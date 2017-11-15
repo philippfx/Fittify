@@ -7,8 +7,8 @@
 
   <ItemGroup>
     <Content Include="appsettings.json">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
 
@@ -20,12 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataModels\DataModels.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="DbConnection.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
   </ItemGroup>
 
 </Project>

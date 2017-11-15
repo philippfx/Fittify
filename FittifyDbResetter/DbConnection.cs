@@ -10,7 +10,7 @@ using Web.Models;
 using Web.Models.Seed;
 using Web.Models.Sport;
 
-namespace Spielwiese
+namespace FittifyDbResetter
 {
     public class DbConnection
     {
@@ -42,7 +42,7 @@ namespace Spielwiese
             return path;
         }
 
-        public void Run()
+        public void DeleteDb()
         {
             using (var master = new SqlConnection(GetMasterConnectionStringFromAppsettingsJson()))
             {
@@ -66,34 +66,11 @@ namespace Spielwiese
                     command.ExecuteNonQuery();
                 }
             }
-
-            using (var db = new FittifyContext(GetFittifyConnectionStringFromAppsettingsJson()))
-            {
-                var wH = new WorkoutHistory(db, 1);
-            }
-
-            //var dbConnectionString = @"Server=.\SQLEXPRESS;Database=Fittify;Trusted_Connection=True;MultipleActiveResultSets=true";
-            ////services.AddDbContext<FittifyContext>(options => options.UseSqlServer(connection));
-
-            ////DbContextOptionsBuilder optionsBuilder = new DbContextOptionsBuilder();
-            ////optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=Fittify;Trusted_Connection=True;MultipleActiveResultSets=true");
-
-            //using (var db = new FittifyContext(dbConnectionString))
-            //{
-            //    db.Categories.Add(new Category { Name = "Chest" });
-            //    db.SaveChanges();
-            //}
-
-            //using (var db = new FittifyContext(dbConnectionString))
-            //{
-            //    //List<Category> result = db.Categories.;
-            //}
         }
-
         public void Seed()
         {
             FittifyContextSeeder seeder = new FittifyContextSeeder();
-            //seeder.EnsureFreshSeedDataForContext();
+            seeder.EnsureFreshSeedDataForContext(GetFittifyConnectionStringFromAppsettingsJson());
         }
     }
 }
