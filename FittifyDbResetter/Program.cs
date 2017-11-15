@@ -1,5 +1,4 @@
 ﻿using System;
-using Web.Models.Seed;
 
 namespace FittifyDbResetter
 {

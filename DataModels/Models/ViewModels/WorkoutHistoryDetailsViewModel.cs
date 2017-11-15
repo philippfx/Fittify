@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Web.Models.Sport;
+using DataModels.Models.Sport;
 
-namespace Web.Models.ViewModels
+namespace DataModels.Models.ViewModels
 {
     public class WorkoutHistoryDetailsViewModel
     {

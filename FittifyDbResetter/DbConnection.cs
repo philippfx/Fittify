@@ -5,10 +5,8 @@
 using System;
 using System.Data.SqlClient;
 using System.IO;
+using DataModelRepositories.Seed;
 using Microsoft.Extensions.Configuration;
-using Web.Models;
-using Web.Models.Seed;
-using Web.Models.Sport;
 
 namespace FittifyDbResetter
 {

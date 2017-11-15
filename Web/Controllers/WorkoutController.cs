@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using DataModels.Models.Sport;
+using DataModels.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Web.Models;
-using Web.Models.Sport;
-using Web.Models.ViewModels;
 
 namespace Web.Controllers
 {
@@ -89,11 +87,11 @@ namespace Web.Controllers
         [Route("Workout/HistoryDetails/{workoutHistoryId}/StartSession")]
         public RedirectToActionResult StartSession(int workoutHistoryId)
         {
-            _fittifyContext.DataTimeStartEnd.Add(new DateTimeStartEnd() { DateTimeStart = DateTime.Now, WorkoutHistoryId = workoutHistoryId});
+            _fittifyContext.DateTimeStartEnd.Add(new DateTimeStartEnd() { DateTimeStart = DateTime.Now, WorkoutHistoryId = workoutHistoryId});
             _fittifyContext.SaveChanges();
 
             var workoutHistory = _fittifyContext.WorkoutHistories.FirstOrDefault(wH => wH.Id == workoutHistoryId);
-            workoutHistory.DateTimeStartEndId = _fittifyContext.DataTimeStartEnd.OrderByDescending(o => o.Id).FirstOrDefault(d => d.WorkoutHistoryId == workoutHistoryId).Id;
+            workoutHistory.DateTimeStartEndId = _fittifyContext.DateTimeStartEnd.OrderByDescending(o => o.Id).FirstOrDefault(d => d.WorkoutHistoryId == workoutHistoryId).Id;
             _fittifyContext.Update(workoutHistory);
             _fittifyContext.SaveChanges();
 

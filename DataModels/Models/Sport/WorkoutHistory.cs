@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
-namespace Web.Models.Sport
+namespace DataModels.Models.Sport
 {
     public class WorkoutHistory
     {
@@ -12,6 +10,7 @@ namespace Web.Models.Sport
         {
                 
         }
+
         public WorkoutHistory(FittifyContext fittifyContext, int workoutIdOfBluePrint)
         {
             var workoutBluePrint = fittifyContext.Workouts.FirstOrDefault(w => w.Id == workoutIdOfBluePrint);
@@ -41,7 +40,6 @@ namespace Web.Models.Sport
             
             fittifyContext.SaveChanges();
         }
-        public int Id { get; set; }
 
         [ForeignKey("DateTimeStartEndId")]
         public virtual DateTimeStartEnd DateTimeStartEnd { get; set; }

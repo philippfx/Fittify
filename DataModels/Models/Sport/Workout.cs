@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Web.Models.Sport
+namespace DataModels.Models.Sport
 {
     public class Workout
     {
-        public int Id { get; set; }
+        public Workout()
+        {
+            
+        }
+        
         public string Name { get; set; }
 
         [ForeignKey("CategoryId")]

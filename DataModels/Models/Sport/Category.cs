@@ -1,18 +1,14 @@
 ﻿using System.Collections.Generic;
-using DataModels;
 
-namespace Web.Models.Sport
+namespace DataModels.Models.Sport
 {
-    public class Category : Crud<Category, int>
+    public class Category
     {
         public Category()
         {
-        }
-
-        public Category(FittifyContext fittifyContext) : base(fittifyContext)
-        {
 
         }
+        
         
         public string Name { get; set; }
         public virtual ICollection<Workout> Workouts { get; set; }

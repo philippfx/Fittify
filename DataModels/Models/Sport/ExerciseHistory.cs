@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
-namespace Web.Models.Sport
+namespace DataModels.Models.Sport
 {
     public class ExerciseHistory
     {
@@ -12,7 +10,7 @@ namespace Web.Models.Sport
         {
             
         }
-
+        
         public ExerciseHistory(FittifyContext fittifyContext, int workoutHistoryId, int exerciseId)
         {
             var exerciseHistory = new ExerciseHistory();

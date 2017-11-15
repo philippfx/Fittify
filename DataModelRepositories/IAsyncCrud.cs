@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
-namespace DataModels.Models
+namespace DataModelRepositories
 {
     interface IAsyncCrud<TEntity, TId> where TEntity : class
     {

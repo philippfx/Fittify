@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Web.Models.Sport;
+using DataModels.Models.Sport;
 
-namespace Web.Models.Seed.Sport
+namespace DataModelRepositories.Seed.Sport
 {
     public class ExerciseHistorySeed
     {

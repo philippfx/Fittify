@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using Web.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {

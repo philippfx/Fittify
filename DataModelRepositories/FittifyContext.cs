@@ -1,11 +1,8 @@
 ﻿using System;
-using System.IO;
+using DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Web.Models.Sport;
-using System.Configuration;
 
-namespace Web.Models
+namespace DataModelRepositories
 {
     public class FittifyContext : DbContext
     {
@@ -42,7 +39,7 @@ namespace Web.Models
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<WorkoutHistory> WorkoutHistories { get; set; }
         public DbSet<MapExerciseWorkout> MapExerciseWorkout { get; set; }
-        public DbSet<DateTimeStartEnd> DataTimeStartEnd { get; set; }
+        public DbSet<DateTimeStartEnd> DateTimeStartEnd { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

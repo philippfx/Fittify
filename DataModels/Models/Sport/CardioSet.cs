@@ -1,11 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Web.Models.Sport
+namespace DataModels.Models.Sport
 {
-    public class CardioSet
+    public class CardioSet : PrimaryKey<CardioSet>
     {
-        public int Id { get; set; }
-
+        public CardioSet()
+        {
+            
+        }
+        
         [ForeignKey("DateTimeSetId")]
         public virtual DateTimeStartEnd DateTimeStartEnd { get; set; }
         public int DateTimeSetId { get; set; }

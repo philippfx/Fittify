@@ -1,8 +1,6 @@
-﻿using System;
-using System.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Web.Models.Seed.Sport;
-namespace Web.Models.Seed
+﻿using DataModelRepositories.Seed.Sport;
+
+namespace DataModelRepositories.Seed
 {
     public class FittifyContextSeeder
     {

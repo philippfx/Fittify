@@ -8,5 +8,5 @@ INNER JOIN Exercises ON ExerciseHistories.ExerciseId = Exercises.Id
 INNER JOIN WorkoutHistories ON ExerciseHistories.WorkoutHistoryId = WorkoutHistories.Id
 INNER JOIN Workouts ON WorkoutHistories.WorkoutId = Workouts.Id
 FULL OUTER JOIN CardioSets ON CardioSets.ExerciseHistoryId = ExerciseHistories.Id
-INNER JOIN DateTimeStartEnd ON WorkoutHistories.DateTimeSetId = DateTimeStartEnd.Id
+INNER JOIN DateTimeStartEnd ON WorkoutHistories.DateTimeStartEndId = DateTimeStartEnd.Id
 ORDER BY ExerciseHistories.Id

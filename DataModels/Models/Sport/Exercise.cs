@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
 
-namespace Web.Models.Sport
+namespace DataModels.Models.Sport
 {
     public class Exercise
     {
-        public int Id { get; set; }
+        public Exercise()
+        {
+            
+        }
+
         public string Name { get; set; }
 
         public MachineAdjustableType? MachineAdjustableType1 { get; set; }

@@ -1,11 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Web.Models.Sport
+namespace DataModels.Models.Sport
 {
     public class MapExerciseWorkout
     {
-        public int Id { get; set; }
-
+        public MapExerciseWorkout()
+        {
+            
+        }
+        
         [ForeignKey("WorkoutId")]
         public virtual Workout Workout { get; set; }
         public int WorkoutId { get; set; }

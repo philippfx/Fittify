@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Web.Models.Sport
+namespace DataModels.Models.Sport
 {
     public class WeightLiftingSet
     {
@@ -8,14 +8,13 @@ namespace Web.Models.Sport
         {
             
         }
-
+        
         public WeightLiftingSet(FittifyContext fittifyContext, int exerciseHistoryId)
         {
             this.ExerciseHistoryId = exerciseHistoryId;
             fittifyContext.WeightLiftingSets.Add(this);
             fittifyContext.SaveChanges();
         }
-        public int Id { get; set; }
 
         public int? WeightFull { get; set; }
         public int? RepetitionsFull { get; set; }

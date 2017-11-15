@@ -1,11 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Web.Models.Sport
+namespace DataModels.Models.Sport
 {
     public class DateTimeStartEnd
     {
-        public int Id { get; set; }
+        public DateTimeStartEnd()
+        {
+            
+        }
 
         public DateTime? DateTimeStart { get; set; }
         public DateTime? DateTimeEnd { get; set; }
