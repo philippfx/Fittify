@@ -1,5 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Fittify.Analyzer.Library;
+using Fittify.Api;
+using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.DataModels.Models.Sport;
+using Fittify.Web.ApiModelRepositories;
+using Fittify.Web.ApiModelRepositories.Sport;
+using Fittify.Web.ViewModels.Sport;
+using Microsoft.AspNetCore.JsonPatch;
+using Newtonsoft.Json;
 
 namespace Fittify.Spielwiese
 {
@@ -7,23 +18,10 @@ namespace Fittify.Spielwiese
     {
         static void Main(string[] args)
         {
-            var cardioSet = new CardioSet();
-            cardioSet.Id = 5;
+            var classAnalyzer = new ClassAnalyzer();
+            classAnalyzer.GetClassNames();
 
-            //var test = new test();
-            //var result = nameof(test.testme);
-            //var list = new List<Tuple<string, string>>() { new Tuple<string, string>("test1, test1"), new Tuple<string, string>("test2, test2") }
-            DbConnection dbConnection = new DbConnection();
-            //dbConnection.Seed();
-            dbConnection.Run();
-
-            Console.WriteLine("Hello World!");
-            Console.ReadLine();
-        }
-
-        public class test
-        {
-            public int testme { get; set; }
+            Debug.Write((string.Format("Creating a foo: {0}", JsonConvert.SerializeObject(new WeightLiftingSet()))));
         }
     }
 }

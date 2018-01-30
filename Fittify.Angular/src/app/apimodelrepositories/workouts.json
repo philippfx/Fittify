@@ -1,0 +1,30 @@
+[
+  {
+    "name": "MondayChestSeed",
+    "categoryId": 1,
+    "rangeOfExerciseIds": null,
+    "rangeOfWorkoutHistoryIds": null,
+    "id": 1
+  },
+  {
+    "name": "WednesdayBackSeed",
+    "categoryId": 2,
+    "rangeOfExerciseIds": null,
+    "rangeOfWorkoutHistoryIds": null,
+    "id": 2
+  },
+  {
+    "name": "FridayLegSeed",
+    "categoryId": 3,
+    "rangeOfExerciseIds": null,
+    "rangeOfWorkoutHistoryIds": null,
+    "id": 3
+  },
+  {
+    "name": "HIT",
+    "categoryId": 1,
+    "rangeOfExerciseIds": null,
+    "rangeOfWorkoutHistoryIds": null,
+    "id": 4
+  }
+]

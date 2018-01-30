@@ -1,0 +1,29 @@
+<h2>Your workouts</h2>
+<table class="table table-striped table-hover">
+  <tr>
+    <th>
+      Name
+    </th>
+    <th>
+      History
+    </th>
+    <th>
+      Start New Session
+    </th>
+  </tr>
+  <tr *ngFor="let workout of workouts">
+    <td><a routerLink="/workout/{{workout?.id}}/associatedexercises">{{workout?.name}}</a></td>
+    <td><a routerLink="/workout/{{workout?.id}}/workouthistories">Show history</a></td>
+    <td>
+      <form action="/workout/history/new" method="post">
+        <input name="workoutId" type="hidden" value="workout.id"/>
+        <input type="submit" value="Start" class="btn btn-default"/>
+      </form>
+    </td>
+  </tr>
+
+</table>
+<form class="form-group" action="/workout/new" method="post">
+  <input type="text" name="name"/>
+  <input type="submit" value="Add Workout" class="btn btn-primary" />
+</form>

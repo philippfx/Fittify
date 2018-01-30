@@ -1,9 +1,8 @@
-﻿using System.Linq;
-using Fittify.DataModels.Models.Sport;
+﻿using Fittify.DataModels.Models.Sport;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class CategoryRepository : Crud<Category, int>
+    public class CategoryRepository : AsyncCrud<Category,int>
     {
         public CategoryRepository()
         {

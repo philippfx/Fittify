@@ -6,6 +6,6 @@ export class ExerciseHistoryForGet extends UniqueIdentifier<number>
   public exerciseName: string;
   public workoutHistoryId: number;
   public previousExerciseHistoryId: number;
-  public weightLiftingSetIds: number[];
+  public weightLiftingSets: number[];
   public cardioSetIds: number[];
 }

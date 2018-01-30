@@ -1,22 +1,28 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Fittify.Common;
 
 namespace Fittify.DataModelRepositories
 {
-    interface IAsyncCrud<TEntity, TId> where TEntity : class
+    public interface IAsyncCrud<TEntity, TId> 
+        where TEntity : class, IUniqueIdentifierDataModels<TId>
+        where TId : struct
     {
         /// <summary>
         /// Creates entity in Database and returns Id
         /// </summary>
         /// <returns></returns>
-        Task<TId> Create(TEntity entity);
+        Task<TEntity> Create(TEntity entity);
 
-        Task Update(TEntity entity);
+        Task<TEntity> Update(TEntity entity);
 
         Task Delete(TId id);
 
         Task<TEntity> GetById(TId id);
 
         IQueryable<TEntity> GetAll();
+
+        Task<ICollection<TEntity>> GetByCollectionOfIds(ICollection<TId> rangeOfIds);
     }
 }

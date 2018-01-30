@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fittify.Web.Common\Fittify.Web.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Sport\Abstract\" />
+  </ItemGroup>
+
+</Project>

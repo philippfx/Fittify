@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore;
+﻿using Fittify.DataModels.Models.Sport;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
+using System.Diagnostics;
+using NLog.Web;
 
 namespace Fittify.Api
 {
@@ -13,6 +17,7 @@ namespace Fittify.Api
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseNLog()
                 .Build();
     }
 }

@@ -8,4 +8,8 @@
     <Folder Include="Nutrition\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Fittify.Common\Fittify.Common.csproj" />
+  </ItemGroup>
+
 </Project>

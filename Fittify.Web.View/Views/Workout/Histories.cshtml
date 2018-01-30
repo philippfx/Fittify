@@ -1,0 +1,49 @@
+﻿@using Fittify.Web.ViewModels.Sport
+@model List<Fittify.Web.ViewModels.Sport.WorkoutHistoryViewModel>
+
+@{
+    ViewBag.Title = "Workout History";
+}
+
+<div>
+    <h2>Your workout history for @Model.FirstOrDefault()?.WorkoutName</h2>
+    <table class="table table-striped table-hover">
+        <tr>
+            <th>
+                DateTime
+            </th>
+        </tr>
+        @foreach (var workoutHistory in Model)
+        {
+            <tr>
+            <td>
+                <a href="~/Workout/HistoryDetails/@workoutHistory.Id">
+                    <div>
+                        @if (workoutHistory.DateTimeStart != null)
+                        {
+                            @workoutHistory.DateTimeStart.GetValueOrDefault().ToString("dd.MM.yyyy: hh:mm ' - '");
+                        }
+                        else
+                        {
+                            <div>Not started yet</div>
+                        }
+
+                        @if (workoutHistory.DateTimeEnd != null)
+                        {
+                            @workoutHistory.DateTimeEnd.GetValueOrDefault().ToString("hh:mm")
+                        }
+                        else
+                        {
+                            <span>Not ended yet</span>
+                        }
+                    </div>
+                </a></td>
+            </tr>
+
+        }
+    </table>
+    <form action="~/workout/history/new" method="post">
+        <input name="workoutId" type="hidden" value="@Model.FirstOrDefault()?.WorkoutId"/>
+        <input type="submit" value="Start new workout" class="btn btn-default"/>
+    </form>
+</div>

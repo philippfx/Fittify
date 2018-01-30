@@ -9,12 +9,15 @@ namespace Fittify.DbResetter
             // Publish with package manager console command:
             // dotnet publish FittifyDbResetter -c Release -r win10-x64
             
-            DbConnection dbConnection = new DbConnection();
+            DbResetterConnection dbConnection = new DbResetterConnection();
 
             Console.WriteLine("Deleting Db Fittify...");
             dbConnection.DeleteDb();
 
-            Console.WriteLine("Recreating Db and seeding with data...");
+            Console.WriteLine("Recreating Db Fittify...");
+            dbConnection.EnsureCreatedDbContext();
+
+            Console.WriteLine("Seeding Db Fittify...");
             dbConnection.Seed();
 
             Console.Write("Done! Press any key to quit...");

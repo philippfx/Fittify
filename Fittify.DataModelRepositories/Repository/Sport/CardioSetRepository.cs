@@ -1,8 +1,12 @@
-﻿using Fittify.DataModels.Models.Sport;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Fittify.DataModels.Models.Sport;
+using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class CardioSetRepository : Crud<CardioSet, int>
+    public class CardioSetRepository : AsyncCrud<CardioSet,int>
     {
         public CardioSetRepository()
         {
@@ -12,6 +16,13 @@ namespace Fittify.DataModelRepositories.Repository.Sport
         public CardioSetRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
             
+        }
+
+        public async Task<List<CardioSet>> GetCollectionByFkExerciseHistoryId(int exerciseHistoryId)
+        {
+            return await FittifyContext.Set<CardioSet>()
+                .Where(wls => wls.ExerciseHistoryId == exerciseHistoryId)
+                .ToListAsync();
         }
     }
 }

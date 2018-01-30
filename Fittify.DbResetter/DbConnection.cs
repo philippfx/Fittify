@@ -1,16 +1,12 @@
-﻿//using Fittify.Entities;
-//using Fittify.Entities.Sport;
-//using Microsoft.EntityFrameworkCore;
-
-using System;
+﻿using System;
 using System.Data.SqlClient;
 using System.IO;
-using Fittify.DataModelRepositories.Seed;
+using Fittify.Test.Core.Seed;
 using Microsoft.Extensions.Configuration;
 
 namespace Fittify.DbResetter
 {
-    public class DbConnection
+    public class DbResetterConnection
     {
         private string GetFittifyConnectionStringFromAppsettingsJson()
         {
@@ -20,9 +16,9 @@ namespace Fittify.DbResetter
                 .SetBasePath(control)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-            var Configuration = builder.Build();
+            var configuration = builder.Build();
 
-            string path = Configuration.GetConnectionString("DefaultConnection");
+            string path = configuration.GetConnectionString("DefaultConnection");
             return path;
         }
 
@@ -34,9 +30,9 @@ namespace Fittify.DbResetter
                 .SetBasePath(control)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 
-            var Configuration = builder.Build();
+            var configuration = builder.Build();
 
-            string path = Configuration.GetConnectionString("MasterConnection");
+            string path = configuration.GetConnectionString("MasterConnection");
             return path;
         }
 
@@ -65,10 +61,17 @@ namespace Fittify.DbResetter
                 }
             }
         }
+
+        public void EnsureCreatedDbContext()
+        {
+            var fittifyContextSeeder = new FittifyContextSeeder();
+            fittifyContextSeeder.EnsureCreatedDbProductionContext(GetFittifyConnectionStringFromAppsettingsJson());
+        }
+
         public void Seed()
         {
-            FittifyContextSeeder seeder = new FittifyContextSeeder();
-            seeder.EnsureFreshSeedDataForContext(GetFittifyConnectionStringFromAppsettingsJson());
+            var fittifyContextSeeder = new FittifyContextSeeder();
+            fittifyContextSeeder.EnsureFreshSeedDataForProductionContext(GetFittifyConnectionStringFromAppsettingsJson());
         }
     }
 }

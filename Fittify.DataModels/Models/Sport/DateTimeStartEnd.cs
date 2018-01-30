@@ -1,15 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport
 {
-    public class DateTimeStartEnd : UniqueIdentifier
+    public class DateTimeStartEnd : IUniqueIdentifierDataModels<int>
     {
-        public DateTimeStartEnd()
-        {
-            
-        }
-
+        public int Id { get; set; }
         public DateTime? DateTimeStart { get; set; }
         public DateTime? DateTimeEnd { get; set; }
 

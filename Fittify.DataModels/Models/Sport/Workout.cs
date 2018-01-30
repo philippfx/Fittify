@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport
 {
-    public class Workout : UniqueIdentifier
+    public class Workout : IUniqueIdentifierDataModels<int>
     {
-        public Workout()
-        {
-            
-        }
-        
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         [ForeignKey("CategoryId")]

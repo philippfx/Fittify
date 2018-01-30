@@ -1,31 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport
 {
-    public class ExerciseHistory : UniqueIdentifier
+    public class ExerciseHistory : IUniqueIdentifierDataModels<int>
     {
-        public ExerciseHistory()
-        {
-            
-        }
-        
-        //public ExerciseHistory(FittifyContext fittifyContext, int workoutHistoryId, int exerciseId)
-        //{
-        //    var exerciseHistory = new ExerciseHistory();
-        //    exerciseHistory.ExerciseId = exerciseId;
-        //    exerciseHistory.WorkoutHistoryId = workoutHistoryId;
-
-        //    var eHs = fittifyContext.ExerciseHistories.Include(i => i.WeightLiftingSets).OrderByDescending(o => o.Id).ToList();
-        //    var sameE = eHs.Where(eH => eH.ExerciseId == exerciseId).ToList();
-        //    var nnWLS = sameE.Where(w => w.WeightLiftingSets != null).ToList();
-        //    var countAboveOne = nnWLS.FirstOrDefault(f => f.WeightLiftingSets.Count > 0);
-
-        //    exerciseHistory.PreviousExerciseHistoryId = fittifyContext.ExerciseHistories.Include(i => i.WeightLiftingSets).OrderByDescending(o => o.Id).FirstOrDefault(eH => eH.ExerciseId == exerciseId && eH.WeightLiftingSets != null && eH.WeightLiftingSets.Count > 0).Id;
-        //    fittifyContext.Add(exerciseHistory);
-        //    fittifyContext.SaveChanges();
-        //}
+        public int Id { get; set; }
 
         [ForeignKey("ExerciseId")]
         public Exercise Exercise { get; set; }
@@ -43,8 +25,5 @@ namespace Fittify.DataModels.Models.Sport
 
         public virtual ICollection<WeightLiftingSet> WeightLiftingSets { get; set; }
         public virtual ICollection<CardioSet> CardioSets { get; set; }
-
-        //public MachineAdjustableType? StandardMachineAdjustable1 { get; set; }
-        //public MachineAdjustableType? StandardMachineAdjustable2 { get; set; }
     }
 }
