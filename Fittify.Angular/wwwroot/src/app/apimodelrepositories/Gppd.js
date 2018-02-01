@@ -16,7 +16,7 @@ require("rxjs/add/observable/throw");
 require("rxjs/add/operator/catch");
 require("rxjs/add/operator/do");
 require("rxjs/add/operator/map");
-var GppdRepository = (function () {
+var GppdRepository = /** @class */ (function () {
     function GppdRepository(_http) {
         this._http = _http;
     }
@@ -54,11 +54,11 @@ var GppdRepository = (function () {
         console.error(errorMessage);
         return Rx_1.Observable.throw(errorMessage);
     };
+    GppdRepository = __decorate([
+        core_1.Injectable(),
+        __metadata("design:paramtypes", [http_1.HttpClient])
+    ], GppdRepository);
     return GppdRepository;
 }());
-GppdRepository = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [http_1.HttpClient])
-], GppdRepository);
 exports.GppdRepository = GppdRepository;
 //# sourceMappingURL=Gppd.js.map

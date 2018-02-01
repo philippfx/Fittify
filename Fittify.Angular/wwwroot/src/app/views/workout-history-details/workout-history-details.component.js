@@ -10,20 +10,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var WorkoutHistoryDetailsComponent = (function () {
+var WorkoutHistoryDetailsComponent = /** @class */ (function () {
     function WorkoutHistoryDetailsComponent() {
     }
     WorkoutHistoryDetailsComponent.prototype.ngOnInit = function () {
     };
+    WorkoutHistoryDetailsComponent = __decorate([
+        core_1.Component({
+            selector: 'ff-workout-history-details',
+            templateUrl: './workout-history-details.component.html',
+            styleUrls: ['./workout-history-details.component.css']
+        }),
+        __metadata("design:paramtypes", [])
+    ], WorkoutHistoryDetailsComponent);
     return WorkoutHistoryDetailsComponent;
 }());
-WorkoutHistoryDetailsComponent = __decorate([
-    core_1.Component({
-        selector: 'ff-workout-history-details',
-        templateUrl: './workout-history-details.component.html',
-        styleUrls: ['./workout-history-details.component.css']
-    }),
-    __metadata("design:paramtypes", [])
-], WorkoutHistoryDetailsComponent);
 exports.WorkoutHistoryDetailsComponent = WorkoutHistoryDetailsComponent;
 //# sourceMappingURL=workout-history-details.component.js.map

@@ -115,7 +115,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<ff-navbar></ff-navbar>\n<div class=\"container-fluid text-center\">\n  <div class=\"row content\">\n    <!--<ff-leftsidebar></ff-leftsidebar>-->\n\n    \n    <div class=\"container-fluid text-center\">\n      <div class=\"row content\">\n\n        <ff-leftsidebar></ff-leftsidebar>\n\n        <div class=\"col-sm-10 text-left\">\r\n          <router-outlet></router-outlet>\n        </div>\n\n      </div>\n    </div>\n  </div>\n</div>\n<ff-footer></ff-footer>\n"
+module.exports = "<ff-navbar></ff-navbar>\r\n<div class=\"container-fluid text-center\">\r\n  <div class=\"row content\">\r\n    <!--<ff-leftsidebar></ff-leftsidebar>-->\r\n\r\n    \r\n    <div class=\"container-fluid text-center\">\r\n      <div class=\"row content\">\r\n\r\n        <ff-leftsidebar></ff-leftsidebar>\r\n\r\n        <div class=\"col-sm-10 text-left\">\r\n          <router-outlet></router-outlet>\r\n        </div>\r\n\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n<ff-footer></ff-footer>\r\n"
 
 /***/ }),
 
@@ -483,7 +483,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/views/workout-associated-exercises/workout-associated-exercises.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Exercises for {{workouts[0].name}}</h2>\n<table class=\"table table-striped table-hover\">\n  <tr>\n    <th>\n      Name\n    </th>\n  </tr>\n <tr *ngFor=\"let exercise of associatedExercises\">\n    <td>{{exercise.name}}</td>\n  </tr>\n</table>\n<form class=\"form-group\" action=\"~/workout/@Model.Id/associatedexercises\" method=\"post\">\n  <input type=\"submit\" value=\"Add\" class=\"btn btn-primary\" />\n  <div class=\"col-sm-4\">\n    <select class=\"form-control\" name=\"Id\">\n      <option>Please select exercise to add</option>\n      <option *ngFor=\"let e of allExercises\" value=\"{{e.id}}\">{{e.name}}</option>\n    </select>\n  </div>\n</form>\n"
+module.exports = "<h2>Exercises for {{workouts[0].name}}</h2>\r\n<table class=\"table table-striped table-hover\">\r\n  <tr>\r\n    <th>\r\n      Name\r\n    </th>\r\n  </tr>\r\n <tr *ngFor=\"let exercise of associatedExercises\">\r\n    <td>{{exercise.name}}</td>\r\n  </tr>\r\n</table>\r\n<form class=\"form-group\" action=\"~/workout/@Model.Id/associatedexercises\" method=\"post\">\r\n  <input type=\"submit\" value=\"Add\" class=\"btn btn-primary\" />\r\n  <div class=\"col-sm-4\">\r\n    <select class=\"form-control\" name=\"Id\">\r\n      <option>Please select exercise to add</option>\r\n      <option *ngFor=\"let e of allExercises\" value=\"{{e.id}}\">{{e.name}}</option>\r\n    </select>\r\n  </div>\r\n</form>\r\n"
 
 /***/ }),
 
@@ -570,7 +570,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/views/workout-history-details/workout-history-details.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  workout-history-details works!\n</p>\n"
+module.exports = "<p>\r\n  workout-history-details works!\r\n</p>\r\n"
 
 /***/ }),
 
@@ -631,7 +631,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/views/workout-history/workout-history.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Your workout history for {{workouts[0]?.workoutName}}</h2>\n<table class=\"table table-striped table-hover\">\n  <tr>\n    <th>\n      DateTime\n    </th>\n  </tr>\n\n  <tr *ngFor=\"let workoutHistory of workoutHistories\">\n    <td>\n      <a href=\"/workout/historyDetails/{{workoutHistory?.id}}\">\n        <div *ngIf=\"workoutHistory?.dateTimeStart; else elseNotStartedYet\">\n          {{workoutHistory?.dateTimeStart}}\n        </div>\n        <ng-template #elseNotStartedYet>Not started yet</ng-template>\n\n\n        <div *ngIf=\"workoutHistory?.dateTimeEnd; else elseNotEndedYet\">\n          {{workoutHistory?.dateTimeEnd}}\n        </div>\n        <ng-template #elseNotEndedYet>Not ended yet</ng-template>\n\n      </a>\n    </td>\n  </tr>\n\n\n</table>\n<form action=\"~/workout/history/new\" method=\"post\">\n  <input name=\"workoutId\" type=\"hidden\" value=\"@Model.FirstOrDefault()?.WorkoutId\"/>\n  <input type=\"submit\" value=\"Start new workout\" class=\"btn btn-default\"/>\n</form>\n"
+module.exports = "<h2>Your workout history for {{workouts[0]?.workoutName}}</h2>\r\n<table class=\"table table-striped table-hover\">\r\n  <tr>\r\n    <th>\r\n      DateTime\r\n    </th>\r\n  </tr>\r\n\r\n  <tr *ngFor=\"let workoutHistory of workoutHistories\">\r\n    <td>\r\n      <a href=\"/workout/historyDetails/{{workoutHistory?.id}}\">\r\n        <div *ngIf=\"workoutHistory?.dateTimeStart; else elseNotStartedYet\">\r\n          {{workoutHistory?.dateTimeStart}}\r\n        </div>\r\n        <ng-template #elseNotStartedYet>Not started yet</ng-template>\r\n\r\n\r\n        <div *ngIf=\"workoutHistory?.dateTimeEnd; else elseNotEndedYet\">\r\n          {{workoutHistory?.dateTimeEnd}}\r\n        </div>\r\n        <ng-template #elseNotEndedYet>Not ended yet</ng-template>\r\n\r\n      </a>\r\n    </td>\r\n  </tr>\r\n\r\n\r\n</table>\r\n<form action=\"~/workout/history/new\" method=\"post\">\r\n  <input name=\"workoutId\" type=\"hidden\" value=\"@Model.FirstOrDefault()?.WorkoutId\"/>\r\n  <input type=\"submit\" value=\"Start new workout\" class=\"btn btn-default\"/>\r\n</form>\r\n"
 
 /***/ }),
 

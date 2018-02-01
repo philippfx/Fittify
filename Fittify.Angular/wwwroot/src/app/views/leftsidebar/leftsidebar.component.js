@@ -7,17 +7,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var LeftSidebarComponent = (function () {
+var LeftSidebarComponent = /** @class */ (function () {
     function LeftSidebarComponent() {
     }
+    LeftSidebarComponent = __decorate([
+        core_1.Component({
+            selector: 'ff-leftsidebar',
+            templateUrl: './leftsidebar.component.html',
+            styleUrls: ['./leftsidebar.component.css']
+        })
+    ], LeftSidebarComponent);
     return LeftSidebarComponent;
 }());
-LeftSidebarComponent = __decorate([
-    core_1.Component({
-        selector: 'ff-leftsidebar',
-        templateUrl: './leftsidebar.component.html',
-        styleUrls: ['./leftsidebar.component.css']
-    })
-], LeftSidebarComponent);
 exports.LeftSidebarComponent = LeftSidebarComponent;
 //# sourceMappingURL=leftsidebar.component.js.map
