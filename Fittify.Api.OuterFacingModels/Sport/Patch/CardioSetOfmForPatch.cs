@@ -4,8 +4,8 @@ using Fittify.Common;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Patch
 {
-    public class CardioSetOfmForPatch : CardioSetOfmBase
+    public class CardioSetOfmForPatch : CardioSetOfmBase, IUniqueIdentifierDataModels<int>
     {
-
+        public int Id { get; set; }
     }
 }

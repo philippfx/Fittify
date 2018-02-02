@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.Controllers.HttpMethodInterfaces
 {
-    public interface IAsyncGetMoreForHttpForIntId
+    public interface IAsyncGetMoreForHttpForIntId<T> where T: class
     {
-        Task<IActionResult> GetByRangeOfIds(string inputStringForRangeOfIds);
+        Task<ICollection<T>> GetByRangeOfIds(string inputStringForRangeOfIds);
     }
 }

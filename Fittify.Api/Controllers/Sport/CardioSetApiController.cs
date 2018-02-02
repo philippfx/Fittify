@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Controllers.HttpMethodInterfaces;
@@ -21,13 +22,13 @@ namespace Fittify.Api.Controllers.Sport
     {
         private readonly GppdOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int> _gppdForHttpMethods;
         private readonly CardioSetRepository _repo;
-        private readonly GetMoreForHttpIntId<CardioSetRepository, CardioSet> _getMoreForIntId;
+        private readonly GetMoreForHttpIntId<CardioSetRepository, CardioSet, CardioSetOfmForGet> _getMoreForIntId;
 
         public CardioSetApiController(FittifyContext fittifyContext)
         {
             _repo = new CardioSetRepository(fittifyContext);
             _gppdForHttpMethods = new GppdOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int>(_repo);
-            _getMoreForIntId = new GetMoreForHttpIntId<CardioSetRepository, CardioSet>(_repo);
+            _getMoreForIntId = new GetMoreForHttpIntId<CardioSetRepository, CardioSet, CardioSetOfmForGet>(_repo);
         }
 
         [HttpGet]
@@ -49,7 +50,9 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet("range/{inputString}", Name = "GetCardioSetsByRangeOfIds")]
         public async Task<IActionResult> GetByRangeOfIds(string inputString)
         {
-            return await _getMoreForIntId.GetByRangeOfIds(inputString);
+            var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputString));
+            var ofmCollection = Mapper.Map<List<CardioSet>, List<CardioSetOfmForGet>>(entityCollection.ToList());
+            return Ok(ofmCollection);
         }
 
         [HttpDelete("{id:int}")]

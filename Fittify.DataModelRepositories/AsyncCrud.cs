@@ -66,6 +66,7 @@ namespace Fittify.DataModelRepositories
 
         public virtual async Task<ICollection<TEntity>> GetByCollectionOfIds(ICollection<TId> collectionOfIds)
         {
+            //return await FittifyContext.Set<TEntity>().Where(t => collectionOfIds.Contains(t.Id)).ToListAsync();
             return await FittifyContext.Set<TEntity>().Where(t => collectionOfIds.Contains(t.Id)).ToListAsync();
         }
 

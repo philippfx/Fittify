@@ -40,6 +40,10 @@ namespace Fittify.Api.Controllers.Sport
         {
             var allEntites = await _gppdForHttpMethods.GetAll();
             var allOfmForGet = Mapper.Map<ICollection<WeightLiftingSetOfmForGet>>(allEntites);
+            if (allOfmForGet.Count == 0)
+            {
+                NoContent();
+            }
             return new JsonResult(allOfmForGet);
         }
 
