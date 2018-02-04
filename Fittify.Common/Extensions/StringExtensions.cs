@@ -14,5 +14,10 @@ namespace Fittify.Common.Extensions
         {
             return StringPluralization.Pluralize(1, str);
         }
+
+        public static string ToCamelCase(this String str)
+        {
+            return Char.ToLowerInvariant(str[0]) + str.Substring(1);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Controllers.HttpMethodInterfaces;
@@ -7,6 +8,7 @@ using Fittify.Api.OfmRepository;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
@@ -16,31 +18,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.Controllers.Sport
 {
-    [Route("api/exercisehistories")]
+    [Route("api/exercise-histories")]
     public class ExerciseHistoryApiController :
         Controller,
         IAsyncGppdForHttp<int, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch>
     {
         private readonly GppdOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int> _gppdForHttpMethods;
         private readonly ExerciseHistoryRepository _repo;
-        private readonly GetMoreForHttpIntId<ExerciseHistoryRepository, ExerciseHistory> _getMoreForIntId;
 
         public ExerciseHistoryApiController(FittifyContext fittifyContext)
         {
             _repo = new ExerciseHistoryRepository(fittifyContext);
             _gppdForHttpMethods = new GppdOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int>(_repo);
-            _getMoreForIntId = new GetMoreForHttpIntId<ExerciseHistoryRepository, ExerciseHistory>(_repo);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var allEntites = await _gppdForHttpMethods.GetAll();
-            var allOfmForGet = Mapper.Map<ICollection<ExerciseHistoryOfmForGet>>(allEntites);
-            return new JsonResult(allOfmForGet);
-        }
-
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}", Name = "GetExerciseHistoryById")]
         public async Task<IActionResult> GetById(int id)
         {
             var entity = await _repo.GetById(id);
@@ -48,14 +40,24 @@ namespace Fittify.Api.Controllers.Sport
             return new JsonResult(ofmForGet);
         }
 
+        [HttpGet( Name = "GetAllExerciseHistoriesByRangeOfIds")]
+        public async Task<IActionResult> GetAll()
+        {
+            var allEntites = await _gppdForHttpMethods.GetAll();
+            var allOfmForGet = Mapper.Map<ICollection<ExerciseHistoryOfmForGet>>(allEntites);
+            return new JsonResult(allOfmForGet);
+        }
+
         [HttpGet("range/{inputString}", Name = "GetExerciseHistoriesByRangeOfIds")]
         public async Task<IActionResult> GetByRangeOfIds(string inputString)
         {
-            return await _getMoreForIntId.GetByRangeOfIds(inputString);
+            var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputString));
+            var ofmCollection = Mapper.Map<List<ExerciseHistory>, List<ExerciseHistoryOfmForGet>>(entityCollection.ToList());
+            return Ok(ofmCollection);
         }
 
         [HttpPost("new")]
-        public async Task<CreatedAtRouteResult> Post([FromBody] ExerciseHistoryOfmForPost ofmForPost)
+        public async Task<IActionResult> Post([FromBody] ExerciseHistoryOfmForPost ofmForPost)
         {
             var ofmForGet = await _gppdForHttpMethods.Post(ofmForPost);
             var result = CreatedAtRoute(routeName: "GetExerciseHistoriesByRangeOfIds",

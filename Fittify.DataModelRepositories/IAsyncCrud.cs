@@ -9,10 +9,8 @@ namespace Fittify.DataModelRepositories
         where TEntity : class, IUniqueIdentifierDataModels<TId>
         where TId : struct
     {
-        /// <summary>
-        /// Creates entity in Database and returns Id
-        /// </summary>
-        /// <returns></returns>
+        Task<bool> DoesEntityExist(TId id);
+
         Task<TEntity> Create(TEntity entity);
 
         Task<TEntity> Update(TEntity entity);

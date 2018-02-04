@@ -25,6 +25,14 @@ namespace Fittify.DataModelRepositories
 
         }
 
+        public virtual async Task<bool> DoesEntityExist(TId id)
+        {
+            // Todo: The any() method may be faster. Check if an async any() is faster and whether an async any() exists
+            var entity = await FittifyContext.Set<TEntity>().FindAsync(id);
+            if (entity != null) return true;
+            return false;
+        }
+
         public virtual async Task<TEntity> Create(TEntity entity)
         {
             try
@@ -66,7 +74,6 @@ namespace Fittify.DataModelRepositories
 
         public virtual async Task<ICollection<TEntity>> GetByCollectionOfIds(ICollection<TId> collectionOfIds)
         {
-            //return await FittifyContext.Set<TEntity>().Where(t => collectionOfIds.Contains(t.Id)).ToListAsync();
             return await FittifyContext.Set<TEntity>().Where(t => collectionOfIds.Contains(t.Id)).ToListAsync();
         }
 
@@ -83,7 +90,7 @@ namespace Fittify.DataModelRepositories
             }
             catch (Exception e)
             {
-
+                var msg = e.Message;
             }
             return objectsWrittenToContext >= 0;
         }

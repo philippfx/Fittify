@@ -7,6 +7,7 @@ using Fittify.Api.OfmRepository;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
@@ -22,13 +23,11 @@ namespace Fittify.Api.Controllers.Sport
     {
         private readonly GppdOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int> _gppdForHttpMethods;
         private readonly CardioSetRepository _repo;
-        private readonly GetMoreForHttpIntId<CardioSetRepository, CardioSet, CardioSetOfmForGet> _getMoreForIntId;
 
         public CardioSetApiController(FittifyContext fittifyContext)
         {
             _repo = new CardioSetRepository(fittifyContext);
             _gppdForHttpMethods = new GppdOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int>(_repo);
-            _getMoreForIntId = new GetMoreForHttpIntId<CardioSetRepository, CardioSet, CardioSetOfmForGet>(_repo);
         }
 
         [HttpGet]
@@ -71,7 +70,7 @@ namespace Fittify.Api.Controllers.Sport
         }
         
         [HttpPost("new")]
-        public async Task<CreatedAtRouteResult> Post([FromBody] CardioSetOfmForPost ofmForPost)
+        public async Task<IActionResult> Post([FromBody] CardioSetOfmForPost ofmForPost)
         {
             var ofmForGet = await _gppdForHttpMethods.Post(ofmForPost);
             var result = CreatedAtRoute(routeName: "GetExercisesByRangeOfIds", routeValues: new { inputString = ofmForGet.Id }, value: ofmForGet);

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using AutoMapper;
-using Fittify.Api.OfmRepository;
-using Fittify.Api.OuterFacingModels.Sport.Abstract;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -22,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using Fittify.Common.Helpers;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Diagnostics;
 
@@ -92,7 +88,7 @@ namespace Fittify.Api
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
-                // Entity to Ofm
+                // Entity to OfmGet
                 cfg.CreateMap<Workout, WorkoutOfmForGet>()
                     .ForMember(dest => dest.RangeOfWorkoutHistoryIds, opt => opt.MapFrom(src => src.WorkoutHistories.Select(s => s.Id).ToList().ToStringOfIds()))
                     .ForMember(dest => dest.RangeOfExerciseIds, opt => opt.MapFrom(src => src.ExercisesWorkoutsMap.Select(s => s.ExerciseId).ToList().ToStringOfIds()));
@@ -114,16 +110,7 @@ namespace Fittify.Api
                     .ForMember(dest => dest.DateTimeEnd, opt => opt.MapFrom(src => src.DateTimeStartEnd.DateTimeEnd))
                     .ForMember(dest => dest.Workout, opt => opt.MapFrom(src => src.Workout))
                     .ForMember(dest => dest.ExerciseHistoryIds, opt => opt.MapFrom(src => src.ExerciseHistories.Select(eH => eH.Id)));
-
-                // OfmGet to Entity
-                //cfg.CreateMap<WorkoutHistoryOfmForGet, WorkoutHistory>()
-                //    .ForMember(dest => dest.WorkoutId, opt => opt.MapFrom(src => src.Workout))
-                //    .ForMember(dest => dest.Id, opt => opt.Ignore());
-                //cfg.CreateMap<WeightLiftingSetOfmForGet, WeightLiftingSet>()
-                //    .ForMember(dest => dest.Id, opt => opt.Ignore());
-                //cfg.CreateMap<ExerciseHistoryOfmForGet, ExerciseHistory>()
-                //    .ForMember(dest => dest.Id, opt => opt.Ignore());
-
+                
                 // OfmPpp to Entity
                 cfg.CreateMap<WorkoutHistoryOfmForPatch, WorkoutHistory>();
                 //cfg.IgnoreUnmapped<WorkoutHistoryOfmForPpp, WorkoutHistory>(); // does not work as expected

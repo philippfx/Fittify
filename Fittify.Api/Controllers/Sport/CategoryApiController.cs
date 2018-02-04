@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Controllers.HttpMethodInterfaces;
@@ -28,14 +30,12 @@ namespace Fittify.Api.Controllers.Sport
     {
         private readonly GppdOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int> _gppdForHttpMethods;
         private readonly CategoryRepository _repo;
-        private readonly GetMoreForHttpIntId<CategoryRepository, Category> _getMoreForIntId;
         private readonly string _shortCamelCasedControllerName;
 
         public CategoryApiController(FittifyContext fittifyContext)
         {
             _repo = new CategoryRepository(fittifyContext);
             _gppdForHttpMethods = new GppdOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo);
-            _getMoreForIntId = new GetMoreForHttpIntId<CategoryRepository, Category>(_repo);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerName();
         }
 
@@ -45,7 +45,7 @@ namespace Fittify.Api.Controllers.Sport
             var entity = await _repo.GetById(id);
             if (entity == null)
             {
-                ModelState.AddModelError(_shortCamelCasedControllerName, "Nothing found for id=" + id);
+                ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
                 return new EntityNotFoundObjectResult(ModelState);
             }
 
@@ -54,7 +54,7 @@ namespace Fittify.Api.Controllers.Sport
             return Ok(ofmForGet);
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetAllCategories")]
         public async Task<IActionResult> GetAll()
         {
             var allEntites = await _gppdForHttpMethods.GetAll();
@@ -71,16 +71,26 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet("range/{inputString}", Name = "GetCategoriesByRangeOfIds")]
         public async Task<IActionResult> GetByRangeOfIds(string inputString)
         {
-            // Todo logic is executed on different levels compared to _gppdForHttpMethods methods
-            // Todo Should return 200
-            //var result =  await _getMoreForIntId.GetByRangeOfIds(inputString);
-            //return Ok(result);
-            return await _getMoreForIntId.GetByRangeOfIds(inputString);
+            var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputString));
+            var ofmCollection = Mapper.Map<List<Category>, List<CategoryOfmForGet>>(entityCollection.ToList());
+            if (ofmCollection.Count == 0) // Todo mock "not found" as query paramter 
+            {
+                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
+                return new EntityNotFoundObjectResult(ModelState);
+            }
+            return Ok(ofmCollection);
         }
 
         [HttpPost("new")]
-        public async Task<CreatedAtRouteResult> Post([FromBody] CategoryOfmForPost ofmForPost)
+        public async Task<IActionResult> Post([FromBody] CategoryOfmForPost ofmForPost)
         {
+            if (ofmForPost == null) return BadRequest();
+
+            if (!ModelState.IsValid)
+            {
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
+
             var ofmForGet = await _gppdForHttpMethods.Post(ofmForPost);
             var result = CreatedAtRoute(routeName: "GetCategoriesByRangeOfIds", routeValues: new { inputString = ofmForGet.Id }, value: ofmForGet);
             return result;
@@ -94,10 +104,56 @@ namespace Fittify.Api.Controllers.Sport
         }
         
         [HttpPatch("{id:int}")]
-        public async Task<IActionResult> UpdatePartially(int id, JsonPatchDocument<CategoryOfmForPatch> jsonPatchDocument)
+        public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<CategoryOfmForPatch> jsonPatchDocument)
         {
-            var ofmForGet = await _gppdForHttpMethods.UpdatePartially(id, jsonPatchDocument);
-            return new JsonResult(ofmForGet);
+            if (jsonPatchDocument == null)
+            {
+                ModelState.AddModelError(_shortCamelCasedControllerName, "You sent an empty body (null) for " + _shortCamelCasedControllerName + " with id=" + id);
+                return new EntityNotFoundObjectResult(ModelState);
+            }
+
+            try
+            {
+                // Get entity with original values from context
+                var entity = _repo.GetById(id).Result;
+                if (entity == null)
+                {
+                    ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
+                    return new EntityNotFoundObjectResult(ModelState);
+                }
+
+                // Convert entity to ofm
+                var ofmForPatch = Mapper.Map<CategoryOfmForPatch>(entity);
+
+                // Apply new values from jsonPatchDocument to ofm (the ofm that was just created based on fresh entity from context)
+                jsonPatchDocument.ApplyTo(ofmForPatch);
+
+                // Validating ofm
+                TryValidateModel(ofmForPatch);
+                if (!ModelState.IsValid)
+                {
+                    return new UnprocessableEntityObjectResult(ModelState);
+                }
+
+                // Convert ofm with new values back to entity (by overriding entity field values)
+                entity = Mapper.Map(ofmForPatch, entity);
+
+                // Update entity in context
+                entity = await _repo.Update(entity);
+
+                // returning the patched ofm as response
+                var ofmForGet = Mapper.Map<CategoryOfmForGet>(entity);
+                return new JsonResult(ofmForGet);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+            //var ofmForGet = await _gppdForHttpMethods.UpdatePartially(id, jsonPatchDocument);
+            //return new JsonResult(ofmForGet);
         }
     }
 }

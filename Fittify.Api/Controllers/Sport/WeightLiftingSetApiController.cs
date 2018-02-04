@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Controllers.HttpMethodInterfaces;
@@ -7,6 +8,7 @@ using Fittify.Api.OfmRepository;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
@@ -24,14 +26,12 @@ namespace Fittify.Api.Controllers.Sport
     {
         private readonly GppdOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int> _gppdForHttpMethods;
         private readonly WeightLiftingSetRepository _repo;
-        private readonly GetMoreForHttpIntId<WeightLiftingSetRepository, WeightLiftingSet> _getMoreForIntId;
         private readonly ILogger<WeightLiftingSetApiController> _logger;
 
         public WeightLiftingSetApiController(FittifyContext fittifyContext, ILogger<WeightLiftingSetApiController> logger)
         {
             _repo = new WeightLiftingSetRepository(fittifyContext);
             _gppdForHttpMethods = new GppdOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int>(_repo);
-            _getMoreForIntId = new GetMoreForHttpIntId<WeightLiftingSetRepository, WeightLiftingSet>(_repo);
             _logger = logger;
         }
 
@@ -58,11 +58,13 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet("range/{inputString}", Name = "GetWeightLiftingSetsByRangeOfIds")]
         public async Task<IActionResult> GetByRangeOfIds(string inputString)
         {
-            return await _getMoreForIntId.GetByRangeOfIds(inputString);
+            var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputString));
+            var ofmCollection = Mapper.Map<List<WeightLiftingSet>, List<WeightLiftingSetOfmForGet>>(entityCollection.ToList());
+            return Ok(ofmCollection);
         }
 
         [HttpPost("new")]
-        public async Task<CreatedAtRouteResult> Post([FromBody] WeightLiftingSetOfmForPost ofmForPost)
+        public async Task<IActionResult> Post([FromBody] WeightLiftingSetOfmForPost ofmForPost)
         {
             var ofmForGet = await _gppdForHttpMethods.Post(ofmForPost);
             var result = CreatedAtRoute(routeName: "GetWeightLiftingSetsByRangeOfIds",

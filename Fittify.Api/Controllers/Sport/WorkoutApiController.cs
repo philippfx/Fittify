@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Controllers.HttpMethodInterfaces;
@@ -6,6 +7,7 @@ using Fittify.Api.OfmRepository;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
@@ -21,13 +23,11 @@ namespace Fittify.Api.Controllers.Sport
     {
         private readonly GppdOfm<WorkoutRepository, Workout, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int> _gppdForHttpMethods;
         private readonly WorkoutRepository _repo;
-        private readonly GetMoreForHttpIntId<WorkoutRepository, Workout> _getMoreForIntId;
 
         public WorkoutApiController(FittifyContext fittifyContext)
         {
             _repo = new WorkoutRepository(fittifyContext);
             _gppdForHttpMethods = new GppdOfm<WorkoutRepository, Workout, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int>(_repo);
-            _getMoreForIntId = new GetMoreForHttpIntId<WorkoutRepository, Workout>(_repo);
         }
         
         [HttpGet]
@@ -45,14 +45,17 @@ namespace Fittify.Api.Controllers.Sport
             var ofmForGet = new List<WorkoutOfmForGet>() { Mapper.Map<WorkoutOfmForGet>(entity) };
             return new JsonResult(ofmForGet);
         }
+
         [HttpGet("range/{inputString}", Name = "GetWorkoutsByRangeOfIds")]
         public async Task<IActionResult> GetByRangeOfIds(string inputString)
         {
-            return await _getMoreForIntId.GetByRangeOfIds(inputString);
+            var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputString));
+            var ofmCollection = Mapper.Map<List<Workout>, List<WorkoutOfmForGet>>(entityCollection.ToList());
+            return Ok(ofmCollection);
         }
         
-        [HttpPost]
-        public async Task<CreatedAtRouteResult> Post([FromBody] WorkoutOfmForPost ofmForPost)
+        [HttpPost("new")]
+        public async Task<IActionResult> Post([FromBody] WorkoutOfmForPost ofmForPost)
         {
             var ofmForGet = await _gppdForHttpMethods.Post(ofmForPost);
             var result = CreatedAtRoute(routeName: "GetWorkoutsByRangeOfIds", routeValues: new { inputString = ofmForGet.Id }, value: ofmForGet);

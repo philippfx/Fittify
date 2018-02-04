@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2002
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Spielwiese", "Fittify.Spielwiese\Fittify.Spielwiese.csproj", "{0689FF45-5805-4456-831A-E980187B1FAB}"
 EndProject
@@ -45,7 +45,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Analyzer.Library", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Angular", "Angular", "{031CE6ED-5D76-427D-8CEE-2464AC6210E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fittify.Angular", "Fittify.Angular\Fittify.Angular.csproj", "{BBA27E00-FE45-4167-B715-016626F0664F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Angular", "Fittify.Angular\Fittify.Angular.csproj", "{BBA27E00-FE45-4167-B715-016626F0664F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{E4C2E774-6288-4D70-93DA-D9BE069E3258}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Common.Test", "Fittify.Common.Test\Fittify.Common.Test.csproj", "{8DFD04E3-14B1-48FE-8B33-B8217B523EE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fittify.Api.OuterFacingModels.Test", "Fittify.Api.OuterFacingModels.Test\Fittify.Api.OuterFacingModels.Test.csproj", "{2B87E92D-DFB9-48CD-9097-076A62F69BD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -125,6 +131,14 @@ Global
 		{BBA27E00-FE45-4167-B715-016626F0664F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBA27E00-FE45-4167-B715-016626F0664F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBA27E00-FE45-4167-B715-016626F0664F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DFD04E3-14B1-48FE-8B33-B8217B523EE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DFD04E3-14B1-48FE-8B33-B8217B523EE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DFD04E3-14B1-48FE-8B33-B8217B523EE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DFD04E3-14B1-48FE-8B33-B8217B523EE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B87E92D-DFB9-48CD-9097-076A62F69BD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B87E92D-DFB9-48CD-9097-076A62F69BD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B87E92D-DFB9-48CD-9097-076A62F69BD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B87E92D-DFB9-48CD-9097-076A62F69BD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -144,6 +158,9 @@ Global
 		{66AC2F69-E616-4483-8039-DF00F17CA6EB} = {06847FC7-F55D-4BB2-896A-F3BFFA3DAB6B}
 		{D9188E50-F225-4587-A33A-926AF71A008D} = {06847FC7-F55D-4BB2-896A-F3BFFA3DAB6B}
 		{BBA27E00-FE45-4167-B715-016626F0664F} = {031CE6ED-5D76-427D-8CEE-2464AC6210E2}
+		{E4C2E774-6288-4D70-93DA-D9BE069E3258} = {61B2FCA8-F355-46A9-B5CD-231A070A4A2A}
+		{8DFD04E3-14B1-48FE-8B33-B8217B523EE2} = {E4C2E774-6288-4D70-93DA-D9BE069E3258}
+		{2B87E92D-DFB9-48CD-9097-076A62F69BD7} = {E4C2E774-6288-4D70-93DA-D9BE069E3258}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B305ABF-A3CE-4E97-BE76-377367E1E5B8}

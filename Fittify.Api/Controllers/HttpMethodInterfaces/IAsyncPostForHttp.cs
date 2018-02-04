@@ -5,6 +5,6 @@ namespace Fittify.Api.Controllers.HttpMethodInterfaces
 {
     public interface IAsyncPostForHttp<in TOfmForPost> where TOfmForPost : class
     {
-        Task<CreatedAtRouteResult> Post(TOfmForPost ofmForPost);
+        Task<IActionResult> Post(TOfmForPost ofmForPost);
     }
 }

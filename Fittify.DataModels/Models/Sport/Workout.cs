@@ -12,7 +12,7 @@ namespace Fittify.DataModels.Models.Sport
 
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
 
         public virtual ICollection<MapExerciseWorkout> ExercisesWorkoutsMap { get; set; }
         public virtual ICollection<WorkoutHistory> WorkoutHistories { get; set; }

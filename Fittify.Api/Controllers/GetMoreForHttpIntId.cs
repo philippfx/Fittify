@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Controllers.HttpMethodInterfaces;
 using Fittify.Common;
+using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories;
 using Fittify.DataModels.Models;
 using Microsoft.AspNetCore.Mvc;

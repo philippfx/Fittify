@@ -8,6 +8,5 @@ namespace Fittify.DataModels.Models.Sport
         public int Id { get; set; }
         public string Name { get; set; }
         public virtual ICollection<Workout> Workouts { get; set; }
-
     }
 }

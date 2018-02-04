@@ -18,10 +18,13 @@ namespace Fittify.Spielwiese
     {
         static void Main(string[] args)
         {
-            var classAnalyzer = new ClassAnalyzer();
-            classAnalyzer.GetClassNames();
+            //var classAnalyzer = new ClassAnalyzer();
+            //classAnalyzer.GetClassNames();
 
-            Debug.Write((string.Format("Creating a foo: {0}", JsonConvert.SerializeObject(new WeightLiftingSet()))));
+            //Debug.Write((string.Format("Creating a foo: {0}", JsonConvert.SerializeObject(new WeightLiftingSet()))));
+
+            Console.WriteLine(@"Your range of Id parameter is badly formatted. It must meet the regular expression '^([1-9]{1}\d*(-[1-9]{1}\d*)?((,[1-9]{1}\d*)?(-[1-9]{1}\d*)?)*|null)$'");
+            Console.ReadLine();
         }
     }
 }

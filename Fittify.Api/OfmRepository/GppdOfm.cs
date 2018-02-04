@@ -34,9 +34,16 @@ namespace Fittify.Api.OfmRepository
         {
             
         }
+
+        public virtual async Task<bool> DoesEntityExist(TId id)
+        {
+            // Todo this async lacks await
+            return  _repo.DoesEntityExist(id).Result;
+        }
         
         public virtual async Task<ICollection<TOfmForGet>> GetAll()
         {
+            // Todo this async lacks await
             var entityCollection = _repo.GetAll().ToList();
             var ofmCollection = Mapper.Map<List<TEntity>, List<TOfmForGet>>(entityCollection);
             return ofmCollection;
@@ -52,7 +59,14 @@ namespace Fittify.Api.OfmRepository
         public virtual async Task<TOfmForGet> Post(TOfmForPost ofmForPost)
         {
             var entity = Mapper.Map<TOfmForPost, TEntity>(ofmForPost);
-            entity = await _repo.Create(entity);
+            try
+            {
+                entity = await _repo.Create(entity);
+            }
+            catch (Exception e)
+            {
+                var msg = e.Message;
+            }
             
             return Mapper.Map<TEntity, TOfmForGet>(entity);
         }
@@ -79,13 +93,20 @@ namespace Fittify.Api.OfmRepository
                 var entity = _repo.GetById(id).Result;
 
                 // Convert entity to ofm
-                var ofmPppToPatch = Mapper.Map<TOfmForPatch>(entity);
+                var ofmForPatch = Mapper.Map<TOfmForPatch>(entity);
 
                 // Apply new values from jsonPatchDocument to ofm (the ofm that was just created based on fresh entity from context)
-                jsonPatchDocument.ApplyTo(ofmPppToPatch);
+                jsonPatchDocument.ApplyTo(ofmForPatch);
+
+                // Validating ofm
+                TryValidateModel(ofmForPatch);
+                if (!ModelState.IsValid)
+                {
+
+                }
 
                 // Convert ofm with new values back to entity (by overriding entity field values)
-                Mapper.Map(ofmPppToPatch, entity);
+                Mapper.Map(ofmForPatch, entity);
 
                 // Update entity in context
                 entity = await _repo.Update(entity);

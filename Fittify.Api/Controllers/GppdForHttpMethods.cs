@@ -49,7 +49,7 @@ namespace Fittify.Api.Controllers
             return new JsonResult(ofm);
         }
 
-        public virtual async Task<CreatedAtRouteResult> Post(TOfmForPost ofmForPost)
+        public virtual async Task<IActionResult> Post(TOfmForPost ofmForPost)
         {
             //var entity = Mapper.Map<TOfmForPost, TEntity>(ofmForPost);
             //entity = await _repo.Create(entity);

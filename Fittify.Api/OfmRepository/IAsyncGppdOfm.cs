@@ -1,4 +1,6 @@
-﻿namespace Fittify.Api.OfmRepository
+﻿using System.Threading.Tasks;
+
+namespace Fittify.Api.OfmRepository
 {
     public interface IAsyncGppdOfm<TId, TOfmForGet, in TOfmForPost, TOfmForPatch> :
         IAsyncGetOfm<TOfmForGet, TId>,
@@ -11,6 +13,6 @@
         where TOfmForPost : class
         where TOfmForPatch : class
     {
-
+        Task<bool> DoesEntityExist(TId id);
     }
 }

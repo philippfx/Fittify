@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Controllers.HttpMethodInterfaces;
@@ -7,6 +8,7 @@ using Fittify.Api.OfmRepository;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
@@ -22,13 +24,19 @@ namespace Fittify.Api.Controllers.Sport
     {
         private readonly GppdOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int> _gppdForHttpMethods;
         private readonly WorkoutHistoryRepository _repo;
-        private readonly GetMoreForHttpIntId<WorkoutHistoryRepository, WorkoutHistory> _getMoreForIntId;
 
         public WorkoutHistoryApiController(FittifyContext fittifyContext)
         {
             _repo = new WorkoutHistoryRepository(fittifyContext);
             _gppdForHttpMethods = new GppdOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int>(_repo);
-            _getMoreForIntId = new GetMoreForHttpIntId<WorkoutHistoryRepository, WorkoutHistory>(_repo);
+        }
+
+        [HttpGet("{id:int}", Name = "GetWorkoutHistoryById")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var entity = await _repo.GetById(id);
+            var ofmForGet = new List<WorkoutHistoryOfmForGet>() { Mapper.Map<WorkoutHistoryOfmForGet>(entity) };
+            return new JsonResult(ofmForGet);
         }
 
         [HttpGet]
@@ -39,16 +47,16 @@ namespace Fittify.Api.Controllers.Sport
             return new JsonResult(allOfmForGet);
         }
 
-        [HttpGet("{id:int}", Name = "GetWorkoutHistoryById")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("range/{inputString}", Name = "GetWorkoutHistoriesByRangeOfIds")]
+        public async Task<IActionResult> GetByRangeOfIds(string inputString)
         {
-            var entity = await _repo.GetById(id);
-            var ofmForGet = new List<WorkoutHistoryOfmForGet>() {Mapper.Map<WorkoutHistoryOfmForGet>(entity) };
-            return new JsonResult(ofmForGet);
+            var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputString));
+            var ofmCollection = Mapper.Map<List<WorkoutHistory>, List<WorkoutHistoryOfmForGet>>(entityCollection.ToList());
+            return Ok(ofmCollection);
         }
 
         [HttpPost]
-        public async Task<CreatedAtRouteResult> Post([FromBody] WorkoutHistoryOfmForPost ofmForPost)
+        public async Task<IActionResult> Post([FromBody] WorkoutHistoryOfmForPost ofmForPost)
         {
             var ofmForGet = await _gppdForHttpMethods.Post(ofmForPost);
             var result = CreatedAtRoute(routeName: "GetWorkoutHistoryById", routeValues: new { id = ofmForGet.Id }, value: ofmForGet);
