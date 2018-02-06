@@ -115,34 +115,25 @@ namespace Fittify.Api.Controllers.Sport
             try
             {
                 // Get entity with original values from context
-                var entity = _repo.GetById(id).Result;
-                if (entity == null)
+                var ofmForPatch = await _gppdForHttpMethods.GetByIdOfmForPatch(id);
+                if (ofmForPatch == null)
                 {
                     ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
                     return new EntityNotFoundObjectResult(ModelState);
                 }
 
-                // Convert entity to ofm
-                var ofmForPatch = Mapper.Map<CategoryOfmForPatch>(entity);
-
                 // Apply new values from jsonPatchDocument to ofm (the ofm that was just created based on fresh entity from context)
-                jsonPatchDocument.ApplyTo(ofmForPatch);
+                jsonPatchDocument.ApplyTo(ofmForPatch, ModelState);
 
                 // Validating ofm
-                TryValidateModel(ofmForPatch);
+                TryValidateModel(ofmForPatch);// This is important to catch invalid model states caused by applying the jsonPatch, for example if a required field (previously had a value) is now set to null
                 if (!ModelState.IsValid)
                 {
                     return new UnprocessableEntityObjectResult(ModelState);
                 }
 
-                // Convert ofm with new values back to entity (by overriding entity field values)
-                entity = Mapper.Map(ofmForPatch, entity);
-
-                // Update entity in context
-                entity = await _repo.Update(entity);
-
                 // returning the patched ofm as response
-                var ofmForGet = Mapper.Map<CategoryOfmForGet>(entity);
+                var ofmForGet = _gppdForHttpMethods.UpdatePartially(ofmForPatch).Result;
                 return new JsonResult(ofmForGet);
 
             }

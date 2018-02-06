@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -80,8 +81,9 @@ namespace Fittify.Api.Controllers.Sport
         [HttpPatch("{id:int}")]
         public async Task<IActionResult> UpdatePartially(int id, JsonPatchDocument<CardioSetOfmForPatch> jsonPatchDocument)
         {
-            var ofmForGet = await _gppdForHttpMethods.UpdatePartially(id, jsonPatchDocument);
-            return new JsonResult(ofmForGet);
+            throw new NotImplementedException();
+            //var ofmForGet = await _gppdForHttpMethods.UpdatePartially(id, jsonPatchDocument);
+            //return new JsonResult(ofmForGet);
         }
     }
 }

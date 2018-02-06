@@ -5,7 +5,7 @@ namespace Fittify.Api.OfmRepository
     public interface IAsyncGppdOfm<TId, TOfmForGet, in TOfmForPost, TOfmForPatch> :
         IAsyncGetOfm<TOfmForGet, TId>,
         IAsyncPostOfm<TOfmForGet, TOfmForPost>,
-        IAsyncPatchOfm<TOfmForGet, TOfmForPatch, TId>,
+        IAsyncPatchOfm<TOfmForGet, TOfmForPatch>,
         IAsyncDeleteOfm<TId>
 
         where TId : struct

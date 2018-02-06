@@ -101,8 +101,9 @@ namespace Fittify.Api.Controllers.Sport
         [HttpPatch("{id:int}")]
         public async Task<IActionResult> UpdatePartially(int id, JsonPatchDocument<ExerciseHistoryOfmForPatch> jsonPatchDocument)
         {
-            var ofmForGet = await _gppdForHttpMethods.UpdatePartially(id, jsonPatchDocument);
-            return new JsonResult(ofmForGet);
+            throw new NotImplementedException();
+            //var ofmForGet = await _gppdForHttpMethods.UpdatePartially(id, jsonPatchDocument);
+            //return new JsonResult(ofmForGet);
         }
     }
 }

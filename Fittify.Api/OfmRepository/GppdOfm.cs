@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Fittify.Api.Helpers;
 using Fittify.Common;
 using Fittify.DataModelRepositories;
 using Fittify.DataModels.Models;
@@ -21,9 +22,10 @@ namespace Fittify.Api.OfmRepository
         where TEntity : class, IUniqueIdentifierDataModels<TId>
         where TOfmForGet : class
         where TOfmForPost : class
-        where TOfmForPatch : class
+        where TOfmForPatch : class, new()
         where TId : struct
     {
+        private TEntity _cachedEntity;
         private readonly TCrudRepository _repo;
         public GppdOfm(TCrudRepository repository)
         {
@@ -55,7 +57,7 @@ namespace Fittify.Api.OfmRepository
             var ofm = Mapper.Map<TEntity, TOfmForGet>(entity);
             return ofm;
         }
-
+        
         public virtual async Task<TOfmForGet> Post(TOfmForPost ofmForPost)
         {
             var entity = Mapper.Map<TOfmForPost, TEntity>(ofmForPost);
@@ -78,47 +80,27 @@ namespace Fittify.Api.OfmRepository
 
         private async Task<StatusCodeResult> SaveChanges()
         {
+            // Todo decide if SavingToContext should take place here or in data layer
             if (!await _repo.SaveContext())
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
             return Ok();
         }
-        
-        public async Task<TOfmForGet> UpdatePartially(TId id, JsonPatchDocument<TOfmForPatch> jsonPatchDocument)
+
+        public virtual async Task<TOfmForPatch> GetByIdOfmForPatch(TId id)
         {
-            try
-            {
-                // Get entity with original values from context
-                var entity = _repo.GetById(id).Result;
+            _cachedEntity = await _repo.GetById(id);
+            var ofmForPatch = Mapper.Map<TEntity, TOfmForPatch>(_cachedEntity);
+            return ofmForPatch;
+        }
 
-                // Convert entity to ofm
-                var ofmForPatch = Mapper.Map<TOfmForPatch>(entity);
-
-                // Apply new values from jsonPatchDocument to ofm (the ofm that was just created based on fresh entity from context)
-                jsonPatchDocument.ApplyTo(ofmForPatch);
-
-                // Validating ofm
-                TryValidateModel(ofmForPatch);
-                if (!ModelState.IsValid)
-                {
-
-                }
-
-                // Convert ofm with new values back to entity (by overriding entity field values)
-                Mapper.Map(ofmForPatch, entity);
-
-                // Update entity in context
-                entity = await _repo.Update(entity);
-
-                // returning the patched ofm as response
-                return Mapper.Map<TOfmForGet>(entity);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+        public async Task<TOfmForGet> UpdatePartially(TOfmForPatch ofmForPatch)
+        {
+            Mapper.Map(ofmForPatch, _cachedEntity);
+            var entity = await _repo.Update(_cachedEntity);
+            return Mapper.Map<TEntity, TOfmForGet>(entity);
+            
         }
         
     }

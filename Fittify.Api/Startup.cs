@@ -110,9 +110,12 @@ namespace Fittify.Api
                     .ForMember(dest => dest.DateTimeEnd, opt => opt.MapFrom(src => src.DateTimeStartEnd.DateTimeEnd))
                     .ForMember(dest => dest.Workout, opt => opt.MapFrom(src => src.Workout))
                     .ForMember(dest => dest.ExerciseHistoryIds, opt => opt.MapFrom(src => src.ExerciseHistories.Select(eH => eH.Id)));
-                
+
+                //cfg.CreateMap<Category, CategoryOfmForPatch>()
+                //    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name + " appendix"));
+
                 // OfmPpp to Entity
-                cfg.CreateMap<WorkoutHistoryOfmForPatch, WorkoutHistory>();
+                //cfg.CreateMap<WorkoutHistoryOfmForPatch, WorkoutHistory>();
                 //cfg.IgnoreUnmapped<WorkoutHistoryOfmForPpp, WorkoutHistory>(); // does not work as expected
 
                 // Must be last statement

@@ -4,11 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.OfmRepository
 {
-    public interface IAsyncPatchOfm<TOfmForGet, TOfmForPatch, in TId>
+    public interface IAsyncPatchOfm<TOfmForGet, TOfmForPatch>
         where TOfmForGet : class
-        where TOfmForPatch : class 
-        where TId : struct
+        where TOfmForPatch : class
     {
-        Task<TOfmForGet> UpdatePartially(TId id, [FromBody] JsonPatchDocument<TOfmForPatch> jsonPatchDocument);
+        Task<TOfmForGet> UpdatePartially(TOfmForPatch ofmForPatch);
     }
 }
