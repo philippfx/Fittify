@@ -1,4 +1,6 @@
-﻿using Fittify.DataModels.Models.Sport;
+﻿using System.Threading.Tasks;
+using Fittify.DataModels.Models.Sport;
+using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
@@ -13,5 +15,13 @@ namespace Fittify.DataModelRepositories.Repository.Sport
         {
             
         }
+
+        public override async Task<Category> GetById(int id)
+        {
+            return await FittifyContext.Categories
+                .Include(i => i.Workouts)
+                .FirstOrDefaultAsync(w => w.Id == id);
+        }
+
     }
 }

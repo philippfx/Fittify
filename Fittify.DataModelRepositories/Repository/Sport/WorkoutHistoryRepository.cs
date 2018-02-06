@@ -108,7 +108,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
 
         public override Task<WorkoutHistory> GetById(int id)
         {
-            return FittifyContext.WorkoutHistories.Include(i => i.DateTimeStartEnd).FirstOrDefaultAsync(wH => wH.Id == id);
+            return FittifyContext.WorkoutHistories.Include(i => i.DateTimeStartEnd).Include(i => i.ExerciseHistories).Include(i => i.Workout).FirstOrDefaultAsync(wH => wH.Id == id);
         }
     }
 }

@@ -49,5 +49,10 @@ namespace Fittify.DataModelRepositories
                 optionsBuilder.UseSqlServer(_dbConnectionString);
             }
         }
+
+        internal object Set(Type type)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

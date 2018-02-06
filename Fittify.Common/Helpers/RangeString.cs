@@ -40,27 +40,6 @@ namespace Fittify.Common.Helpers
             return lstNumber;
         }
 
-        ///// <summary>
-        ///// Checks if range of int Ids is in ascending order
-        ///// </summary>
-        ///// <param name="str">Valid input string, for example "1-5,10,20-25"</param>
-        ///// <returns>Returns true if input string was valid and integers were in ascending order.</returns>
-        //public static bool IsOrderAscending(string str)
-        //{
-        //    if (str == null) return false;
-        //    var split = str.Split(new char[] {',', '-' });
-        //    int current;
-        //    int next;
-        //    if (!int.TryParse(split[0], out current)) return false; // Covering the case when input is only a single int
-        //    for (int i = 0; i < split.Length-1; i++)
-        //    {
-        //        if (!int.TryParse(split[i], out current)) return false;
-        //        if (!int.TryParse(split[i + 1], out next)) return false;
-        //        if (current > next) return false;
-        //    }
-        //    return true;
-        //}
-
         /// <summary>
         /// Converts a List of ints to an abbreviated concatenated string
         /// </summary>

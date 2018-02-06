@@ -24,7 +24,7 @@ namespace Fittify.Api.OuterFacingModels.Helpers
 
         public override string FormatErrorMessage(string name)
         {
-            return this.ErrorMessage = "The range of integer ids is not in an ascending order. For example, '10-8,7,6-1' is not in an ascending order and should be '1-6,7,8-10' instead ";
+            return this.ErrorMessage = "The range of integer ids is invalid or not in an ascending order. For example, '10-8,7,6-1' is not in an ascending order and should be '1-6,7,8-10' instead";
         }
     }
 }
