@@ -18,10 +18,10 @@ namespace Fittify.Api.OfmRepository
         {
             _repo = repo;
         }
-        public async Task<ICollection<TOfmForGet>> GetByRangeOfIds(string inputStringForRangeOfIds)
+        public async Task<IEnumerable<TOfmForGet>> GetByRangeOfIds(string inputStringForRangeOfIds)
         {
             var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputStringForRangeOfIds));
-            return Mapper.Map<ICollection<TOfmForGet>>(entityCollection);
+            return Mapper.Map<IEnumerable<TOfmForGet>>(entityCollection);
         }
     }
 }

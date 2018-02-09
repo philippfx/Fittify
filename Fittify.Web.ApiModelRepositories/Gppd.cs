@@ -25,13 +25,13 @@ namespace Fittify.Web.ApiModelRepositories
             return Ok();
         }
 
-        public virtual async Task<ICollection<T>> Get()
+        public virtual async Task<IEnumerable<T>> Get()
         {
-            ICollection<T> outputModel = null;
+            IEnumerable<T> outputModel = null;
             try
             {
                 HttpResponse = await HttpRequestFactory.Get(RequestUri);
-                outputModel = HttpResponse.ContentAsType<ICollection<T>>();
+                outputModel = HttpResponse.ContentAsType<IEnumerable<T>>();
             }
             catch (Exception e)
             {
@@ -40,10 +40,10 @@ namespace Fittify.Web.ApiModelRepositories
             return outputModel;
         }
 
-        public virtual async Task<ICollection<T>> GetByRangeOfIds(string rangeOfIds)
+        public virtual async Task<IEnumerable<T>> GetByRangeOfIds(string rangeOfIds)
         {
             HttpResponse = await HttpRequestFactory.Get(RequestUri + "/" + rangeOfIds);
-            var outputModel = HttpResponse.ContentAsType<ICollection<T>>();
+            var outputModel = HttpResponse.ContentAsType<IEnumerable<T>>();
             return outputModel;
         }
 

@@ -11,6 +11,6 @@ namespace Fittify.Api.OuterFacingModels.Sport.Abstract
         
         public WorkoutOfmBase Workout { get; set; }
 
-        public virtual ICollection<int> ExerciseHistoryIds { get; set; }
+        public virtual IEnumerable<int> ExerciseHistoryIds { get; set; }
     }
 }

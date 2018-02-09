@@ -5,6 +5,6 @@ namespace Fittify.Api.OfmRepository
 {
     public interface IAsyncGetMoreForOfmWithIntId<TOfmForGet>
     {
-        Task<ICollection<TOfmForGet>> GetByRangeOfIds(string inputStringForRangeOfIds);
+        Task<IEnumerable<TOfmForGet>> GetByRangeOfIds(string inputStringForRangeOfIds);
     }
 }

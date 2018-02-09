@@ -21,11 +21,11 @@ namespace Fittify.Api.Controllers
         {
             _repo = repo;
         }
-        public async Task<ICollection<TOfmForGet>> GetByRangeOfIds(string inputStringForRangeOfIds)
+        public async Task<IEnumerable<TOfmForGet>> GetByRangeOfIds(string inputStringForRangeOfIds)
         {
             // TODO check input with regex
 
-            ICollection<TEntity> entityCollection;
+            IEnumerable<TEntity> entityCollection;
             List<TOfmForGet> ofmCollection;
             //if (int.TryParse(inputStringForRangeOfIds, out var rangeOfIds))
             //{

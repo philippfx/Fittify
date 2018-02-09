@@ -82,17 +82,17 @@ namespace Fittify.Web.View.Controllers
                 {
                     if (i < previousWeightliftingSetsLength && i < currentWeightliftingSetsLength)
                     {
-                        eH.CurrentAndHistoricWeightLiftingSetPairs.Add(new ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair(previousWeightliftingSets[i], currentWeightliftingSets[i]));
+                        eH.CurrentAndHistoricWeightLiftingSetPairs.ToList().Add(new ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair(previousWeightliftingSets[i], currentWeightliftingSets[i]));
                     }
 
                     if (i < previousWeightliftingSetsLength && i >= currentWeightliftingSetsLength)
                     {
-                        eH.CurrentAndHistoricWeightLiftingSetPairs.Add(new ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair(previousWeightliftingSets[i], null));
+                        eH.CurrentAndHistoricWeightLiftingSetPairs.ToList().Add(new ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair(previousWeightliftingSets[i], null));
                     }
 
                     if (i >= previousWeightliftingSetsLength && i < currentWeightliftingSetsLength)
                     {
-                        eH.CurrentAndHistoricWeightLiftingSetPairs.Add(new ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair(null, currentWeightliftingSets[i]));
+                        eH.CurrentAndHistoricWeightLiftingSetPairs.ToList().Add(new ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair(null, currentWeightliftingSets[i]));
                     }
                 }
 
@@ -119,17 +119,17 @@ namespace Fittify.Web.View.Controllers
                 {
                     if (i < previousCardioSetsLength && i < currentCardioSetsLength)
                     {
-                        eH.CurrentAndHistoricCardioSetPairs.Add(new ExerciseHistoryViewModel.CurrentAndHistoricCardioSetPair(previousCardioSets[i], currentCardioSets[i]));
+                        eH.CurrentAndHistoricCardioSetPairs.ToList().Add(new ExerciseHistoryViewModel.CurrentAndHistoricCardioSetPair(previousCardioSets[i], currentCardioSets[i]));
                     }
 
                     if (i < previousCardioSetsLength && i >= currentCardioSetsLength)
                     {
-                        eH.CurrentAndHistoricCardioSetPairs.Add(new ExerciseHistoryViewModel.CurrentAndHistoricCardioSetPair(previousCardioSets[i], null));
+                        eH.CurrentAndHistoricCardioSetPairs.ToList().Add(new ExerciseHistoryViewModel.CurrentAndHistoricCardioSetPair(previousCardioSets[i], null));
                     }
 
                     if (i >= previousCardioSetsLength && i < currentCardioSetsLength)
                     {
-                        eH.CurrentAndHistoricCardioSetPairs.Add(new ExerciseHistoryViewModel.CurrentAndHistoricCardioSetPair(null, currentCardioSets[i]));
+                        eH.CurrentAndHistoricCardioSetPairs.ToList().Add(new ExerciseHistoryViewModel.CurrentAndHistoricCardioSetPair(null, currentCardioSets[i]));
                     }
                 }
 

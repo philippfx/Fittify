@@ -14,6 +14,7 @@ using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Fittify.Api.Controllers.Sport
 {
@@ -25,17 +26,17 @@ namespace Fittify.Api.Controllers.Sport
         private readonly GppdOfm<MapExerciseWorkoutRepository, MapExerciseWorkout, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForPatch, int> _gppdForHttpMethods;
         private readonly MapExerciseWorkoutRepository _repo;
 
-        public MapExerciseWorkoutApiController(FittifyContext fittifyContext)
+        public MapExerciseWorkoutApiController(FittifyContext fittifyContext, IActionDescriptorCollectionProvider adcProvider)
         {
             _repo = new MapExerciseWorkoutRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<MapExerciseWorkoutRepository, MapExerciseWorkout, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForPatch, int>(_repo);
+            _gppdForHttpMethods = new GppdOfm<MapExerciseWorkoutRepository, MapExerciseWorkout, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForPatch, int>(_repo, adcProvider);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var allEntites = await _gppdForHttpMethods.GetAll();
-            var allOfmForGet = Mapper.Map<ICollection<MapExerciseWorkoutOfmForGet>>(allEntites);
+            var allOfmForGet = Mapper.Map<IEnumerable<MapExerciseWorkoutOfmForGet>>(allEntites);
             return new JsonResult(allOfmForGet);
         }
 

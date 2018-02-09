@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Controllers.HttpMethodInterfaces;
+using Fittify.Api.Extensions;
+using Fittify.Api.Helpers;
 using Fittify.Api.OfmRepository;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Fittify.Api.Controllers.Sport
 {
@@ -24,11 +30,13 @@ namespace Fittify.Api.Controllers.Sport
     {
         private readonly GppdOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int> _gppdForHttpMethods;
         private readonly WorkoutHistoryRepository _repo;
+        private readonly string _shortCamelCasedControllerName;
 
-        public WorkoutHistoryApiController(FittifyContext fittifyContext)
+        public WorkoutHistoryApiController(FittifyContext fittifyContext, IActionDescriptorCollectionProvider adcProvider)
         {
             _repo = new WorkoutHistoryRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int>(_repo);
+            _gppdForHttpMethods = new GppdOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int>(_repo, adcProvider);
+            _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
         }
 
         [HttpGet("{id:int}", Name = "GetWorkoutHistoryById")]
@@ -43,7 +51,7 @@ namespace Fittify.Api.Controllers.Sport
         public async Task<IActionResult> GetAll()
         {
             var allEntites = await _gppdForHttpMethods.GetAll();
-            var allOfmForGet = Mapper.Map<ICollection<WorkoutHistoryOfmForGet>>(allEntites);
+            var allOfmForGet = Mapper.Map<IEnumerable<WorkoutHistoryOfmForGet>>(allEntites);
             return new JsonResult(allOfmForGet);
         }
 
@@ -67,6 +75,29 @@ namespace Fittify.Api.Controllers.Sport
         public async Task<IActionResult> Delete(int id)
         {
             await _gppdForHttpMethods.Delete(id);
+            return NoContent();
+        }
+
+        [HttpDelete("mydelete/{id:int}")]
+        public async Task<IActionResult> MyDelete(int id)
+        {
+            var methodBase = typeof(ExerciseHistoryApiController).GetMethod("GetByRangeOfIds");
+
+            var attribute = (HttpGetAttribute)methodBase.GetCustomAttributes(typeof(HttpGetAttribute), true)[0];
+            
+            var blockingOfmForGetLists = _gppdForHttpMethods.MyDelete(id).Result;
+            if (blockingOfmForGetLists.Count != 0)
+            {
+                foreach (var tuple in blockingOfmForGetLists)
+                {
+                    ModelState.AddModelError(_shortCamelCasedControllerName, tuple);
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
             return NoContent();
         }
 

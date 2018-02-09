@@ -47,7 +47,7 @@ namespace Fittify.Test.HumanInteraction.ConsumeApi
             var gppdRepo = new GppdRepository<ExerciseViewModel>(baseRequestUri);
 
             // Act
-            var listExercises = gppdRepo.GetByRangeOfIds("1-2").Result;
+            var listExercises = gppdRepo.GetByRangeOfIds("1-2").Result.ToList();
 
             // Assert
             Assert.AreEqual(listExercises.Count, 2);
@@ -62,7 +62,7 @@ namespace Fittify.Test.HumanInteraction.ConsumeApi
             var gppdRepo = new GppdRepository<ExerciseViewModel>(baseRequestUri);
 
             // Act
-            var listExercises = gppdRepo.GetByRangeOfIds("1-3").Result;
+            var listExercises = gppdRepo.GetByRangeOfIds("1-3").Result.ToList();
 
             // Assert
             Assert.AreEqual(listExercises.Count, 3);
@@ -78,7 +78,7 @@ namespace Fittify.Test.HumanInteraction.ConsumeApi
             var gppdRepo = new GppdRepository<ExerciseViewModel>(baseRequestUri);
 
             // Act
-            var listExercises = gppdRepo.GetByRangeOfIds("1,3").Result;
+            var listExercises = gppdRepo.GetByRangeOfIds("1,3").Result.ToList();
 
             // Assert
             Assert.AreEqual(listExercises.Count, 2);
@@ -93,7 +93,7 @@ namespace Fittify.Test.HumanInteraction.ConsumeApi
             var gppdRepo = new GppdRepository<ExerciseViewModel>(baseRequestUri);
 
             // Act
-            var listExercises = gppdRepo.GetByRangeOfIds("1,2,3").Result;
+            var listExercises = gppdRepo.GetByRangeOfIds("1,2,3").Result.ToList();
 
             // Assert
             Assert.AreEqual(listExercises.Count, 3);
@@ -109,7 +109,7 @@ namespace Fittify.Test.HumanInteraction.ConsumeApi
             var gppdRepo = new GppdRepository<ExerciseViewModel>(baseRequestUri);
 
             // Act
-            var listExercises = gppdRepo.GetByRangeOfIds("1,2-3").Result;
+            var listExercises = gppdRepo.GetByRangeOfIds("1,2-3").Result.ToList();
 
             // Assert
             Assert.AreEqual(listExercises.Count, 3);

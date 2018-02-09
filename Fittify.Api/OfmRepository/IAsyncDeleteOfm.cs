@@ -4,6 +4,6 @@ namespace Fittify.Api.OfmRepository
 {
     public interface IAsyncDeleteOfm<TId> where TId : struct
     {
-        Task Delete(TId id);
+        Task<bool> Delete(TId id);
     }
 }

@@ -6,9 +6,9 @@ namespace Fittify.Web.ApiModelRepositories
 {
     public interface IAsyncGppd<T> where T : class
     {
-        Task<ICollection<T>> GetByRangeOfIds(string rangeOfIds);
+        Task<IEnumerable<T>> GetByRangeOfIds(string rangeOfIds);
         
-        Task<ICollection<T>> Get();
+        Task<IEnumerable<T>> Get();
         
         Task<T> Post(T entity);
 

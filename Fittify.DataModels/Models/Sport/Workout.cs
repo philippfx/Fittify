@@ -14,7 +14,7 @@ namespace Fittify.DataModels.Models.Sport
         public virtual Category Category { get; set; }
         public int? CategoryId { get; set; }
 
-        public virtual ICollection<MapExerciseWorkout> ExercisesWorkoutsMap { get; set; }
-        public virtual ICollection<WorkoutHistory> WorkoutHistories { get; set; }
+        public virtual IEnumerable<MapExerciseWorkout> ExercisesWorkoutsMap { get; set; }
+        public virtual IEnumerable<WorkoutHistory> WorkoutHistories { get; set; }
     }
 }

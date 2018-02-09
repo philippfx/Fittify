@@ -18,6 +18,7 @@ using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -32,11 +33,11 @@ namespace Fittify.Api.Controllers.Sport
         private readonly CategoryRepository _repo;
         private readonly string _shortCamelCasedControllerName;
 
-        public CategoryApiController(FittifyContext fittifyContext)
+        public CategoryApiController(FittifyContext fittifyContext, IActionDescriptorCollectionProvider adcProvider)
         {
             _repo = new CategoryRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo);
-            _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerName();
+            _gppdForHttpMethods = new GppdOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo, adcProvider);
+            _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
         }
 
         [HttpGet("{id:int}", Name="GetCategoryById")]
@@ -58,7 +59,7 @@ namespace Fittify.Api.Controllers.Sport
         public async Task<IActionResult> GetAll()
         {
             var allEntites = await _gppdForHttpMethods.GetAll();
-            var allOfmForGet = Mapper.Map<ICollection<CategoryOfmForGet>>(allEntites);
+            var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
             //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
             if (allOfmForGet.Count == 0)
             {
@@ -99,10 +100,36 @@ namespace Fittify.Api.Controllers.Sport
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _gppdForHttpMethods.Delete(id);
+            bool successfullyDeleted = await _gppdForHttpMethods.Delete(id);
+            if (successfullyDeleted) return NoContent();
+            else return StatusCode(409);
+
+        }
+
+        [HttpDelete("mydelete/{id:int}")]
+        public async Task<IActionResult> MyDelete(int id)
+        {
+            // Todo Refactor route, merge it with the original route and make this method use less code
+            var methodBase = typeof(ExerciseHistoryApiController).GetMethod("GetByRangeOfIds");
+
+            var attribute = (HttpGetAttribute)methodBase.GetCustomAttributes(typeof(HttpGetAttribute), true)[0];
+
+            var blockingOfmForGetLists = await _gppdForHttpMethods.MyDelete(id);
+            if (blockingOfmForGetLists.Count != 0)
+            {
+                foreach (var tuple in blockingOfmForGetLists)
+                {
+                    ModelState.AddModelError(_shortCamelCasedControllerName, tuple);
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
             return NoContent();
         }
-        
+
         [HttpPatch("{id:int}")]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<CategoryOfmForPatch> jsonPatchDocument)
         {

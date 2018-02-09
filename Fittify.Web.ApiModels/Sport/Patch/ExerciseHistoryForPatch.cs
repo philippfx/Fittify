@@ -26,7 +26,7 @@ namespace Fittify.Web.ApiModels.Sport.Patch
         public virtual ExerciseHistoryForPatch PreviousExerciseHistory { get; set; }
         public int? PreviousExerciseHistoryId { get; set; }
 
-        public virtual ICollection<WeightLiftingSetForPatch> WeightLiftingSets { get; set; }
-        public virtual ICollection<CardioSetForPatch> CardioSets { get; set; }
+        public virtual IEnumerable<WeightLiftingSetForPatch> WeightLiftingSets { get; set; }
+        public virtual IEnumerable<CardioSetForPatch> CardioSets { get; set; }
     }
 }

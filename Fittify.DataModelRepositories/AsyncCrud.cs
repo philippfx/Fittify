@@ -66,6 +66,7 @@ namespace Fittify.DataModelRepositories
 
         public virtual async Task<List<List<IUniqueIdentifierDataModels<int>>>> MyDelete(TId id)
         {
+            // Todo Refactor and make return type bool (out errors)!
             List<List<IUniqueIdentifierDataModels<int>>> returnList = new List<List<IUniqueIdentifierDataModels<int>>>();
 
             var entity = await GetById(id);
@@ -77,85 +78,33 @@ namespace Fittify.DataModelRepositories
                     t.ClrType.Name,
                     NavigationProperties = t.GetNavigations().Select(x => x.PropertyInfo)
                 });
-
+            
             var thisModelsNavProperties = modelData.FirstOrDefault(w => w.Name == entity.GetType().Name).NavigationProperties;
             
             foreach (var navProp in thisModelsNavProperties)
             {
-                var navPropName = navProp.Name;
-                var navPropType = navProp.PropertyType;
-
-                var listnavPropValueUncasted = navProp.GetValue(entity);
+                
                 var IEnumerablenavPropValue = navProp.GetValue(entity) as IEnumerable<IUniqueIdentifierDataModels<int>>;
-
-                //try
-                //{
-                //    //var castToIColly = (ICollection<IUniqueIdentifierDataModels<int>>)navProp.GetValue(entity);
-                //    var castToIColly = (HashSet<IUniqueIdentifierDataModels<int>>)navProp.GetValue(entity);
-                //}
-                //catch (Exception e)
-                //{
-                //    var msg = e.Message;
-                //}
-
-
-                var singlenavPropValueUncasted = navProp.GetValue(entity);
-                var singlenavPropValue = navProp.GetValue(entity) as IUniqueIdentifierDataModels<int>;
                 if (IEnumerablenavPropValue != null)
                 {
                     var listnavPropValue = IEnumerablenavPropValue.ToList();
                     returnList.Add(listnavPropValue);
                 }
 
+                var singlenavPropValue = navProp.GetValue(entity) as IUniqueIdentifierDataModels<int>;
                 if (singlenavPropValue != null)
                 {
                     returnList.Add(new List<IUniqueIdentifierDataModels<int>>() { singlenavPropValue });
                 }
-
-
-
-
-                //Type singleItemType = null;
-
-                //foreach (Type interfaceType in navPropType.GetInterfaces())
-                //{
-                //    //if (/*interfaceType.IsGenericType &&*/
-                //    //    interfaceType.GetGenericTypeDefinition()
-                //    //    == typeof(ICollection<>))
-                //    //{
-                //    singleItemType = navPropType.GetGenericArguments()[0];
-                //    // do something...
-                //    //break;
-                //    //}
-                //}
-
-                //var target = FittifyContext.Set(singleItemType);
-                //var nameOfEntity = nameof(TEntity);
-                //var keyName = FittifyContext.Model.FindEntityType(nameof(TEntity)).FindPrimaryKey().Properties.Select(x => x.Name).Single();
-
-                //var Model = FittifyContext.Model;
-                //var findType = Model.FindEntityType(singleItemType);
-                //var fks = findType.GetForeignKeys();
-
-
-
-
-                //var value = (TId)entity.GetType().GetProperty(keyName).GetValue(entity, null);
             }
-
-            //var keyName = FittifyContext.Model.FindEntityType(typeof(TEntity)).FindPrimaryKey().Properties.Select(x => x.Name).Single();
-            //var fks = FittifyContext.Model.FindEntityType(typeof(TEntity)).GetForeignKeys().ToList();
-            //var value = (TId)entity.GetType().GetProperty(keyName).GetValue(entity, null);
-
             return returnList;
         }
 
-        public virtual async Task Delete(TId id)
+        public virtual async Task<bool> Delete(TId id)
         {
-            var teeest = MyDelete(id).Result;
             var entity = await GetById(id);
             FittifyContext.Set<TEntity>().Remove(entity);
-            await SaveContext();
+            return await SaveContext();
         }
 
         public virtual async Task<TEntity> GetById(TId id)
@@ -168,7 +117,7 @@ namespace Fittify.DataModelRepositories
             return FittifyContext.Set<TEntity>().AsNoTracking();
         }
 
-        public virtual async Task<ICollection<TEntity>> GetByCollectionOfIds(ICollection<TId> collectionOfIds)
+        public virtual async Task<IEnumerable<TEntity>> GetByCollectionOfIds(IEnumerable<TId> collectionOfIds)
         {
             return await FittifyContext.Set<TEntity>().Where(t => collectionOfIds.Contains(t.Id)).ToListAsync();
         }

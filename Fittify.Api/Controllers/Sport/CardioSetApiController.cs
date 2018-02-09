@@ -14,6 +14,7 @@ using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Fittify.Api.Controllers.Sport
 {
@@ -25,17 +26,17 @@ namespace Fittify.Api.Controllers.Sport
         private readonly GppdOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int> _gppdForHttpMethods;
         private readonly CardioSetRepository _repo;
 
-        public CardioSetApiController(FittifyContext fittifyContext)
+        public CardioSetApiController(FittifyContext fittifyContext, IActionDescriptorCollectionProvider adcProvider)
         {
             _repo = new CardioSetRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int>(_repo);
+            _gppdForHttpMethods = new GppdOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int>(_repo, adcProvider);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var allEntites = await _gppdForHttpMethods.GetAll();
-            var allOfmForGet = Mapper.Map<ICollection<CardioSetOfmForGet>>(allEntites);
+            var allOfmForGet = Mapper.Map<IEnumerable<CardioSetOfmForGet>>(allEntites);
             return new JsonResult(allOfmForGet);
         }
 

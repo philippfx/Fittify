@@ -12,7 +12,7 @@ namespace Fittify.Web.ApiModels.Sport.Patch
 
         public string Name { get; set; }
         
-        public virtual ICollection<ExerciseHistoryForPatch> ExerciseHistories { get; set; }
+        public virtual IEnumerable<ExerciseHistoryForPatch> ExerciseHistories { get; set; }
         
     }
 }

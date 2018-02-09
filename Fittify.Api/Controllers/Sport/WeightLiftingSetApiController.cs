@@ -14,6 +14,7 @@ using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -28,10 +29,10 @@ namespace Fittify.Api.Controllers.Sport
         private readonly WeightLiftingSetRepository _repo;
         private readonly ILogger<WeightLiftingSetApiController> _logger;
 
-        public WeightLiftingSetApiController(FittifyContext fittifyContext, ILogger<WeightLiftingSetApiController> logger)
+        public WeightLiftingSetApiController(FittifyContext fittifyContext, ILogger<WeightLiftingSetApiController> logger, IActionDescriptorCollectionProvider adcProvider)
         {
             _repo = new WeightLiftingSetRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int>(_repo);
+            _gppdForHttpMethods = new GppdOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int>(_repo, adcProvider);
             _logger = logger;
         }
 
@@ -39,7 +40,7 @@ namespace Fittify.Api.Controllers.Sport
         public async Task<IActionResult> GetAll()
         {
             var allEntites = await _gppdForHttpMethods.GetAll();
-            var allOfmForGet = Mapper.Map<ICollection<WeightLiftingSetOfmForGet>>(allEntites);
+            var allOfmForGet = Mapper.Map<IEnumerable<WeightLiftingSetOfmForGet>>(allEntites).ToList();
             if (allOfmForGet.Count == 0)
             {
                 NoContent();

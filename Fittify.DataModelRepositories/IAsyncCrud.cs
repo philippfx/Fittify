@@ -15,12 +15,12 @@ namespace Fittify.DataModelRepositories
 
         Task<TEntity> Update(TEntity entity);
 
-        Task Delete(TId id);
+        Task<bool> Delete(TId id);
 
         Task<TEntity> GetById(TId id);
 
         IQueryable<TEntity> GetAll();
 
-        Task<ICollection<TEntity>> GetByCollectionOfIds(ICollection<TId> rangeOfIds);
+        Task<IEnumerable<TEntity>> GetByCollectionOfIds(IEnumerable<TId> rangeOfIds);
     }
 }

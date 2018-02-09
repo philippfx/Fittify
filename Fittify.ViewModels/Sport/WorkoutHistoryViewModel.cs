@@ -14,8 +14,8 @@ namespace Fittify.Web.ViewModels.Sport
         public int WorkoutId { get; set; }
         public string WorkoutName { get; set; }
 
-        public virtual ICollection<ExerciseHistoryViewModel> ExerciseHistories { get; set; }
+        public virtual IEnumerable<ExerciseHistoryViewModel> ExerciseHistories { get; set; }
 
-        public virtual ICollection<ExerciseViewModel> AllExercises { get; set; }
+        public virtual IEnumerable<ExerciseViewModel> AllExercises { get; set; }
     }
 }

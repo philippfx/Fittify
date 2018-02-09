@@ -12,7 +12,7 @@ namespace Fittify.Web.ApiModels.Sport.Post
         public int? PreviousExerciseHistoryId { get; set; }
 
 
-        public virtual ICollection<int> WeightLiftingSetIds { get; set; }
-        public virtual ICollection<int> CardioSetIds { get; set; }
+        public virtual IEnumerable<int> WeightLiftingSetIds { get; set; }
+        public virtual IEnumerable<int> CardioSetIds { get; set; }
     }
 }

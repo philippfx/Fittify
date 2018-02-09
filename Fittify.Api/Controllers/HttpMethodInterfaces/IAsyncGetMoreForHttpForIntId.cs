@@ -6,6 +6,6 @@ namespace Fittify.Api.Controllers.HttpMethodInterfaces
 {
     public interface IAsyncGetMoreForHttpForIntId<T> where T: class
     {
-        Task<ICollection<T>> GetByRangeOfIds(string inputStringForRangeOfIds);
+        Task<IEnumerable<T>> GetByRangeOfIds(string inputStringForRangeOfIds);
     }
 }

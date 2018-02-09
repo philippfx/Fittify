@@ -15,6 +15,7 @@ using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Fittify.Api.Controllers.Sport
 {
@@ -26,10 +27,10 @@ namespace Fittify.Api.Controllers.Sport
         private readonly GppdOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int> _gppdForHttpMethods;
         private readonly ExerciseHistoryRepository _repo;
 
-        public ExerciseHistoryApiController(FittifyContext fittifyContext)
+        public ExerciseHistoryApiController(FittifyContext fittifyContext, IActionDescriptorCollectionProvider adcProvider)
         {
             _repo = new ExerciseHistoryRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int>(_repo);
+            _gppdForHttpMethods = new GppdOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int>(_repo, adcProvider);
         }
 
         [HttpGet("{id:int}", Name = "GetExerciseHistoryById")]
@@ -44,7 +45,7 @@ namespace Fittify.Api.Controllers.Sport
         public async Task<IActionResult> GetAll()
         {
             var allEntites = await _gppdForHttpMethods.GetAll();
-            var allOfmForGet = Mapper.Map<ICollection<ExerciseHistoryOfmForGet>>(allEntites);
+            var allOfmForGet = Mapper.Map<IEnumerable<ExerciseHistoryOfmForGet>>(allEntites);
             return new JsonResult(allOfmForGet);
         }
 
@@ -84,12 +85,12 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet("workouthistory/{workouthistoryId:int}")]
         public async Task<IActionResult> GetCollectionByFkWorkoutHistoryId(int workouthistoryId)
         {
-            ICollection<ExerciseHistoryOfmForGet> ofm = null;
+            IEnumerable<ExerciseHistoryOfmForGet> ofm = null;
             try
             {
                 var collectionExerciseHistories = await _repo.GetCollectionByFkWorkoutHistoryId(workouthistoryId);
                 ofm = Mapper
-                    .Map<ICollection<ExerciseHistory>, ICollection<ExerciseHistoryOfmForGet>>(collectionExerciseHistories);
+                    .Map<IEnumerable<ExerciseHistory>, IEnumerable<ExerciseHistoryOfmForGet>>(collectionExerciseHistories);
             }
             catch (Exception e)
             {

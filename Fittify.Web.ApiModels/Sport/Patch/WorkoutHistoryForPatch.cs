@@ -14,6 +14,6 @@ namespace Fittify.Web.ApiModels.Sport.Patch
         public virtual WorkoutForPatch Workout { get; set; }
         public int WorkoutId { get; set; }
 
-        public virtual ICollection<ExerciseHistoryForPatch> ExerciseHistories { get; set; }
+        public virtual IEnumerable<ExerciseHistoryForPatch> ExerciseHistories { get; set; }
     }
 }

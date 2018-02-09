@@ -25,7 +25,7 @@ namespace Fittify.Api.OuterFacingModels.Sport.Post
         public virtual ExerciseHistoryOfmForPost PreviousExerciseHistory { get; set; }
         public int? PreviousExerciseHistoryId { get; set; }
 
-        public virtual ICollection<WeightLiftingSetOfmForPost> WeightLiftingSets { get; set; }
-        public virtual ICollection<CardioSetOfmForPost> CardioSets { get; set; }
+        public virtual IEnumerable<WeightLiftingSetOfmForPost> WeightLiftingSets { get; set; }
+        public virtual IEnumerable<CardioSetOfmForPost> CardioSets { get; set; }
     }
 }

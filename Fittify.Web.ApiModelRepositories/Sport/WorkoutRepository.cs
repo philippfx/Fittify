@@ -17,10 +17,10 @@ namespace Fittify.Web.ApiModelRepositories.Sport
 
         }
 
-        public override async Task<ICollection<WorkoutViewModel>> Get()
+        public override async Task<IEnumerable<WorkoutViewModel>> Get()
         {
             var response = await HttpRequestFactory.Get(RequestUri);
-            var workoutApiModel = response.ContentAsType<ICollection<WorkoutForGet>>().FirstOrDefault();
+            var workoutApiModel = response.ContentAsType<IEnumerable<WorkoutForGet>>().FirstOrDefault();
             var viewModel = Mapper.Map<WorkoutViewModel>(workoutApiModel);
 
             response = await HttpRequestFactory.Get("http://localhost:52275/api/exercises/range/" + workoutApiModel.RangeOfExerciseIds);

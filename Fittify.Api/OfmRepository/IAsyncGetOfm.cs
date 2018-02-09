@@ -7,7 +7,7 @@ namespace Fittify.Api.OfmRepository
         where TOfmForGet : class
         where TId : struct
     {
-        Task<ICollection<TOfmForGet>> GetAll();
+        Task<IEnumerable<TOfmForGet>> GetAll();
         Task<TOfmForGet> GetById(TId id);
     }
 }

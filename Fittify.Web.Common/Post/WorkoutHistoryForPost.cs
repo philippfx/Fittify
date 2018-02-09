@@ -11,6 +11,6 @@ namespace Fittify.Web.Common.Post
         public int WorkoutId { get; set; }
         public string WorkoutName { get; set; }
 
-        public virtual ICollection<int> ExerciseHistoryIds { get; set; }
+        public virtual IEnumerable<int> ExerciseHistoryIds { get; set; }
     }
 }

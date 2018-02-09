@@ -88,7 +88,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                                               && (FittifyContext.WeightLiftingSets.OrderByDescending(o => o.Id).FirstOrDefault(wls => wls.ExerciseHistoryId == eH.Id && wls.RepetitionsFull != null) != null
                                                   || FittifyContext.CardioSets.OrderByDescending(o => o.Id).FirstOrDefault(cds => cds.ExerciseHistoryId == eH.Id) != null));
 
-                newWorkoutHistory.ExerciseHistories.Add(exerciseHistory);
+                newWorkoutHistory.ExerciseHistories.ToList().Add(exerciseHistory);
             }
 
             await FittifyContext.SaveChangesAsync();

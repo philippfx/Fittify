@@ -17,8 +17,8 @@ namespace Fittify.Web.ViewModels.Sport
         public int? PreviousExerciseHistoryId { get; set; }
         public ExerciseHistoryViewModel PreviousExerciseHistory { get; set; }
 
-        public virtual ICollection<CurrentAndHistoricWeightLiftingSetPair> CurrentAndHistoricWeightLiftingSetPairs { get; set; }
-        public virtual ICollection<CurrentAndHistoricCardioSetPair> CurrentAndHistoricCardioSetPairs { get; set; }
+        public virtual IEnumerable<CurrentAndHistoricWeightLiftingSetPair> CurrentAndHistoricWeightLiftingSetPairs { get; set; }
+        public virtual IEnumerable<CurrentAndHistoricCardioSetPair> CurrentAndHistoricCardioSetPairs { get; set; }
 
         public class CurrentAndHistoricWeightLiftingSetPair
         {

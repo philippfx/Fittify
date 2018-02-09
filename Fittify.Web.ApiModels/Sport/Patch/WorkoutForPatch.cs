@@ -17,6 +17,6 @@ namespace Fittify.Web.ApiModels.Sport.Patch
         public virtual CategoryForPatch Category { get; set; }
         public int CategoryId { get; set; }
         
-        public virtual ICollection<WorkoutHistoryForPatch> WorkoutHistories { get; set; }
+        public virtual IEnumerable<WorkoutHistoryForPatch> WorkoutHistories { get; set; }
     }
 }
