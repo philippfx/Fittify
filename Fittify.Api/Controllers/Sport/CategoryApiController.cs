@@ -13,6 +13,7 @@ using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
+using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
@@ -33,10 +34,12 @@ namespace Fittify.Api.Controllers.Sport
         private readonly CategoryRepository _repo;
         private readonly string _shortCamelCasedControllerName;
 
-        public CategoryApiController(FittifyContext fittifyContext, IActionDescriptorCollectionProvider adcProvider)
+        public CategoryApiController(FittifyContext fittifyContext,
+            IActionDescriptorCollectionProvider adcProvider,
+            IUrlHelper urlHelper)
         {
             _repo = new CategoryRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo, adcProvider);
+            _gppdForHttpMethods = new GppdOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
         }
 
@@ -59,6 +62,21 @@ namespace Fittify.Api.Controllers.Sport
         public async Task<IActionResult> GetAll()
         {
             var allEntites = await _gppdForHttpMethods.GetAll();
+            var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
+            //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
+            if (allOfmForGet.Count == 0)
+            {
+                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
+                return new EntityNotFoundObjectResult(ModelState);
+            }
+            return new JsonResult(allOfmForGet);
+        }
+
+        [HttpGet("paged", Name = "GetAllPagedCategories")]
+        public async Task<IActionResult> GetAllPaged(SearchQueryResourceParameters resourceParameters)
+        {
+            var allEntites = await _gppdForHttpMethods.GetAllPaged(resourceParameters, this);
+            
             var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
             //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
             if (allOfmForGet.Count == 0)

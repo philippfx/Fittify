@@ -27,10 +27,12 @@ namespace Fittify.Api.Controllers.Sport
         private readonly GppdOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int> _gppdForHttpMethods;
         private readonly ExerciseHistoryRepository _repo;
 
-        public ExerciseHistoryApiController(FittifyContext fittifyContext, IActionDescriptorCollectionProvider adcProvider)
+        public ExerciseHistoryApiController(FittifyContext fittifyContext,
+            IActionDescriptorCollectionProvider adcProvider,
+            IUrlHelper urlHelper)
         {
             _repo = new ExerciseHistoryRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int>(_repo, adcProvider);
+            _gppdForHttpMethods = new GppdOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
         }
 
         [HttpGet("{id:int}", Name = "GetExerciseHistoryById")]

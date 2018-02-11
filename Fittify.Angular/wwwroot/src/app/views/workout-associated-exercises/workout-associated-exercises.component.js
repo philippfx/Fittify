@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var Gppd_1 = require("../../apimodelrepositories/Gppd");
 var router_1 = require("@angular/router");
-var WorkoutAssociatedExercisesComponent = /** @class */ (function () {
+var WorkoutAssociatedExercisesComponent = (function () {
     function WorkoutAssociatedExercisesComponent(gppd, _route) {
         var _this = this;
         this.gppd = gppd;
@@ -38,16 +38,16 @@ var WorkoutAssociatedExercisesComponent = /** @class */ (function () {
             });
         }
     }
-    WorkoutAssociatedExercisesComponent = __decorate([
-        core_1.Component({
-            selector: 'ff-workout-associated-exercises',
-            templateUrl: './workout-associated-exercises.component.html',
-            styleUrls: ['./workout-associated-exercises.component.css']
-        }),
-        __metadata("design:paramtypes", [Gppd_1.GppdRepository,
-            router_1.ActivatedRoute])
-    ], WorkoutAssociatedExercisesComponent);
     return WorkoutAssociatedExercisesComponent;
 }());
+WorkoutAssociatedExercisesComponent = __decorate([
+    core_1.Component({
+        selector: 'ff-workout-associated-exercises',
+        templateUrl: './workout-associated-exercises.component.html',
+        styleUrls: ['./workout-associated-exercises.component.css']
+    }),
+    __metadata("design:paramtypes", [Gppd_1.GppdRepository,
+        router_1.ActivatedRoute])
+], WorkoutAssociatedExercisesComponent);
 exports.WorkoutAssociatedExercisesComponent = WorkoutAssociatedExercisesComponent;
 //# sourceMappingURL=workout-associated-exercises.component.js.map

@@ -10,9 +10,12 @@ using Fittify.Api.Helpers;
 using Fittify.Common;
 using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
+using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories;
+using Fittify.DataModelRepositories.Helpers;
 using Fittify.DataModels.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -25,7 +28,7 @@ namespace Fittify.Api.OfmRepository
         IAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TOfmForPatch>
         
         where TCrudRepository : AsyncCrud<TEntity,TId> 
-        where TEntity : class, IUniqueIdentifierDataModels<TId>
+        where TEntity : class, IEntityUniqueIdentifier<TId>
         where TOfmForGet : class
         where TOfmForPost : class
         where TOfmForPatch : class, new()
@@ -34,11 +37,15 @@ namespace Fittify.Api.OfmRepository
         private TEntity _cachedEntity;
         private readonly TCrudRepository _repo;
         private readonly IActionDescriptorCollectionProvider _adcp;
+        private readonly IUrlHelper _urlHelper;
 
-        public GppdOfm(TCrudRepository repository, IActionDescriptorCollectionProvider actionDescriptorCollectionProvider)
+        public GppdOfm(TCrudRepository repository,
+            IUrlHelper urlHelper,
+            IActionDescriptorCollectionProvider actionDescriptorCollectionProvider)
         {
             _repo = repository;
             _adcp = actionDescriptorCollectionProvider;
+            _urlHelper = urlHelper;
         }
 
         public GppdOfm()
@@ -51,7 +58,41 @@ namespace Fittify.Api.OfmRepository
             // Todo this async lacks await
             return  _repo.DoesEntityExist(id).Result;
         }
-        
+
+        public virtual async Task<IEnumerable<TOfmForGet>> GetAllPaged(IResourceParameters resourceParameters, ControllerBase controllerBase)
+        {
+            //// Todo this async lacks await
+            var pagedListEntityCollection = _repo.GetAllPaged(resourceParameters);
+
+            var previousPageLink = pagedListEntityCollection.HasPrevious ?
+                RsourceUriFactory.CreateAuthorsResourceUri(resourceParameters,
+                    _urlHelper,
+                    ResourceUriType.PreviousPage) : null;
+
+            var nextPageLink = pagedListEntityCollection.HasNext ?
+                RsourceUriFactory.CreateAuthorsResourceUri(resourceParameters,
+                    _urlHelper,
+                    ResourceUriType.NextPage) : null;
+
+            // Todo Maybe refactor to a type safe class instead of anonymous
+            var paginationMetadata = new
+            {
+                totalCount = pagedListEntityCollection.TotalCount,
+                pageSize = pagedListEntityCollection.PageSize,
+                currentPage = pagedListEntityCollection.CurrentPage,
+                totalPages = pagedListEntityCollection.TotalPages,
+                previousPageLink = previousPageLink,
+                nextPageLink = nextPageLink
+            };
+
+            // Todo: Refactor to class taking controller as input instead of only this method
+            controllerBase.Response.Headers.Add("X-Pagination",
+                Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
+
+            var ofmCollection = Mapper.Map<List<TEntity>, List<TOfmForGet>>(pagedListEntityCollection);
+            return ofmCollection;
+        }
+
         public virtual async Task<IEnumerable<TOfmForGet>> GetAll()
         {
             // Todo this async lacks await

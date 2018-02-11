@@ -4,7 +4,7 @@ using Fittify.Common;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Patch
 {
-    public class ExerciseOfmForPatch : ExerciseOfmBase, IUniqueIdentifierDataModels<int>
+    public class ExerciseOfmForPatch : ExerciseOfmBase, IEntityUniqueIdentifier<int>
     {
         public int Id { get; set; }
         public string RangeOfWorkoutIds { get; set; }

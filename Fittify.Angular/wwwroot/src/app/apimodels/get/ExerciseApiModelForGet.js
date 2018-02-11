@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var UniqueIdentifier_1 = require("../../common/UniqueIdentifier");
-var ExerciseForGet = /** @class */ (function (_super) {
+var ExerciseForGet = (function (_super) {
     __extends(ExerciseForGet, _super);
     function ExerciseForGet() {
         return _super !== null && _super.apply(this, arguments) || this;

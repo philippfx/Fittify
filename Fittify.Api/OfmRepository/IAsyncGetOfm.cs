@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Fittify.Common.Helpers.ResourceParameters;
+using Fittify.DataModelRepositories.Helpers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.OfmRepository
 {
@@ -8,6 +11,7 @@ namespace Fittify.Api.OfmRepository
         where TId : struct
     {
         Task<IEnumerable<TOfmForGet>> GetAll();
+        Task<IEnumerable<TOfmForGet>> GetAllPaged(IResourceParameters resourceParameters, ControllerBase controllerBase);
         Task<TOfmForGet> GetById(TId id);
     }
 }

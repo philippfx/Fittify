@@ -7,17 +7,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var TopNavbarComponent = /** @class */ (function () {
+var TopNavbarComponent = (function () {
     function TopNavbarComponent() {
     }
-    TopNavbarComponent = __decorate([
-        core_1.Component({
-            selector: 'ff-navbar',
-            templateUrl: './topnavbar.component.html',
-            styleUrls: ['./topnavbar.component.css']
-        })
-    ], TopNavbarComponent);
     return TopNavbarComponent;
 }());
+TopNavbarComponent = __decorate([
+    core_1.Component({
+        selector: 'ff-navbar',
+        templateUrl: './topnavbar.component.html',
+        styleUrls: ['./topnavbar.component.css']
+    })
+], TopNavbarComponent);
 exports.TopNavbarComponent = TopNavbarComponent;
 //# sourceMappingURL=topnavbar.component.js.map

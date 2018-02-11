@@ -3,7 +3,7 @@ using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport
 {
-    public class MapExerciseWorkout : IUniqueIdentifierDataModels<int>
+    public class MapExerciseWorkout : IEntityUniqueIdentifier<int>
     {
         public int Id { get; set; }
 

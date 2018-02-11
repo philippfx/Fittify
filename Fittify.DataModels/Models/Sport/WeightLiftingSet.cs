@@ -3,7 +3,7 @@ using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport
 {
-    public class WeightLiftingSet : IUniqueIdentifierDataModels<int>
+    public class WeightLiftingSet : IEntityUniqueIdentifier<int>
     {
         public int Id { get; set; }
 

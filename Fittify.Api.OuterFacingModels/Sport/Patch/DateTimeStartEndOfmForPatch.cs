@@ -6,7 +6,7 @@ using Fittify.Common;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Patch
 {
-    public class DateTimeStartEndOfmForPatch : DateTimeStartEndOfmBase, IUniqueIdentifierDataModels<int>
+    public class DateTimeStartEndOfmForPatch : DateTimeStartEndOfmBase, IEntityUniqueIdentifier<int>
     {
         public int Id { get; set; }
     }

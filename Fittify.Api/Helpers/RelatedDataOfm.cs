@@ -22,7 +22,7 @@ namespace Fittify.Api.Helpers
             { typeof(WorkoutOfmForGet), typeof(Workout) }
         };
 
-        //public static Dictionary<IUniqueIdentifierDataModels<TId>, IUniqueIdentifierDataModels<TId>> RelatedClasses = new Dictionary<IUniqueIdentifierDataModels<TId>, IUniqueIdentifierDataModels<TId>>()
+        //public static Dictionary<IEntityUniqueIdentifier<TId>, IEntityUniqueIdentifier<TId>> RelatedClasses = new Dictionary<IEntityUniqueIdentifier<TId>, IEntityUniqueIdentifier<TId>>()
         //{
         //    { new WorkoutHistoryOfmForGet(), WorkoutHistory }
         //};

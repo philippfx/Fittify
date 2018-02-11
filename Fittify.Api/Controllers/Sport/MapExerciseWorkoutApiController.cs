@@ -26,10 +26,12 @@ namespace Fittify.Api.Controllers.Sport
         private readonly GppdOfm<MapExerciseWorkoutRepository, MapExerciseWorkout, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForPatch, int> _gppdForHttpMethods;
         private readonly MapExerciseWorkoutRepository _repo;
 
-        public MapExerciseWorkoutApiController(FittifyContext fittifyContext, IActionDescriptorCollectionProvider adcProvider)
+        public MapExerciseWorkoutApiController(FittifyContext fittifyContext,
+            IActionDescriptorCollectionProvider adcProvider,
+            IUrlHelper urlHelper)
         {
             _repo = new MapExerciseWorkoutRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<MapExerciseWorkoutRepository, MapExerciseWorkout, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForPatch, int>(_repo, adcProvider);
+            _gppdForHttpMethods = new GppdOfm<MapExerciseWorkoutRepository, MapExerciseWorkout, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForPatch, int>(_repo, urlHelper, adcProvider);
         }
 
         [HttpGet]

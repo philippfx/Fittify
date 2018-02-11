@@ -4,7 +4,7 @@ using Fittify.Common;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Get
 {
-    public class WeightLiftingSetOfmForGet : WeightLiftingSetOfmBase, IUniqueIdentifierDataModels<int>
+    public class WeightLiftingSetOfmForGet : WeightLiftingSetOfmBase, IEntityUniqueIdentifier<int>
     {
         public int Id { get; set; }
     }

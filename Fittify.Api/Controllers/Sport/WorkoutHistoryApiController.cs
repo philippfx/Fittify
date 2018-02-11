@@ -32,10 +32,12 @@ namespace Fittify.Api.Controllers.Sport
         private readonly WorkoutHistoryRepository _repo;
         private readonly string _shortCamelCasedControllerName;
 
-        public WorkoutHistoryApiController(FittifyContext fittifyContext, IActionDescriptorCollectionProvider adcProvider)
+        public WorkoutHistoryApiController(FittifyContext fittifyContext,
+            IActionDescriptorCollectionProvider adcProvider,
+            IUrlHelper urlHelper)
         {
             _repo = new WorkoutHistoryRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int>(_repo, adcProvider);
+            _gppdForHttpMethods = new GppdOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
         }
 

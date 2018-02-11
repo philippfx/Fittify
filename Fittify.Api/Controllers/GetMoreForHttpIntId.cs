@@ -13,7 +13,7 @@ namespace Fittify.Api.Controllers
 {
     public class GetMoreForHttpIntId<TCrudRepository, TEntity, TOfmForGet> : IAsyncGetMoreForHttpForIntId<TOfmForGet>
         where TCrudRepository : AsyncCrud<TEntity, int>
-        where TEntity : class, IUniqueIdentifierDataModels<int>
+        where TEntity : class, IEntityUniqueIdentifier<int>
         where TOfmForGet : class
     {
         private readonly TCrudRepository _repo;

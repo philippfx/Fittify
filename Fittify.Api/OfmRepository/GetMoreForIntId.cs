@@ -9,7 +9,7 @@ using Fittify.DataModels.Models;
 namespace Fittify.Api.OfmRepository
 {
     public class GetMoreForIntId<TCrudRepository, TEntity, TOfmForGet> : IAsyncGetMoreForOfmWithIntId<TOfmForGet>
-        where TEntity : class, IUniqueIdentifierDataModels<int>
+        where TEntity : class, IEntityUniqueIdentifier<int>
         where TCrudRepository : AsyncCrud<TEntity, int>
         where TOfmForGet : class
     {

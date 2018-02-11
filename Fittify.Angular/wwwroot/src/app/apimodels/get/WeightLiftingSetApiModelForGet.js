@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var UniqueIdentifier_1 = require("../../common/UniqueIdentifier");
-var WeightLiftingSetForGet = /** @class */ (function (_super) {
+var WeightLiftingSetForGet = (function (_super) {
     __extends(WeightLiftingSetForGet, _super);
     function WeightLiftingSetForGet() {
         return _super !== null && _super.apply(this, arguments) || this;

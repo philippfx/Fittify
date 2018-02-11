@@ -13,7 +13,7 @@ var core_1 = require("@angular/core");
 var http_1 = require("@angular/common/http");
 var Gppd_1 = require("../../apimodelrepositories/Gppd");
 var router_1 = require("@angular/router");
-var WorkoutHistoryComponent = /** @class */ (function () {
+var WorkoutHistoryComponent = (function () {
     function WorkoutHistoryComponent(_http, _gppd, _route) {
         this._http = _http;
         this._gppd = _gppd;
@@ -37,17 +37,17 @@ var WorkoutHistoryComponent = /** @class */ (function () {
             }, function (err) { return console.log(err); });
         }
     };
-    WorkoutHistoryComponent = __decorate([
-        core_1.Component({
-            selector: 'ff-workout-history',
-            templateUrl: './workout-history.component.html',
-            styleUrls: ['./workout-history.component.css']
-        }),
-        __metadata("design:paramtypes", [http_1.HttpClient,
-            Gppd_1.GppdRepository,
-            router_1.ActivatedRoute])
-    ], WorkoutHistoryComponent);
     return WorkoutHistoryComponent;
 }());
+WorkoutHistoryComponent = __decorate([
+    core_1.Component({
+        selector: 'ff-workout-history',
+        templateUrl: './workout-history.component.html',
+        styleUrls: ['./workout-history.component.css']
+    }),
+    __metadata("design:paramtypes", [http_1.HttpClient,
+        Gppd_1.GppdRepository,
+        router_1.ActivatedRoute])
+], WorkoutHistoryComponent);
 exports.WorkoutHistoryComponent = WorkoutHistoryComponent;
 //# sourceMappingURL=workout-history.component.js.map

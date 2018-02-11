@@ -2,11 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Common;
+using Fittify.Common.Helpers.ResourceParameters;
+using Fittify.DataModelRepositories.Helpers;
 
 namespace Fittify.DataModelRepositories
 {
     public interface IAsyncCrud<TEntity, TId> 
-        where TEntity : class, IUniqueIdentifierDataModels<TId>
+        where TEntity : class, IEntityUniqueIdentifier<TId>
         where TId : struct
     {
         Task<bool> DoesEntityExist(TId id);
@@ -20,6 +22,8 @@ namespace Fittify.DataModelRepositories
         Task<TEntity> GetById(TId id);
 
         IQueryable<TEntity> GetAll();
+
+        PagedList<TEntity> GetAllPaged(IResourceParameters resourceParameters);
 
         Task<IEnumerable<TEntity>> GetByCollectionOfIds(IEnumerable<TId> rangeOfIds);
     }

@@ -3,7 +3,7 @@ using Fittify.Common;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Patch
 {
-    public class WeightLiftingSetOfmForPatch : WeightLiftingSetOfmBase, IUniqueIdentifierDataModels<int>
+    public class WeightLiftingSetOfmForPatch : WeightLiftingSetOfmBase, IEntityUniqueIdentifier<int>
     {
         public int Id { get; set; }
     }

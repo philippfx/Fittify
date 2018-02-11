@@ -5,7 +5,7 @@ using Fittify.Common;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Get
 {
-    public class CardioSetOfmForGet : CardioSetOfmBase, IUniqueIdentifierDataModels<int>
+    public class CardioSetOfmForGet : CardioSetOfmBase, IEntityUniqueIdentifier<int>
     {
         public int Id { get; set; }
     }

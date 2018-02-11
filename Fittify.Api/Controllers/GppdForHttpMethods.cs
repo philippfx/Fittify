@@ -18,7 +18,7 @@ namespace Fittify.Api.Controllers
         IAsyncGppdForHttp<TId, TOfmForPost, TOfmForPatch>
         
         where TCrudRepository : AsyncCrud<TEntity,TId> 
-        where TEntity : class, IUniqueIdentifierDataModels<TId>
+        where TEntity : class, IEntityUniqueIdentifier<TId>
         where TOfmForGet : class
         where TOfmForPost : class
         where TOfmForPatch : class

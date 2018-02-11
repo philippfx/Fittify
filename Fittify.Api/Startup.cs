@@ -20,6 +20,9 @@ using System.Diagnostics;
 using Fittify.Common.Helpers;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Fittify.Api
 {
@@ -43,12 +46,22 @@ namespace Fittify.Api
             services.AddCors();
             services.AddMvc(setupAction =>
             {
-                setupAction.ReturnHttpNotAcceptable = true; // returns 406 for header "Accept applicatioon/xml2" for example (or any other unsupported content type)
+                setupAction.ReturnHttpNotAcceptable = true; // returns 406 for header "Accept application/xml2" for example (or any other unsupported content type)
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
             }); 
 
             var dbConnectionString = Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             services.AddDbContext<FittifyContext>(options => options.UseSqlServer(dbConnectionString));
+
+            // Is required for the UrlHelper, because it creates url to ACTIONS
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddScoped<IUrlHelper, UrlHelper>(implementationFactory =>
+            {
+                var actionContext = 
+                    implementationFactory.GetService<IActionContextAccessor>()
+                    .ActionContext;
+                return new UrlHelper(actionContext);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -141,13 +154,13 @@ namespace Fittify.Api
 
         public class BaseClassConstructor
         {
-            public static D Construct<S, D>(S source, ResolutionContext context) where D : class where S: IUniqueIdentifierDataModels<int>
+            public static D Construct<S, D>(S source, ResolutionContext context) where D : class where S: IEntityUniqueIdentifier<int>
             {
                 D instance = context.Options.CreateInstance<D>();
-                IUniqueIdentifierDataModels<int> completeInstance = null;
-                if (typeof(IUniqueIdentifierDataModels<int>).IsAssignableFrom(typeof(D)))
+                IEntityUniqueIdentifier<int> completeInstance = null;
+                if (typeof(IEntityUniqueIdentifier<int>).IsAssignableFrom(typeof(D)))
                 {
-                    completeInstance = instance as IUniqueIdentifierDataModels<int>;
+                    completeInstance = instance as IEntityUniqueIdentifier<int>;
                     if (completeInstance != null)
                     {
                         completeInstance.Id = source.Id;

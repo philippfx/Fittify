@@ -4,7 +4,7 @@ using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport
 {
-    public class Workout : IUniqueIdentifierDataModels<int>
+    public class Workout : IEntityUniqueIdentifier<int>
     {
         public int Id { get; set; }
 

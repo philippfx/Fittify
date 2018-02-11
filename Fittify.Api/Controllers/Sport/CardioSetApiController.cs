@@ -26,10 +26,12 @@ namespace Fittify.Api.Controllers.Sport
         private readonly GppdOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int> _gppdForHttpMethods;
         private readonly CardioSetRepository _repo;
 
-        public CardioSetApiController(FittifyContext fittifyContext, IActionDescriptorCollectionProvider adcProvider)
+        public CardioSetApiController(FittifyContext fittifyContext, 
+            IActionDescriptorCollectionProvider adcProvider,
+            IUrlHelper urlHelper)
         {
             _repo = new CardioSetRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int>(_repo, adcProvider);
+            _gppdForHttpMethods = new GppdOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int>(_repo, urlHelper, adcProvider);
         }
 
         [HttpGet]

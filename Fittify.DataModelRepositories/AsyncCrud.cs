@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Common;
+using Fittify.Common.Helpers.ResourceParameters;
+using Fittify.DataModelRepositories.Helpers;
 using Fittify.DataModels.Models;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +15,7 @@ namespace Fittify.DataModelRepositories
 {
 
     public abstract class AsyncCrud<TEntity, TId> : IAsyncCrud<TEntity, TId> 
-        where TEntity : class, IUniqueIdentifierDataModels<TId>
+        where TEntity : class, IEntityUniqueIdentifier<TId>
         where TId : struct
     {
         protected readonly FittifyContext FittifyContext;
@@ -64,10 +66,10 @@ namespace Fittify.DataModelRepositories
             return (from prop in propertiesList where prop.PropertyType.IsGenericType select prop.GetValue(entity) into propValue select propValue as IList).All(propList => propList == null || propList.Count <= 0);
         }
 
-        public virtual async Task<List<List<IUniqueIdentifierDataModels<int>>>> MyDelete(TId id)
+        public virtual async Task<List<List<IEntityUniqueIdentifier<int>>>> MyDelete(TId id)
         {
             // Todo Refactor and make return type bool (out errors)!
-            List<List<IUniqueIdentifierDataModels<int>>> returnList = new List<List<IUniqueIdentifierDataModels<int>>>();
+            List<List<IEntityUniqueIdentifier<int>>> returnList = new List<List<IEntityUniqueIdentifier<int>>>();
 
             var entity = await GetById(id);
 
@@ -84,17 +86,17 @@ namespace Fittify.DataModelRepositories
             foreach (var navProp in thisModelsNavProperties)
             {
                 
-                var IEnumerablenavPropValue = navProp.GetValue(entity) as IEnumerable<IUniqueIdentifierDataModels<int>>;
+                var IEnumerablenavPropValue = navProp.GetValue(entity) as IEnumerable<IEntityUniqueIdentifier<int>>;
                 if (IEnumerablenavPropValue != null)
                 {
                     var listnavPropValue = IEnumerablenavPropValue.ToList();
                     returnList.Add(listnavPropValue);
                 }
 
-                var singlenavPropValue = navProp.GetValue(entity) as IUniqueIdentifierDataModels<int>;
+                var singlenavPropValue = navProp.GetValue(entity) as IEntityUniqueIdentifier<int>;
                 if (singlenavPropValue != null)
                 {
-                    returnList.Add(new List<IUniqueIdentifierDataModels<int>>() { singlenavPropValue });
+                    returnList.Add(new List<IEntityUniqueIdentifier<int>>() { singlenavPropValue });
                 }
             }
             return returnList;
@@ -115,6 +117,39 @@ namespace Fittify.DataModelRepositories
         public virtual IQueryable<TEntity> GetAll()
         {
             return FittifyContext.Set<TEntity>().AsNoTracking();
+        }
+
+        public PagedList<TEntity> GetAllPaged(IResourceParameters resourceParameters)
+        {
+            var allEntitiesQueryable = GetAll();
+
+
+
+            return PagedList<TEntity>.Create(allEntitiesQueryable,
+                resourceParameters.PageNumber,
+                resourceParameters.PageSize);
+        }
+
+        public PagedList<TEntity> GetAllPagedQueryName(IResourceParameters resourceParameters)
+        {
+            var allEntitiesQueryable = GetAll();
+
+
+
+            return PagedList<TEntity>.Create(allEntitiesQueryable,
+                resourceParameters.PageNumber,
+                resourceParameters.PageSize);
+        }
+
+        public PagedList<TEntity> GetAllPagedQueryDate(IResourceParameters resourceParameters)
+        {
+            var allEntitiesQueryable = GetAll();
+
+
+
+            return PagedList<TEntity>.Create(allEntitiesQueryable,
+                resourceParameters.PageNumber,
+                resourceParameters.PageSize);
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetByCollectionOfIds(IEnumerable<TId> collectionOfIds)

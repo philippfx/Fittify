@@ -29,10 +29,13 @@ namespace Fittify.Api.Controllers.Sport
         private readonly WeightLiftingSetRepository _repo;
         private readonly ILogger<WeightLiftingSetApiController> _logger;
 
-        public WeightLiftingSetApiController(FittifyContext fittifyContext, ILogger<WeightLiftingSetApiController> logger, IActionDescriptorCollectionProvider adcProvider)
+        public WeightLiftingSetApiController(FittifyContext fittifyContext,
+            ILogger<WeightLiftingSetApiController> logger,
+            IActionDescriptorCollectionProvider adcProvider,
+            IUrlHelper urlHelper)
         {
             _repo = new WeightLiftingSetRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int>(_repo, adcProvider);
+            _gppdForHttpMethods = new GppdOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int>(_repo, urlHelper, adcProvider);
             _logger = logger;
         }
 
