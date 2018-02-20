@@ -129,29 +129,7 @@ namespace Fittify.DataModelRepositories
                 resourceParameters.PageNumber,
                 resourceParameters.PageSize);
         }
-
-        public PagedList<TEntity> GetAllPagedQueryName(IResourceParameters resourceParameters)
-        {
-            var allEntitiesQueryable = GetAll();
-
-
-
-            return PagedList<TEntity>.Create(allEntitiesQueryable,
-                resourceParameters.PageNumber,
-                resourceParameters.PageSize);
-        }
-
-        public PagedList<TEntity> GetAllPagedQueryDate(IResourceParameters resourceParameters)
-        {
-            var allEntitiesQueryable = GetAll();
-
-
-
-            return PagedList<TEntity>.Create(allEntitiesQueryable,
-                resourceParameters.PageNumber,
-                resourceParameters.PageSize);
-        }
-
+        
         public virtual async Task<IEnumerable<TEntity>> GetByCollectionOfIds(IEnumerable<TId> collectionOfIds)
         {
             return await FittifyContext.Set<TEntity>().Where(t => collectionOfIds.Contains(t.Id)).ToListAsync();

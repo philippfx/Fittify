@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport
 {
-    public class WorkoutHistory : IEntityUniqueIdentifier<int>
+    public class WorkoutHistory : IEntityDateTimeStartEnd<int>
     {
         public int Id { get; set; }
 
-        [ForeignKey("DateTimeStartEndId")]
-        public virtual DateTimeStartEnd DateTimeStartEnd { get; set; }
-        public int? DateTimeStartEndId { get; set; }
+        public DateTime? DateTimeStart { get; set; }
+        public DateTime? DateTimeEnd { get; set; }
 
         [ForeignKey("WorkoutId")]
         public virtual Workout Workout { get; set; }

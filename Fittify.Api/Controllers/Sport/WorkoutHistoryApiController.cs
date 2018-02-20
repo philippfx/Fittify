@@ -118,13 +118,7 @@ namespace Fittify.Api.Controllers.Sport
             {
                 // Get entity with original values from context
                 var entity = _repo.GetById(id).Result;
-
-                if (entity.DateTimeStartEnd == null)
-                {
-                    entity.DateTimeStartEnd = new DateTimeStartEnd();
-                    entity.DateTimeStartEnd.WorkoutHistoryId = entity.Id;
-                }
-
+                
                 // Convert entity to ofm
                 var ofmPppToPatch = Mapper.Map<WorkoutHistoryOfmForPatch>(entity);
 

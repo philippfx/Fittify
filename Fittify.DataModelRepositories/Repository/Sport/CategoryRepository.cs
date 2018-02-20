@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class CategoryRepository : AsyncCrud<Category,int>
+    public class CategoryRepository : AsyncCrudForEntityName<Category,int>
     {
         public CategoryRepository()
         {

@@ -1,15 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport
 {
-    public class CardioSet : IEntityUniqueIdentifier<int>
+    public class CardioSet : IEntityUniqueIdentifier<int> // Todo implement IEntityDateTimeStartEnd
     {
         public int Id { get; set; }
 
-        [ForeignKey("DateTimeSetId")]
-        public virtual DateTimeStartEnd DateTimeStartEnd { get; set; }
-        public int DateTimeSetId { get; set; }
+        public DateTime? DateTimeStart { get; set; }
+        public DateTime? DateTimeEnd { get; set; }
 
         [ForeignKey("ExerciseHistoryId")]
         public virtual ExerciseHistory ExerciseHistory { get; set; }

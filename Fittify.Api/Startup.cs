@@ -107,9 +107,7 @@ namespace Fittify.Api
                     .ForMember(dest => dest.RangeOfExerciseIds, opt => opt.MapFrom(src => src.ExercisesWorkoutsMap.Select(s => s.ExerciseId).ToList().ToStringOfIds()));
                 cfg.CreateMap<Category, CategoryOfmForGet>()
                     .ForMember(dest => dest.RangeOfWorkoutIds, opt => opt.MapFrom(src => src.Workouts.Select(w => w.Id).ToList().ToStringOfIds()));
-                cfg.CreateMap<CardioSet, CardioSetOfmForGet>()
-                    .ForMember(dest => dest.DateTimeStart, opt => opt.MapFrom(src => src.DateTimeStartEnd.DateTimeStart))
-                    .ForMember(dest => dest.DateTimeEnd, opt => opt.MapFrom(src => src.DateTimeStartEnd.DateTimeEnd));
+                cfg.CreateMap<CardioSet, CardioSetOfmForGet>();
                 cfg.CreateMap<WeightLiftingSet, WeightLiftingSetOfmForGet>();
                 cfg.CreateMap<Exercise, ExerciseOfmForGet>()
                     .ForMember(dest => dest.RangeOfWorkoutIds, opt => opt.MapFrom(src => src.ExercisesWorkoutsMap.Select(w => w.Workout.Id).ToList().ToStringOfIds()))
@@ -119,8 +117,6 @@ namespace Fittify.Api
                     .ForMember(dest => dest.RangeOfWeightLiftingSetIds, opt => opt.MapFrom(src => src.WeightLiftingSets.Select(s => s.Id).ToList().ToStringOfIds()))
                     .ForMember(dest => dest.RangeOfCardioSetIds, opt => opt.MapFrom(src => src.CardioSets.Select(s => s.Id).ToList().ToStringOfIds()));
                 cfg.CreateMap<WorkoutHistory, WorkoutHistoryOfmForGet>()
-                    .ForMember(dest => dest.DateTimeStart, opt => opt.MapFrom(src => src.DateTimeStartEnd.DateTimeStart))
-                    .ForMember(dest => dest.DateTimeEnd, opt => opt.MapFrom(src => src.DateTimeStartEnd.DateTimeEnd))
                     .ForMember(dest => dest.Workout, opt => opt.MapFrom(src => src.Workout))
                     .ForMember(dest => dest.ExerciseHistoryIds, opt => opt.MapFrom(src => src.ExerciseHistories.Select(eH => eH.Id)));
 

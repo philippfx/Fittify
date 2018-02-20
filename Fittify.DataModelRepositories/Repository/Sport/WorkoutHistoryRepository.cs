@@ -67,7 +67,6 @@ namespace Fittify.DataModelRepositories.Repository.Sport
         {
             var workoutBluePrint = FittifyContext.Workouts.FirstOrDefault(w => w.Id == newWorkoutHistory.WorkoutId);
             newWorkoutHistory.Workout = workoutBluePrint;
-            newWorkoutHistory.DateTimeStartEnd = new DateTimeStartEnd();
             await FittifyContext.AddAsync(newWorkoutHistory);
             await FittifyContext.SaveChangesAsync();
             
@@ -100,7 +99,6 @@ namespace Fittify.DataModelRepositories.Repository.Sport
         {
             return await FittifyContext.Set<WorkoutHistory>()
                 .Where(wH => wH.WorkoutId == workoutId)
-                .Include(i => i.DateTimeStartEnd)
                 .Include(i => i.Workout)
                 .Include(i => i.ExerciseHistories)
                 .ToListAsync();
@@ -108,7 +106,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
 
         public override Task<WorkoutHistory> GetById(int id)
         {
-            return FittifyContext.WorkoutHistories.Include(i => i.DateTimeStartEnd).Include(i => i.ExerciseHistories).Include(i => i.Workout).FirstOrDefaultAsync(wH => wH.Id == id);
+            return FittifyContext.WorkoutHistories.Include(i => i.ExerciseHistories).Include(i => i.Workout).FirstOrDefaultAsync(wH => wH.Id == id);
         }
     }
 }

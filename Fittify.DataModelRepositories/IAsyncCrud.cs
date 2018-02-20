@@ -26,5 +26,7 @@ namespace Fittify.DataModelRepositories
         PagedList<TEntity> GetAllPaged(IResourceParameters resourceParameters);
 
         Task<IEnumerable<TEntity>> GetByCollectionOfIds(IEnumerable<TId> rangeOfIds);
+
+        Task<bool> SaveContext();
     }
 }

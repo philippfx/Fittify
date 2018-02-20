@@ -17,15 +17,12 @@ namespace Fittify.Test.Core.Seed.Sport
             SessionEnd = new DateTime(2017, 05, 01, 14, 32, 01);
             workout = "MondayChestSeed";
             if (fittifyContext.WorkoutHistories.FirstOrDefault(f =>
-                    f.DateTimeStartEnd.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
+                    f.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
             {
                 fittifyContext.Add(new WorkoutHistory()
                 {
-                    DateTimeStartEnd = new DateTimeStartEnd()
-                    {
-                        DateTimeStart = SessionStart,
-                        DateTimeEnd = SessionEnd,
-                    },
+                    DateTimeStart = SessionStart,
+                    DateTimeEnd = SessionEnd,
                     WorkoutId = fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
                 });
             }
@@ -34,15 +31,12 @@ namespace Fittify.Test.Core.Seed.Sport
             SessionEnd = new DateTime(2017, 05, 03, 14, 32, 01);
             workout = "WednesdayBackSeed";
             if (fittifyContext.WorkoutHistories.FirstOrDefault(f =>
-                    f.DateTimeStartEnd.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
+                    f.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
             {
                 fittifyContext.Add(new WorkoutHistory()
                 {
-                    DateTimeStartEnd = new DateTimeStartEnd()
-                    {
-                        DateTimeStart = SessionStart,
-                        DateTimeEnd = SessionEnd,
-                    },
+                    DateTimeStart = SessionStart,
+                    DateTimeEnd = SessionEnd,
                     WorkoutId =
                         fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
                 });
@@ -52,15 +46,12 @@ namespace Fittify.Test.Core.Seed.Sport
             SessionEnd = new DateTime(2017, 05, 05, 14, 32, 01);
             workout = "FridayLegSeed";
             if (fittifyContext.WorkoutHistories.FirstOrDefault(f =>
-                    f.DateTimeStartEnd.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
+                    f.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
             {
                 fittifyContext.Add(new WorkoutHistory()
                 {
-                    DateTimeStartEnd = new DateTimeStartEnd()
-                    {
-                        DateTimeStart = SessionStart,
-                        DateTimeEnd = SessionEnd,
-                    },
+                    DateTimeStart = SessionStart,
+                    DateTimeEnd = SessionEnd,
                     WorkoutId = fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
                 });
             }
@@ -69,15 +60,12 @@ namespace Fittify.Test.Core.Seed.Sport
             SessionEnd = new DateTime(2017, 05, 08, 14, 32, 01);
             workout = "MondayChestSeed";
             if (fittifyContext.WorkoutHistories.FirstOrDefault(f =>
-                    f.DateTimeStartEnd.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
+                    f.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
             {
                 fittifyContext.Add(new WorkoutHistory()
                 {
-                    DateTimeStartEnd = new DateTimeStartEnd()
-                    {
-                        DateTimeStart = SessionStart,
-                        DateTimeEnd = SessionEnd,
-                    },
+                    DateTimeStart = SessionStart,
+                    DateTimeEnd = SessionEnd,
                     WorkoutId =
                         fittifyContext.Workouts.FirstOrDefault(w => w.Name == "MondayChestSeed").Id
                 });
@@ -87,15 +75,12 @@ namespace Fittify.Test.Core.Seed.Sport
             SessionEnd = new DateTime(2017, 05, 10, 14, 32, 01);
             workout = "WednesdayBackSeed";
             if (fittifyContext.WorkoutHistories.FirstOrDefault(f =>
-                    f.DateTimeStartEnd.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
+                    f.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
             {
                 fittifyContext.Add(new WorkoutHistory()
                 {
-                    DateTimeStartEnd = new DateTimeStartEnd()
-                    {
-                        DateTimeStart = SessionStart,
-                        DateTimeEnd = SessionEnd,
-                    },
+                    DateTimeStart = SessionStart,
+                    DateTimeEnd = SessionEnd,
                     WorkoutId =
                         fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
                 });
@@ -105,15 +90,12 @@ namespace Fittify.Test.Core.Seed.Sport
             SessionEnd = new DateTime(2017, 05, 12, 14, 32, 01);
             workout = "FridayLegSeed";
             if (fittifyContext.WorkoutHistories.FirstOrDefault(f =>
-                    f.DateTimeStartEnd.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
+                    f.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
             {
                 fittifyContext.Add(new WorkoutHistory()
                 {
-                    DateTimeStartEnd = new DateTimeStartEnd()
-                    {
-                        DateTimeStart = SessionStart,
-                        DateTimeEnd = SessionEnd,
-                    },
+                    DateTimeStart = SessionStart,
+                    DateTimeEnd = SessionEnd,
                     WorkoutId = fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
                 });
             }
@@ -122,15 +104,12 @@ namespace Fittify.Test.Core.Seed.Sport
             SessionEnd = new DateTime(2017, 05, 15, 14, 32, 01);
             workout = "MondayChestSeed";
             if (fittifyContext.WorkoutHistories.FirstOrDefault(f =>
-                    f.DateTimeStartEnd.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
+                    f.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
             {
                 fittifyContext.Add(new WorkoutHistory()
                 {
-                    DateTimeStartEnd = new DateTimeStartEnd()
-                    {
-                        DateTimeStart = SessionStart,
-                        DateTimeEnd = SessionEnd,
-                    },
+                    DateTimeStart = SessionStart,
+                    DateTimeEnd = SessionEnd,
                     WorkoutId =
                         fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
                 });
@@ -140,15 +119,12 @@ namespace Fittify.Test.Core.Seed.Sport
             SessionEnd = new DateTime(2017, 05, 17, 14, 32, 01);
             workout = "WednesdayBackSeed";
             if (fittifyContext.WorkoutHistories.FirstOrDefault(f =>
-                    f.DateTimeStartEnd.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
+                    f.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
             {
                 fittifyContext.Add(new WorkoutHistory()
                 {
-                    DateTimeStartEnd = new DateTimeStartEnd()
-                    {
-                        DateTimeStart = SessionStart,
-                        DateTimeEnd = SessionEnd,
-                    },
+                    DateTimeStart = SessionStart,
+                    DateTimeEnd = SessionEnd,
                     WorkoutId =
                         fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
                 });
@@ -158,15 +134,12 @@ namespace Fittify.Test.Core.Seed.Sport
             SessionEnd = new DateTime(2017, 05, 19, 14, 32, 01);
             workout = "FridayLegSeed";
             if (fittifyContext.WorkoutHistories.FirstOrDefault(f =>
-                    f.DateTimeStartEnd.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
+                    f.DateTimeStart == SessionStart && f.Workout.Name == workout) == null)
             {
                 fittifyContext.Add(new WorkoutHistory()
                 {
-                    DateTimeStartEnd = new DateTimeStartEnd()
-                    {
-                        DateTimeStart = SessionStart,
-                        DateTimeEnd = SessionEnd,
-                    },
+                    DateTimeStart = SessionStart,
+                    DateTimeEnd = SessionEnd,
                     WorkoutId = fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
                 });
             }

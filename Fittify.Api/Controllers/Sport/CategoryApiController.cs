@@ -87,6 +87,21 @@ namespace Fittify.Api.Controllers.Sport
             return new JsonResult(allOfmForGet);
         }
 
+        [HttpGet("pagedandsearchname", Name = "GetAllPagedAndSearchNameCategories")]
+        public async Task<IActionResult> GetAllPagedAndSearchName(SearchQueryResourceParameters resourceParameters)
+        {
+            var allEntites = await _gppdForHttpMethods.GetAllPaged(resourceParameters, this);
+
+            var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
+            //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
+            if (allOfmForGet.Count == 0)
+            {
+                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
+                return new EntityNotFoundObjectResult(ModelState);
+            }
+            return new JsonResult(allOfmForGet);
+        }
+
         [HttpGet("range/{inputString}", Name = "GetCategoriesByRangeOfIds")]
         public async Task<IActionResult> GetByRangeOfIds(string inputString)
         {

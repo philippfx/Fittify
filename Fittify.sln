@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Spielwiese", "Fittify.Spielwiese\Fittify.Spielwiese.csproj", "{0689FF45-5805-4456-831A-E980187B1FAB}"
 EndProject
@@ -51,7 +51,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{E4C2E774-628
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Common.Test", "Fittify.Common.Test\Fittify.Common.Test.csproj", "{8DFD04E3-14B1-48FE-8B33-B8217B523EE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fittify.Api.OuterFacingModels.Test", "Fittify.Api.OuterFacingModels.Test\Fittify.Api.OuterFacingModels.Test.csproj", "{2B87E92D-DFB9-48CD-9097-076A62F69BD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.OuterFacingModels.Test", "Fittify.Api.OuterFacingModels.Test\Fittify.Api.OuterFacingModels.Test.csproj", "{2B87E92D-DFB9-48CD-9097-076A62F69BD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

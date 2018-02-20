@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Fittify.Common.Helpers.ResourceParameters
 {
-    public class DateTimeResourceParameters : ResourceParameterBase, IDateTimeStartEndResourceParameters
+    public class DateTimeStartEndResourceParameters : ResourceParameterBase, IDateTimeStartEndResourceParameters
     {
         public DateTime DateTimeStart { get; set; }
         public DateTime DateTimeEnd { get; set; }

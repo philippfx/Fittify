@@ -16,11 +16,8 @@ namespace Fittify.Test.Core.Seed.Sport
                 {
                     fittifyContext.CardioSets.Add(new CardioSet()
                     {
-                        DateTimeStartEnd = new DateTimeStartEnd()
-                        {
-                            DateTimeStart = eH.ExecutedOnDateTime + TimeSpan.FromMinutes(20),
-                            DateTimeEnd = eH.ExecutedOnDateTime + TimeSpan.FromMinutes(30)
-                        },
+                        DateTimeStart = eH.ExecutedOnDateTime + TimeSpan.FromMinutes(20),
+                        DateTimeEnd = eH.ExecutedOnDateTime + TimeSpan.FromMinutes(30),
                         ExerciseHistoryId = eH.Id
                     });
                 }

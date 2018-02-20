@@ -39,7 +39,6 @@ namespace Fittify.DataModelRepositories
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<WorkoutHistory> WorkoutHistories { get; set; }
         public DbSet<MapExerciseWorkout> MapExerciseWorkout { get; set; }
-        public DbSet<DateTimeStartEnd> DateTimeStartEnd { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
