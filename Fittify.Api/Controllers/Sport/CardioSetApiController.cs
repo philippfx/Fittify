@@ -24,6 +24,7 @@ namespace Fittify.Api.Controllers.Sport
         IAsyncGppdForHttp<int, CardioSetOfmForPost, CardioSetOfmForPatch>
     {
         private readonly AsyncPostPatchDeleteOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int> _asyncPostPatchDeleteForHttpMethods;
+        private readonly IAsyncGetOfm<CardioSetOfmForGet, int> _asyncGetOfm;
         private readonly CardioSetRepository _repo;
 
         public CardioSetApiController(FittifyContext fittifyContext, 
@@ -32,12 +33,13 @@ namespace Fittify.Api.Controllers.Sport
         {
             _repo = new CardioSetRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int>(_repo, urlHelper, adcProvider);
+            _asyncGetOfm = new AsyncGetOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, int>(_repo, urlHelper, adcProvider);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allEntites = await _asyncPostPatchDeleteForHttpMethods.GetAll();
+            var allEntites = await _asyncGetOfm.GetAll();
             var allOfmForGet = Mapper.Map<IEnumerable<CardioSetOfmForGet>>(allEntites);
             return new JsonResult(allOfmForGet);
         }

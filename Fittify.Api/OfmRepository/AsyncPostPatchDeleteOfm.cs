@@ -1,33 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
-using Fittify.Api.Controllers.Sport;
 using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
 using Fittify.Common;
 using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
-using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories;
-using Fittify.DataModelRepositories.Helpers;
-using Fittify.DataModels.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.Api.OfmRepository
 {
     public class AsyncPostPatchDeleteOfm<TCrudRepository, TEntity, TOfmForGet, TOfmForPost, TOfmForPatch, TId> :
-        Controller
-        
-        where TCrudRepository : IAsyncCrudForEntityName<TEntity,TId> 
-        where TEntity : class, IEntityName<TId>
+        Controller,
+        IAsyncPostOfm<TOfmForGet, TOfmForPost>,
+        IAsyncPatchOfm<TOfmForGet, TOfmForPatch>,
+        IAsyncDeleteOfm<TId>
+
+        where TCrudRepository : IAsyncCrud<TEntity,TId> 
+        where TEntity : class, IEntityUniqueIdentifier<TId>
         where TOfmForGet : class
         where TOfmForPost : class
         where TOfmForPatch : class, new()
@@ -52,54 +47,30 @@ namespace Fittify.Api.OfmRepository
             
         }
 
-        
-
-        public virtual async Task<IEnumerable<TOfmForGet>> GetAllPagedAndSearchName(ISearchQueryResourceParameters resourceParameters, ControllerBase controllerBase)
+        public virtual async Task<TOfmForGet> Post(TOfmForPost ofmForPost)
         {
-            //// Todo this async lacks await
-            var pagedListEntityCollection = _repo.GetAllPagedQueryName(resourceParameters);
-
-            var previousPageLink = pagedListEntityCollection.HasPrevious ?
-                RsourceUriFactory.CreateAuthorsResourceUri(resourceParameters,
-                    _urlHelper,
-                    ResourceUriType.PreviousPage) : null;
-
-            var nextPageLink = pagedListEntityCollection.HasNext ?
-                RsourceUriFactory.CreateAuthorsResourceUri(resourceParameters,
-                    _urlHelper,
-                    ResourceUriType.NextPage) : null;
-
-            // Todo Maybe refactor to a type safe class instead of anonymous
-            var paginationMetadata = new
+            var entity = Mapper.Map<TOfmForPost, TEntity>(ofmForPost);
+            try
             {
-                totalCount = pagedListEntityCollection.TotalCount,
-                pageSize = pagedListEntityCollection.PageSize,
-                currentPage = pagedListEntityCollection.CurrentPage,
-                totalPages = pagedListEntityCollection.TotalPages,
-                previousPageLink = previousPageLink,
-                nextPageLink = nextPageLink
-            };
+                entity = await _repo.Create(entity);
+            }
+            catch (Exception e)
+            {
+                var msg = e.Message;
+            }
 
-            // Todo: Refactor to class taking controller as input instead of only this method
-            controllerBase.Response.Headers.Add("X-Pagination",
-                Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
-
-            var ofmCollection = Mapper.Map<List<TEntity>, List<TOfmForGet>>(pagedListEntityCollection);
-            return ofmCollection;
+            return Mapper.Map<TEntity, TOfmForGet>(entity);
         }
 
-        
-        
         public virtual async Task<bool> Delete(TId id)
         {
             var successfullyDeleted = _repo.Delete(id);
             return successfullyDeleted.Result;
         }
-        
+
         public virtual async Task<List<string>> MyDelete(TId id)
         {
             // Todo Refactor and make return type bool (out errors)
-            //var entitiesBlockingDeletion = await _repo.MyDelete(id);
             var entitiesBlockingDeletion = new List<List<IEntityUniqueIdentifier<int>>>(); // Quick fix for compile error
             var blockingEntitiesList = new List<string>();
             if (entitiesBlockingDeletion.Count != 0)
@@ -168,8 +139,7 @@ namespace Fittify.Api.OfmRepository
             Mapper.Map(ofmForPatch, _cachedEntity);
             var entity = await _repo.Update(_cachedEntity);
             return Mapper.Map<TEntity, TOfmForGet>(entity);
-            
         }
-        
+
     }
 }

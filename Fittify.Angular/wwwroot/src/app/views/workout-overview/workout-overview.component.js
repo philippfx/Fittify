@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var Gppd_1 = require("../../apimodelrepositories/Gppd");
-var WorkoutOverviewComponent = (function () {
+var WorkoutOverviewComponent = /** @class */ (function () {
     function WorkoutOverviewComponent(gppd) {
         // gppd.getAllWorkouts().subscribe(data => {
         //   this.workouts = data;
@@ -25,15 +25,15 @@ var WorkoutOverviewComponent = (function () {
         });
         var be = 'abc';
     }
+    WorkoutOverviewComponent = __decorate([
+        core_1.Component({
+            selector: 'ff-workout-overview',
+            templateUrl: './workout-overview.component.html',
+            styleUrls: ['./workout-overview.component.css']
+        }),
+        __metadata("design:paramtypes", [Gppd_1.GppdRepository])
+    ], WorkoutOverviewComponent);
     return WorkoutOverviewComponent;
 }());
-WorkoutOverviewComponent = __decorate([
-    core_1.Component({
-        selector: 'ff-workout-overview',
-        templateUrl: './workout-overview.component.html',
-        styleUrls: ['./workout-overview.component.css']
-    }),
-    __metadata("design:paramtypes", [Gppd_1.GppdRepository])
-], WorkoutOverviewComponent);
 exports.WorkoutOverviewComponent = WorkoutOverviewComponent;
 //# sourceMappingURL=workout-overview.component.js.map

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var WorkoutGppd = (function () {
+var WorkoutGppd = /** @class */ (function () {
     function WorkoutGppd(_gppdFactory) {
         this._gppdFactory = _gppdFactory;
     }

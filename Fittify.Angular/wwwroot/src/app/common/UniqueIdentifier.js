@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var UniqueIdentifier = (function () {
+var UniqueIdentifier = /** @class */ (function () {
     function UniqueIdentifier() {
     }
     return UniqueIdentifier;
