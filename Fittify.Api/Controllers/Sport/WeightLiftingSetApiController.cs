@@ -25,7 +25,7 @@ namespace Fittify.Api.Controllers.Sport
         Controller,
         IAsyncGppdForHttp<int, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch>
     {
-        private readonly GppdOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int> _gppdForHttpMethods;
+        private readonly AsyncPostPatchDeleteOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int> _asyncPostPatchDeleteForHttpMethods;
         private readonly WeightLiftingSetRepository _repo;
         private readonly ILogger<WeightLiftingSetApiController> _logger;
 
@@ -35,14 +35,14 @@ namespace Fittify.Api.Controllers.Sport
             IUrlHelper urlHelper)
         {
             _repo = new WeightLiftingSetRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int>(_repo, urlHelper, adcProvider);
+            _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int>(_repo, urlHelper, adcProvider);
             _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allEntites = await _gppdForHttpMethods.GetAll();
+            var allEntites = await _asyncPostPatchDeleteForHttpMethods.GetAll();
             var allOfmForGet = Mapper.Map<IEnumerable<WeightLiftingSetOfmForGet>>(allEntites).ToList();
             if (allOfmForGet.Count == 0)
             {
@@ -70,7 +70,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpPost("new")]
         public async Task<IActionResult> Post([FromBody] WeightLiftingSetOfmForPost ofmForPost)
         {
-            var ofmForGet = await _gppdForHttpMethods.Post(ofmForPost);
+            var ofmForGet = await _asyncPostPatchDeleteForHttpMethods.Post(ofmForPost);
             var result = CreatedAtRoute(routeName: "GetWeightLiftingSetsByRangeOfIds",
                 routeValues: new {inputString = ofmForGet.Id}, value: ofmForGet);
             return result;
@@ -79,7 +79,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _gppdForHttpMethods.Delete(id);
+            await _asyncPostPatchDeleteForHttpMethods.Delete(id);
             return NoContent();
         }
 
@@ -98,7 +98,7 @@ namespace Fittify.Api.Controllers.Sport
         public async Task<IActionResult> UpdatePartially(int id, [FromBody] JsonPatchDocument<WeightLiftingSetOfmForPatch> jsonPatchDocument)
         {
             throw new NotImplementedException();
-            //var ofmForGet = await _gppdForHttpMethods.UpdatePartially(id, jsonPatchDocument);
+            //var ofmForGet = await _asyncPostPatchDeleteForHttpMethods.UpdatePartially(id, jsonPatchDocument);
             //return new JsonResult(ofmForGet);
         }
     }

@@ -24,7 +24,7 @@ namespace Fittify.Api.Controllers.Sport
         Controller,
         IAsyncGppdForHttp<int, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch>
     {
-        private readonly GppdOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int> _gppdForHttpMethods;
+        private readonly AsyncPostPatchDeleteOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int> _asyncPostPatchDeleteForHttpMethods;
         private readonly ExerciseHistoryRepository _repo;
 
         public ExerciseHistoryApiController(FittifyContext fittifyContext,
@@ -32,7 +32,7 @@ namespace Fittify.Api.Controllers.Sport
             IUrlHelper urlHelper)
         {
             _repo = new ExerciseHistoryRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
+            _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
         }
 
         [HttpGet("{id:int}", Name = "GetExerciseHistoryById")]
@@ -46,7 +46,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet( Name = "GetAllExerciseHistoriesByRangeOfIds")]
         public async Task<IActionResult> GetAll()
         {
-            var allEntites = await _gppdForHttpMethods.GetAll();
+            var allEntites = await _asyncPostPatchDeleteForHttpMethods.GetAll();
             var allOfmForGet = Mapper.Map<IEnumerable<ExerciseHistoryOfmForGet>>(allEntites);
             return new JsonResult(allOfmForGet);
         }
@@ -62,7 +62,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpPost("new")]
         public async Task<IActionResult> Post([FromBody] ExerciseHistoryOfmForPost ofmForPost)
         {
-            var ofmForGet = await _gppdForHttpMethods.Post(ofmForPost);
+            var ofmForGet = await _asyncPostPatchDeleteForHttpMethods.Post(ofmForPost);
             var result = CreatedAtRoute(routeName: "GetExerciseHistoriesByRangeOfIds",
                 routeValues: new { inputString = ofmForGet.Id }, value: ofmForGet);
             return result;
@@ -73,7 +73,7 @@ namespace Fittify.Api.Controllers.Sport
         {
             try
             {
-                await _gppdForHttpMethods.Delete(id);
+                await _asyncPostPatchDeleteForHttpMethods.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)
@@ -105,7 +105,7 @@ namespace Fittify.Api.Controllers.Sport
         public async Task<IActionResult> UpdatePartially(int id, JsonPatchDocument<ExerciseHistoryOfmForPatch> jsonPatchDocument)
         {
             throw new NotImplementedException();
-            //var ofmForGet = await _gppdForHttpMethods.UpdatePartially(id, jsonPatchDocument);
+            //var ofmForGet = await _asyncPostPatchDeleteForHttpMethods.UpdatePartially(id, jsonPatchDocument);
             //return new JsonResult(ofmForGet);
         }
     }

@@ -23,9 +23,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.Api.OfmRepository
 {
-    public class GppdOfm<TCrudRepository, TEntity, TOfmForGet, TOfmForPost, TOfmForPatch, TId> :
-        Controller,
-        IAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TOfmForPatch>
+    public class AsyncPostPatchDeleteOfm<TCrudRepository, TEntity, TOfmForGet, TOfmForPost, TOfmForPatch, TId> :
+        Controller
         
         where TCrudRepository : IAsyncCrudForEntityName<TEntity,TId> 
         where TEntity : class, IEntityName<TId>
@@ -39,7 +38,7 @@ namespace Fittify.Api.OfmRepository
         private readonly IActionDescriptorCollectionProvider _adcp;
         private readonly IUrlHelper _urlHelper;
 
-        public GppdOfm(TCrudRepository repository,
+        public AsyncPostPatchDeleteOfm(TCrudRepository repository,
             IUrlHelper urlHelper,
             IActionDescriptorCollectionProvider actionDescriptorCollectionProvider)
         {
@@ -48,51 +47,12 @@ namespace Fittify.Api.OfmRepository
             _urlHelper = urlHelper;
         }
 
-        public GppdOfm()
+        public AsyncPostPatchDeleteOfm()
         {
             
         }
 
-        public virtual async Task<bool> DoesEntityExist(TId id)
-        {
-            // Todo this async lacks await
-            return  _repo.DoesEntityExist(id).Result;
-        }
-
-        // Todo Refactor improved search paramters to override virtual
-        public virtual async Task<IEnumerable<TOfmForGet>> GetAllPaged(IResourceParameters resourceParameters, ControllerBase controllerBase)
-        {
-            //// Todo this async lacks await
-            var pagedListEntityCollection = _repo.GetAllPaged(resourceParameters);
-
-            var previousPageLink = pagedListEntityCollection.HasPrevious ?
-                RsourceUriFactory.CreateAuthorsResourceUri(resourceParameters,
-                    _urlHelper,
-                    ResourceUriType.PreviousPage) : null;
-
-            var nextPageLink = pagedListEntityCollection.HasNext ?
-                RsourceUriFactory.CreateAuthorsResourceUri(resourceParameters,
-                    _urlHelper,
-                    ResourceUriType.NextPage) : null;
-
-            // Todo Maybe refactor to a type safe class instead of anonymous
-            var paginationMetadata = new
-            {
-                totalCount = pagedListEntityCollection.TotalCount,
-                pageSize = pagedListEntityCollection.PageSize,
-                currentPage = pagedListEntityCollection.CurrentPage,
-                totalPages = pagedListEntityCollection.TotalPages,
-                previousPageLink = previousPageLink,
-                nextPageLink = nextPageLink
-            };
-
-            // Todo: Refactor to class taking controller as input instead of only this method
-            controllerBase.Response.Headers.Add("X-Pagination",
-                Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
-
-            var ofmCollection = Mapper.Map<List<TEntity>, List<TOfmForGet>>(pagedListEntityCollection);
-            return ofmCollection;
-        }
+        
 
         public virtual async Task<IEnumerable<TOfmForGet>> GetAllPagedAndSearchName(ISearchQueryResourceParameters resourceParameters, ControllerBase controllerBase)
         {
@@ -128,35 +88,7 @@ namespace Fittify.Api.OfmRepository
             return ofmCollection;
         }
 
-        public virtual async Task<IEnumerable<TOfmForGet>> GetAll()
-        {
-            // Todo this async lacks await
-            var entityCollection = _repo.GetAll().ToList();
-            var ofmCollection = Mapper.Map<List<TEntity>, List<TOfmForGet>>(entityCollection);
-            return ofmCollection;
-        }
-
-        public virtual async Task<TOfmForGet> GetById(TId id)
-        {
-            var entity = await _repo.GetById(id);
-            var ofm = Mapper.Map<TEntity, TOfmForGet>(entity);
-            return ofm;
-        }
         
-        public virtual async Task<TOfmForGet> Post(TOfmForPost ofmForPost)
-        {
-            var entity = Mapper.Map<TOfmForPost, TEntity>(ofmForPost);
-            try
-            {
-                entity = await _repo.Create(entity);
-            }
-            catch (Exception e)
-            {
-                var msg = e.Message;
-            }
-            
-            return Mapper.Map<TEntity, TOfmForGet>(entity);
-        }
         
         public virtual async Task<bool> Delete(TId id)
         {

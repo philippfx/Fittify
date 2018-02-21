@@ -30,7 +30,7 @@ namespace Fittify.Api.Controllers.Sport
         Controller,
         IAsyncGppdForHttp<int, CategoryOfmForPost, CategoryOfmForPatch>
     {
-        private readonly GppdOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int> _gppdForHttpMethods;
+        private readonly AsyncPostPatchDeleteOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int> _asyncPostPatchDeleteForHttpMethods;
         private readonly CategoryRepository _repo;
         private readonly string _shortCamelCasedControllerName;
 
@@ -39,7 +39,7 @@ namespace Fittify.Api.Controllers.Sport
             IUrlHelper urlHelper)
         {
             _repo = new CategoryRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
+            _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
         }
 
@@ -61,7 +61,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet(Name = "GetAllCategories")]
         public async Task<IActionResult> GetAll()
         {
-            var allEntites = await _gppdForHttpMethods.GetAll();
+            var allEntites = await _asyncPostPatchDeleteForHttpMethods.GetAll();
             var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
             //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
             if (allOfmForGet.Count == 0)
@@ -75,7 +75,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet("paged", Name = "GetAllPagedCategories")]
         public async Task<IActionResult> GetAllPaged(SearchQueryResourceParameters resourceParameters)
         {
-            var allEntites = await _gppdForHttpMethods.GetAllPaged(resourceParameters, this);
+            var allEntites = await _asyncPostPatchDeleteForHttpMethods.GetAllPaged(resourceParameters, this);
             
             var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
             //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
@@ -90,7 +90,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet("pagedandsearchname", Name = "GetAllPagedAndSearchNameCategories")]
         public async Task<IActionResult> GetAllPagedAndSearchName(SearchQueryResourceParameters resourceParameters)
         {
-            var allEntites = await _gppdForHttpMethods.GetAllPaged(resourceParameters, this);
+            var allEntites = await _asyncPostPatchDeleteForHttpMethods.GetAllPaged(resourceParameters, this);
 
             var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
             //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
@@ -125,7 +125,7 @@ namespace Fittify.Api.Controllers.Sport
                 return new UnprocessableEntityObjectResult(ModelState);
             }
 
-            var ofmForGet = await _gppdForHttpMethods.Post(ofmForPost);
+            var ofmForGet = await _asyncPostPatchDeleteForHttpMethods.Post(ofmForPost);
             var result = CreatedAtRoute(routeName: "GetCategoriesByRangeOfIds", routeValues: new { inputString = ofmForGet.Id }, value: ofmForGet);
             return result;
         }
@@ -133,7 +133,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            bool successfullyDeleted = await _gppdForHttpMethods.Delete(id);
+            bool successfullyDeleted = await _asyncPostPatchDeleteForHttpMethods.Delete(id);
             if (successfullyDeleted) return NoContent();
             else return StatusCode(409);
 
@@ -147,7 +147,7 @@ namespace Fittify.Api.Controllers.Sport
 
             var attribute = (HttpGetAttribute)methodBase.GetCustomAttributes(typeof(HttpGetAttribute), true)[0];
 
-            var blockingOfmForGetLists = await _gppdForHttpMethods.MyDelete(id);
+            var blockingOfmForGetLists = await _asyncPostPatchDeleteForHttpMethods.MyDelete(id);
             if (blockingOfmForGetLists.Count != 0)
             {
                 foreach (var tuple in blockingOfmForGetLists)
@@ -175,7 +175,7 @@ namespace Fittify.Api.Controllers.Sport
             try
             {
                 // Get entity with original values from context
-                var ofmForPatch = await _gppdForHttpMethods.GetByIdOfmForPatch(id);
+                var ofmForPatch = await _asyncPostPatchDeleteForHttpMethods.GetByIdOfmForPatch(id);
                 if (ofmForPatch == null)
                 {
                     ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
@@ -193,7 +193,7 @@ namespace Fittify.Api.Controllers.Sport
                 }
 
                 // returning the patched ofm as response
-                var ofmForGet = _gppdForHttpMethods.UpdatePartially(ofmForPatch).Result;
+                var ofmForGet = _asyncPostPatchDeleteForHttpMethods.UpdatePartially(ofmForPatch).Result;
                 return new JsonResult(ofmForGet);
 
             }
@@ -203,7 +203,7 @@ namespace Fittify.Api.Controllers.Sport
                 throw;
             }
 
-            //var ofmForGet = await _gppdForHttpMethods.UpdatePartially(id, jsonPatchDocument);
+            //var ofmForGet = await _asyncPostPatchDeleteForHttpMethods.UpdatePartially(id, jsonPatchDocument);
             //return new JsonResult(ofmForGet);
         }
     }

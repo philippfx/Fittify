@@ -28,7 +28,7 @@ namespace Fittify.Api.Controllers.Sport
         Controller,
         IAsyncGppdForHttp<int, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch>
     {
-        private readonly GppdOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int> _gppdForHttpMethods;
+        private readonly AsyncPostPatchDeleteOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int> _asyncPostPatchDeleteForHttpMethods;
         private readonly WorkoutHistoryRepository _repo;
         private readonly string _shortCamelCasedControllerName;
 
@@ -37,7 +37,7 @@ namespace Fittify.Api.Controllers.Sport
             IUrlHelper urlHelper)
         {
             _repo = new WorkoutHistoryRepository(fittifyContext);
-            _gppdForHttpMethods = new GppdOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
+            _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
         }
 
@@ -52,7 +52,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allEntites = await _gppdForHttpMethods.GetAll();
+            var allEntites = await _asyncPostPatchDeleteForHttpMethods.GetAll();
             var allOfmForGet = Mapper.Map<IEnumerable<WorkoutHistoryOfmForGet>>(allEntites);
             return new JsonResult(allOfmForGet);
         }
@@ -68,7 +68,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] WorkoutHistoryOfmForPost ofmForPost)
         {
-            var ofmForGet = await _gppdForHttpMethods.Post(ofmForPost);
+            var ofmForGet = await _asyncPostPatchDeleteForHttpMethods.Post(ofmForPost);
             var result = CreatedAtRoute(routeName: "GetWorkoutHistoryById", routeValues: new { id = ofmForGet.Id }, value: ofmForGet);
             return result;
         }
@@ -76,7 +76,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _gppdForHttpMethods.Delete(id);
+            await _asyncPostPatchDeleteForHttpMethods.Delete(id);
             return NoContent();
         }
 
@@ -87,7 +87,7 @@ namespace Fittify.Api.Controllers.Sport
 
             var attribute = (HttpGetAttribute)methodBase.GetCustomAttributes(typeof(HttpGetAttribute), true)[0];
             
-            var blockingOfmForGetLists = _gppdForHttpMethods.MyDelete(id).Result;
+            var blockingOfmForGetLists = _asyncPostPatchDeleteForHttpMethods.MyDelete(id).Result;
             if (blockingOfmForGetLists.Count != 0)
             {
                 foreach (var tuple in blockingOfmForGetLists)
