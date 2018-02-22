@@ -4,7 +4,7 @@ using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport
 {
-    public class CardioSet : IEntityUniqueIdentifier<int> // Todo implement IEntityDateTimeStartEnd
+    public class CardioSet : IEntityDateTimeStartEnd<int> // Todo implement IEntityDateTimeStartEnd
     {
         public int Id { get; set; }
 

@@ -29,6 +29,7 @@ namespace Fittify.Api.Controllers.Sport
         IAsyncGppdForHttp<int, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch>
     {
         private readonly AsyncPostPatchDeleteOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int> _asyncPostPatchDeleteForHttpMethods;
+        private readonly IAsyncGetOfm<WorkoutHistoryOfmForGet, int> _asyncGetOfm;
         private readonly WorkoutHistoryRepository _repo;
         private readonly string _shortCamelCasedControllerName;
 
@@ -38,6 +39,7 @@ namespace Fittify.Api.Controllers.Sport
         {
             _repo = new WorkoutHistoryRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
+            _asyncGetOfm = new AsyncGetOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, int>(_repo, urlHelper, adcProvider);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
         }
 
@@ -52,7 +54,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allEntites = await _asyncPostPatchDeleteForHttpMethods.GetAll();
+            var allEntites = await _asyncGetOfm.GetAll();
             var allOfmForGet = Mapper.Map<IEnumerable<WorkoutHistoryOfmForGet>>(allEntites);
             return new JsonResult(allOfmForGet);
         }

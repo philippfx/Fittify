@@ -11,12 +11,6 @@ namespace Fittify.DataModelRepositories
         where TEntity : class, IEntityDateTimeStartEnd<TId>
         where TId : struct
     {
-        new Task<TEntity> GetById(TId id);
-
-        new IQueryable<TEntity> GetAll();
-
-        new PagedList<TEntity> GetAllPaged(IResourceParameters resourceParameters);
-
-        new Task<IEnumerable<TEntity>> GetByCollectionOfIds(IEnumerable<TId> rangeOfIds);
+        PagedList<TEntity> GetAllPagedDateTimeStartEnd(IDateTimeStartEndResourceParameters resourceParameters);
     }
 }

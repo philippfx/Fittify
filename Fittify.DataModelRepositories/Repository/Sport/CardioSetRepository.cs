@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class CardioSetRepository : AsyncCrud<CardioSet,int> // Todo implement IAsyncCrudForDateTimeStartEnd
+    public class CardioSetRepository : AsyncCrudForEntityDateTimeStartEnd<CardioSet, int> // Todo implement IAsyncCrudForDateTimeStartEnd
     {
         public CardioSetRepository()
         {

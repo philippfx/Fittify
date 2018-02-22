@@ -24,6 +24,7 @@ namespace Fittify.Api.Controllers.Sport
         IAsyncGppdForHttp<int, ExerciseOfmForPost, ExerciseOfmForPatch>
     {
         private readonly AsyncPostPatchDeleteOfm<ExerciseRepository, Exercise, ExerciseOfmForGet, ExerciseOfmForPost, ExerciseOfmForPatch, int> _asyncPostPatchDeleteForHttpMethods;
+        private readonly IAsyncGetOfmByNameSearch<ExerciseOfmForGet, int> _asyncGetOfmByNameSearch;
         private readonly ExerciseRepository _repo;
 
         public ExerciseApiController(FittifyContext fittifyContext, 
@@ -32,12 +33,13 @@ namespace Fittify.Api.Controllers.Sport
         {
             _repo = new ExerciseRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<ExerciseRepository, Exercise, ExerciseOfmForGet, ExerciseOfmForPost, ExerciseOfmForPatch, int>(_repo, urlHelper, adcProvider);
+            _asyncGetOfmByNameSearch = new AsyncGetOfmByNameSearch<ExerciseRepository, Exercise, ExerciseOfmForGet, int>(_repo, urlHelper, adcProvider);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allEntites = await _asyncPostPatchDeleteForHttpMethods.GetAll();
+            var allEntites = await _asyncGetOfmByNameSearch.GetAll();
             var allOfmForGet = Mapper.Map<IEnumerable<ExerciseOfmForGet>>(allEntites);
             return new JsonResult(allOfmForGet);
         }

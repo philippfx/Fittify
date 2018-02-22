@@ -26,6 +26,7 @@ namespace Fittify.Api.Controllers.Sport
         IAsyncGppdForHttp<int, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch>
     {
         private readonly AsyncPostPatchDeleteOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int> _asyncPostPatchDeleteForHttpMethods;
+        private readonly IAsyncGetOfm<WeightLiftingSetOfmForGet, int> _asyncGetOfm;
         private readonly WeightLiftingSetRepository _repo;
         private readonly ILogger<WeightLiftingSetApiController> _logger;
 
@@ -36,13 +37,14 @@ namespace Fittify.Api.Controllers.Sport
         {
             _repo = new WeightLiftingSetRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int>(_repo, urlHelper, adcProvider);
+            _asyncGetOfm = new AsyncGetOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, int>(_repo, urlHelper, adcProvider);
             _logger = logger;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allEntites = await _asyncPostPatchDeleteForHttpMethods.GetAll();
+            var allEntites = await _asyncGetOfm.GetAll();
             var allOfmForGet = Mapper.Map<IEnumerable<WeightLiftingSetOfmForGet>>(allEntites).ToList();
             if (allOfmForGet.Count == 0)
             {

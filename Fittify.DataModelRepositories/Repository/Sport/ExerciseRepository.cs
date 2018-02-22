@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class ExerciseRepository : AsyncCrud<Exercise,int>
+    public class ExerciseRepository : AsyncCrudForEntityName<Exercise,int>
     {
         public ExerciseRepository()
         {
@@ -18,15 +18,15 @@ namespace Fittify.DataModelRepositories.Repository.Sport
             
         }
 
-        public override IQueryable<Exercise> GetAll()
-        {
-            return FittifyContext.Set<Exercise>().Include(i => i.ExercisesWorkoutsMap).ThenInclude(i => i.Workout).Include(i => i.ExerciseHistories).AsNoTracking();
-        }
+        //public override IQueryable<Exercise> GetAll()
+        //{
+        //    return FittifyContext.Set<Exercise>().Include(i => i.ExercisesWorkoutsMap).ThenInclude(i => i.Workout).Include(i => i.ExerciseHistories).AsNoTracking();
+        //}
 
-        public override async Task<Exercise> GetById(int id)
-        {
-            return await GetAll().FirstOrDefaultAsync(f => f.Id == id);
-        }
+        //public override async Task<Exercise> GetById(int id)
+        //{
+        //    return await GetAll().FirstOrDefaultAsync(f => f.Id == id);
+        //}
 
         public async Task<List<Exercise>> GetCollectionByFkWorkoutId(int workoutId)
         {

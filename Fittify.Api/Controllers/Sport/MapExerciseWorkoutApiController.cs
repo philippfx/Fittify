@@ -24,6 +24,7 @@ namespace Fittify.Api.Controllers.Sport
         IAsyncGppdForHttp<int, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForPatch>
     {
         private readonly AsyncPostPatchDeleteOfm<MapExerciseWorkoutRepository, MapExerciseWorkout, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForPatch, int> _asyncPostPatchDeleteForHttpMethods;
+        private readonly IAsyncGetOfm<MapExerciseWorkoutOfmForGet, int> _asyncGetOfm;
         private readonly MapExerciseWorkoutRepository _repo;
 
         public MapExerciseWorkoutApiController(FittifyContext fittifyContext,
@@ -32,12 +33,13 @@ namespace Fittify.Api.Controllers.Sport
         {
             _repo = new MapExerciseWorkoutRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<MapExerciseWorkoutRepository, MapExerciseWorkout, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForPatch, int>(_repo, urlHelper, adcProvider);
+            _asyncGetOfm = new AsyncGetOfm<MapExerciseWorkoutRepository, MapExerciseWorkout, MapExerciseWorkoutOfmForGet, int>(_repo, urlHelper, adcProvider);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var allEntites = await _asyncPostPatchDeleteForHttpMethods.GetAll();
+            var allEntites = await _asyncGetOfm.GetAll();
             var allOfmForGet = Mapper.Map<IEnumerable<MapExerciseWorkoutOfmForGet>>(allEntites);
             return new JsonResult(allOfmForGet);
         }

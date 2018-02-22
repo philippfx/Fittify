@@ -31,6 +31,7 @@ namespace Fittify.Api.Controllers.Sport
         IAsyncGppdForHttp<int, CategoryOfmForPost, CategoryOfmForPatch>
     {
         private readonly AsyncPostPatchDeleteOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int> _asyncPostPatchDeleteForHttpMethods;
+        private readonly IAsyncGetOfmByNameSearch<CategoryOfmForGet, int> _asyncGetOfmByNameSearch;
         private readonly CategoryRepository _repo;
         private readonly string _shortCamelCasedControllerName;
 
@@ -41,6 +42,7 @@ namespace Fittify.Api.Controllers.Sport
             _repo = new CategoryRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
+            _asyncGetOfmByNameSearch = new AsyncGetOfmByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider);
         }
 
         [HttpGet("{id:int}", Name="GetCategoryById")]
@@ -61,7 +63,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet(Name = "GetAllCategories")]
         public async Task<IActionResult> GetAll()
         {
-            var allEntites = await _asyncPostPatchDeleteForHttpMethods.GetAll();
+            var allEntites = await _asyncGetOfmByNameSearch.GetAll();
             var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
             //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
             if (allOfmForGet.Count == 0)
@@ -75,7 +77,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet("paged", Name = "GetAllPagedCategories")]
         public async Task<IActionResult> GetAllPaged(SearchQueryResourceParameters resourceParameters)
         {
-            var allEntites = await _asyncPostPatchDeleteForHttpMethods.GetAllPaged(resourceParameters, this);
+            var allEntites = await _asyncGetOfmByNameSearch.GetAllPaged(resourceParameters, this);
             
             var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
             //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
@@ -90,7 +92,7 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet("pagedandsearchname", Name = "GetAllPagedAndSearchNameCategories")]
         public async Task<IActionResult> GetAllPagedAndSearchName(SearchQueryResourceParameters resourceParameters)
         {
-            var allEntites = await _asyncPostPatchDeleteForHttpMethods.GetAllPaged(resourceParameters, this);
+            var allEntites = await _asyncGetOfmByNameSearch.GetAllPaged(resourceParameters, this);
 
             var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
             //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 

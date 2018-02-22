@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Helpers;
-using Microsoft.EntityFrameworkCore;
 
-namespace Fittify.DataModelRepositories.Repository
+namespace Fittify.DataModelRepositories
 {
     public class AsyncCrudForEntityName<TEntity, TId> : AsyncCrud<TEntity, TId>, IAsyncCrudForEntityName<TEntity, TId>
         where TEntity : class, IEntityName<TId>
         where TId : struct
     {
-        protected readonly FittifyContext FittifyContext;
 
         protected AsyncCrudForEntityName(FittifyContext fittifyContext) : base(fittifyContext)
         {
-            FittifyContext = fittifyContext;
+
         }
 
         protected AsyncCrudForEntityName()

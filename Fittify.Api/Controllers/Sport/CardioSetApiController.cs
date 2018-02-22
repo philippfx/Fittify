@@ -4,11 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Controllers.HttpMethodInterfaces;
+using Fittify.Api.Extensions;
+using Fittify.Api.Helpers;
 using Fittify.Api.OfmRepository;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
+using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
@@ -24,8 +28,9 @@ namespace Fittify.Api.Controllers.Sport
         IAsyncGppdForHttp<int, CardioSetOfmForPost, CardioSetOfmForPatch>
     {
         private readonly AsyncPostPatchDeleteOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int> _asyncPostPatchDeleteForHttpMethods;
-        private readonly IAsyncGetOfm<CardioSetOfmForGet, int> _asyncGetOfm;
+        private readonly IAsyncGetOfmByDateTimeStartEnd<CardioSetOfmForGet, int> _asyncGetOfm;
         private readonly CardioSetRepository _repo;
+        private readonly string _shortCamelCasedControllerName;
 
         public CardioSetApiController(FittifyContext fittifyContext, 
             IActionDescriptorCollectionProvider adcProvider,
@@ -33,7 +38,8 @@ namespace Fittify.Api.Controllers.Sport
         {
             _repo = new CardioSetRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int>(_repo, urlHelper, adcProvider);
-            _asyncGetOfm = new AsyncGetOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, int>(_repo, urlHelper, adcProvider);
+            _asyncGetOfm = new AsyncGetOfmByDateTimeStartEnd<CardioSetRepository, CardioSet, CardioSetOfmForGet, int>(_repo, urlHelper, adcProvider);
+            _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
         }
 
         [HttpGet]
@@ -50,6 +56,21 @@ namespace Fittify.Api.Controllers.Sport
             var entity = await _repo.GetById(id);
             var ofmForGet = new List<CardioSetOfmForGet>() { Mapper.Map<CardioSetOfmForGet>(entity) };
             return new JsonResult(ofmForGet);
+        }
+
+        [HttpGet("pagedanddatetimestartend", Name = "GetAllPagedAndDateTimeStartEndCardioSets")]
+        public async Task<IActionResult> GetAllPagedAndSearchName(DateTimeStartEndResourceParameters resourceParameters)
+        {
+            var allEntites = await _asyncGetOfm.GetAllPagedAndDateTimeStartEnd(resourceParameters, this);
+
+            var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
+            //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
+            if (allOfmForGet.Count == 0)
+            {
+                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
+                return new EntityNotFoundObjectResult(ModelState);
+            }
+            return new JsonResult(allOfmForGet);
         }
 
         [HttpGet("range/{inputString}", Name = "GetCardioSetsByRangeOfIds")]
