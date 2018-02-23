@@ -59,7 +59,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet("pagedanddatetimestartend", Name = "GetAllPagedAndDateTimeStartEndCardioSets")]
-        public async Task<IActionResult> GetAllPagedAndSearchName(DateTimeStartEndResourceParameters resourceParameters)
+        public async Task<IActionResult> GetAllPagedAndDateTimeStartEnd(DateTimeStartEndResourceParameters resourceParameters)
         {
             var allEntites = await _asyncGetOfm.GetAllPagedAndDateTimeStartEnd(resourceParameters, this);
 

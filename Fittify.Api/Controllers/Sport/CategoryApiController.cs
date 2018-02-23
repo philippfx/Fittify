@@ -16,6 +16,7 @@ using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
+using Fittify.DataModelRepositories.Services;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,7 @@ namespace Fittify.Api.Controllers.Sport
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
             _asyncGetOfmByNameSearch = new AsyncGetOfmByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider);
+            
         }
 
         [HttpGet("{id:int}", Name="GetCategoryById")]

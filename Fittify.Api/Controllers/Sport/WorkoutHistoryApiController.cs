@@ -14,6 +14,7 @@ using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
+using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
@@ -29,7 +30,7 @@ namespace Fittify.Api.Controllers.Sport
         IAsyncGppdForHttp<int, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch>
     {
         private readonly AsyncPostPatchDeleteOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int> _asyncPostPatchDeleteForHttpMethods;
-        private readonly IAsyncGetOfm<WorkoutHistoryOfmForGet, int> _asyncGetOfm;
+        private readonly IAsyncGetOfmByDateTimeStartEnd<WorkoutHistoryOfmForGet, int> _asyncGetOfm;
         private readonly WorkoutHistoryRepository _repo;
         private readonly string _shortCamelCasedControllerName;
 
@@ -39,7 +40,7 @@ namespace Fittify.Api.Controllers.Sport
         {
             _repo = new WorkoutHistoryRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
-            _asyncGetOfm = new AsyncGetOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, int>(_repo, urlHelper, adcProvider);
+            _asyncGetOfm = new AsyncGetOfmByDateTimeStartEnd<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, int>(_repo, urlHelper, adcProvider);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
         }
 
@@ -56,6 +57,21 @@ namespace Fittify.Api.Controllers.Sport
         {
             var allEntites = await _asyncGetOfm.GetAll();
             var allOfmForGet = Mapper.Map<IEnumerable<WorkoutHistoryOfmForGet>>(allEntites);
+            return new JsonResult(allOfmForGet);
+        }
+
+        [HttpGet("pagedanddatetimestartend", Name = "GetAllPagedAndDateTimeStartEndWorkoutHistories")]
+        public async Task<IActionResult> GetAllPagedAndDateTimeStartEnd(DateTimeStartEndResourceParameters resourceParameters)
+        {
+            var allEntites = await _asyncGetOfm.GetAllPagedAndDateTimeStartEnd(resourceParameters, this);
+
+            var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
+            //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
+            if (allOfmForGet.Count == 0)
+            {
+                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
+                return new EntityNotFoundObjectResult(ModelState);
+            }
             return new JsonResult(allOfmForGet);
         }
 

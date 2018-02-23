@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Helpers;
+using Fittify.DataModelRepositories.Services;
 using Fittify.DataModels.Models;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
@@ -19,10 +20,13 @@ namespace Fittify.DataModelRepositories
         where TId : struct
     {
         protected readonly FittifyContext FittifyContext;
+        private IPropertyMappingService _propertyMappingService;
+
 
         protected AsyncCrud(FittifyContext fittifyContext)
         {
             FittifyContext = fittifyContext;
+            _propertyMappingService = new PropertyMappingService();
         }
 
         protected AsyncCrud()
@@ -121,9 +125,14 @@ namespace Fittify.DataModelRepositories
 
         public PagedList<TEntity> GetAllPaged(IResourceParameters resourceParameters)
         {
-            var allEntitiesQueryable = GetAll();
+            var allEntitiesQueryable = GetAll()
+                .OrderBy(o => o.Id)
+                .AsQueryable();
 
-
+            //var collectionBeforePaging =
+            //    GetAll()
+            //        .ApplySort(resourceParameters.OrderBy,
+            //            _propertyMappingService.GetPropertyMapping<AuthorDto, Author>());
 
             return PagedList<TEntity>.Create(allEntitiesQueryable,
                 resourceParameters.PageNumber,

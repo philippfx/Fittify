@@ -4,5 +4,6 @@
     {
         int PageNumber { get; set; }
         int PageSize { get; set; }
+        string OrderBy { get; set; }
     }
 }
