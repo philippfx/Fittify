@@ -27,7 +27,7 @@ namespace Fittify.Spielwiese
             //Console.WriteLine(@"Your range of Id parameter is badly formatted. It must meet the regular expression '^([1-9]{1}\d*(-[1-9]{1}\d*)?((,[1-9]{1}\d*)?(-[1-9]{1}\d*)?)*|null)$'");
             //Console.ReadLine();
 
-            IEnumerable<string> strings = new List<string>() as List<string>;
+            //IEnumerable<string> strings = new List<string>() as List<string>;
             
         }
     }
