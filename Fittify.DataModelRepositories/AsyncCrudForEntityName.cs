@@ -1,7 +1,9 @@
 ﻿using System.Linq;
+using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Helpers;
+using Fittify.DataModels.Models.Sport;
 
 namespace Fittify.DataModelRepositories
 {
@@ -36,6 +38,32 @@ namespace Fittify.DataModelRepositories
             }
 
             return PagedList<TEntity>.Create(allEntitiesQueryable,
+                resourceParameters.PageNumber,
+                resourceParameters.PageSize);
+        }
+
+        public PagedList<TEntity> GetAllPagedQueryNameOrdered(ISearchQueryResourceParameters resourceParameters)
+        {
+            //var allEntitiesQueryable = GetAll()
+            //    .OrderBy(o => o.Name)
+            //    .AsQueryable();
+
+            var allEntitiesQueryableBeforePaging =
+                GetAll()
+                    .ApplySort(resourceParameters.OrderBy,
+                        PropertyMappingService.GetPropertyMapping<CategoryOfmForGet, Category>());
+
+
+            if (!string.IsNullOrEmpty(resourceParameters.SearchQuery))
+            {
+                // trim & ignore casing
+                var searchNameForWhereClause = resourceParameters.SearchQuery
+                    .Trim().ToLowerInvariant();
+                allEntitiesQueryableBeforePaging = allEntitiesQueryableBeforePaging
+                    .Where(a => a.Name.ToLowerInvariant().Contains(resourceParameters.SearchQuery.ToLowerInvariant()));
+            }
+
+            return PagedList<TEntity>.Create(allEntitiesQueryableBeforePaging,
                 resourceParameters.PageNumber,
                 resourceParameters.PageSize);
         }

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Fittify.Api.OuterFacingModels.Sport.Abstract;
+using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.DataModels.Models.Sport;
 
-namespace Fittify.DataModelRepositories.Services
+namespace Fittify.Common.Services
 {
     public class PropertyMappingService : IPropertyMappingService
     {
@@ -14,14 +14,17 @@ namespace Fittify.DataModelRepositories.Services
                { "Id", new PropertyMappingValue(new List<string>() { "Id" } ) },
                { "Genre", new PropertyMappingValue(new List<string>() { "Genre" } )},
                { "Age", new PropertyMappingValue(new List<string>() { "DateOfBirth" } , true) },
-               { "Name", new PropertyMappingValue(new List<string>() { "FirstName", "LastName" }) }
+               //{ "Name", new PropertyMappingValue(new List<string>() { "FirstName", "LastName" }) }
+               { "Name", new PropertyMappingValue(new List<string>() { "Name" })  }
            };
 
         private IList<IPropertyMapping> propertyMappings = new List<IPropertyMapping>();
 
         public PropertyMappingService()
         {
-            propertyMappings.Add(new PropertyMapping<CategoryOfmBase, Category>(_authorPropertyMapping));
+            // Todo this must be refactored to TOfmForGet and Entity!
+            //propertyMappings.Add(new PropertyMapping<CategoryOfmBase, Category>(_authorPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<CategoryOfmForGet, Category>(_authorPropertyMapping));
         }
         public Dictionary<string, PropertyMappingValue> GetPropertyMapping
             <TSource, TDestination>()

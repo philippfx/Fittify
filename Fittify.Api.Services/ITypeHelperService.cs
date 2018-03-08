@@ -1,4 +1,4 @@
-﻿namespace Fittify.DataModelRepositories.Services
+﻿namespace Fittify.Common.Services
 {
     public interface ITypeHelperService
     {

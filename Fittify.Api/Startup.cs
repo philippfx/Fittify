@@ -18,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using Fittify.Common.Helpers;
+using Fittify.Common.Services;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -62,6 +63,8 @@ namespace Fittify.Api
                     .ActionContext;
                 return new UrlHelper(actionContext);
             });
+
+            services.AddTransient<IPropertyMappingService, PropertyMappingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

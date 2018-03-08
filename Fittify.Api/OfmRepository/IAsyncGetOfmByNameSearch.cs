@@ -12,5 +12,6 @@ namespace Fittify.Api.OfmRepository
         where TId : struct
     {
         Task<IEnumerable<TOfmForGet>> GetAllPagedAndSearchName(ISearchQueryResourceParameters resourceParameters, ControllerBase controllerBase);
+        Task<IEnumerable<TOfmForGet>> GetAllPagedAndSearchNameAndOrdered(ISearchQueryResourceParameters resourceParameters, ControllerBase controllerBase);
     }
 }

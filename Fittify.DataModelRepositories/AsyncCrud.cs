@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
+using Fittify.Common.Services;
 using Fittify.DataModelRepositories.Helpers;
-using Fittify.DataModelRepositories.Services;
 using Fittify.DataModels.Models;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
@@ -20,13 +21,13 @@ namespace Fittify.DataModelRepositories
         where TId : struct
     {
         protected readonly FittifyContext FittifyContext;
-        private IPropertyMappingService _propertyMappingService;
+        protected IPropertyMappingService PropertyMappingService;
 
 
         protected AsyncCrud(FittifyContext fittifyContext)
         {
             FittifyContext = fittifyContext;
-            _propertyMappingService = new PropertyMappingService();
+            PropertyMappingService = new PropertyMappingService();
         }
 
         protected AsyncCrud()
@@ -125,20 +126,36 @@ namespace Fittify.DataModelRepositories
 
         public PagedList<TEntity> GetAllPaged(IResourceParameters resourceParameters)
         {
-            var allEntitiesQueryable = GetAll()
+            var allEntitiesQueryableBeforePaging = GetAll()
                 .OrderBy(o => o.Id)
                 .AsQueryable();
 
-            //var collectionBeforePaging =
+            //var allEntitiesQueryableBeforePaging =
             //    GetAll()
             //        .ApplySort(resourceParameters.OrderBy,
-            //            _propertyMappingService.GetPropertyMapping<AuthorDto, Author>());
+            //            PropertyMappingService.GetPropertyMapping<CategoryOfmForGet, Category>());
 
-            return PagedList<TEntity>.Create(allEntitiesQueryable,
+            return PagedList<TEntity>.Create(allEntitiesQueryableBeforePaging,
                 resourceParameters.PageNumber,
                 resourceParameters.PageSize);
         }
-        
+
+        public PagedList<TEntity> GetAllPagedAndOrdered(IResourceParameters resourceParameters)
+        {
+            //var allEntitiesQueryableBeforePaging = GetAll()
+            //    .OrderBy(o => o.Id)
+            //    .AsQueryable();
+
+            var allEntitiesQueryableBeforePaging =
+                GetAll()
+                    .ApplySort(resourceParameters.OrderBy,
+                        PropertyMappingService.GetPropertyMapping<CategoryOfmForGet, Category>());
+
+            return PagedList<TEntity>.Create(allEntitiesQueryableBeforePaging,
+                resourceParameters.PageNumber,
+                resourceParameters.PageSize);
+        }
+
         public virtual async Task<IEnumerable<TEntity>> GetByCollectionOfIds(IEnumerable<TId> collectionOfIds)
         {
             return await FittifyContext.Set<TEntity>().Where(t => collectionOfIds.Contains(t.Id)).ToListAsync();

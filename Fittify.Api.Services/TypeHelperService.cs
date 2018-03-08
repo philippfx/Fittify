@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Fittify.DataModelRepositories.Services
+namespace Fittify.Common.Services
 {
     public class TypeHelperService : ITypeHelperService
     {

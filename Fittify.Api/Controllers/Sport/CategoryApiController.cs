@@ -16,7 +16,6 @@ using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
-using Fittify.DataModelRepositories.Services;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -94,7 +93,22 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet("pagedandsearchname", Name = "GetAllPagedAndSearchNameCategories")]
         public async Task<IActionResult> GetAllPagedAndSearchName(SearchQueryResourceParameters resourceParameters)
         {
-            var allEntites = await _asyncGetOfmByNameSearch.GetAllPaged(resourceParameters, this);
+            var allEntites = await _asyncGetOfmByNameSearch.GetAllPagedAndSearchName(resourceParameters, this);
+
+            var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
+            //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
+            if (allOfmForGet.Count == 0)
+            {
+                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
+                return new EntityNotFoundObjectResult(ModelState);
+            }
+            return new JsonResult(allOfmForGet);
+        }
+
+        [HttpGet("pagedandsearchnameandordered", Name = "GetAllPagedAndSearchNameAndOrderedCategories")]
+        public async Task<IActionResult> GetAllPagedAndSearchNameAndOrdered(SearchQueryResourceParameters resourceParameters)
+        {
+            var allEntites = await _asyncGetOfmByNameSearch.GetAllPagedAndSearchNameAndOrdered(resourceParameters, this);
 
             var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
             //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 

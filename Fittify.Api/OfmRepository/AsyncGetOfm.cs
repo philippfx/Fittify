@@ -80,5 +80,39 @@ namespace Fittify.Api.OfmRepository
             var ofmCollection = Mapper.Map<List<TEntity>, List<TOfmForGet>>(pagedListEntityCollection);
             return ofmCollection;
         }
+
+        public virtual async Task<IEnumerable<TOfmForGet>> GetAllPagedAndOrdered(IResourceParameters resourceParameters, ControllerBase controllerBase)
+        {
+            //// Todo this async lacks await
+            var pagedListEntityCollection = Repo.GetAllPagedAndOrdered(resourceParameters);
+
+            var previousPageLink = pagedListEntityCollection.HasPrevious ?
+                RsourceUriFactory.CreateAuthorsResourceUri(resourceParameters,
+                    UrlHelper,
+                    ResourceUriType.PreviousPage) : null;
+
+            var nextPageLink = pagedListEntityCollection.HasNext ?
+                RsourceUriFactory.CreateAuthorsResourceUri(resourceParameters,
+                    UrlHelper,
+                    ResourceUriType.NextPage) : null;
+
+            // Todo Maybe refactor to a type safe class instead of anonymous
+            var paginationMetadata = new
+            {
+                totalCount = pagedListEntityCollection.TotalCount,
+                pageSize = pagedListEntityCollection.PageSize,
+                currentPage = pagedListEntityCollection.CurrentPage,
+                totalPages = pagedListEntityCollection.TotalPages,
+                previousPageLink = previousPageLink,
+                nextPageLink = nextPageLink
+            };
+
+            // Todo: Refactor to class taking controller as input instead of only this method
+            controllerBase.Response.Headers.Add("X-Pagination",
+                Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
+
+            var ofmCollection = Mapper.Map<List<TEntity>, List<TOfmForGet>>(pagedListEntityCollection);
+            return ofmCollection;
+        }
     }
 }

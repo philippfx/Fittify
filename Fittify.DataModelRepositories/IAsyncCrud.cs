@@ -23,7 +23,9 @@ namespace Fittify.DataModelRepositories
 
         IQueryable<TEntity> GetAll();
 
-        PagedList<TEntity> GetAllPaged(IResourceParameters resourceParameters);
+        PagedList<TEntity> GetAllPaged(IResourceParameters resourceParameters); // Todo remove by putting it all together
+
+        PagedList<TEntity> GetAllPagedAndOrdered(IResourceParameters resourceParameters); // Todo remove by putting it all together
 
         Task<IEnumerable<TEntity>> GetByCollectionOfIds(IEnumerable<TId> rangeOfIds);
 

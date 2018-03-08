@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Fittify.Api.Controllers.Sport
+namespace Fittify.Api.Controllers.Special
 {
     [Route("monitor")]
     public class MonitorController : Controller

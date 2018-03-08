@@ -12,6 +12,7 @@ namespace Fittify.Api.OfmRepository
     {
         Task<IEnumerable<TOfmForGet>> GetAll();
         Task<IEnumerable<TOfmForGet>> GetAllPaged(IResourceParameters resourceParameters, ControllerBase controllerBase);
+        Task<IEnumerable<TOfmForGet>> GetAllPagedAndOrdered(IResourceParameters resourceParameters, ControllerBase controllerBase);
         Task<TOfmForGet> GetById(TId id);
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Fittify.DataModelRepositories.Services;
+using Fittify.Common.Services;
 
 namespace Fittify.DataModelRepositories.Helpers
 {
