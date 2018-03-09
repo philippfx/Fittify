@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Fittify.Common.Services
+namespace Fittify.Api.Services
 {
     public class PropertyMappingValue
     {

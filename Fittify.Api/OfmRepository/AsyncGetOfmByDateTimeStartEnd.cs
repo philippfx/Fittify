@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Helpers;
+using Fittify.Api.Services;
 using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories;
@@ -20,8 +21,9 @@ namespace Fittify.Api.OfmRepository
     {
         public AsyncGetOfmByDateTimeStartEnd(TCrudRepository repository,
             IUrlHelper urlHelper,
-            IActionDescriptorCollectionProvider actionDescriptorCollectionProvider)
-            : base(repository, urlHelper, actionDescriptorCollectionProvider)
+            IActionDescriptorCollectionProvider actionDescriptorCollectionProvider,
+            IPropertyMappingService propertyMappingService)
+            : base(repository, urlHelper, actionDescriptorCollectionProvider, propertyMappingService)
         {
 
         }
@@ -32,12 +34,12 @@ namespace Fittify.Api.OfmRepository
             var pagedListEntityCollection = Repo.GetAllPagedDateTimeStartEnd(resourceParameters);
 
             var previousPageLink = pagedListEntityCollection.HasPrevious ?
-                RsourceUriFactory.CreateAuthorsResourceUri(resourceParameters,
+                RsourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.PreviousPage) : null;
 
             var nextPageLink = pagedListEntityCollection.HasNext ?
-                RsourceUriFactory.CreateAuthorsResourceUri(resourceParameters,
+                RsourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.NextPage) : null;
 

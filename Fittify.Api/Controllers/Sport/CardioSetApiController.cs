@@ -10,6 +10,7 @@ using Fittify.Api.OfmRepository;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Api.Services;
 using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
@@ -34,11 +35,12 @@ namespace Fittify.Api.Controllers.Sport
 
         public CardioSetApiController(FittifyContext fittifyContext, 
             IActionDescriptorCollectionProvider adcProvider,
-            IUrlHelper urlHelper)
+            IUrlHelper urlHelper,
+            IPropertyMappingService propertyMappingService)
         {
             _repo = new CardioSetRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int>(_repo, urlHelper, adcProvider);
-            _asyncGetOfm = new AsyncGetOfmByDateTimeStartEnd<CardioSetRepository, CardioSet, CardioSetOfmForGet, int>(_repo, urlHelper, adcProvider);
+            _asyncGetOfm = new AsyncGetOfmByDateTimeStartEnd<CardioSetRepository, CardioSet, CardioSetOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
         }
 

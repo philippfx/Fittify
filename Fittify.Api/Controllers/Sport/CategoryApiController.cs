@@ -11,6 +11,7 @@ using Fittify.Api.OfmRepository;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Api.Services;
 using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
@@ -37,13 +38,13 @@ namespace Fittify.Api.Controllers.Sport
 
         public CategoryApiController(FittifyContext fittifyContext,
             IActionDescriptorCollectionProvider adcProvider,
-            IUrlHelper urlHelper)
+            IUrlHelper urlHelper,
+            IPropertyMappingService propertyMappingService)
         {
             _repo = new CategoryRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
-            _asyncGetOfmByNameSearch = new AsyncGetOfmByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider);
-            
+            _asyncGetOfmByNameSearch = new AsyncGetOfmByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService);
         }
 
         [HttpGet("{id:int}", Name="GetCategoryById")]
@@ -108,9 +109,33 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet("pagedandsearchnameandordered", Name = "GetAllPagedAndSearchNameAndOrderedCategories")]
         public async Task<IActionResult> GetAllPagedAndSearchNameAndOrdered(SearchQueryResourceParameters resourceParameters)
         {
-            var allEntites = await _asyncGetOfmByNameSearch.GetAllPagedAndSearchNameAndOrdered(resourceParameters, this);
+            var allentities = await _asyncGetOfmByNameSearch.GetAllPagedAndSearchNameAndOrdered(resourceParameters, this);
 
-            var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites).ToList();
+            var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allentities).ToList();
+            //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
+            if (allOfmForGet.Count == 0)
+            {
+                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
+                return new EntityNotFoundObjectResult(ModelState);
+            }
+            return new JsonResult(allOfmForGet);
+        }
+
+        [HttpGet("pagedandsearchnameandorderedincludingerrormessages", Name = "GetAllPagedAndSearchNameAndOrderedCategoriesIncludingErrorMessages")]
+        public async Task<IActionResult> GetAllPagedAndSearchNameAndOrderedIncludingErrorMessages(SearchQueryResourceParameters resourceParameters)
+        {
+            var ofmForGetResult = await _asyncGetOfmByNameSearch.GetAllPagedAndSearchNameAndOrderedIncludingErrorMessages(resourceParameters, this);
+
+            if (ofmForGetResult.ErrorMessages.Count() > 0)
+            {
+                foreach (var errorMessage in ofmForGetResult.ErrorMessages)
+                {
+                    ModelState.AddModelError(_shortCamelCasedControllerName, errorMessage);
+                }
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
+
+            var allOfmForGet = ofmForGetResult.ReturnedTOfmForGetCollection.ToList();
             //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
             if (allOfmForGet.Count == 0)
             {
@@ -168,9 +193,9 @@ namespace Fittify.Api.Controllers.Sport
             var blockingOfmForGetLists = await _asyncPostPatchDeleteForHttpMethods.MyDelete(id);
             if (blockingOfmForGetLists.Count != 0)
             {
-                foreach (var tuple in blockingOfmForGetLists)
+                foreach (var blockingOfmForGet in blockingOfmForGetLists)
                 {
-                    ModelState.AddModelError(_shortCamelCasedControllerName, tuple);
+                    ModelState.AddModelError(_shortCamelCasedControllerName, blockingOfmForGet);
                 }
             }
 

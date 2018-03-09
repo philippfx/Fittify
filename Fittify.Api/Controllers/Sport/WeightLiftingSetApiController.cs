@@ -8,6 +8,7 @@ using Fittify.Api.OfmRepository;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Api.Services;
 using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
@@ -33,11 +34,12 @@ namespace Fittify.Api.Controllers.Sport
         public WeightLiftingSetApiController(FittifyContext fittifyContext,
             ILogger<WeightLiftingSetApiController> logger,
             IActionDescriptorCollectionProvider adcProvider,
-            IUrlHelper urlHelper)
+            IUrlHelper urlHelper,
+            IPropertyMappingService propertyMappingService)
         {
             _repo = new WeightLiftingSetRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int>(_repo, urlHelper, adcProvider);
-            _asyncGetOfm = new AsyncGetOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, int>(_repo, urlHelper, adcProvider);
+            _asyncGetOfm = new AsyncGetOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService);
             _logger = logger;
         }
 

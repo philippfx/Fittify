@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
-using Fittify.Common.Services;
+using Fittify.Api.Services;
 
 namespace Fittify.DataModelRepositories.Helpers
 {
@@ -70,6 +70,8 @@ namespace Fittify.DataModelRepositories.Helpers
                     {
                         orderDescending = !orderDescending;
                     }
+
+                    // This is a dynamic linq query which allows to inject sql queries as string into ef context 
                     source = source.OrderBy(destinationProperty + (orderDescending ? " descending" : " ascending"));
                 }
             }

@@ -8,6 +8,7 @@ using Fittify.Api.OfmRepository;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Api.Services;
 using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
@@ -30,11 +31,12 @@ namespace Fittify.Api.Controllers.Sport
 
         public ExerciseHistoryApiController(FittifyContext fittifyContext,
             IActionDescriptorCollectionProvider adcProvider,
-            IUrlHelper urlHelper)
+            IUrlHelper urlHelper,
+            IPropertyMappingService propertyMappingService)
         {
             _repo = new ExerciseHistoryRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
-            _asyncGetOfm = new AsyncGetOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, int>(_repo, urlHelper, adcProvider);
+            _asyncGetOfm = new AsyncGetOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService);
         }
 
         [HttpGet("{id:int}", Name = "GetExerciseHistoryById")]

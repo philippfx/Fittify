@@ -8,6 +8,7 @@ using Fittify.Api.OfmRepository;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Api.Services;
 using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
@@ -29,11 +30,12 @@ namespace Fittify.Api.Controllers.Sport
 
         public WorkoutApiController(FittifyContext fittifyContext,
             IActionDescriptorCollectionProvider adcProvider,
-            IUrlHelper urlHelper)
+            IUrlHelper urlHelper,
+            IPropertyMappingService propertyMappingService)
         {
             _repo = new WorkoutRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<WorkoutRepository, Workout, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int>(_repo, urlHelper, adcProvider);
-            _asyncGetOfmByNameSearch = new AsyncGetOfmByNameSearch<WorkoutRepository, Workout, WorkoutOfmForGet, int>(_repo, urlHelper, adcProvider);
+            _asyncGetOfmByNameSearch = new AsyncGetOfmByNameSearch<WorkoutRepository, Workout, WorkoutOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService);
         }
         
         [HttpGet]

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Helpers;
+using Fittify.Api.Services;
 using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories;
@@ -21,14 +22,17 @@ namespace Fittify.Api.OfmRepository
         protected readonly TCrudRepository Repo;
         protected readonly IActionDescriptorCollectionProvider Adcp;
         protected readonly IUrlHelper UrlHelper;
+        protected IPropertyMappingService PropertyMappingService;
 
         public AsyncGetOfm(TCrudRepository repository,
             IUrlHelper urlHelper,
-            IActionDescriptorCollectionProvider actionDescriptorCollectionProvider)
+            IActionDescriptorCollectionProvider actionDescriptorCollectionProvider,
+            IPropertyMappingService propertyMappingService)
         {
             Repo = repository;
             Adcp = actionDescriptorCollectionProvider;
             UrlHelper = urlHelper;
+            PropertyMappingService = propertyMappingService;
         }
         
         public virtual async Task<IEnumerable<TOfmForGet>> GetAll()
@@ -53,12 +57,12 @@ namespace Fittify.Api.OfmRepository
             var pagedListEntityCollection = Repo.GetAllPaged(resourceParameters);
 
             var previousPageLink = pagedListEntityCollection.HasPrevious ?
-                RsourceUriFactory.CreateAuthorsResourceUri(resourceParameters,
+                RsourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.PreviousPage) : null;
 
             var nextPageLink = pagedListEntityCollection.HasNext ?
-                RsourceUriFactory.CreateAuthorsResourceUri(resourceParameters,
+                RsourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.NextPage) : null;
 
@@ -87,12 +91,12 @@ namespace Fittify.Api.OfmRepository
             var pagedListEntityCollection = Repo.GetAllPagedAndOrdered(resourceParameters);
 
             var previousPageLink = pagedListEntityCollection.HasPrevious ?
-                RsourceUriFactory.CreateAuthorsResourceUri(resourceParameters,
+                RsourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.PreviousPage) : null;
 
             var nextPageLink = pagedListEntityCollection.HasNext ?
-                RsourceUriFactory.CreateAuthorsResourceUri(resourceParameters,
+                RsourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.NextPage) : null;
 

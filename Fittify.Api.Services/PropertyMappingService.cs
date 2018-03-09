@@ -4,19 +4,19 @@ using System.Linq;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.DataModels.Models.Sport;
 
-namespace Fittify.Common.Services
+namespace Fittify.Api.Services
 {
     public class PropertyMappingService : IPropertyMappingService
     {
         private Dictionary<string, PropertyMappingValue> _authorPropertyMapping =
-           new Dictionary<string, PropertyMappingValue>(StringComparer.OrdinalIgnoreCase)
-           {
-               { "Id", new PropertyMappingValue(new List<string>() { "Id" } ) },
-               { "Genre", new PropertyMappingValue(new List<string>() { "Genre" } )},
-               { "Age", new PropertyMappingValue(new List<string>() { "DateOfBirth" } , true) },
-               //{ "Name", new PropertyMappingValue(new List<string>() { "FirstName", "LastName" }) }
-               { "Name", new PropertyMappingValue(new List<string>() { "Name" })  }
-           };
+            new Dictionary<string, PropertyMappingValue>(StringComparer.OrdinalIgnoreCase)
+            {
+                {"Id", new PropertyMappingValue(new List<string>() {"Id"})},
+                {"Genre", new PropertyMappingValue(new List<string>() {"Genre"})},
+                {"Age", new PropertyMappingValue(new List<string>() {"DateOfBirth"}, true)},
+                {"FullName", new PropertyMappingValue(new List<string>() {"FirstName", "LastName"})},
+                {"Name", new PropertyMappingValue(new List<string>() {"Name"})}
+            };
 
         private IList<IPropertyMapping> propertyMappings = new List<IPropertyMapping>();
 
@@ -40,7 +40,7 @@ namespace Fittify.Common.Services
             throw new Exception($"Cannot find exact property mapping instance for <{typeof(TSource)},{typeof(TDestination)}");
         }
 
-        public bool ValidMappingExistsFor<TSource, TDestination>(string fields)
+        public bool ValidMappingExistsFor<TSource, TDestination>(string fields, ref IList<string> errorMessages)
         {
             var propertyMapping = GetPropertyMapping<TSource, TDestination>();
 
@@ -68,11 +68,16 @@ namespace Fittify.Common.Services
                 // find the matching property
                 if (!propertyMapping.ContainsKey(propertyName))
                 {
-                    return false;
+                    errorMessages.Add("A property named '" + propertyName + "' does not exist");
                 }
             }
-            return true;
 
+            if (errorMessages.Count > 0)
+            {
+                return false;
+            }
+
+            return true;
         }
 
     }

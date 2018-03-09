@@ -1,4 +1,4 @@
-﻿namespace Fittify.Common.Services
+﻿namespace Fittify.Api.Services
 {
     public interface ITypeHelperService
     {

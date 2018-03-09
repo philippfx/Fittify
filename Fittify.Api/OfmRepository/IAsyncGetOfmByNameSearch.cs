@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fittify.Api.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,5 +14,6 @@ namespace Fittify.Api.OfmRepository
     {
         Task<IEnumerable<TOfmForGet>> GetAllPagedAndSearchName(ISearchQueryResourceParameters resourceParameters, ControllerBase controllerBase);
         Task<IEnumerable<TOfmForGet>> GetAllPagedAndSearchNameAndOrdered(ISearchQueryResourceParameters resourceParameters, ControllerBase controllerBase);
+        Task<OfmForGetQueryResult<TOfmForGet>> GetAllPagedAndSearchNameAndOrderedIncludingErrorMessages(ISearchQueryResourceParameters resourceParameters, ControllerBase controllerBase);
     }
 }
