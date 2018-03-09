@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Newtonsoft.Json.Serialization;
 
 namespace Fittify.Api
 {
@@ -49,7 +50,13 @@ namespace Fittify.Api
             {
                 setupAction.ReturnHttpNotAcceptable = true; // returns 406 for header "Accept application/xml2" for example (or any other unsupported content type)
                 setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
-            }); 
+                setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
+            })
+                .AddJsonOptions(options => // ensures camel cased properties for data shaped properties
+                {
+                    options.SerializerSettings.ContractResolver =
+                        new CamelCasePropertyNamesContractResolver();
+                }); 
 
             var dbConnectionString = Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             services.AddDbContext<FittifyContext>(options => options.UseSqlServer(dbConnectionString));
@@ -65,6 +72,8 @@ namespace Fittify.Api
             });
 
             services.AddTransient<IPropertyMappingService, PropertyMappingService>();
+
+            services.AddTransient<ITypeHelperService, TypeHelperService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

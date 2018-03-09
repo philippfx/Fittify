@@ -14,6 +14,6 @@ namespace Fittify.Api.OfmRepository
     {
         Task<IEnumerable<TOfmForGet>> GetAllPagedAndSearchName(ISearchQueryResourceParameters resourceParameters, ControllerBase controllerBase);
         Task<IEnumerable<TOfmForGet>> GetAllPagedAndSearchNameAndOrdered(ISearchQueryResourceParameters resourceParameters, ControllerBase controllerBase);
-        Task<OfmForGetQueryResult<TOfmForGet>> GetAllPagedAndSearchNameAndOrderedIncludingErrorMessages(ISearchQueryResourceParameters resourceParameters, ControllerBase controllerBase);
+        Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetAllPagedAndSearchNameAndOrderedIncludingErrorMessages(ISearchQueryResourceParameters resourceParameters, ControllerBase controllerBase);
     }
 }

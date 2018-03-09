@@ -31,11 +31,12 @@ namespace Fittify.Api.Controllers.Sport
         public MapExerciseWorkoutApiController(FittifyContext fittifyContext,
             IActionDescriptorCollectionProvider adcProvider,
             IUrlHelper urlHelper,
-            IPropertyMappingService propertyMappingService)
+            IPropertyMappingService propertyMappingService,
+            ITypeHelperService typeHelperService)
         {
             _repo = new MapExerciseWorkoutRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<MapExerciseWorkoutRepository, MapExerciseWorkout, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForPatch, int>(_repo, urlHelper, adcProvider);
-            _asyncGetOfm = new AsyncGetOfm<MapExerciseWorkoutRepository, MapExerciseWorkout, MapExerciseWorkoutOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService);
+            _asyncGetOfm = new AsyncGetOfm<MapExerciseWorkoutRepository, MapExerciseWorkout, MapExerciseWorkoutOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService);
         }
 
         [HttpGet]

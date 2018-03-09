@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Fittify.Common;
+﻿using System.Collections.Generic;
 
 namespace Fittify.Api.Helpers
 {
@@ -12,7 +8,7 @@ namespace Fittify.Api.Helpers
     /// <typeparam name="TOfmForGet">Is the concrete type of any OfmForGet class</typeparam>
     public class OfmForGetQueryResult<TOfmForGet> where TOfmForGet : class
     {
-        public IEnumerable<TOfmForGet> ReturnedTOfmForGetCollection { get; set; }
+        public TOfmForGet ReturnedTOfmForGet { get; set; }
         public List<string> ErrorMessages { get; set; }
     }
 }

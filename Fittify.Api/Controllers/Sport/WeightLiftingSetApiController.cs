@@ -35,11 +35,12 @@ namespace Fittify.Api.Controllers.Sport
             ILogger<WeightLiftingSetApiController> logger,
             IActionDescriptorCollectionProvider adcProvider,
             IUrlHelper urlHelper,
-            IPropertyMappingService propertyMappingService)
+            IPropertyMappingService propertyMappingService,
+            ITypeHelperService typeHelperService)
         {
             _repo = new WeightLiftingSetRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int>(_repo, urlHelper, adcProvider);
-            _asyncGetOfm = new AsyncGetOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService);
+            _asyncGetOfm = new AsyncGetOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService);
             _logger = logger;
         }
 

@@ -22,8 +22,9 @@ namespace Fittify.Api.OfmRepository
         public AsyncGetOfmByDateTimeStartEnd(TCrudRepository repository,
             IUrlHelper urlHelper,
             IActionDescriptorCollectionProvider actionDescriptorCollectionProvider,
-            IPropertyMappingService propertyMappingService)
-            : base(repository, urlHelper, actionDescriptorCollectionProvider, propertyMappingService)
+            IPropertyMappingService propertyMappingService,
+            ITypeHelperService typeHelperService)
+            : base(repository, urlHelper, actionDescriptorCollectionProvider, propertyMappingService, typeHelperService)
         {
 
         }

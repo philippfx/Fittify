@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Fittify.Api.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Helpers;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,8 @@ namespace Fittify.Api.OfmRepository
         Task<IEnumerable<TOfmForGet>> GetAll();
         Task<IEnumerable<TOfmForGet>> GetAllPaged(IResourceParameters resourceParameters, ControllerBase controllerBase);
         Task<IEnumerable<TOfmForGet>> GetAllPagedAndOrdered(IResourceParameters resourceParameters, ControllerBase controllerBase);
+        Task<OfmForGetQueryResult<TOfmForGet>> GetByIdDataShaped(TId id, string fields);
+
         Task<TOfmForGet> GetById(TId id);
     }
 }

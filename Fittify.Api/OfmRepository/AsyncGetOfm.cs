@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,17 +23,20 @@ namespace Fittify.Api.OfmRepository
         protected readonly TCrudRepository Repo;
         protected readonly IActionDescriptorCollectionProvider Adcp;
         protected readonly IUrlHelper UrlHelper;
-        protected IPropertyMappingService PropertyMappingService;
+        protected readonly IPropertyMappingService PropertyMappingService;
+        protected readonly ITypeHelperService TypeHelperService;
 
         public AsyncGetOfm(TCrudRepository repository,
             IUrlHelper urlHelper,
             IActionDescriptorCollectionProvider actionDescriptorCollectionProvider,
-            IPropertyMappingService propertyMappingService)
+            IPropertyMappingService propertyMappingService,
+            ITypeHelperService typeHelperService)
         {
             Repo = repository;
             Adcp = actionDescriptorCollectionProvider;
             UrlHelper = urlHelper;
             PropertyMappingService = propertyMappingService;
+            TypeHelperService = typeHelperService;
         }
         
         public virtual async Task<IEnumerable<TOfmForGet>> GetAll()
@@ -48,6 +52,27 @@ namespace Fittify.Api.OfmRepository
             var entity = await Repo.GetById(id);
             var ofm = Mapper.Map<TEntity, TOfmForGet>(entity);
             return ofm;
+        }
+
+        public virtual async Task<OfmForGetQueryResult<TOfmForGet>> GetByIdDataShaped(TId id, string fields)
+        {
+            var ofmForGetResult = new OfmForGetQueryResult<TOfmForGet>();
+            ofmForGetResult.ErrorMessages = new List<string>();
+            IList<string> errorMessages = new List<string>();
+            if (!TypeHelperService.TypeHasProperties<TOfmForGet>(fields, ref errorMessages))
+            {
+                // Todo ref unknown fields error messages
+                ofmForGetResult.ErrorMessages.AddRange(errorMessages);
+            }
+
+            if (ofmForGetResult.ErrorMessages.Count > 0)
+            {
+                return ofmForGetResult;
+            }
+
+            var entity = await Repo.GetById(id);
+            ofmForGetResult.ReturnedTOfmForGet = Mapper.Map<TEntity, TOfmForGet>(entity);
+            return ofmForGetResult;
         }
 
         // Todo Refactor improved search paramters to override virtual

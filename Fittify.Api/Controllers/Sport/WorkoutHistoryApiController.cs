@@ -38,11 +38,12 @@ namespace Fittify.Api.Controllers.Sport
         public WorkoutHistoryApiController(FittifyContext fittifyContext,
             IActionDescriptorCollectionProvider adcProvider,
             IUrlHelper urlHelper,
-            IPropertyMappingService propertyMappingService)
+            IPropertyMappingService propertyMappingService,
+            ITypeHelperService typeHelperService)
         {
             _repo = new WorkoutHistoryRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
-            _asyncGetOfm = new AsyncGetOfmByDateTimeStartEnd<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService);
+            _asyncGetOfm = new AsyncGetOfmByDateTimeStartEnd<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
         }
 

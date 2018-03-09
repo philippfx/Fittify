@@ -13,5 +13,7 @@
         }
 
         public string OrderBy { get; set; } = "Id"; // Todo hardcoded "Id" property could be made dynamic
+
+        public string Fields { get; set; }
     }
 }

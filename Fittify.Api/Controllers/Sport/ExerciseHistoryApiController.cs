@@ -32,11 +32,12 @@ namespace Fittify.Api.Controllers.Sport
         public ExerciseHistoryApiController(FittifyContext fittifyContext,
             IActionDescriptorCollectionProvider adcProvider,
             IUrlHelper urlHelper,
-            IPropertyMappingService propertyMappingService)
+            IPropertyMappingService propertyMappingService,
+            ITypeHelperService typeHelperService)
         {
             _repo = new ExerciseHistoryRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
-            _asyncGetOfm = new AsyncGetOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService);
+            _asyncGetOfm = new AsyncGetOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService);
         }
 
         [HttpGet("{id:int}", Name = "GetExerciseHistoryById")]

@@ -21,6 +21,7 @@ namespace Fittify.Api.Helpers
                     return urlHelper.Link("GetAllPagedCategories",
                         new
                         {
+                            fields = authorsResourceParameters.Fields,
                             orderBy = authorsResourceParameters.OrderBy,
                             //searchQuery = authorsResourceParameters.SearchQuery,
                             //genre = authorsResourceParameters.Genre,
@@ -31,6 +32,7 @@ namespace Fittify.Api.Helpers
                     return urlHelper.Link("GetAllPagedCategories",
                         new
                         {
+                            fields = authorsResourceParameters.Fields,
                             orderBy = authorsResourceParameters.OrderBy,
                             //searchQuery = authorsResourceParameters.SearchQuery,
                             //genre = authorsResourceParameters.Genre,
@@ -42,6 +44,7 @@ namespace Fittify.Api.Helpers
                     return urlHelper.Link("GetAllPagedCategories",
                         new
                         {
+                            fields = authorsResourceParameters.Fields,
                             orderBy = authorsResourceParameters.OrderBy,
                             //searchQuery = authorsResourceParameters.SearchQuery,
                             //genre = authorsResourceParameters.Genre,
@@ -62,6 +65,7 @@ namespace Fittify.Api.Helpers
                     return urlHelper.Link("GetAllPagedCategories",
                         new
                         {
+                            fields = authorsResourceParameters.Fields,
                             orderBy = authorsResourceParameters.OrderBy,
                             searchQuery = authorsResourceParameters.SearchQuery,
                             //genre = authorsResourceParameters.Genre,
@@ -72,6 +76,7 @@ namespace Fittify.Api.Helpers
                     return urlHelper.Link("GetAllPagedCategories",
                         new
                         {
+                            fields = authorsResourceParameters.Fields,
                             orderBy = authorsResourceParameters.OrderBy,
                             searchQuery = authorsResourceParameters.SearchQuery,
                             //genre = authorsResourceParameters.Genre,
@@ -83,6 +88,7 @@ namespace Fittify.Api.Helpers
                     return urlHelper.Link("GetAllPagedCategories",
                         new
                         {
+                            fields = authorsResourceParameters.Fields,
                             orderBy = authorsResourceParameters.OrderBy,
                             searchQuery = authorsResourceParameters.SearchQuery,
                             //genre = authorsResourceParameters.Genre,

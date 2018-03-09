@@ -35,16 +35,19 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IAsyncGetOfmByNameSearch<CategoryOfmForGet, int> _asyncGetOfmByNameSearch;
         private readonly CategoryRepository _repo;
         private readonly string _shortCamelCasedControllerName;
+        private ITypeHelperService _typeHelperService;
 
         public CategoryApiController(FittifyContext fittifyContext,
             IActionDescriptorCollectionProvider adcProvider,
             IUrlHelper urlHelper,
-            IPropertyMappingService propertyMappingService)
+            IPropertyMappingService propertyMappingService,
+            ITypeHelperService typeHelperService)
         {
             _repo = new CategoryRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo, urlHelper, adcProvider);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
-            _asyncGetOfmByNameSearch = new AsyncGetOfmByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService);
+            _asyncGetOfmByNameSearch = new AsyncGetOfmByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService);
+            _typeHelperService = typeHelperService;
         }
 
         [HttpGet("{id:int}", Name="GetCategoryById")]
@@ -60,6 +63,30 @@ namespace Fittify.Api.Controllers.Sport
             var ofmForGet = Mapper.Map<CategoryOfmForGet>(entity);
             
             return Ok(ofmForGet);
+        }
+
+        [HttpGet("datashaped/{id:int}", Name = "GetCategoryByIdDataShaped")]
+        public async Task<IActionResult> GetByIdDataShaped(int id, [FromQuery] string fields)
+        {
+            var ofmForGetQueryResult = await _asyncGetOfmByNameSearch.GetByIdDataShaped(id, fields);
+
+            if (ofmForGetQueryResult.ErrorMessages.Count > 0)
+            {
+                foreach (var errorMessage in ofmForGetQueryResult.ErrorMessages)
+                {
+                    ModelState.AddModelError(_shortCamelCasedControllerName, errorMessage);
+                }
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
+
+            //var entity = await _repo.GetById(id);
+            if (ofmForGetQueryResult.ReturnedTOfmForGet == null)
+            {
+                ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
+                return new EntityNotFoundObjectResult(ModelState);
+            }
+
+            return Ok(ofmForGetQueryResult.ReturnedTOfmForGet.ShapeData(fields));
         }
 
         [HttpGet(Name = "GetAllCategories")]
@@ -143,6 +170,30 @@ namespace Fittify.Api.Controllers.Sport
                 return new EntityNotFoundObjectResult(ModelState);
             }
             return new JsonResult(allOfmForGet);
+        }
+
+        [HttpGet("pagedandsearchnameandorderedincludingerrormessagesanddatashaped", Name = "GetAllPagedAndSearchNameAndOrderedCategoriesIncludingErrorMessagesAndDataShaped")]
+        public async Task<IActionResult> GetAllPagedAndSearchNameAndOrderedIncludingErrorMessagesAndDataShaped(SearchQueryResourceParameters resourceParameters)
+        {
+            var ofmForGetResult = await _asyncGetOfmByNameSearch.GetAllPagedAndSearchNameAndOrderedIncludingErrorMessages(resourceParameters, this);
+
+            if (ofmForGetResult.ErrorMessages.Count() > 0)
+            {
+                foreach (var errorMessage in ofmForGetResult.ErrorMessages)
+                {
+                    ModelState.AddModelError(_shortCamelCasedControllerName, errorMessage);
+                }
+                return new UnprocessableEntityObjectResult(ModelState);
+            }
+
+            var allOfmForGet = ofmForGetResult.ReturnedTOfmForGetCollection.ToList();
+            //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
+            if (allOfmForGet.Count == 0)
+            {
+                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
+                return new EntityNotFoundObjectResult(ModelState);
+            }
+            return new JsonResult(allOfmForGet.ShapeData(resourceParameters.Fields)); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
         }
 
         [HttpGet("range/{inputString}", Name = "GetCategoriesByRangeOfIds")]

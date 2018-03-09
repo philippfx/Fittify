@@ -23,8 +23,9 @@ namespace Fittify.Api.OfmRepository
         public AsyncGetOfmByNameSearch(TCrudRepository repository,
             IUrlHelper urlHelper,
             IActionDescriptorCollectionProvider actionDescriptorCollectionProvider,
-            IPropertyMappingService propertyMappingService) 
-            : base(repository, urlHelper, actionDescriptorCollectionProvider, propertyMappingService)
+            IPropertyMappingService propertyMappingService,
+            ITypeHelperService typeHelperService) 
+            : base(repository, urlHelper, actionDescriptorCollectionProvider, propertyMappingService, typeHelperService)
         {
 
         }
@@ -97,16 +98,27 @@ namespace Fittify.Api.OfmRepository
             return ofmCollection;
         }
 
-        public virtual async Task<OfmForGetQueryResult<TOfmForGet>> GetAllPagedAndSearchNameAndOrderedIncludingErrorMessages(ISearchQueryResourceParameters resourceParameters, ControllerBase controllerBase)
+        public virtual async Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetAllPagedAndSearchNameAndOrderedIncludingErrorMessages(ISearchQueryResourceParameters resourceParameters, ControllerBase controllerBase)
         {
             // Todo refactor to extract error message to adhere better to Single Responsibility principle
-            var ofmForGetResult = new OfmForGetQueryResult<TOfmForGet>();
+            // Todo collect multiple different types of errors 
+            var ofmForGetResult = new OfmForGetCollectionQueryResult<TOfmForGet>();
             ofmForGetResult.ErrorMessages = new List<string>();
             IList<string> errorMessages = new List<string>();
             if (!PropertyMappingService.ValidMappingExistsFor<TOfmForGet, TEntity>(resourceParameters.OrderBy, ref errorMessages))
             {
-                // Todo out error Messages
                 ofmForGetResult.ErrorMessages.AddRange(errorMessages);
+            }
+
+            errorMessages = new List<string>();
+            if (!TypeHelperService.TypeHasProperties<TOfmForGet>(resourceParameters.Fields, ref errorMessages))
+            {
+                // Todo ref unknown fields error messages
+                ofmForGetResult.ErrorMessages.AddRange(errorMessages);
+            }
+
+            if (ofmForGetResult.ErrorMessages.Count > 0)
+            {
                 return ofmForGetResult;
             }
 
