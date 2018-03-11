@@ -116,7 +116,7 @@ namespace Fittify.Api.Controllers.Sport
             return Ok(ofmForGetQueryResult.ReturnedTOfmForGet.ShapeData(fields)); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
         }
 
-        [HttpGet(Name = "GetAllCategories")]
+        [HttpGet("simplegetall", Name = "SimpleGetAllCategories")]
         public async Task<IActionResult> GetAll()
         {
             var allEntites = await _asyncGetOfmByNameSearch.GetAll();

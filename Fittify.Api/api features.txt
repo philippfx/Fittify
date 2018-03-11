@@ -1,0 +1,16 @@
+freely expandable return value:
+
+validation of patch and post object
+validation of query: fields, orderby
+optional datashaping fields (query)
+optional orderby (query)
+optional hateoas links (header)
+logging
+
+using ExpandoObject and IDictionary<string, object>
+
+RootController
+
+constraint...
+use same header for all queries!
+versioning only extends
