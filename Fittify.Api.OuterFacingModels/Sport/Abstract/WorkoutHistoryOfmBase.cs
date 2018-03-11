@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Abstract
 {
-    public abstract class WorkoutHistoryOfmBase
+    public abstract class WorkoutHistoryOfmBase : LinkedResourceBase
     {
         public DateTime? DateTimeStart { get; set; }
         public DateTime? DateTimeEnd { get; set; }

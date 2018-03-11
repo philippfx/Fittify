@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Helpers;
+using Fittify.Api.OuterFacingModels;
 using Fittify.Api.Services;
 using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
@@ -14,7 +15,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 namespace Fittify.Api.OfmRepository
 {
     public class AsyncGetOfmByDateTimeStartEnd<TCrudRepository, TEntity, TOfmForGet, TId> : AsyncGetOfm<TCrudRepository, TEntity, TOfmForGet, TId>, IAsyncGetOfmByDateTimeStartEnd<TOfmForGet, TId>
-        where TOfmForGet : class
+        where TOfmForGet : LinkedResourceBase, IEntityUniqueIdentifier<TId>
         where TId : struct
         where TEntity : class, IEntityDateTimeStartEnd<TId>
         where TCrudRepository : class, IAsyncCrudForEntityDateTimeStartEnd<TEntity, TId>
@@ -23,8 +24,9 @@ namespace Fittify.Api.OfmRepository
             IUrlHelper urlHelper,
             IActionDescriptorCollectionProvider actionDescriptorCollectionProvider,
             IPropertyMappingService propertyMappingService,
-            ITypeHelperService typeHelperService)
-            : base(repository, urlHelper, actionDescriptorCollectionProvider, propertyMappingService, typeHelperService)
+            ITypeHelperService typeHelperService,
+            string controllerName)
+            : base(repository, urlHelper, actionDescriptorCollectionProvider, propertyMappingService, typeHelperService, controllerName)
         {
 
         }
@@ -35,12 +37,12 @@ namespace Fittify.Api.OfmRepository
             var pagedListEntityCollection = Repo.GetAllPagedDateTimeStartEnd(resourceParameters);
 
             var previousPageLink = pagedListEntityCollection.HasPrevious ?
-                RsourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
+                ResourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.PreviousPage) : null;
 
             var nextPageLink = pagedListEntityCollection.HasNext ?
-                RsourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
+                ResourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.NextPage) : null;
 

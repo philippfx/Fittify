@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
+using Fittify.Api.OuterFacingModels;
 using Fittify.Common;
 using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
@@ -23,7 +24,7 @@ namespace Fittify.Api.OfmRepository
 
         where TCrudRepository : IAsyncCrud<TEntity,TId> 
         where TEntity : class, IEntityUniqueIdentifier<TId>
-        where TOfmForGet : class
+        where TOfmForGet : LinkedResourceBase, IEntityUniqueIdentifier<TId>
         where TOfmForPost : class
         where TOfmForPatch : class, new()
         where TId : struct
@@ -32,14 +33,17 @@ namespace Fittify.Api.OfmRepository
         private readonly TCrudRepository _repo;
         private readonly IActionDescriptorCollectionProvider _adcp;
         private readonly IUrlHelper _urlHelper;
+        protected readonly HateoasLinkFactory<TOfmForGet, TId> HateoasLinkFactory;
 
         public AsyncPostPatchDeleteOfm(TCrudRepository repository,
             IUrlHelper urlHelper,
-            IActionDescriptorCollectionProvider actionDescriptorCollectionProvider)
+            IActionDescriptorCollectionProvider actionDescriptorCollectionProvider,
+            string controllerName)
         {
             _repo = repository;
             _adcp = actionDescriptorCollectionProvider;
             _urlHelper = urlHelper;
+            HateoasLinkFactory = new HateoasLinkFactory<TOfmForGet, TId>(urlHelper, controllerName);
         }
 
         public AsyncPostPatchDeleteOfm()
@@ -59,7 +63,9 @@ namespace Fittify.Api.OfmRepository
                 var msg = e.Message;
             }
 
-            return Mapper.Map<TEntity, TOfmForGet>(entity);
+            var ofm = Mapper.Map<TEntity, TOfmForGet>(entity);
+            ofm = HateoasLinkFactory.CreateLinksForOfmForGet(ofm);
+            return ofm;
         }
 
         public virtual async Task<bool> Delete(TId id)

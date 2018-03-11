@@ -3,7 +3,7 @@ using Fittify.Common;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Get
 {
-    public class MapExerciseWorkoutOfmForGet : IEntityUniqueIdentifier<int>
+    public class MapExerciseWorkoutOfmForGet : LinkedResourceBase, IEntityUniqueIdentifier<int>
     {
         public int Id { get; set; }
         public int WorkoutId { get; set; }

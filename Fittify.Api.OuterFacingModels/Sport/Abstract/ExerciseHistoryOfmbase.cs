@@ -5,7 +5,7 @@ using Fittify.Api.OuterFacingModels.Sport.Get;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Abstract
 {
-    public abstract class ExerciseHistoryOfmBase : IAbstracted
+    public abstract class ExerciseHistoryOfmBase : LinkedResourceBase
     {
         public int WorkoutHistoryId { get; set; }
 

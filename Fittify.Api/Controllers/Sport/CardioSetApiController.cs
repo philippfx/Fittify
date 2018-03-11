@@ -40,8 +40,8 @@ namespace Fittify.Api.Controllers.Sport
             ITypeHelperService typeHelperService)
         {
             _repo = new CardioSetRepository(fittifyContext);
-            _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int>(_repo, urlHelper, adcProvider);
-            _asyncGetOfm = new AsyncGetOfmByDateTimeStartEnd<CardioSetRepository, CardioSet, CardioSetOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService);
+            _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CardioSetRepository, CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int>(_repo, urlHelper, adcProvider, nameof(CardioSetApiController));
+            _asyncGetOfm = new AsyncGetOfmByDateTimeStartEnd<CardioSetRepository, CardioSet, CardioSetOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, nameof(CardioSetApiController));
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
         }
 

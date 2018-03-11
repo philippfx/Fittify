@@ -35,8 +35,8 @@ namespace Fittify.Api.Controllers.Sport
             ITypeHelperService typeHelperService)
         {
             _repo = new ExerciseRepository(fittifyContext);
-            _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<ExerciseRepository, Exercise, ExerciseOfmForGet, ExerciseOfmForPost, ExerciseOfmForPatch, int>(_repo, urlHelper, adcProvider);
-            _asyncGetOfmByNameSearch = new AsyncGetOfmByNameSearch<ExerciseRepository, Exercise, ExerciseOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService);
+            _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<ExerciseRepository, Exercise, ExerciseOfmForGet, ExerciseOfmForPost, ExerciseOfmForPatch, int>(_repo, urlHelper, adcProvider, nameof(ExerciseApiController));
+            _asyncGetOfmByNameSearch = new AsyncGetOfmByNameSearch<ExerciseRepository, Exercise, ExerciseOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, nameof(ExerciseApiController));
         }
 
         [HttpGet]

@@ -40,5 +40,21 @@ namespace Fittify.Api.Extensions
             var shortenedString = str.Replace(apiOfmForGetString, "");
             return Char.ToLowerInvariant(shortenedString[0]) + shortenedString.Substring(1);
         }
+
+        /// <summary>
+        /// Cuts ApiController name down to entity name. Useful, for example, for the creation of dynamic controller action names. 
+        /// </summary>
+        /// <param name="str">Full name of the controller, for example "WorkoutApiController"</param>
+        /// <returns>Short pascal cased controller name, for example "Workout", or the unmodified input string</returns>
+        public static string ToShortPascalCasedControllerNameOrDefault(this String str)
+        {
+            if (str == null) return null;
+            string apiControllerString = "ApiController";
+            if (!str.Contains(apiControllerString))
+            {
+                return str;
+            }
+            return str.Replace(apiControllerString, "");
+        }
     }
 }

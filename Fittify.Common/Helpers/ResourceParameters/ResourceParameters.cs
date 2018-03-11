@@ -1,6 +1,6 @@
 ﻿namespace Fittify.Common.Helpers.ResourceParameters
 {
-    public abstract class ResourceParameterBase : IResourceParameters
+    public class ResourceParameters : IResourceParameters
     {
         private const int MaxPageSize = 20;
         public int PageNumber { get; set; } = 1;

@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
+using Fittify.Api.OuterFacingModels;
+using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.Services;
 using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
@@ -15,9 +18,9 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 namespace Fittify.Api.OfmRepository
 {
     public class AsyncGetOfm<TCrudRepository, TEntity, TOfmForGet, TId> : IAsyncGetOfm<TOfmForGet, TId>
-        where TOfmForGet : class
+        where TOfmForGet : LinkedResourceBase, IEntityUniqueIdentifier<TId>
         where TId : struct
-        where TEntity: class, IEntityUniqueIdentifier<TId>
+        where TEntity : class, IEntityUniqueIdentifier<TId>
         where TCrudRepository : class, IAsyncCrud<TEntity, TId>
     {
         protected readonly TCrudRepository Repo;
@@ -25,20 +28,24 @@ namespace Fittify.Api.OfmRepository
         protected readonly IUrlHelper UrlHelper;
         protected readonly IPropertyMappingService PropertyMappingService;
         protected readonly ITypeHelperService TypeHelperService;
+        protected readonly HateoasLinkFactory<TOfmForGet, TId> HateoasLinkFactory;
 
         public AsyncGetOfm(TCrudRepository repository,
             IUrlHelper urlHelper,
             IActionDescriptorCollectionProvider actionDescriptorCollectionProvider,
             IPropertyMappingService propertyMappingService,
-            ITypeHelperService typeHelperService)
+            ITypeHelperService typeHelperService,
+            string controllerName)
         {
             Repo = repository;
             Adcp = actionDescriptorCollectionProvider;
             UrlHelper = urlHelper;
             PropertyMappingService = propertyMappingService;
             TypeHelperService = typeHelperService;
+            HateoasLinkFactory = new HateoasLinkFactory<TOfmForGet, TId>(urlHelper, controllerName);
         }
         
+
         public virtual async Task<IEnumerable<TOfmForGet>> GetAll()
         {
             // Todo this async lacks await
@@ -51,6 +58,8 @@ namespace Fittify.Api.OfmRepository
         {
             var entity = await Repo.GetById(id);
             var ofm = Mapper.Map<TEntity, TOfmForGet>(entity);
+            
+            ofm = HateoasLinkFactory.CreateLinksForOfmForGet(ofm);
             return ofm;
         }
 
@@ -72,6 +81,8 @@ namespace Fittify.Api.OfmRepository
 
             var entity = await Repo.GetById(id);
             ofmForGetResult.ReturnedTOfmForGet = Mapper.Map<TEntity, TOfmForGet>(entity);
+
+            ofmForGetResult.ReturnedTOfmForGet.Links = HateoasLinkFactory.CreateLinksForOfmForGet(id, fields).ToList();
             return ofmForGetResult;
         }
 
@@ -82,12 +93,12 @@ namespace Fittify.Api.OfmRepository
             var pagedListEntityCollection = Repo.GetAllPaged(resourceParameters);
 
             var previousPageLink = pagedListEntityCollection.HasPrevious ?
-                RsourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
+                ResourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.PreviousPage) : null;
 
             var nextPageLink = pagedListEntityCollection.HasNext ?
-                RsourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
+                ResourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.NextPage) : null;
 
@@ -116,12 +127,12 @@ namespace Fittify.Api.OfmRepository
             var pagedListEntityCollection = Repo.GetAllPagedAndOrdered(resourceParameters);
 
             var previousPageLink = pagedListEntityCollection.HasPrevious ?
-                RsourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
+                ResourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.PreviousPage) : null;
 
             var nextPageLink = pagedListEntityCollection.HasNext ?
-                RsourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
+                ResourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.NextPage) : null;
 

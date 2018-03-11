@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.Helpers
 {
-    public class RsourceUriFactory
+    public class ResourceUriFactory
     {
         // Todo Refactor so that actionName is created dynamically
         public static string CreateResourceUriForIResourceParameters(
@@ -39,7 +39,7 @@ namespace Fittify.Api.Helpers
                             pageNumber = authorsResourceParameters.PageNumber + 1,
                             pageSize = authorsResourceParameters.PageSize
                         });
-
+                case ResourceUriType.Current:
                 default:
                     return urlHelper.Link("GetAllPagedCategories",
                         new
@@ -83,7 +83,7 @@ namespace Fittify.Api.Helpers
                             pageNumber = authorsResourceParameters.PageNumber + 1,
                             pageSize = authorsResourceParameters.PageSize
                         });
-
+                case ResourceUriType.Current:
                 default:
                     return urlHelper.Link("GetAllPagedCategories",
                         new

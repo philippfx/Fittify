@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Helpers;
+using Fittify.Api.OuterFacingModels;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.Services;
 using Fittify.Common;
@@ -15,7 +16,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 namespace Fittify.Api.OfmRepository
 {
     public class AsyncGetOfmByNameSearch<TCrudRepository, TEntity, TOfmForGet, TId> : AsyncGetOfm<TCrudRepository, TEntity, TOfmForGet, TId>, IAsyncGetOfmByNameSearch<TOfmForGet, TId>
-        where TOfmForGet : class
+        where TOfmForGet : LinkedResourceBase, IEntityUniqueIdentifier<TId>
         where TId : struct
         where TEntity : class, IEntityName<TId>
         where TCrudRepository : class, IAsyncCrudForEntityName<TEntity, TId>
@@ -24,8 +25,9 @@ namespace Fittify.Api.OfmRepository
             IUrlHelper urlHelper,
             IActionDescriptorCollectionProvider actionDescriptorCollectionProvider,
             IPropertyMappingService propertyMappingService,
-            ITypeHelperService typeHelperService) 
-            : base(repository, urlHelper, actionDescriptorCollectionProvider, propertyMappingService, typeHelperService)
+            ITypeHelperService typeHelperService,
+            string controllerName) 
+            : base(repository, urlHelper, actionDescriptorCollectionProvider, propertyMappingService, typeHelperService, controllerName)
         {
 
         }
@@ -36,12 +38,12 @@ namespace Fittify.Api.OfmRepository
             var pagedListEntityCollection = Repo.GetAllPagedQueryName(resourceParameters);
 
             var previousPageLink = pagedListEntityCollection.HasPrevious ?
-                RsourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters,
+                ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.PreviousPage) : null;
 
             var nextPageLink = pagedListEntityCollection.HasNext ?
-                RsourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters,
+                ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.NextPage) : null;
 
@@ -70,12 +72,12 @@ namespace Fittify.Api.OfmRepository
             var pagedListEntityCollection = Repo.GetAllPagedQueryNameOrdered(resourceParameters);
 
             var previousPageLink = pagedListEntityCollection.HasPrevious ?
-                RsourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters,
+                ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.PreviousPage) : null;
 
             var nextPageLink = pagedListEntityCollection.HasNext ?
-                RsourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters,
+                ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters,
                     UrlHelper,
                     ResourceUriType.NextPage) : null;
 
@@ -102,38 +104,38 @@ namespace Fittify.Api.OfmRepository
         {
             // Todo refactor to extract error message to adhere better to Single Responsibility principle
             // Todo collect multiple different types of errors 
-            var ofmForGetResult = new OfmForGetCollectionQueryResult<TOfmForGet>();
-            ofmForGetResult.ErrorMessages = new List<string>();
+            var ofmForGetCollectionQueryResult = new OfmForGetCollectionQueryResult<TOfmForGet>();
+            ofmForGetCollectionQueryResult.ErrorMessages = new List<string>();
             IList<string> errorMessages = new List<string>();
             if (!PropertyMappingService.ValidMappingExistsFor<TOfmForGet, TEntity>(resourceParameters.OrderBy, ref errorMessages))
             {
-                ofmForGetResult.ErrorMessages.AddRange(errorMessages);
+                ofmForGetCollectionQueryResult.ErrorMessages.AddRange(errorMessages);
             }
 
             errorMessages = new List<string>();
             if (!TypeHelperService.TypeHasProperties<TOfmForGet>(resourceParameters.Fields, ref errorMessages))
             {
                 // Todo ref unknown fields error messages
-                ofmForGetResult.ErrorMessages.AddRange(errorMessages);
+                ofmForGetCollectionQueryResult.ErrorMessages.AddRange(errorMessages);
             }
 
-            if (ofmForGetResult.ErrorMessages.Count > 0)
+            if (ofmForGetCollectionQueryResult.ErrorMessages.Count > 0)
             {
-                return ofmForGetResult;
+                return ofmForGetCollectionQueryResult;
             }
 
             //// Todo this async lacks await
             var pagedListEntityCollection = Repo.GetAllPagedQueryNameOrdered(resourceParameters);
 
-            var previousPageLink = pagedListEntityCollection.HasPrevious ?
-                RsourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters,
-                    UrlHelper,
-                    ResourceUriType.PreviousPage) : null;
+            //var previousPageLink = pagedListEntityCollection.HasPrevious ?
+            //    ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters,
+            //        UrlHelper,
+            //        ResourceUriType.PreviousPage) : null;
 
-            var nextPageLink = pagedListEntityCollection.HasNext ?
-                RsourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters,
-                    UrlHelper,
-                    ResourceUriType.NextPage) : null;
+            //var nextPageLink = pagedListEntityCollection.HasNext ?
+            //    ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters,
+            //        UrlHelper,
+            //        ResourceUriType.NextPage) : null;
 
             // Todo Maybe refactor to a type safe class instead of anonymous
             var paginationMetadata = new
@@ -142,8 +144,8 @@ namespace Fittify.Api.OfmRepository
                 pageSize = pagedListEntityCollection.PageSize,
                 currentPage = pagedListEntityCollection.CurrentPage,
                 totalPages = pagedListEntityCollection.TotalPages,
-                previousPageLink = previousPageLink,
-                nextPageLink = nextPageLink
+                //previousPageLink = previousPageLink,
+                //nextPageLink = nextPageLink
             };
 
             // Todo: Refactor to class taking controller as input instead of only this method
@@ -152,11 +154,53 @@ namespace Fittify.Api.OfmRepository
 
             if (errorMessages!= null && errorMessages.Count > 0)
             {
-                return ofmForGetResult;
+                return ofmForGetCollectionQueryResult;
             }
 
-            ofmForGetResult.ReturnedTOfmForGetCollection = Mapper.Map<List<TEntity>, List<TOfmForGet>>(pagedListEntityCollection);
-            return ofmForGetResult;
+            ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets = Mapper.Map<List<TEntity>, List<TOfmForGet>>(pagedListEntityCollection);
+            
+            foreach (var ofmForGet in ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets)
+            {
+                ofmForGet.Links = HateoasLinkFactory.CreateLinksForOfmForGet(ofmForGet.Id, resourceParameters.Fields)
+                    .ToList();
+            }
+
+            ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.HateoasLinks = HateoasLinkFactory.CreateLinksForOfmForGetCollection(
+                resourceParameters,
+                pagedListEntityCollection.HasPrevious,
+                pagedListEntityCollection.HasNext).ToList();
+
+            return ofmForGetCollectionQueryResult;
+        }
+
+        private IEnumerable<HateoasLink> CreateLinksForCategories(
+            ISearchQueryResourceParameters resourceParameters,
+            bool hasNext, bool hasPrevious)
+        {
+            var links = new List<HateoasLink>();
+
+            // self 
+            links.Add(
+                new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters, UrlHelper, ResourceUriType.Current)
+                    , "self", "GET"));
+
+            if (hasNext)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters, UrlHelper,
+                            ResourceUriType.NextPage),
+                        "nextPage", "GET"));
+            }
+
+            if (hasPrevious)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters, UrlHelper,
+                            ResourceUriType.PreviousPage),
+                        "previousPage", "GET"));
+            }
+
+            return links;
         }
     }
 }
