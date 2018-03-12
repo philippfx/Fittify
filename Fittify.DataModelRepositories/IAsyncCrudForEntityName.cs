@@ -11,7 +11,8 @@ namespace Fittify.DataModelRepositories
         where TEntity : class, IEntityName<TId>
         where TId : struct
     {
-        PagedList<TEntity> GetAllPagedQueryName(ISearchQueryResourceParameters resourceParameters);
-        PagedList<TEntity> GetAllPagedQueryNameOrdered(ISearchQueryResourceParameters resourceParameters);
+        PagedList<TEntity> GetCollection(ISearchQueryResourceParameters resourceParameters);
+        //PagedList<TEntity> GetAllPagedQueryName(ISearchQueryResourceParameters resourceParameters);
+        //PagedList<TEntity> GetAllPagedQueryNameOrdered(ISearchQueryResourceParameters resourceParameters);
     }
 }

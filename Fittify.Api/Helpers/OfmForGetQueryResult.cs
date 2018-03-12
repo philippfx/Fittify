@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Fittify.Common.Helpers;
 
 namespace Fittify.Api.Helpers
 {

@@ -13,12 +13,13 @@ namespace Fittify.Api.Helpers
         public static string CreateResourceUriForIResourceParameters(
             IResourceParameters authorsResourceParameters,
             IUrlHelper urlHelper,
-            ResourceUriType type)
+            ResourceUriType type, 
+            string shortPascalCasedControllerName)
         {
             switch (type)
             {
                 case ResourceUriType.PreviousPage:
-                    return urlHelper.Link("GetAllPagedCategories",
+                    return urlHelper.Link("Get" + shortPascalCasedControllerName + "Collection",
                         new
                         {
                             fields = authorsResourceParameters.Fields,
@@ -29,7 +30,7 @@ namespace Fittify.Api.Helpers
                             pageSize = authorsResourceParameters.PageSize
                         });
                 case ResourceUriType.NextPage:
-                    return urlHelper.Link("GetAllPagedCategories",
+                    return urlHelper.Link("Get" + shortPascalCasedControllerName + "Collection",
                         new
                         {
                             fields = authorsResourceParameters.Fields,
@@ -41,7 +42,7 @@ namespace Fittify.Api.Helpers
                         });
                 case ResourceUriType.Current:
                 default:
-                    return urlHelper.Link("GetAllPagedCategories",
+                    return urlHelper.Link("Get" + shortPascalCasedControllerName + "Collection",
                         new
                         {
                             fields = authorsResourceParameters.Fields,
@@ -57,12 +58,13 @@ namespace Fittify.Api.Helpers
         public static string CreateResourceUriForISearchQueryResourceParameters(
            ISearchQueryResourceParameters authorsResourceParameters,
            IUrlHelper urlHelper,
-           ResourceUriType type)
+           ResourceUriType type,
+           string shortCamelCasedControllerName)
         {
             switch (type)
             {
                 case ResourceUriType.PreviousPage:
-                    return urlHelper.Link("GetAllPagedCategories",
+                    return urlHelper.Link("Get" + shortCamelCasedControllerName + "Collection",
                         new
                         {
                             fields = authorsResourceParameters.Fields,
@@ -73,7 +75,7 @@ namespace Fittify.Api.Helpers
                             pageSize = authorsResourceParameters.PageSize
                         });
                 case ResourceUriType.NextPage:
-                    return urlHelper.Link("GetAllPagedCategories",
+                    return urlHelper.Link("Get" + shortCamelCasedControllerName + "Collection",
                         new
                         {
                             fields = authorsResourceParameters.Fields,
@@ -85,7 +87,7 @@ namespace Fittify.Api.Helpers
                         });
                 case ResourceUriType.Current:
                 default:
-                    return urlHelper.Link("GetAllPagedCategories",
+                    return urlHelper.Link("Get" + shortCamelCasedControllerName + "Collection",
                         new
                         {
                             fields = authorsResourceParameters.Fields,

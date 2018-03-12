@@ -21,28 +21,8 @@ namespace Fittify.DataModelRepositories
         {
 
         }
-
-        public PagedList<TEntity> GetAllPagedQueryName(ISearchQueryResourceParameters resourceParameters)
-        {
-            var allEntitiesQueryable = GetAll()
-                .OrderBy(o => o.Name)
-                .AsQueryable();
-
-            if (!string.IsNullOrEmpty(resourceParameters.SearchQuery))
-            {
-                // trim & ignore casing
-                var searchNameForWhereClause = resourceParameters.SearchQuery
-                    .Trim().ToLowerInvariant();
-                allEntitiesQueryable = allEntitiesQueryable
-                    .Where(a => a.Name.ToLowerInvariant().Contains(resourceParameters.SearchQuery.ToLowerInvariant()));
-            }
-
-            return PagedList<TEntity>.Create(allEntitiesQueryable,
-                resourceParameters.PageNumber,
-                resourceParameters.PageSize);
-        }
-
-        public PagedList<TEntity> GetAllPagedQueryNameOrdered(ISearchQueryResourceParameters resourceParameters)
+        
+        public PagedList<TEntity> GetCollection(ISearchQueryResourceParameters resourceParameters)
         {
             //var allEntitiesQueryable = GetAll()
             //    .OrderBy(o => o.Name)

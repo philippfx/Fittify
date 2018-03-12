@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Fittify.Common.Helpers.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.Controllers.HttpMethodInterfaces
 {
-    public interface IAsyncGetForHttp<TId>
+    public interface IAsyncGetByIdForHttp<TId>
         where TId : struct
     {
-        Task<IActionResult> GetAll();
-        Task<IActionResult> GetById(TId id);
+        Task<IActionResult> GetById(TId id, string fields);
     }
 }

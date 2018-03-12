@@ -1,7 +1,7 @@
 ﻿namespace Fittify.Api.Controllers.HttpMethodInterfaces
 {
     public interface IAsyncGppdForHttp<TId, in TOfmForPost, TOfmForPatch> :
-        IAsyncGetForHttp<TId>,
+        IAsyncGetByIdForHttp<TId>,
         IAsyncPostForHttp<TOfmForPost>,
         IAsyncPatchForHttp<TOfmForPatch, TId>,
         IAsyncDeleteForHttp<TId>

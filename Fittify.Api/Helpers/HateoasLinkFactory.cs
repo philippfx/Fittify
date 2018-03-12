@@ -99,14 +99,14 @@ namespace Fittify.Api.Helpers
 
             // self 
             links.Add(
-                new HateoasLink(ResourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters, UrlHelper, ResourceUriType.Current)
+                new HateoasLink(ResourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters, UrlHelper, ResourceUriType.Current, ShortPascalCasedControllerName)
                     , "self", "GET"));
 
             if (hasPrevious)
             {
                 links.Add(
                     new HateoasLink(ResourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters, UrlHelper,
-                            ResourceUriType.PreviousPage),
+                            ResourceUriType.PreviousPage, ShortPascalCasedControllerName),
                         "previousPage", "GET"));
             }
 
@@ -114,8 +114,38 @@ namespace Fittify.Api.Helpers
             {
                 links.Add(
                     new HateoasLink(ResourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters, UrlHelper,
-                            ResourceUriType.NextPage),
+                            ResourceUriType.NextPage, ShortPascalCasedControllerName),
                         "nextPage", "GET"));
+            }
+
+            return links;
+        }
+
+        public IEnumerable<HateoasLink> CreateLinksForOfmGetCollectionIncludeByNameSearch(
+            ISearchQueryResourceParameters resourceParameters,
+            bool hasPrevious, bool hasNext)
+        {
+            var links = new List<HateoasLink>();
+
+            // self 
+            links.Add(
+                new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters, UrlHelper, ResourceUriType.Current, ShortPascalCasedControllerName)
+                    , "self", "GET"));
+
+            if (hasNext)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters, UrlHelper,
+                            ResourceUriType.NextPage, ShortPascalCasedControllerName),
+                        "nextPage", "GET"));
+            }
+
+            if (hasPrevious)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters, UrlHelper,
+                            ResourceUriType.PreviousPage, ShortPascalCasedControllerName),
+                        "previousPage", "GET"));
             }
 
             return links;

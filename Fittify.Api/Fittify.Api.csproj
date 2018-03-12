@@ -12,6 +12,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Sport\CardioSetApiController.cs" />
+    <Compile Remove="Controllers\Sport\ExerciseApiController.cs" />
+    <Compile Remove="Controllers\Sport\MapExerciseWorkoutApiController.cs" />
+    <Compile Remove="Controllers\Sport\WeightLiftingSetApiController.cs" />
+    <Compile Remove="Controllers\Sport\WorkoutApiController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="nlog.config" />
   </ItemGroup>
 

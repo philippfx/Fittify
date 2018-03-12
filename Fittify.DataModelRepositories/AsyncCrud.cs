@@ -124,23 +124,7 @@ namespace Fittify.DataModelRepositories
             return FittifyContext.Set<TEntity>().AsNoTracking();
         }
 
-        public PagedList<TEntity> GetAllPaged(IResourceParameters resourceParameters)
-        {
-            var allEntitiesQueryableBeforePaging = GetAll()
-                .OrderBy(o => o.Id)
-                .AsQueryable();
-
-            //var allEntitiesQueryableBeforePaging =
-            //    GetAll()
-            //        .ApplySort(resourceParameters.OrderBy,
-            //            PropertyMappingService.GetPropertyMapping<CategoryOfmForGet, Category>());
-
-            return PagedList<TEntity>.Create(allEntitiesQueryableBeforePaging,
-                resourceParameters.PageNumber,
-                resourceParameters.PageSize);
-        }
-
-        public PagedList<TEntity> GetAllPagedAndOrdered(IResourceParameters resourceParameters)
+        public PagedList<TEntity> GetCollection(IResourceParameters resourceParameters)
         {
             //var allEntitiesQueryableBeforePaging = GetAll()
             //    .OrderBy(o => o.Id)

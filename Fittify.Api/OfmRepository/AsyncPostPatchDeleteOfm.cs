@@ -38,12 +38,12 @@ namespace Fittify.Api.OfmRepository
         public AsyncPostPatchDeleteOfm(TCrudRepository repository,
             IUrlHelper urlHelper,
             IActionDescriptorCollectionProvider actionDescriptorCollectionProvider,
-            string controllerName)
+            Controller controller)
         {
             _repo = repository;
             _adcp = actionDescriptorCollectionProvider;
             _urlHelper = urlHelper;
-            HateoasLinkFactory = new HateoasLinkFactory<TOfmForGet, TId>(urlHelper, controllerName);
+            HateoasLinkFactory = new HateoasLinkFactory<TOfmForGet, TId>(urlHelper, controller.GetType().Name);
         }
 
         public AsyncPostPatchDeleteOfm()

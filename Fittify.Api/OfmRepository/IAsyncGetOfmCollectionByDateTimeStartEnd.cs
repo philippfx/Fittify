@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.OfmRepository
 {
-    public interface IAsyncGetOfmByDateTimeStartEnd<TOfmForGet, TId> : IAsyncGetOfm<TOfmForGet, TId>
+    public interface IAsyncGetOfmCollectionByDateTimeStartEnd<TOfmForGet, TId> : IAsyncGetOfmById<TOfmForGet, TId>
         where TOfmForGet : class
         where TId : struct
     {
-        Task<IEnumerable<TOfmForGet>> GetAllPagedAndDateTimeStartEnd(IDateTimeStartEndResourceParameters resourceParameters, ControllerBase controllerBase);
+        Task<IEnumerable<TOfmForGet>> GetCollection(IDateTimeStartEndResourceParameters resourceParameters, ControllerBase controllerBase);
     }
 }

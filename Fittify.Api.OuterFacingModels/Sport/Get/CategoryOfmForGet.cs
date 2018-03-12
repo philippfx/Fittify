@@ -6,7 +6,7 @@ using Fittify.Common.Helpers;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Get
 {
-    public class CategoryOfmForGet : CategoryOfmBase, IEntityUniqueIdentifier<int>
+    public class CategoryOfmForGet : CategoryOfmBase, IEntityUniqueIdentifier<int>, IOfmForGet
     {
         public int Id { get; set; }
     }

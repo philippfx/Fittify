@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -29,15 +30,22 @@ namespace Fittify.Api.Controllers.Sport
 {
     [Route("api/categories")]
     public class CategoryApiController :
-        Controller,
-        IAsyncGppdForHttp<int, CategoryOfmForPost, CategoryOfmForPatch>
+        Controller, 
+        IAsyncGetByIdForHttp<int>,
+        IAsyncGetCollectionByNameSearchForHttp,
+        IAsyncPostForHttp<CategoryOfmForPost>,
+        IAsyncPatchForHttp<CategoryOfmForPatch, int>,
+        IAsyncDeleteForHttp<int>
     {
         private readonly AsyncPostPatchDeleteOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int> _asyncPostPatchDeleteForHttpMethods;
-        private readonly IAsyncGetOfmByNameSearch<CategoryOfmForGet, int> _asyncGetOfmByNameSearch;
+        private readonly IAsyncGetOfmById<CategoryOfmForGet, int> _asyncGetOfmById;
+        private readonly IAsyncGetOfmCollectionByNameSearch<CategoryOfmForGet> _asyncGetOfmCollectionIncludeByNameSearch;
         private readonly CategoryRepository _repo;
         private readonly string _shortCamelCasedControllerName;
         private ITypeHelperService _typeHelperService;
         private readonly IUrlHelper _urlHelper;
+        private readonly ControllerGuardClauses<CategoryOfmForGet> controllerGuardClause;
+        private readonly HateoasLinkFactory<CategoryOfmForGet, int> _hateoasLinkFactory;
 
         public CategoryApiController(FittifyContext fittifyContext,
             IActionDescriptorCollectionProvider adcProvider,
@@ -46,195 +54,52 @@ namespace Fittify.Api.Controllers.Sport
             ITypeHelperService typeHelperService)
         {
             _repo = new CategoryRepository(fittifyContext);
-            _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo, urlHelper, adcProvider, nameof(CategoryApiController));
+            _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo, urlHelper, adcProvider, this);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
-            _asyncGetOfmByNameSearch = new AsyncGetOfmByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, nameof(CategoryApiController));
+            _asyncGetOfmById = new AsyncGetOfmCollectionIncludeByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
+            _asyncGetOfmCollectionIncludeByNameSearch = new AsyncGetOfmCollectionIncludeByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
             _urlHelper = urlHelper;
             _typeHelperService = typeHelperService;
+            controllerGuardClause = new ControllerGuardClauses<CategoryOfmForGet>(this);
+            _hateoasLinkFactory = new HateoasLinkFactory<CategoryOfmForGet, int>(urlHelper, nameof(CategoryApiController));
         }
 
-        [HttpGet("{id:int}", Name="GetCategoryById")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("{id:int}", Name = "GetCategoryById")]
+        public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
-            var entity = await _repo.GetById(id);
-            if (entity == null)
+            var ofmForGetQueryResult = await _asyncGetOfmById.GetById(id, fields);
+            if (!controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
             {
-                ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
-                return new EntityNotFoundObjectResult(ModelState);
+                return objectResult;
             }
+            var expandable = ofmForGetQueryResult.ReturnedTOfmForGet.ToExpandableOfm();
+            var shapedExpandable = expandable.Shape(fields);
+            //var _hateoasLinkFactory = new _hateoasLinkFactory<CategoryOfmForGet, int>(_urlHelper, nameof(CategoryApiController));
+            shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, fields).ToList());
 
-            var ofmForGet = Mapper.Map<CategoryOfmForGet>(entity);
-            
-            return Ok(ofmForGet);
+            //return Ok(ofmForGetQueryResult.ReturnedTOfmForGet.ShapeData(fields)); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
+            return Ok(shapedExpandable);
         }
 
-        [HttpGet("datashaped/{id:int}", Name = "GetCategoryByIdDataShaped")]
-        public async Task<IActionResult> GetByIdDataShaped(int id, [FromQuery] string fields)
+        [HttpGet(Name = "GetCategoryCollection")]
+        public async Task<IActionResult> GetCollection(SearchQueryResourceParameters resourceParameters)
         {
-            var ofmForGetQueryResult = await _asyncGetOfmByNameSearch.GetByIdDataShaped(id, fields);
-
-            if (ofmForGetQueryResult.ErrorMessages.Count > 0)
+            var ofmForGetCollectionQueryResult = await _asyncGetOfmCollectionIncludeByNameSearch.GetCollection(resourceParameters);
+            if (!controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult))
             {
-                foreach (var errorMessage in ofmForGetQueryResult.ErrorMessages)
-                {
-                    ModelState.AddModelError(_shortCamelCasedControllerName, errorMessage);
-                }
-                return new UnprocessableEntityObjectResult(ModelState);
+                return objectResult;
             }
-
-            //var entity = await _repo.GetById(id);
-            if (ofmForGetQueryResult.ReturnedTOfmForGet == null)
-            {
-                ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
-                return new EntityNotFoundObjectResult(ModelState);
-            }
-
-            return Ok(ofmForGetQueryResult.ReturnedTOfmForGet.ShapeData(fields)); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
-        }
-
-        [HttpGet("datashapedincludinghateoas/{id:int}", Name = "GetCategoryByIdDataShapedIncludingHateoas")]
-        public async Task<IActionResult> GetByIdDataShapedIncludingHateoas(int id, [FromQuery] string fields)
-        {
-            var ofmForGetQueryResult = await _asyncGetOfmByNameSearch.GetByIdDataShaped(id, fields);
-
-            if (ofmForGetQueryResult.ErrorMessages.Count > 0)
-            {
-                foreach (var errorMessage in ofmForGetQueryResult.ErrorMessages)
-                {
-                    ModelState.AddModelError(_shortCamelCasedControllerName, errorMessage);
-                }
-                return new UnprocessableEntityObjectResult(ModelState);
-            }
-
-            //var entity = await _repo.GetById(id);
-            if (ofmForGetQueryResult.ReturnedTOfmForGet == null)
-            {
-                ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
-                return new EntityNotFoundObjectResult(ModelState);
-            }
-            
-            return Ok(ofmForGetQueryResult.ReturnedTOfmForGet.ShapeData(fields)); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
-        }
-
-        [HttpGet("simplegetall", Name = "SimpleGetAllCategories")]
-        public async Task<IActionResult> GetAll()
-        {
-            var allEntites = await _asyncGetOfmByNameSearch.GetAll();
-            var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites);
-            //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
-            if (allOfmForGet.Count() == 0)
-            {
-                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
-                return new EntityNotFoundObjectResult(ModelState);
-            }
-
-            //allOfmForGet = allOfmForGet.Select(ofmForGet =>
-            //{
-            //    ofmForGet = CreateLinksForCategoryOfmForGet(ofmForGet);
-            //    return ofmForGet;
-            //});
-
-            return new JsonResult(allOfmForGet);
-        }
-
-        [HttpGet("paged", Name = "GetAllPagedCategories")]
-        public async Task<IActionResult> GetAllPaged(SearchQueryResourceParameters resourceParameters)
-        {
-            var allEntites = await _asyncGetOfmByNameSearch.GetAllPaged(resourceParameters, this);
-            
-            var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites);
-            //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
-            if (allOfmForGet.Count() == 0)
-            {
-                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
-                return new EntityNotFoundObjectResult(ModelState);
-            }
-            return new JsonResult(allOfmForGet);
-        }
-
-        [HttpGet("pagedandsearchname", Name = "GetAllPagedAndSearchNameCategories")]
-        public async Task<IActionResult> GetAllPagedAndSearchName(SearchQueryResourceParameters resourceParameters)
-        {
-            var allEntites = await _asyncGetOfmByNameSearch.GetAllPagedAndSearchName(resourceParameters, this);
-
-            var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allEntites);
-            //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
-            if (allOfmForGet.Count() == 0)
-            {
-                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
-                return new EntityNotFoundObjectResult(ModelState);
-            }
-            return new JsonResult(allOfmForGet);
-        }
-
-        [HttpGet("pagedandsearchnameandordered", Name = "GetAllPagedAndSearchNameAndOrderedCategories")]
-        public async Task<IActionResult> GetAllPagedAndSearchNameAndOrdered(SearchQueryResourceParameters resourceParameters)
-        {
-            var allentities = await _asyncGetOfmByNameSearch.GetAllPagedAndSearchNameAndOrdered(resourceParameters, this);
-
-            var allOfmForGet = Mapper.Map<IEnumerable<CategoryOfmForGet>>(allentities);
-            //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
-            if (allOfmForGet.Count() == 0)
-            {
-                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
-                return new EntityNotFoundObjectResult(ModelState);
-            }
-            return new JsonResult(allOfmForGet);
-        }
-
-        [HttpGet("pagedandsearchnameandorderedincludingerrormessages", Name = "GetAllPagedAndSearchNameAndOrderedCategoriesIncludingErrorMessages")]
-        public async Task<IActionResult> GetAllPagedAndSearchNameAndOrderedIncludingErrorMessages(SearchQueryResourceParameters resourceParameters)
-        {
-            var ofmForGetResult = await _asyncGetOfmByNameSearch.GetAllPagedAndSearchNameAndOrderedIncludingErrorMessages(resourceParameters, this);
-
-            if (ofmForGetResult.ErrorMessages.Count() > 0)
-            {
-                foreach (var errorMessage in ofmForGetResult.ErrorMessages)
-                {
-                    ModelState.AddModelError(_shortCamelCasedControllerName, errorMessage);
-                }
-                return new UnprocessableEntityObjectResult(ModelState);
-            };
-
-            var allOfmForGet = ofmForGetResult.ReturnedTOfmForGetCollection;
-            //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
-            if (allOfmForGet.OfmForGets.Count() == 0)
-            {
-                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
-                return new EntityNotFoundObjectResult(ModelState);
-            }
-            return new JsonResult(allOfmForGet);
-        }
-
-        [HttpGet("pagedandsearchnameandorderedincludingerrormessagesanddatashaped", Name = "GetAllPagedAndSearchNameAndOrderedCategoriesIncludingErrorMessagesAndDataShaped")]
-        public async Task<IActionResult> GetAllPagedAndSearchNameAndOrderedIncludingErrorMessagesAndDataShaped(SearchQueryResourceParameters resourceParameters)
-        {
-            var ofmForGetCollectionQueryResult = await _asyncGetOfmByNameSearch.GetAllPagedAndSearchNameAndOrderedIncludingErrorMessages(resourceParameters, this);
-
-            if (ofmForGetCollectionQueryResult.ErrorMessages.Count() > 0)
-            {
-                foreach (var errorMessage in ofmForGetCollectionQueryResult.ErrorMessages)
-                {
-                    ModelState.AddModelError(_shortCamelCasedControllerName, errorMessage);
-                }
-                return new UnprocessableEntityObjectResult(ModelState);
-            }
-
-            var allOfmForGet = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection;
-            //allOfmForGet = new Collection<CategoryOfmForGet>(); // Todo mock "not found" as query paramter 
-            if (allOfmForGet.OfmForGets.Count() == 0)
-            {
-                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
-                return new EntityNotFoundObjectResult(ModelState);
-            }
-
+            var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
+            var shapedExpandableOfmForGetCollection = expandableOfmForGetCollection.Shape(resourceParameters.Fields).ToList();
+            var links = _hateoasLinkFactory.CreateLinksForOfmGetCollectionIncludeByNameSearch(resourceParameters,
+                ofmForGetCollectionQueryResult.HasPrevious, ofmForGetCollectionQueryResult.HasNext);
             var linkedResource = new
             {
-                value = allOfmForGet.OfmForGets.ShapeData(resourceParameters.Fields),
-                links = allOfmForGet.HateoasLinks
+                value = shapedExpandableOfmForGetCollection,
+                //links = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.HateoasLinks
+                links = links
             };
-            
-            return new JsonResult(linkedResource); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
+            return Ok(linkedResource); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
         }
 
         [HttpGet("range/{inputString}", Name = "GetCategoriesByRangeOfIds")]
@@ -262,7 +127,7 @@ namespace Fittify.Api.Controllers.Sport
 
             var ofmForGet = await _asyncPostPatchDeleteForHttpMethods.Post(ofmForPost);
             
-            var result = CreatedAtRoute(routeName: "GetCategoryByIdDataShaped", routeValues: new { id = ofmForGet.Id }, value: ofmForGet);
+            var result = CreatedAtRoute(routeName: "GetCategoryById", routeValues: new { id = ofmForGet.Id }, value: ofmForGet);
             return result;
         }
 
@@ -279,7 +144,7 @@ namespace Fittify.Api.Controllers.Sport
         public async Task<IActionResult> MyDelete(int id)
         {
             // Todo Refactor route, merge it with the original route and make this method use less code
-            var methodBase = typeof(ExerciseHistoryApiController).GetMethod("GetByRangeOfIds");
+            var methodBase = typeof(CategoryApiController).GetMethod("GetByRangeOfIds");
 
             var attribute = (HttpGetAttribute)methodBase.GetCustomAttributes(typeof(HttpGetAttribute), true)[0];
 
@@ -296,6 +161,7 @@ namespace Fittify.Api.Controllers.Sport
             {
                 return new UnprocessableEntityObjectResult(ModelState);
             }
+
             return NoContent();
         }
 

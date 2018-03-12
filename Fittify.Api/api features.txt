@@ -1,13 +1,17 @@
 freely expandable return value:
 
-validation of patch and post object
+
 validation of query: fields, orderby
+validation of patch and post object
 optional datashaping fields (query)
 optional orderby (query)
 optional hateoas links (header)
 logging
 
 using ExpandoObject and IDictionary<string, object>
+
+versioning
+check headers to add additional features
 
 RootController
 

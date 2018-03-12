@@ -4,7 +4,7 @@ using Fittify.Common;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Get
 {
-    public class ExerciseOfmForGet : ExerciseOfmBase, IEntityUniqueIdentifier<int>
+    public class ExerciseOfmForGet : ExerciseOfmBase, IEntityUniqueIdentifier<int>, IOfmForGet
     {
         public int Id { get; set; }
 

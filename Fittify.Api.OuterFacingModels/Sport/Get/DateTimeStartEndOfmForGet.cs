@@ -6,7 +6,7 @@ using Fittify.Common;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Get
 {
-    internal abstract class DateTimeStartEndOfmForGet : DateTimeStartEndOfmBase, IEntityUniqueIdentifier<int>
+    internal abstract class DateTimeStartEndOfmForGet : DateTimeStartEndOfmBase, IEntityUniqueIdentifier<int>, IOfmForGet
     {
         public int Id { get; set; }
     }
