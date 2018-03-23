@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -9,7 +7,6 @@ using Fittify.Api.Controllers.HttpMethodInterfaces;
 using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
 using Fittify.Api.OfmRepository;
-using Fittify.Api.OuterFacingModels;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -20,9 +17,11 @@ using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -46,12 +45,16 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IUrlHelper _urlHelper;
         private readonly ControllerGuardClauses<CategoryOfmForGet> controllerGuardClause;
         private readonly HateoasLinkFactory<CategoryOfmForGet, int> _hateoasLinkFactory;
+        private readonly IConfiguration _appConfiguration;
+        private readonly IncomingHeaders _incomingHeaders;
 
         public CategoryApiController(FittifyContext fittifyContext,
             IActionDescriptorCollectionProvider adcProvider,
             IUrlHelper urlHelper,
             IPropertyMappingService propertyMappingService,
-            ITypeHelperService typeHelperService)
+            ITypeHelperService typeHelperService,
+            IConfiguration appConfiguration,
+            IHttpContextAccessor httpContextAccesor)
         {
             _repo = new CategoryRepository(fittifyContext);
             _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo, urlHelper, adcProvider, this);
@@ -62,9 +65,13 @@ namespace Fittify.Api.Controllers.Sport
             _typeHelperService = typeHelperService;
             controllerGuardClause = new ControllerGuardClauses<CategoryOfmForGet>(this);
             _hateoasLinkFactory = new HateoasLinkFactory<CategoryOfmForGet, int>(urlHelper, nameof(CategoryApiController));
+            _appConfiguration = appConfiguration;
+            //_incomingHeaders = Mapper.Map<IncomingHeaders>(incomingRawHeaders)
+            _incomingHeaders = Mapper.Map<IncomingHeaders>(httpContextAccesor.HttpContext.Items[nameof(IncomingRawHeaders)] as IncomingRawHeaders);
         }
 
         [HttpGet("{id:int}", Name = "GetCategoryById")]
+        [RequestHeaderMatchesApiVersion("Api-Version", new [] { "1" })]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
             var ofmForGetQueryResult = await _asyncGetOfmById.GetById(id, fields);
@@ -73,36 +80,36 @@ namespace Fittify.Api.Controllers.Sport
                 return objectResult;
             }
             var expandable = ofmForGetQueryResult.ReturnedTOfmForGet.ToExpandableOfm();
-            var shapedExpandable = expandable.Shape(fields);
-            //var _hateoasLinkFactory = new _hateoasLinkFactory<CategoryOfmForGet, int>(_urlHelper, nameof(CategoryApiController));
+            var shapedExpandable = expandable.Shape(fields); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
             shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, fields).ToList());
-
-            //return Ok(ofmForGetQueryResult.ReturnedTOfmForGet.ShapeData(fields)); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
             return Ok(shapedExpandable);
         }
 
         [HttpGet(Name = "GetCategoryCollection")]
-        public async Task<IActionResult> GetCollection(SearchQueryResourceParameters resourceParameters)
+        [RequestHeaderMatchesApiVersion("Api-Version", new[] { "1" })]
+        public async Task<IActionResult> GetCollection(SearchQueryResourceParameters resourceParameters, IncomingRawHeaders incomingRawHeaders)
         {
             var ofmForGetCollectionQueryResult = await _asyncGetOfmCollectionIncludeByNameSearch.GetCollection(resourceParameters);
-            if (!controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult))
-            {
-                return objectResult;
-            }
+            if (!controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
-            var shapedExpandableOfmForGetCollection = expandableOfmForGetCollection.Shape(resourceParameters.Fields).ToList();
-            var links = _hateoasLinkFactory.CreateLinksForOfmGetCollectionIncludeByNameSearch(resourceParameters,
-                ofmForGetCollectionQueryResult.HasPrevious, ofmForGetCollectionQueryResult.HasNext);
-            var linkedResource = new
+            if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasLinksForeachExpandableOfmForGet<CategoryOfmForGet, int>(_urlHelper, nameof(CategoryApiController), resourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
+            expandableOfmForGetCollection = expandableOfmForGetCollection.Shape(resourceParameters.Fields, _incomingHeaders.IncludeHateoas).ToList();
+            if (!_incomingHeaders.IncludeHateoas)
             {
-                value = shapedExpandableOfmForGetCollection,
-                //links = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.HateoasLinks
-                links = links
+                return Ok(expandableOfmForGetCollection);
+            }
+
+            dynamic result = new
+            {
+                value = expandableOfmForGetCollection,
+                links = _hateoasLinkFactory.CreateLinksForOfmGetCollectionQueryIncludeByNameSearch(resourceParameters,
+                    ofmForGetCollectionQueryResult.HasPrevious, ofmForGetCollectionQueryResult.HasNext).ToList()
             };
-            return Ok(linkedResource); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
+            return Ok(result);
         }
 
         [HttpGet("range/{inputString}", Name = "GetCategoriesByRangeOfIds")]
+        [RequestHeaderMatchesApiVersion("Api-Version", new[] { "1" })]
         public async Task<IActionResult> GetByRangeOfIds(string inputString)
         {
             var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputString));
@@ -115,7 +122,8 @@ namespace Fittify.Api.Controllers.Sport
             return Ok(ofmCollection);
         }
 
-        [HttpPost("new", Name = "CreateCategory")]
+        [HttpPost(Name = "CreateCategory")]
+        [RequestHeaderMatchesApiVersion("Api-Version", new[] { "1" })]
         public async Task<IActionResult> Post([FromBody] CategoryOfmForPost ofmForPost)
         {
             if (ofmForPost == null) return BadRequest();
@@ -132,6 +140,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpDelete("{id:int}", Name = "DeleteCategory")]
+        [RequestHeaderMatchesApiVersion("Api-Version", new[] { "1" })]
         public async Task<IActionResult> Delete(int id)
         {
             bool successfullyDeleted = await _asyncPostPatchDeleteForHttpMethods.Delete(id);
@@ -141,6 +150,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpDelete("mydelete/{id:int}")]
+        [RequestHeaderMatchesApiVersion("Api-Version", new[] { "1" })]
         public async Task<IActionResult> MyDelete(int id)
         {
             // Todo Refactor route, merge it with the original route and make this method use less code
@@ -166,6 +176,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpPatch("{id:int}", Name = "PartiallyUpdateCategory")]
+        [RequestHeaderMatchesApiVersion("Api-Version", new[] { "1" })]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<CategoryOfmForPatch> jsonPatchDocument)
         {
             if (jsonPatchDocument == null)

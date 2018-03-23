@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Fittify.Api.Extensions;
 using Fittify.Api.OuterFacingModels;
-using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Fittify.Api.Helpers
 {
     public class HateoasLinkFactory<TOfmForGet, TId>
-        where TOfmForGet : LinkedResourceBase, IEntityUniqueIdentifier<TId>
+        where TOfmForGet : class
         where TId : struct
     {
         protected readonly IUrlHelper UrlHelper;
@@ -23,33 +18,6 @@ namespace Fittify.Api.Helpers
             UrlHelper = urlHelper;
             ShortPascalCasedControllerName = controllerName.ToShortPascalCasedControllerNameOrDefault();
             ShortCamelCasedControllerName = controllerName.ToShortCamelCasedOfmForGetNameOrDefault();
-        }
-        public TOfmForGet CreateLinksForOfmForGet(TOfmForGet categoryOfmForGet)
-        {
-            categoryOfmForGet.Links.Add(new HateoasLink(UrlHelper.Link("Get" + ShortPascalCasedControllerName + "ById",
-                    new { id = categoryOfmForGet.Id }),
-                "self",
-                "GET"));
-
-            categoryOfmForGet.Links.Add(
-                new HateoasLink(UrlHelper.Link("Delete" + ShortPascalCasedControllerName,
-                        new { id = categoryOfmForGet.Id }),
-                    "delete_" + ShortCamelCasedControllerName,
-                    "DELETE"));
-
-            categoryOfmForGet.Links.Add(
-                new HateoasLink(UrlHelper.Link("Update" + ShortPascalCasedControllerName,
-                        new { id = categoryOfmForGet.Id }),
-                    "update_" + ShortCamelCasedControllerName,
-                    "PUT"));
-
-            categoryOfmForGet.Links.Add(
-                new HateoasLink(UrlHelper.Link("PartiallyUpdate" + ShortPascalCasedControllerName,
-                        new { id = categoryOfmForGet.Id }),
-                    "partially_update_" + ShortCamelCasedControllerName,
-                    "PATCH"));
-
-            return categoryOfmForGet;
         }
         
         public IEnumerable<HateoasLink> CreateLinksForOfmForGet(TId id, string fields)
@@ -91,7 +59,7 @@ namespace Fittify.Api.Helpers
             return links;
         }
 
-        public IEnumerable<HateoasLink> CreateLinksForOfmForGetCollection(
+        public IEnumerable<HateoasLink> CreateLinksForOfmForGetCollectionQuery(
             IResourceParameters resourceParameters,
             bool hasPrevious, bool hasNext)
         {
@@ -121,7 +89,37 @@ namespace Fittify.Api.Helpers
             return links;
         }
 
-        public IEnumerable<HateoasLink> CreateLinksForOfmGetCollectionIncludeByNameSearch(
+        public IEnumerable<HateoasLink> CreateLinksForOfmGetCollectionQueryIncludeByNameSearch(
+            ISearchQueryResourceParameters resourceParameters,
+            bool hasPrevious, bool hasNext)
+        {
+            var links = new List<HateoasLink>();
+
+            // self 
+            links.Add(
+                new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters, UrlHelper, ResourceUriType.Current, ShortPascalCasedControllerName)
+                    , "self", "GET"));
+
+            if (hasNext)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters, UrlHelper,
+                            ResourceUriType.NextPage, ShortPascalCasedControllerName),
+                        "nextPage", "GET"));
+            }
+
+            if (hasPrevious)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters, UrlHelper,
+                            ResourceUriType.PreviousPage, ShortPascalCasedControllerName),
+                        "previousPage", "GET"));
+            }
+
+            return links;
+        }
+        
+        public IEnumerable<HateoasLink> CreateLinksForRootController(
             ISearchQueryResourceParameters resourceParameters,
             bool hasPrevious, bool hasNext)
         {

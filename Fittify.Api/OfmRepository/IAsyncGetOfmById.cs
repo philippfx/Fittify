@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Fittify.Api.Helpers;
-using Fittify.Common.Helpers.ResourceParameters;
-using Fittify.DataModelRepositories.Helpers;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.OfmRepository
 {

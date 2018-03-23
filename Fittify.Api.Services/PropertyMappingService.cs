@@ -40,7 +40,7 @@ namespace Fittify.Api.Services
             throw new Exception($"Cannot find exact property mapping instance for <{typeof(TSource)},{typeof(TDestination)}");
         }
 
-        public bool ValidMappingExistsFor<TSource, TDestination>(string fields, ref IList<string> errorMessages)
+        public bool ValidMappingExistsFor<TSource, TDestination>(string fields, ref List<string> errorMessages)
         {
             var propertyMapping = GetPropertyMapping<TSource, TDestination>();
 

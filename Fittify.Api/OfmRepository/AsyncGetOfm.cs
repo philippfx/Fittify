@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Fittify.Api.Controllers.Sport;
 using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
-using Fittify.Api.OuterFacingModels;
-using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.Services;
 using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
@@ -19,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 namespace Fittify.Api.OfmRepository
 {
     public class AsyncGetOfm<TCrudRepository, TEntity, TOfmForGet, TId> : IAsyncGetOfmById<TOfmForGet, TId>
-        where TOfmForGet : LinkedResourceBase, IEntityUniqueIdentifier<TId>
+        where TOfmForGet : class, IEntityUniqueIdentifier<TId>
         where TId : struct
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TCrudRepository : class, IAsyncCrud<TEntity, TId>
@@ -52,11 +46,19 @@ namespace Fittify.Api.OfmRepository
             Controller = controller;
         }
 
-        public virtual async Task<IEnumerable<TOfmForGet>> GetCollection(IResourceParameters resourceParameters)
+        public virtual async Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(IResourceParameters resourceParameters)
         {
+            var ofmForGetCollectionQueryResult = new OfmForGetCollectionQueryResult<TOfmForGet>();
+
+            ofmForGetCollectionQueryResult = await AsyncGetOfmGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, resourceParameters);
+            if (ofmForGetCollectionQueryResult.ErrorMessages.Count > 0)
+            {
+                return ofmForGetCollectionQueryResult;
+            }
+
             //// Todo this async lacks await
             var pagedListEntityCollection = Repo.GetCollection(resourceParameters);
-
+            
             var previousPageLink = pagedListEntityCollection.HasPrevious ?
                 ResourceUriFactory.CreateResourceUriForIResourceParameters(resourceParameters,
                     UrlHelper,
@@ -82,22 +84,21 @@ namespace Fittify.Api.OfmRepository
             Controller.Response.Headers.Add("X-Pagination",
                 Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
 
-            var ofmCollection = Mapper.Map<List<TEntity>, List<TOfmForGet>>(pagedListEntityCollection);
-            return ofmCollection;
+            ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets = Mapper.Map<List<TEntity>, List<TOfmForGet>>(pagedListEntityCollection);
+            return ofmForGetCollectionQueryResult;
         }
 
         public virtual async Task<TOfmForGet> GetById(TId id)
         {
             var entity = await Repo.GetById(id);
             var ofm = Mapper.Map<TEntity, TOfmForGet>(entity);
-            ofm = HateoasLinkFactory.CreateLinksForOfmForGet(ofm);
             return ofm;
         }
         
         public virtual async Task<OfmForGetQueryResult<TOfmForGet>> GetById(TId id, string fields)
         {
             var ofmForGetResult = new OfmForGetQueryResult<TOfmForGet>();
-            ofmForGetResult = await AsyncGetOfmGuardClause.ValidateGetByIdInput(ofmForGetResult, fields);
+            ofmForGetResult = await AsyncGetOfmGuardClause.ValidateGetById(ofmForGetResult, fields);
 
             if (ofmForGetResult.ErrorMessages.Count > 0)
             {
@@ -106,10 +107,6 @@ namespace Fittify.Api.OfmRepository
 
             var entity = await Repo.GetById(id);
             ofmForGetResult.ReturnedTOfmForGet = Mapper.Map<TEntity, TOfmForGet>(entity);
-            if (ofmForGetResult.ReturnedTOfmForGet != null)
-            {
-                ofmForGetResult.ReturnedTOfmForGet.Links = HateoasLinkFactory.CreateLinksForOfmForGet(id, fields).ToList();
-            }
             return ofmForGetResult;
         }
     }

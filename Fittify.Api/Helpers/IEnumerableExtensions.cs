@@ -1,30 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Abstract;
+using Fittify.Common.Helpers.ResourceParameters;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Fittify.Api
+namespace Fittify.Api.Helpers
 {
-    public class ExpandableOfmCollection : IEnumerable<ExpandableOfmForGet>
-    {
-        private IEnumerable<ExpandableOfmForGet> ExpandableOfmForGets { get; set; }
-        public IEnumerator<ExpandableOfmForGet> GetEnumerator()
-        {
-            foreach (var ofmForGet in ExpandableOfmForGets)
-            {
-                yield return ofmForGet;
-            }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
-    }
-
     public static class IEnumerableExtensions
     {
         public static IEnumerable<ExpandableOfmForGet> ToExpandableOfmForGets<TOfmForGet>(
@@ -38,7 +21,7 @@ namespace Fittify.Api
             var propertyInfoList = new List<PropertyInfo>();
             var propertyInfos = typeof(TOfmForGet).GetProperties(BindingFlags.Public | BindingFlags.Instance);
             propertyInfoList.AddRange(propertyInfos);
-            
+
             var expandableOfmForGetList = new List<ExpandableOfmForGet>();
 
             foreach (var ofmForGetSource in expandableOfmForGetSourceCollection)
@@ -60,7 +43,8 @@ namespace Fittify.Api
 
         public static IEnumerable<ExpandableOfmForGet> Shape(
             this IEnumerable<ExpandableOfmForGet> expandableOfmForGetSourceCollection,
-            string fields)
+            string fields,
+            bool includeHateoasLinks)
         {
             if (expandableOfmForGetSourceCollection == null)
             {
@@ -77,7 +61,7 @@ namespace Fittify.Api
             {
                 fieldsAfterSplit = fields.Split(',').Select(field => field.ToLower().Trim());
             }
-            
+
             foreach (var ofmForGetSource in expandableOfmForGetSourceCollection)
             {
                 var shapedExpandableOfmForGet = new ExpandableOfmForGet();
@@ -92,10 +76,60 @@ namespace Fittify.Api
                     }
                 }
 
+                if (includeHateoasLinks)
+                {
+                    var property = ofmForGetSource.FirstOrDefault(f => f.Key.ToLowerInvariant() == "links");
+                    shapedExpandableOfmForGet.Add(property.Key, property.Value);
+                }
+
                 expandableOfmForGetList.Add(shapedExpandableOfmForGet);
             }
 
             return expandableOfmForGetList;
         }
+
+        public static IEnumerable<ExpandableOfmForGet> CreateHateoasLinksForeachExpandableOfmForGet<TOfmForGet, TId>(
+            this IEnumerable<ExpandableOfmForGet> expandableOfmForGetCollection,
+            IUrlHelper urlhelper,
+            string controllerName,
+            string fields)
+
+            where TOfmForGet : class
+            where TId : struct
+        {
+            var hateoasLinkFactory = new HateoasLinkFactory<TOfmForGet, TId>(urlhelper, controllerName);
+            var expandableOfmForGets = new List<ExpandableOfmForGet>();
+            foreach (var expandableOfmForGet in expandableOfmForGetCollection)
+            {
+                expandableOfmForGet.Add("links", hateoasLinkFactory.CreateLinksForOfmForGet((TId)expandableOfmForGet["Id"], fields).ToList());
+                expandableOfmForGets.Add(expandableOfmForGet);
+            }
+
+            return expandableOfmForGets;
+        }
+
+        public static OfmForGetCollectionObjectResult CreateHateoasLinkForCollectionQueryIncludeByNameSearch<TOfmForGet, TId>(
+            this IEnumerable<ExpandableOfmForGet> expandableOfmForGetCollection,
+            IUrlHelper urlhelper,
+            string controllerName,
+            ISearchQueryResourceParameters resourceParameters,
+            bool hasPrevious,
+            bool hasNext)
+
+            where TOfmForGet : class
+            where TId : struct
+        {
+            var result = new OfmForGetCollectionObjectResult(expandableOfmForGetCollection);
+            var hateoasLinkFactory = new HateoasLinkFactory<TOfmForGet, TId>(urlhelper, controllerName);
+            //result.Add("value", result.OfmForGets);
+            result.Add(new Dictionary<string, object> { { "links", hateoasLinkFactory
+                    .CreateLinksForOfmGetCollectionQueryIncludeByNameSearch(resourceParameters, hasPrevious, hasNext)
+                    .ToList()
+            } });
+
+            return result;
+        }
+
+
     }
 }

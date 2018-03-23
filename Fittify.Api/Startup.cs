@@ -1,10 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
-using AutoMapper;
 using Fittify.Api.OuterFacingModels.Sport.Get;
-using Fittify.Api.OuterFacingModels.Sport.Patch;
-using Fittify.Api.OuterFacingModels.Sport.Post;
-using Fittify.Common;
 using Fittify.DataModelRepositories;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.Builder;
@@ -17,8 +13,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using AspNetCoreRateLimit;
+using Fittify.Api.Extensions;
+using Fittify.Api.Helpers;
+using Fittify.Api.Middleware;
 using Fittify.Api.Services;
 using Fittify.Common.Helpers;
+using Marvin.Cache.Headers;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +47,7 @@ namespace Fittify.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+            services.AddSingleton<IConfiguration>(Configuration);
             services.AddMvc(setupAction =>
             {
                 setupAction.ReturnHttpNotAcceptable = true; // returns 406 for header "Accept application/xml2" for example (or any other unsupported content type)
@@ -74,11 +76,48 @@ namespace Fittify.Api
             services.AddTransient<IPropertyMappingService, PropertyMappingService>();
 
             services.AddTransient<ITypeHelperService, TypeHelperService>();
+
+            services.AddHttpCacheHeaders(
+                expirationModelOptions =>
+                {
+                    expirationModelOptions.MaxAge = 600;
+                },
+                validationModelOptions =>
+                {
+                    validationModelOptions.AddMustRevalidate = true;
+                });
+
+            services.AddResponseCaching();
+
+            services.AddMemoryCache(); // Necessary for rate limit
+
+            services.Configure<IpRateLimitOptions>((options) =>
+            {
+                options.GeneralRules = new System.Collections.Generic.List<RateLimitRule>()
+                {
+                    new RateLimitRule()
+                    {
+                        Endpoint = "*",
+                        Limit = 5,
+                        Period = "1m"
+                    },
+                    new RateLimitRule()
+                    {
+                        Endpoint = "*",
+                        Limit = 3,
+                        Period = "10s"
+                    }
+                };
+            });
+
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -102,7 +141,10 @@ namespace Fittify.Api
                     });
                 });
             }
-            
+
+            //app.UseMiddleware<HeaderValidation>();
+            app.UseFittifyHeaderValidation(Configuration);
+
             loggerFactory.AddDebug(LogLevel.Debug);
 
             // Allows cross domain api consumption
@@ -131,6 +173,9 @@ namespace Fittify.Api
                 cfg.CreateMap<WorkoutHistory, WorkoutHistoryOfmForGet>()
                     .ForMember(dest => dest.Workout, opt => opt.MapFrom(src => src.Workout))
                     .ForMember(dest => dest.ExerciseHistoryIds, opt => opt.MapFrom(src => src.ExerciseHistories.Select(eH => eH.Id)));
+                cfg.CreateMap<IncomingRawHeaders, IncomingHeaders>()
+                    .ForMember(dest => dest.IncludeHateoas, opt => opt.MapFrom(src => src.IncludeHateoas.ToBool()))
+                    .ForMember(dest => dest.IncludeHateoas, opt => opt.MapFrom(src => int.Parse(src.ApiVersion)));
 
                 //cfg.CreateMap<Category, CategoryOfmForPatch>()
                 //    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name + " appendix"));
@@ -144,7 +189,11 @@ namespace Fittify.Api
             });
 
             Debug.Write(string.Format("Creating a foo: {0}", JsonConvert.SerializeObject(new WeightLiftingSet())));
-            
+
+            app.UseIpRateLimiting();
+
+            app.UseResponseCaching();
+            app.UseHttpCacheHeaders();
 
             app.UseMvc();
 
@@ -158,25 +207,6 @@ namespace Fittify.Api
         {
             routeBuilder.MapRoute("Default",
                 "{controller=Category}/{id?}");
-        }
-
-        public class BaseClassConstructor
-        {
-            public static D Construct<S, D>(S source, ResolutionContext context) where D : class where S: IEntityUniqueIdentifier<int>
-            {
-                D instance = context.Options.CreateInstance<D>();
-                IEntityUniqueIdentifier<int> completeInstance = null;
-                if (typeof(IEntityUniqueIdentifier<int>).IsAssignableFrom(typeof(D)))
-                {
-                    completeInstance = instance as IEntityUniqueIdentifier<int>;
-                    if (completeInstance != null)
-                    {
-                        completeInstance.Id = source.Id;
-                        instance = completeInstance as D;
-                    }
-                }
-                return instance;
-            }
         }
     }
 }

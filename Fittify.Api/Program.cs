@@ -1,8 +1,5 @@
-﻿using Fittify.DataModels.Models.Sport;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Newtonsoft.Json;
-using System.Diagnostics;
 using NLog.Web;
 
 namespace Fittify.Api

@@ -8,7 +8,7 @@ namespace Fittify.Api.Services
     /// </summary>
     public class TypeHelperService : ITypeHelperService
     {
-        public bool TypeHasProperties<T>(string fields, ref IList<string> errorMessages)
+        public bool TypeHasProperties<T>(string fields, ref List<string> errorMessages)
         {
             if (string.IsNullOrWhiteSpace(fields))
             {

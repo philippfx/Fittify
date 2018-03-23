@@ -4,7 +4,6 @@ using AutoMapper;
 using Fittify.Common;
 using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories;
-using Fittify.DataModels.Models;
 
 namespace Fittify.Api.OfmRepository
 {

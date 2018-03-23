@@ -1,38 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fittify.Api.Helpers;
-using Fittify.Api.OuterFacingModels;
 using Fittify.Api.Services;
 using Fittify.Common;
+using Fittify.Common.Helpers.ResourceParameters;
 
 namespace Fittify.Api.OfmRepository
 {
-    public class AsyncGetOfmGuardClauses<TOfmForGet, TId>
-        where TOfmForGet : LinkedResourceBase, IEntityUniqueIdentifier<TId>
+    /// <summary>
+    /// Sealed because this guard clause can be used for any incoming request.
+    /// For example, the "orderBy" and "fields" queries from the request uri are checked against the TOfmForGet and not any other class
+    /// </summary>
+    /// <typeparam name="TOfmForGet"></typeparam>
+    /// <typeparam name="TId"></typeparam>
+    public sealed class AsyncGetOfmGuardClauses<TOfmForGet, TId>
+        where TOfmForGet : class, IEntityUniqueIdentifier<TId>
         where TId : struct
     {
-
-        protected readonly ITypeHelperService TypeHelperService;
+        private readonly ITypeHelperService _typeHelperService;
         public AsyncGetOfmGuardClauses(ITypeHelperService typeHelperService)
         {
-            TypeHelperService = typeHelperService;
+            _typeHelperService = typeHelperService;
         }
-        public virtual async Task<OfmForGetQueryResult<TOfmForGet>> ValidateGetByIdInput(OfmForGetQueryResult<TOfmForGet> ofmForGetResult, string fields)
+        public async Task<OfmForGetQueryResult<TOfmForGet>> ValidateGetById(OfmForGetQueryResult<TOfmForGet> ofmForGetResult, string fields)
         {
-            ofmForGetResult.ErrorMessages = new List<string>();
-            IList<string> errorMessages = new List<string>();
-
             await Task.Run(() =>
             {
-                if (!TypeHelperService.TypeHasProperties<TOfmForGet>(fields, ref errorMessages))
+                var errorMessages = new List<string>();
+                if (!_typeHelperService.TypeHasProperties<TOfmForGet>(fields, ref errorMessages))
                 {
                     ofmForGetResult.ErrorMessages.AddRange(errorMessages);
                 }
             });
-
             return ofmForGetResult;
+        }
+
+        public async Task<OfmForGetCollectionQueryResult<TOfmForGet>> ValidateGetCollection(OfmForGetCollectionQueryResult<TOfmForGet> ofmForGetCollectionQueryResult, IResourceParameters resourceParameters)
+        {
+            await Task.Run(() =>
+            {
+                var errorMessages = new List<string>();
+                if (!_typeHelperService.TypeHasProperties<TOfmForGet>(resourceParameters.OrderBy, ref errorMessages))
+                {
+                    // Todo ref unknown fields error messages
+                    ofmForGetCollectionQueryResult.ErrorMessages.AddRange(errorMessages);
+                }
+
+                errorMessages = new List<string>();
+                if (!_typeHelperService.TypeHasProperties<TOfmForGet>(resourceParameters.Fields, ref errorMessages))
+                {
+                    // Todo ref unknown fields error messages
+                    ofmForGetCollectionQueryResult.ErrorMessages.AddRange(errorMessages);
+                }
+            });
+
+            return ofmForGetCollectionQueryResult;
         }
     }
 }

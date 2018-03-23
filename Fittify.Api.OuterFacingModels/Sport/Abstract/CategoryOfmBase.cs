@@ -7,7 +7,7 @@ using Fittify.Common.Helpers;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Abstract
 {
-    public abstract class CategoryOfmBase : LinkedResourceBase
+    public abstract class CategoryOfmBase
     {
         [Required]
         [MaxStringLength(128)]

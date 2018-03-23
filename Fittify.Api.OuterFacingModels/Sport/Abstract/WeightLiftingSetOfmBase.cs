@@ -5,7 +5,7 @@ using Fittify.Common;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Abstract
 {
-    public abstract class WeightLiftingSetOfmBase : LinkedResourceBase
+    public abstract class WeightLiftingSetOfmBase
     {
         public int? WeightFull { get; set; }
         public int? RepetitionsFull { get; set; }

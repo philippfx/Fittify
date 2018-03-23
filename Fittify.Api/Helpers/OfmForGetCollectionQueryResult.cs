@@ -8,11 +8,12 @@ namespace Fittify.Api.Helpers
     /// This class allows a better error message handling when doing erroneous GET queries. (ref and out are not allowed as parameters for async methods)
     /// </summary>
     /// <typeparam name="TOfmForGet">Is the concrete type of any OfmForGet class</typeparam>
-    public class OfmForGetCollectionQueryResult<TOfmForGet> : IPagedList where TOfmForGet : LinkedResourceBase
+    public class OfmForGetCollectionQueryResult<TOfmForGet> : IPagedList where TOfmForGet : class
     {
         public OfmForGetCollectionQueryResult()
         {
             ReturnedTOfmForGetCollection = new OfmForGetCollection<TOfmForGet>();
+            ErrorMessages = new List<string>();
         }
         public OfmForGetCollection<TOfmForGet> ReturnedTOfmForGetCollection { get; set; }
         public List<string> ErrorMessages { get; set; }

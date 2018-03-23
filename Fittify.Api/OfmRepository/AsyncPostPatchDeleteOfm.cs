@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
-using Fittify.Api.OuterFacingModels;
 using Fittify.Common;
 using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
@@ -24,7 +23,7 @@ namespace Fittify.Api.OfmRepository
 
         where TCrudRepository : IAsyncCrud<TEntity,TId> 
         where TEntity : class, IEntityUniqueIdentifier<TId>
-        where TOfmForGet : LinkedResourceBase, IEntityUniqueIdentifier<TId>
+        where TOfmForGet : class, IEntityUniqueIdentifier<TId>
         where TOfmForPost : class
         where TOfmForPatch : class, new()
         where TId : struct
@@ -64,7 +63,7 @@ namespace Fittify.Api.OfmRepository
             }
 
             var ofm = Mapper.Map<TEntity, TOfmForGet>(entity);
-            ofm = HateoasLinkFactory.CreateLinksForOfmForGet(ofm);
+            //ofm = HateoasLinkFactory.CreateLinksForOfmForGet(ofm.Id, null);
             return ofm;
         }
 

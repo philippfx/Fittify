@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Fittify.Api.Extensions
 {
@@ -55,6 +52,23 @@ namespace Fittify.Api.Extensions
                 return str;
             }
             return str.Replace(apiControllerString, "");
+        }
+
+        /// <summary>
+        /// Converts a string of "1" or case-insensitive "true" to true
+        /// </summary>
+        /// <param name="str"></param>
+        public static bool ToBool(this String str)
+        {
+            if (String.IsNullOrWhiteSpace(str))
+            {
+                return false;
+            }
+            if (str.Trim() == "1" || str.Trim().ToLower() == "true")
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
-using Fittify.Api.OuterFacingModels;
 using Fittify.Common.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.Controllers
 {
-    public class ControllerGuardClauses<TOfmForGet> where TOfmForGet : LinkedResourceBase
+    public sealed class ControllerGuardClauses<TOfmForGet> where TOfmForGet : class
     {
         private Controller _controller;
         private string _shortCamelCasedControllerName;

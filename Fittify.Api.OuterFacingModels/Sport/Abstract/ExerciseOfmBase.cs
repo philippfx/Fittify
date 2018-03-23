@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Abstract
 {
-    public class ExerciseOfmBase : LinkedResourceBase
+    public class ExerciseOfmBase
     {
         public string Name { get; set; }
     }
