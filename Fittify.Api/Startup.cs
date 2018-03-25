@@ -14,12 +14,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using AspNetCoreRateLimit;
+using Fittify.Api.Controllers.Generic;
 using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
 using Fittify.Api.Middleware;
 using Fittify.Api.Services;
 using Fittify.Common.Helpers;
-using Marvin.Cache.Headers;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -48,17 +48,20 @@ namespace Fittify.Api
         {
             services.AddCors();
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddMvc(setupAction =>
-            {
-                setupAction.ReturnHttpNotAcceptable = true; // returns 406 for header "Accept application/xml2" for example (or any other unsupported content type)
-                setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
-                setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
-            })
+            services.AddMvc
+                (setupAction =>
+                {
+                    setupAction.ReturnHttpNotAcceptable = true; // returns 406 for header "Accept application/xml2" for example (or any other unsupported content type)
+                    setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+                    setupAction.InputFormatters.Add(new XmlDataContractSerializerInputFormatter());
+                })
                 .AddJsonOptions(options => // ensures camel cased properties for data shaped properties
                 {
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver();
-                }); 
+                })
+                .ConfigureApplicationPartManager(p => // supports generic controllers 
+                    p.FeatureProviders.Add(new GenericControllerFeatureProvider())); 
 
             var dbConnectionString = Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
             services.AddDbContext<FittifyContext>(options => options.UseSqlServer(dbConnectionString));
@@ -87,7 +90,7 @@ namespace Fittify.Api
                     validationModelOptions.AddMustRevalidate = true;
                 });
 
-            services.AddResponseCaching();
+            //services.AddResponseCaching();
 
             services.AddMemoryCache(); // Necessary for rate limit
 
@@ -98,13 +101,13 @@ namespace Fittify.Api
                     new RateLimitRule()
                     {
                         Endpoint = "*",
-                        Limit = 5,
+                        Limit = 500,
                         Period = "1m"
                     },
                     new RateLimitRule()
                     {
                         Endpoint = "*",
-                        Limit = 3,
+                        Limit = 300,
                         Period = "10s"
                     }
                 };
@@ -144,6 +147,7 @@ namespace Fittify.Api
 
             //app.UseMiddleware<HeaderValidation>();
             app.UseFittifyHeaderValidation(Configuration);
+            app.EnsureFittifyHeaderDefaultValues(Configuration);
 
             loggerFactory.AddDebug(LogLevel.Debug);
 
@@ -152,7 +156,7 @@ namespace Fittify.Api
             builder.WithOrigins("http://localhost:4200")
                    .AllowAnyHeader()
             );
-
+            
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 // Entity to OfmGet
@@ -172,13 +176,13 @@ namespace Fittify.Api
                     .ForMember(dest => dest.RangeOfCardioSetIds, opt => opt.MapFrom(src => src.CardioSets.Select(s => s.Id).ToList().ToStringOfIds()));
                 cfg.CreateMap<WorkoutHistory, WorkoutHistoryOfmForGet>()
                     .ForMember(dest => dest.Workout, opt => opt.MapFrom(src => src.Workout))
-                    .ForMember(dest => dest.ExerciseHistoryIds, opt => opt.MapFrom(src => src.ExerciseHistories.Select(eH => eH.Id)));
+                    .ForMember(dest => dest.RangeOfExerciseHistoryIds, opt => opt.MapFrom(src => src.ExerciseHistories.Select(eH => eH.Id).ToList().ToStringOfIds()));
                 cfg.CreateMap<IncomingRawHeaders, IncomingHeaders>()
                     .ForMember(dest => dest.IncludeHateoas, opt => opt.MapFrom(src => src.IncludeHateoas.ToBool()))
-                    .ForMember(dest => dest.IncludeHateoas, opt => opt.MapFrom(src => int.Parse(src.ApiVersion)));
+                    .ForMember(dest => dest.IncludeHateoas, opt => opt.MapFrom(src => int.Parse(src.IncludeHateoas)));
 
-                //cfg.CreateMap<Category, CategoryOfmForPatch>()
-                //    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name + " appendix"));
+                //cfg.CreateMap<CategoryOfmForPatch, Category>()
+                //    .ForMember(dest => dest.Workouts, opt => opt.);
 
                 // OfmPpp to Entity
                 //cfg.CreateMap<WorkoutHistoryOfmForPatch, WorkoutHistory>();
@@ -192,8 +196,8 @@ namespace Fittify.Api
 
             app.UseIpRateLimiting();
 
-            app.UseResponseCaching();
-            app.UseHttpCacheHeaders();
+            //app.UseResponseCaching();
+            //app.UseHttpCacheHeaders();
 
             app.UseMvc();
 

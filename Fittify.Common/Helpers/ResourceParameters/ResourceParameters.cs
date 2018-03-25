@@ -2,10 +2,14 @@
 {
     public class ResourceParameters : IResourceParameters
     {
-        private const int MaxPageSize = 20;
+        [ValidRegularExpressionRangeOfIntIds(RegularExpressions.RangeOfIntIds)]
+        [ValidAscendingOrderRangeOfIntIds]
+        public string Ids { get; set; }
+
+        private const int MaxPageSize = 100;
         public int PageNumber { get; set; } = 1;
 
-        private int _pageSize = 10;
+        private int _pageSize = 100;
         public int PageSize
         {
             get => _pageSize;

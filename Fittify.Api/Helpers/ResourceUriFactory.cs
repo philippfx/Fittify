@@ -7,9 +7,9 @@ namespace Fittify.Api.Helpers
     {
         // Todo Refactor so that actionName is created dynamically
         public static string CreateResourceUriForIResourceParameters(
-            IResourceParameters authorsResourceParameters,
+            IResourceParameters resourceParameters,
             IUrlHelper urlHelper,
-            ResourceUriType type, 
+            ResourceUriType type,
             string shortPascalCasedControllerName)
         {
             switch (type)
@@ -18,41 +18,41 @@ namespace Fittify.Api.Helpers
                     return urlHelper.Link("Get" + shortPascalCasedControllerName + "Collection",
                         new
                         {
-                            fields = authorsResourceParameters.Fields,
-                            orderBy = authorsResourceParameters.OrderBy,
-                            //searchQuery = authorsResourceParameters.SearchQuery,
-                            //genre = authorsResourceParameters.Genre,
-                            pageNumber = authorsResourceParameters.PageNumber - 1,
-                            pageSize = authorsResourceParameters.PageSize
+                            fields = resourceParameters.Fields,
+                            orderBy = resourceParameters.OrderBy,
+                            //searchQuery = resourceParameters.SearchQuery,
+                            //genre = resourceParameters.Genre,
+                            pageNumber = resourceParameters.PageNumber - 1,
+                            pageSize = resourceParameters.PageSize
                         });
                 case ResourceUriType.NextPage:
                     return urlHelper.Link("Get" + shortPascalCasedControllerName + "Collection",
                         new
                         {
-                            fields = authorsResourceParameters.Fields,
-                            orderBy = authorsResourceParameters.OrderBy,
-                            //searchQuery = authorsResourceParameters.SearchQuery,
-                            //genre = authorsResourceParameters.Genre,
-                            pageNumber = authorsResourceParameters.PageNumber + 1,
-                            pageSize = authorsResourceParameters.PageSize
+                            fields = resourceParameters.Fields,
+                            orderBy = resourceParameters.OrderBy,
+                            //searchQuery = resourceParameters.SearchQuery,
+                            //genre = resourceParameters.Genre,
+                            pageNumber = resourceParameters.PageNumber + 1,
+                            pageSize = resourceParameters.PageSize
                         });
                 case ResourceUriType.Current:
                 default:
                     return urlHelper.Link("Get" + shortPascalCasedControllerName + "Collection",
                         new
                         {
-                            fields = authorsResourceParameters.Fields,
-                            orderBy = authorsResourceParameters.OrderBy,
-                            //searchQuery = authorsResourceParameters.SearchQuery,
-                            //genre = authorsResourceParameters.Genre,
-                            pageNumber = authorsResourceParameters.PageNumber,
-                            pageSize = authorsResourceParameters.PageSize
+                            fields = resourceParameters.Fields,
+                            orderBy = resourceParameters.OrderBy,
+                            //searchQuery = resourceParameters.SearchQuery,
+                            //genre = resourceParameters.Genre,
+                            pageNumber = resourceParameters.PageNumber,
+                            pageSize = resourceParameters.PageSize
                         });
             }
         }
 
         public static string CreateResourceUriForISearchQueryResourceParameters(
-           ISearchQueryResourceParameters authorsResourceParameters,
+           ISearchQueryResourceParameters resourceParameters,
            IUrlHelper urlHelper,
            ResourceUriType type,
            string shortCamelCasedControllerName)
@@ -63,35 +63,83 @@ namespace Fittify.Api.Helpers
                     return urlHelper.Link("Get" + shortCamelCasedControllerName + "Collection",
                         new
                         {
-                            fields = authorsResourceParameters.Fields,
-                            orderBy = authorsResourceParameters.OrderBy,
-                            searchQuery = authorsResourceParameters.SearchQuery,
-                            //genre = authorsResourceParameters.Genre,
-                            pageNumber = authorsResourceParameters.PageNumber - 1,
-                            pageSize = authorsResourceParameters.PageSize
+                            fields = resourceParameters.Fields,
+                            orderBy = resourceParameters.OrderBy,
+                            searchQuery = resourceParameters.SearchQuery,
+                            //genre = resourceParameters.Genre,
+                            pageNumber = resourceParameters.PageNumber - 1,
+                            pageSize = resourceParameters.PageSize
                         });
                 case ResourceUriType.NextPage:
                     return urlHelper.Link("Get" + shortCamelCasedControllerName + "Collection",
                         new
                         {
-                            fields = authorsResourceParameters.Fields,
-                            orderBy = authorsResourceParameters.OrderBy,
-                            searchQuery = authorsResourceParameters.SearchQuery,
-                            //genre = authorsResourceParameters.Genre,
-                            pageNumber = authorsResourceParameters.PageNumber + 1,
-                            pageSize = authorsResourceParameters.PageSize
+                            fields = resourceParameters.Fields,
+                            orderBy = resourceParameters.OrderBy,
+                            searchQuery = resourceParameters.SearchQuery,
+                            //genre = resourceParameters.Genre,
+                            pageNumber = resourceParameters.PageNumber + 1,
+                            pageSize = resourceParameters.PageSize
                         });
                 case ResourceUriType.Current:
                 default:
                     return urlHelper.Link("Get" + shortCamelCasedControllerName + "Collection",
                         new
                         {
-                            fields = authorsResourceParameters.Fields,
-                            orderBy = authorsResourceParameters.OrderBy,
-                            searchQuery = authorsResourceParameters.SearchQuery,
-                            //genre = authorsResourceParameters.Genre,
-                            pageNumber = authorsResourceParameters.PageNumber,
-                            pageSize = authorsResourceParameters.PageSize
+                            fields = resourceParameters.Fields,
+                            orderBy = resourceParameters.OrderBy,
+                            searchQuery = resourceParameters.SearchQuery,
+                            //genre = resourceParameters.Genre,
+                            pageNumber = resourceParameters.PageNumber,
+                            pageSize = resourceParameters.PageSize
+                        });
+            }
+        }
+
+        public static string CreateResourceUriForISearchQueryDateTimeStartEnd(
+           IDateTimeStartEndResourceParameters resourceParameters,
+           IUrlHelper urlHelper,
+           ResourceUriType type,
+           string shortCamelCasedControllerName)
+        {
+            switch (type)
+            {
+                case ResourceUriType.PreviousPage:
+                    return urlHelper.Link("Get" + shortCamelCasedControllerName + "Collection",
+                        new
+                        {
+                            fields = resourceParameters.Fields,
+                            orderBy = resourceParameters.OrderBy,
+                            dateTimeStart = resourceParameters.DateTimeStart,
+                            dateTimeEnd = resourceParameters.DateTimeEnd,
+                            //genre = resourceParameters.Genre,
+                            pageNumber = resourceParameters.PageNumber - 1,
+                            pageSize = resourceParameters.PageSize
+                        });
+                case ResourceUriType.NextPage:
+                    return urlHelper.Link("Get" + shortCamelCasedControllerName + "Collection",
+                        new
+                        {
+                            fields = resourceParameters.Fields,
+                            orderBy = resourceParameters.OrderBy,
+                            dateTimeStart = resourceParameters.DateTimeStart,
+                            dateTimeEnd = resourceParameters.DateTimeEnd,
+                            //genre = resourceParameters.Genre,
+                            pageNumber = resourceParameters.PageNumber + 1,
+                            pageSize = resourceParameters.PageSize
+                        });
+                case ResourceUriType.Current:
+                default:
+                    return urlHelper.Link("Get" + shortCamelCasedControllerName + "Collection",
+                        new
+                        {
+                            fields = resourceParameters.Fields,
+                            orderBy = resourceParameters.OrderBy,
+                            dateTimeStart = resourceParameters.DateTimeStart,
+                            dateTimeEnd = resourceParameters.DateTimeEnd,
+                            //genre = resourceParameters.Genre,
+                            pageNumber = resourceParameters.PageNumber,
+                            pageSize = resourceParameters.PageSize
                         });
             }
         }

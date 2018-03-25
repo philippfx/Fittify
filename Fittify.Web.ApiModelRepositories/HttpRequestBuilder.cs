@@ -16,6 +16,7 @@ namespace Fittify.Web.ApiModelRepositories
 
         public HttpRequestBuilder()
         {
+
         }
 
         public HttpRequestBuilder AddMethod(HttpMethod method)
@@ -67,7 +68,10 @@ namespace Fittify.Web.ApiModelRepositories
             };
 
             if (this.content != null)
+            {
                 request.Content = this.content;
+                //request.Content.Headers.Add("Content-Type", "application/json");
+            }
 
             if (!string.IsNullOrEmpty(this.bearerToken))
                 request.Headers.Authorization =
@@ -77,6 +81,8 @@ namespace Fittify.Web.ApiModelRepositories
             if (!string.IsNullOrEmpty(this.acceptHeader))
                 request.Headers.Accept.Add(
                     new MediaTypeWithQualityHeaderValue(this.acceptHeader));
+
+            
 
             // Setup client
             var client = new System.Net.Http.HttpClient();

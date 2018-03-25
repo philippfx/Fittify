@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class WorkoutRepository : AsyncCrudForEntityName<Workout,int>
+    public class WorkoutRepository : AsyncGetCollectionForEntityName<Workout, WorkoutOfmForGet, int>
     {
         public WorkoutRepository()
         {

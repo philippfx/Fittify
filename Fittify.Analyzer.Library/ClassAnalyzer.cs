@@ -6,9 +6,6 @@ using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.DataModels.Models.Sport;
-using Fittify.Web.ApiModels.Sport.Get;
-using Fittify.Web.ApiModels.Sport.Patch;
-using Fittify.Web.ApiModels.Sport.Post;
 using Fittify.Web.ViewModels.Sport;
 using Newtonsoft.Json.Linq;
 
@@ -60,9 +57,9 @@ namespace Fittify.Analyzer.Library
                 Tuple.Create(typeof(WorkoutOfmForGet).Namespace, typeof(WorkoutOfmForGet).Assembly.GetTypes().Where(t => String.Equals(t.Namespace, typeof(WorkoutOfmForGet).Namespace, StringComparison.Ordinal)).Select(s => s.Name).OrderBy(o => o).ToArray()),
                 Tuple.Create(typeof(WorkoutOfmForPost).Namespace, typeof(WorkoutOfmForPost).Assembly.GetTypes().Where(t => String.Equals(t.Namespace, typeof(WorkoutOfmForPost).Namespace, StringComparison.Ordinal)).Select(s => s.Name).OrderBy(o => o).ToArray()),
                 Tuple.Create(typeof(WorkoutOfmForPatch).Namespace, typeof(WorkoutOfmForPatch).Assembly.GetTypes().Where(t => String.Equals(t.Namespace,  typeof(WorkoutOfmForPatch).Namespace, StringComparison.Ordinal)).Select(s => s.Name).OrderBy(o => o).ToArray()),
-                Tuple.Create(typeof(WorkoutForGet).Namespace, typeof(WorkoutForGet).Assembly.GetTypes().Where(t => String.Equals(t.Namespace, typeof(WorkoutForGet).Namespace, StringComparison.Ordinal)).Select(s => s.Name).OrderBy(o => o).ToArray()),
-                Tuple.Create(typeof(WorkoutForPost).Namespace, typeof(WorkoutForPost).Assembly.GetTypes().Where(t => String.Equals(t.Namespace, typeof(WorkoutForPost).Namespace, StringComparison.Ordinal)).Select(s => s.Name).OrderBy(o => o).ToArray()),
-                Tuple.Create(typeof(WorkoutForPatch).Namespace, typeof(WorkoutForPatch).Assembly.GetTypes().Where(t => String.Equals(t.Namespace, typeof(WorkoutForPatch).Namespace, StringComparison.Ordinal)).Select(s => s.Name).OrderBy(o => o).ToArray()),
+                Tuple.Create(typeof(WorkoutOfmForGet).Namespace, typeof(WorkoutOfmForGet).Assembly.GetTypes().Where(t => String.Equals(t.Namespace, typeof(WorkoutOfmForGet).Namespace, StringComparison.Ordinal)).Select(s => s.Name).OrderBy(o => o).ToArray()),
+                Tuple.Create(typeof(WorkoutOfmForPost).Namespace, typeof(WorkoutOfmForPost).Assembly.GetTypes().Where(t => String.Equals(t.Namespace, typeof(WorkoutOfmForPost).Namespace, StringComparison.Ordinal)).Select(s => s.Name).OrderBy(o => o).ToArray()),
+                Tuple.Create(typeof(WorkoutOfmForPatch).Namespace, typeof(WorkoutOfmForPatch).Assembly.GetTypes().Where(t => String.Equals(t.Namespace, typeof(WorkoutOfmForPatch).Namespace, StringComparison.Ordinal)).Select(s => s.Name).OrderBy(o => o).ToArray()),
                 Tuple.Create(typeof(WorkoutViewModel).Namespace, typeof(WorkoutViewModel).Assembly.GetTypes().Where(t => String.Equals(t.Namespace, typeof(WorkoutViewModel).Namespace, StringComparison.Ordinal)).Select(s => s.Name).OrderBy(o => o).ToArray())
             };
 

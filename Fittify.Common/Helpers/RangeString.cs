@@ -1,11 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Fittify.Common.Helpers
 {
     public static class RangeString
     {
+        public static bool ValidateInputString(string str)
+        {
+            if (Regex.IsMatch(str, RegularExpressions.RangeOfIntIds))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Converts a valid concatenated string of ints to List of ints
         /// </summary>

@@ -7,17 +7,18 @@ using Fittify.DataModels.Models.Sport;
 
 namespace Fittify.DataModelRepositories
 {
-    public class AsyncCrudForEntityName<TEntity, TId> : AsyncCrud<TEntity, TId>, IAsyncCrudForEntityName<TEntity, TId>
+    public class AsyncGetCollectionForEntityName<TEntity, TOfmForGet, TId> : AsyncCrud<TEntity, TId>, IAsyncGetCollectionForEntityName<TEntity, TId>
         where TEntity : class, IEntityName<TId>
+        where TOfmForGet : class
         where TId : struct
     {
 
-        protected AsyncCrudForEntityName(FittifyContext fittifyContext) : base(fittifyContext)
+        protected AsyncGetCollectionForEntityName(FittifyContext fittifyContext) : base(fittifyContext)
         {
 
         }
 
-        protected AsyncCrudForEntityName()
+        protected AsyncGetCollectionForEntityName()
         {
 
         }
@@ -31,7 +32,7 @@ namespace Fittify.DataModelRepositories
             var allEntitiesQueryableBeforePaging =
                 GetAll()
                     .ApplySort(resourceParameters.OrderBy,
-                        PropertyMappingService.GetPropertyMapping<CategoryOfmForGet, Category>());
+                        PropertyMappingService.GetPropertyMapping<TOfmForGet, TEntity>());
 
 
             if (!string.IsNullOrEmpty(resourceParameters.SearchQuery))
@@ -40,7 +41,7 @@ namespace Fittify.DataModelRepositories
                 var searchNameForWhereClause = resourceParameters.SearchQuery
                     .Trim().ToLowerInvariant();
                 allEntitiesQueryableBeforePaging = allEntitiesQueryableBeforePaging
-                    .Where(a => a.Name.ToLowerInvariant().Contains(resourceParameters.SearchQuery.ToLowerInvariant()));
+                    .Where(a => a.Name.ToLowerInvariant().Contains(searchNameForWhereClause));
             }
 
             return PagedList<TEntity>.Create(allEntitiesQueryableBeforePaging,

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
 using Fittify.Api.OuterFacingModels;
 using Fittify.Common.Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
@@ -17,21 +17,24 @@ namespace Fittify.Api.Controllers
         private IUrlHelper _urlHelper;
         private IActionDescriptorCollectionProvider _provider;
         private readonly IConfiguration _appConfiguration;
+        private readonly IncomingHeaders _incomingHeaders;
 
         public RootController(IUrlHelper urlHelper,
             IActionDescriptorCollectionProvider adcProvider,
-            IConfiguration appConfiguration)
+            IConfiguration appConfiguration,
+            IHttpContextAccessor httpContextAccesor)
         {
             _provider = adcProvider;
             _urlHelper = urlHelper;
             _appConfiguration = appConfiguration;
+            _incomingHeaders = Mapper.Map<IncomingHeaders>(httpContextAccesor.HttpContext.Items[nameof(IncomingRawHeaders)] as IncomingRawHeaders);
         }
 
         [HttpGet(Name = "GetRoot")]
-        public IActionResult GetRoot(IncomingRawHeaders incomingRawHeaders)
+        public IActionResult GetRoot()
         {
-            if(!incomingRawHeaders.Validate(_appConfiguration, out var errorMessages)) return BadRequest(new Dictionary<string, List<string>>() { { "header", errorMessages } });
-            var incomingHeaders = Mapper.Map<IncomingHeaders>(incomingRawHeaders);
+            //if (!incomingRawHeaders.Validate(_appConfiguration, out var errorMessages)) return BadRequest(new Dictionary<string, List<string>>() { { "header", errorMessages } });
+            //var incomingHeaders = Mapper.Map<IncomingHeaders>(incomingRawHeaders);
 
             var routes = _provider.ActionDescriptors.Items
                 .Select(x => new

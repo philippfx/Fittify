@@ -4,10 +4,10 @@ using Fittify.Common.Helpers;
 
 namespace Fittify.Api.OuterFacingModels.Helpers
 {
-    public class RegularExpressionRangeOfIntIdAttribute : ValidationAttribute
+    public class ValidRegularExpressionRangeOfIntIdsAttribute : ValidationAttribute
     {
         private readonly string _pattern;
-        public RegularExpressionRangeOfIntIdAttribute(string pattern)
+        public ValidRegularExpressionRangeOfIntIdsAttribute(string pattern)
         {
             _pattern = pattern;
         }

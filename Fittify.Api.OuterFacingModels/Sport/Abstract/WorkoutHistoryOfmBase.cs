@@ -9,8 +9,7 @@ namespace Fittify.Api.OuterFacingModels.Sport.Abstract
         public DateTime? DateTimeStart { get; set; }
         public DateTime? DateTimeEnd { get; set; }
         
-        public WorkoutOfmBase Workout { get; set; }
+        //public WorkoutOfmBase Workout { get; set; }
 
-        public virtual IEnumerable<int> ExerciseHistoryIds { get; set; }
     }
 }

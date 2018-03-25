@@ -35,21 +35,24 @@ namespace Fittify.Api.OfmRepository
             return ofmForGetResult;
         }
 
-        public async Task<OfmForGetCollectionQueryResult<TOfmForGet>> ValidateGetCollection(OfmForGetCollectionQueryResult<TOfmForGet> ofmForGetCollectionQueryResult, IResourceParameters resourceParameters)
+        public async Task<OfmForGetCollectionQueryResult<TOfmForGet>> ValidateResourceParameters(OfmForGetCollectionQueryResult<TOfmForGet> ofmForGetCollectionQueryResult, IResourceParameters resourceParameters)
         {
             await Task.Run(() =>
             {
                 var errorMessages = new List<string>();
+                if (resourceParameters.Ids == null)
+                {
+
+                }
+
                 if (!_typeHelperService.TypeHasProperties<TOfmForGet>(resourceParameters.OrderBy, ref errorMessages))
                 {
-                    // Todo ref unknown fields error messages
                     ofmForGetCollectionQueryResult.ErrorMessages.AddRange(errorMessages);
                 }
 
                 errorMessages = new List<string>();
                 if (!_typeHelperService.TypeHasProperties<TOfmForGet>(resourceParameters.Fields, ref errorMessages))
                 {
-                    // Todo ref unknown fields error messages
                     ofmForGetCollectionQueryResult.ErrorMessages.AddRange(errorMessages);
                 }
             });

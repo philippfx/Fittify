@@ -6,8 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.Helpers
 {
-    public class HateoasLinkFactory<TOfmForGet, TId>
-        where TOfmForGet : class
+    public class HateoasLinkFactory<TId>
         where TId : struct
     {
         protected readonly IUrlHelper UrlHelper;
@@ -17,7 +16,7 @@ namespace Fittify.Api.Helpers
         {
             UrlHelper = urlHelper;
             ShortPascalCasedControllerName = controllerName.ToShortPascalCasedControllerNameOrDefault();
-            ShortCamelCasedControllerName = controllerName.ToShortCamelCasedOfmForGetNameOrDefault();
+            ShortCamelCasedControllerName = controllerName.ToShortCamelCasedControllerNameOrDefault();
         }
         
         public IEnumerable<HateoasLink> CreateLinksForOfmForGet(TId id, string fields)
@@ -40,7 +39,7 @@ namespace Fittify.Api.Helpers
             }
             
             links.Add(
-                new HateoasLink(UrlHelper.Link("Create" + ShortPascalCasedControllerName, new { id = id }),
+                new HateoasLink(UrlHelper.Link("Create" + ShortPascalCasedControllerName, null),
                     "create_" + ShortCamelCasedControllerName,
                     "POST"));
 
@@ -118,7 +117,37 @@ namespace Fittify.Api.Helpers
 
             return links;
         }
-        
+
+        public IEnumerable<HateoasLink> CreateLinksForOfmGetCollectionQueryIncludeByDateTimeStartEnd(
+            IDateTimeStartEndResourceParameters resourceParameters,
+            bool hasPrevious, bool hasNext)
+        {
+            var links = new List<HateoasLink>();
+
+            // self 
+            links.Add(
+                new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryDateTimeStartEnd(resourceParameters, UrlHelper, ResourceUriType.Current, ShortPascalCasedControllerName)
+                    , "self", "GET"));
+
+            if (hasNext)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryDateTimeStartEnd(resourceParameters, UrlHelper,
+                            ResourceUriType.NextPage, ShortPascalCasedControllerName),
+                        "nextPage", "GET"));
+            }
+
+            if (hasPrevious)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryDateTimeStartEnd(resourceParameters, UrlHelper,
+                            ResourceUriType.PreviousPage, ShortPascalCasedControllerName),
+                        "previousPage", "GET"));
+            }
+
+            return links;
+        }
+
         public IEnumerable<HateoasLink> CreateLinksForRootController(
             ISearchQueryResourceParameters resourceParameters,
             bool hasPrevious, bool hasNext)

@@ -7,7 +7,6 @@ namespace Fittify.Api.OfmRepository
     public interface IAsyncGetOfmCollectionByNameSearch<TOfmForGet>
         where TOfmForGet : class
     {
-        Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(
-            ISearchQueryResourceParameters resourceParameters);
+        Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(ISearchQueryResourceParameters resourceParameters);
     }
 }

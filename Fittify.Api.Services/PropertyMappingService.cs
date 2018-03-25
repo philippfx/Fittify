@@ -15,7 +15,9 @@ namespace Fittify.Api.Services
                 {"Genre", new PropertyMappingValue(new List<string>() {"Genre"})},
                 {"Age", new PropertyMappingValue(new List<string>() {"DateOfBirth"}, true)},
                 {"FullName", new PropertyMappingValue(new List<string>() {"FirstName", "LastName"})},
-                {"Name", new PropertyMappingValue(new List<string>() {"Name"})}
+                {"Name", new PropertyMappingValue(new List<string>() {"Name"})},
+                {"DateTimeStart", new PropertyMappingValue(new List<string>() {"DateTimeStart"})},
+                {"DateTimeEnd", new PropertyMappingValue(new List<string>() {"DateTimeEnd"})},
             };
 
         private IList<IPropertyMapping> propertyMappings = new List<IPropertyMapping>();
@@ -23,8 +25,15 @@ namespace Fittify.Api.Services
         public PropertyMappingService()
         {
             // Todo this must be refactored to TOfmForGet and Entity!
-            //propertyMappings.Add(new PropertyMapping<CategoryOfmBase, Category>(_authorPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<CardioSetOfmForGet, CardioSet>(_authorPropertyMapping));
             propertyMappings.Add(new PropertyMapping<CategoryOfmForGet, Category>(_authorPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<ExerciseHistoryOfmForGet, ExerciseHistory>(_authorPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<ExerciseOfmForGet, Exercise>(_authorPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<MapExerciseWorkoutOfmForGet, MapExerciseWorkout>(_authorPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<WeightLiftingSetOfmForGet, WeightLiftingSet>(_authorPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<WorkoutHistoryOfmForGet, WorkoutHistory>(_authorPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<WorkoutOfmForGet, Workout>(_authorPropertyMapping));
+
         }
         public Dictionary<string, PropertyMappingValue> GetPropertyMapping
             <TSource, TDestination>()
@@ -56,7 +65,9 @@ namespace Fittify.Api.Services
             foreach (var field in fieldsAfterSplit)
             {
                 // trim
-                var trimmedField = field.Trim();
+                var trimmedField = field
+                    .Replace(" desc", "") // excluding orderBy descending
+                    .Trim();
 
                 // remove everything after the first " " - if the fields 
                 // are coming from an orderBy string, this part must be 

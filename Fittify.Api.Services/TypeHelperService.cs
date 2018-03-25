@@ -24,7 +24,9 @@ namespace Fittify.Api.Services
                 // trim each field, as it might contain leading 
                 // or trailing spaces. Can't trim the var in foreach,
                 // so use another var.
-                var propertyName = field.Trim();
+                var propertyName = field
+                    .Replace(" desc", "") // excluding orderBy descending
+                    .Trim();
 
                 // use reflection to check if the property can be
                 // found on T. 

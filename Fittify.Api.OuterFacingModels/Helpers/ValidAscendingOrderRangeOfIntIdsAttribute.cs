@@ -3,7 +3,7 @@ using Fittify.Common.Helpers;
 
 namespace Fittify.Api.OuterFacingModels.Helpers
 {
-    public class AscendingOrderIntIdRangeAttribute : ValidationAttribute
+    public class ValidAscendingOrderRangeOfIntIdsAttribute : ValidationAttribute
     {
         public override bool IsValid(object value)
         {

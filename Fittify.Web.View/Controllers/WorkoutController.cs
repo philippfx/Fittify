@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ApiModelRepositories;
 using Fittify.Web.ApiModelRepositories.Sport;
-using Fittify.Web.ApiModels.Sport.Post;
+//using Fittify.Web.ApiModels.Sport.Post;
 using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -35,8 +36,8 @@ namespace Fittify.Web.View.Controllers
         [Route("workout/{workoutId}/associatedexercises")]
         public async Task<IActionResult> AssociateExercise(int workoutId, [FromForm] ExerciseViewModel exerciseViewModel)
         {
-            var gppdRepoMapExerciseWorkout = new GppdRepository<MapExerciseWorkoutForPost>("http://localhost:52275/api/mapexerciseworkouts");
-            var mapExerciseWorkout = new MapExerciseWorkoutForPost() { WorkoutId = workoutId, ExerciseId = exerciseViewModel.Id };
+            var gppdRepoMapExerciseWorkout = new GppdRepository<MapExerciseWorkoutOfmForPost>("http://localhost:52275/api/mapexerciseworkouts");
+            var mapExerciseWorkout = new MapExerciseWorkoutOfmForPost() { WorkoutId = workoutId, ExerciseId = exerciseViewModel.Id };
             await gppdRepoMapExerciseWorkout.Post(mapExerciseWorkout);
             return RedirectToAction("AssociatedExercises", "Workout", new { workoutId = workoutId });
         }

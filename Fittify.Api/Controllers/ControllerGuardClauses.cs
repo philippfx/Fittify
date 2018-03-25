@@ -61,7 +61,7 @@ namespace Fittify.Api.Controllers
             if (ofmForGetQueryResult.ReturnedTOfmForGet == null)
             {
                 _controller.ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
-                objectResult = new UnprocessableEntityObjectResult(_controller.ModelState);
+                objectResult = new EntityNotFoundObjectResult(_controller.ModelState);
                 return false;
             }
             return true;

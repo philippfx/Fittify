@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
@@ -16,11 +15,11 @@ namespace Fittify.Api.Helpers
             var mostRecentApiVersion = AppConfiguration.GetValue<string>("LatestApiVersion");
             if (!int.TryParse(mostRecentApiVersion, out var version))
             {
-                throw new ArgumentException("The latest api version is incorrectly set in the appsettings. It must be an integer value greather than '0'.");
+                throw new ArgumentException("The latest " + ConstantPropertyNames.ApiVersion.ToLower() + " is incorrectly set in the appsettings. It must be an integer value greather than '0'.");
             }
             if (version <= 0)
             {
-                throw new ArgumentException("The latest api version is incorrectly set in the appsettings. It must be an integer value greather than '0'.");
+                throw new ArgumentException("The latest " + ConstantPropertyNames.ApiVersion.ToLower() + " is incorrectly set in the appsettings. It must be an integer value greather than '0'.");
             }
 
             ApiVersion = version.ToString();
@@ -28,10 +27,10 @@ namespace Fittify.Api.Helpers
         [FromHeader(Name = "Content-Type")]
         public string ContentType { get; set; } = "application/json";
         
-        [FromHeader(Name = "Include-Hateoas")]
+        [FromHeader(Name = ConstantPropertyNames.IncludeHateoas)]
         public string IncludeHateoas { get; set; } = "0";
 
-        [FromHeader(Name = "Api-Version")]
+        [FromHeader(Name = ConstantPropertyNames.ApiVersion)]
         public string ApiVersion { get; set; }
     }
 }

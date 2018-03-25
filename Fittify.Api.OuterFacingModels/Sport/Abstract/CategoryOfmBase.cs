@@ -12,9 +12,5 @@ namespace Fittify.Api.OuterFacingModels.Sport.Abstract
         [Required]
         [MaxStringLength(128)]
         public virtual string Name { get; set; }
-
-        [RegularExpressionRangeOfIntId(RegularExpressions.RangeOfIntIds)]
-        [AscendingOrderIntIdRange]
-        public virtual string RangeOfWorkoutIds { get; set; }
     }
 }

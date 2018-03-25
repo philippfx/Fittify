@@ -9,5 +9,9 @@ namespace Fittify.Api.OuterFacingModels.Sport.Get
     public class CategoryOfmForGet : CategoryOfmBase, IEntityUniqueIdentifier<int>, IOfmForGet
     {
         public int Id { get; set; }
+
+        [ValidRegularExpressionRangeOfIntIds(RegularExpressions.RangeOfIntIds)]
+        [ValidAscendingOrderRangeOfIntIds]
+        public virtual string RangeOfWorkoutIds { get; set; }
     }
 }

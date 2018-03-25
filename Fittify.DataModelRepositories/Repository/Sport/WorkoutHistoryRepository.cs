@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fittify.Api.OuterFacingModels.Sport.Get;
+using Fittify.Common.Helpers.ResourceParameters;
+using Fittify.Common.Helpers.ResourceParameters.Sport;
+using Fittify.DataModelRepositories.Helpers;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class WorkoutHistoryRepository : AsyncCrudForEntityDateTimeStartEnd<WorkoutHistory,int>
+    public class WorkoutHistoryRepository : AsyncCrud<WorkoutHistory, int>
+//AsyncGetCollectionForEntityDateTimeStartEnd<WorkoutHistory, WorkoutHistoryOfmForGet, int>
     {
         public WorkoutHistoryRepository()
         {
@@ -95,18 +100,44 @@ namespace Fittify.DataModelRepositories.Repository.Sport
             return newWorkoutHistory;
         }
 
-        public async Task<List<WorkoutHistory>> GetCollectionByFkWorkoutId(int workoutId)
-        {
-            return await FittifyContext.Set<WorkoutHistory>()
-                .Where(wH => wH.WorkoutId == workoutId)
-                .Include(i => i.Workout)
-                .Include(i => i.ExerciseHistories)
-                .ToListAsync();
-        }
-
         public override Task<WorkoutHistory> GetById(int id)
         {
             return FittifyContext.WorkoutHistories.Include(i => i.ExerciseHistories).Include(i => i.Workout).FirstOrDefaultAsync(wH => wH.Id == id);
+        }
+
+        public PagedList<WorkoutHistory> GetCollection(WorkoutHistoryResourceParameters resourceParameters)
+        {
+            // Todo can be improved by calling base class and this overriding method just adds the INCLUDE statements
+            var allEntitiesQueryable = GetAll()
+                .Include(i => i.Workout)
+                .Include(i => i.ExerciseHistories)
+                .ApplySort(resourceParameters.OrderBy,
+                    PropertyMappingService.GetPropertyMapping<WorkoutHistoryOfmForGet, WorkoutHistory>());
+
+            if (resourceParameters.DateTimeStart != null && resourceParameters.DateTimeEnd != null)
+            {
+                allEntitiesQueryable = allEntitiesQueryable
+                    .Where(a => a.DateTimeStart >= resourceParameters.DateTimeStart && a.DateTimeEnd <= resourceParameters.DateTimeEnd);
+            }
+            else if (resourceParameters.DateTimeStart != null)
+            {
+                allEntitiesQueryable = allEntitiesQueryable
+                    .Where(a => a.DateTimeStart >= resourceParameters.DateTimeStart);
+            }
+            else if (resourceParameters.DateTimeEnd != null)
+            {
+                allEntitiesQueryable = allEntitiesQueryable
+                    .Where(a => a.DateTimeEnd <= resourceParameters.DateTimeEnd);
+            }
+
+            if (resourceParameters.WorkoutId != null)
+            {
+                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.WorkoutId == resourceParameters.WorkoutId);
+            }
+
+            return PagedList<WorkoutHistory>.Create(allEntitiesQueryable,
+                resourceParameters.PageNumber,
+                resourceParameters.PageSize);
         }
     }
 }

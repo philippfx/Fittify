@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace Fittify.DataModelRepositories
 {
 
-    public abstract class AsyncCrud<TEntity, TId> : IAsyncCrud<TEntity, TId> 
+    public abstract class AsyncCrud<TEntity, TId> : IAsyncCrud<TEntity, TId>
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TId : struct
     {
@@ -64,19 +64,26 @@ namespace Fittify.DataModelRepositories
             return entity;
         }
 
-        public static bool DeleteCheckOnEntity(object entity)
+        public static bool DeleteCheckOnEntity(TEntity entity)
         {
             var propertiesList = entity.GetType().GetProperties();
             var relatedEntites = (from prop in propertiesList where prop.PropertyType.IsGenericType select prop.GetValue(entity) into propValue select propValue as IList).ToList();
             return (from prop in propertiesList where prop.PropertyType.IsGenericType select prop.GetValue(entity) into propValue select propValue as IList).All(propList => propList == null || propList.Count <= 0);
         }
 
-        public virtual async Task<List<List<IEntityUniqueIdentifier<int>>>> MyDelete(TId id)
+        public virtual async Task<EntityDeletionResult<TId>> MyDelete(TId id) // List<List<IEntityUniqueIdentifier<int>>>
         {
             // Todo Refactor and make return type bool (out errors)!
             List<List<IEntityUniqueIdentifier<int>>> returnList = new List<List<IEntityUniqueIdentifier<int>>>();
+            var entityDeletionResult = new EntityDeletionResult<TId>();
 
             var entity = await GetById(id);
+
+            if (entity == null)
+            {
+                entityDeletionResult.DidEntityExist = false;
+                return entityDeletionResult;
+            }
 
             // all context models
             var modelData = FittifyContext.Model.GetEntityTypes()
@@ -90,29 +97,36 @@ namespace Fittify.DataModelRepositories
             
             foreach (var navProp in thisModelsNavProperties)
             {
-                
-                var IEnumerablenavPropValue = navProp.GetValue(entity) as IEnumerable<IEntityUniqueIdentifier<int>>;
+                var IEnumerablenavPropValue = navProp.GetValue(entity) as IEnumerable<IEntityUniqueIdentifier<TId>>;
                 if (IEnumerablenavPropValue != null)
                 {
                     var listnavPropValue = IEnumerablenavPropValue.ToList();
-                    returnList.Add(listnavPropValue);
+                    //returnList.Add(listnavPropValue);
+                    entityDeletionResult.EntitesThatBlockDeletion.Add(listnavPropValue);
                 }
 
-                var singlenavPropValue = navProp.GetValue(entity) as IEntityUniqueIdentifier<int>;
+                var singlenavPropValue = navProp.GetValue(entity) as IEntityUniqueIdentifier<TId>;
                 if (singlenavPropValue != null)
                 {
-                    returnList.Add(new List<IEntityUniqueIdentifier<int>>() { singlenavPropValue });
+                    //returnList.Add(new List<IEntityUniqueIdentifier<TId>>() { singlenavPropValue });
+                    entityDeletionResult.EntitesThatBlockDeletion.Add(new List<IEntityUniqueIdentifier<TId>>() { singlenavPropValue });
                 }
             }
-            return returnList;
+
+            if (entityDeletionResult.EntitesThatBlockDeletion.Count > 0)
+            {
+                entityDeletionResult.IsDeleted = false;
+            }
+
+            return entityDeletionResult;
         }
 
-        public virtual async Task<bool> Delete(TId id)
-        {
-            var entity = await GetById(id);
-            FittifyContext.Set<TEntity>().Remove(entity);
-            return await SaveContext();
-        }
+        //public virtual async Task<bool> Delete(TId id)
+        //{
+        //    var entity = await GetById(id);
+        //    FittifyContext.Set<TEntity>().Remove(entity);
+        //    return await SaveContext();
+        //}
 
         public virtual async Task<TEntity> GetById(TId id)
         {
@@ -122,22 +136,6 @@ namespace Fittify.DataModelRepositories
         public virtual IQueryable<TEntity> GetAll()
         {
             return FittifyContext.Set<TEntity>().AsNoTracking();
-        }
-
-        public PagedList<TEntity> GetCollection(IResourceParameters resourceParameters)
-        {
-            //var allEntitiesQueryableBeforePaging = GetAll()
-            //    .OrderBy(o => o.Id)
-            //    .AsQueryable();
-
-            var allEntitiesQueryableBeforePaging =
-                GetAll()
-                    .ApplySort(resourceParameters.OrderBy,
-                        PropertyMappingService.GetPropertyMapping<CategoryOfmForGet, Category>());
-
-            return PagedList<TEntity>.Create(allEntitiesQueryableBeforePaging,
-                resourceParameters.PageNumber,
-                resourceParameters.PageSize);
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetByCollectionOfIds(IEnumerable<TId> collectionOfIds)

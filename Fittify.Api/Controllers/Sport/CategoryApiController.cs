@@ -23,8 +23,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Fittify.Api.Controllers.Sport
 {
     [Route("api/categories")]
@@ -36,16 +34,16 @@ namespace Fittify.Api.Controllers.Sport
         IAsyncPatchForHttp<CategoryOfmForPatch, int>,
         IAsyncDeleteForHttp<int>
     {
-        private readonly AsyncPostPatchDeleteOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int> _asyncPostPatchDeleteForHttpMethods;
         private readonly IAsyncGetOfmById<CategoryOfmForGet, int> _asyncGetOfmById;
         private readonly IAsyncGetOfmCollectionByNameSearch<CategoryOfmForGet> _asyncGetOfmCollectionIncludeByNameSearch;
+        private readonly IAsyncPostOfm<CategoryOfmForGet, CategoryOfmForPost> _asyncPostForHttpMethods;
+        private readonly IAsyncPatchOfm<CategoryOfmForGet, CategoryOfmForPatch, int> _asyncPatchForHttpMethods;
+        private readonly IAsyncDeleteOfm<int> _asyncDeleteForHttpMethods;
         private readonly CategoryRepository _repo;
         private readonly string _shortCamelCasedControllerName;
-        private ITypeHelperService _typeHelperService;
         private readonly IUrlHelper _urlHelper;
-        private readonly ControllerGuardClauses<CategoryOfmForGet> controllerGuardClause;
-        private readonly HateoasLinkFactory<CategoryOfmForGet, int> _hateoasLinkFactory;
-        private readonly IConfiguration _appConfiguration;
+        private readonly ControllerGuardClauses<CategoryOfmForGet> _controllerGuardClause;
+        private readonly HateoasLinkFactory<int> _hateoasLinkFactory;
         private readonly IncomingHeaders _incomingHeaders;
 
         public CategoryApiController(FittifyContext fittifyContext,
@@ -57,40 +55,39 @@ namespace Fittify.Api.Controllers.Sport
             IHttpContextAccessor httpContextAccesor)
         {
             _repo = new CategoryRepository(fittifyContext);
-            _asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo, urlHelper, adcProvider, this);
+            _asyncPostForHttpMethods = new AsyncPostOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, int>(_repo);
+            _asyncPatchForHttpMethods = new AsyncPatchOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPatch, int>(_repo);
+            _asyncDeleteForHttpMethods = new AsyncDeleteOfm<CategoryRepository, Category, int>(_repo, adcProvider);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
             _asyncGetOfmById = new AsyncGetOfmCollectionIncludeByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
             _asyncGetOfmCollectionIncludeByNameSearch = new AsyncGetOfmCollectionIncludeByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
             _urlHelper = urlHelper;
-            _typeHelperService = typeHelperService;
-            controllerGuardClause = new ControllerGuardClauses<CategoryOfmForGet>(this);
-            _hateoasLinkFactory = new HateoasLinkFactory<CategoryOfmForGet, int>(urlHelper, nameof(CategoryApiController));
-            _appConfiguration = appConfiguration;
-            //_incomingHeaders = Mapper.Map<IncomingHeaders>(incomingRawHeaders)
+            _controllerGuardClause = new ControllerGuardClauses<CategoryOfmForGet>(this);
+            _hateoasLinkFactory = new HateoasLinkFactory<int>(urlHelper, nameof(CategoryApiController));
             _incomingHeaders = Mapper.Map<IncomingHeaders>(httpContextAccesor.HttpContext.Items[nameof(IncomingRawHeaders)] as IncomingRawHeaders);
         }
 
-        [HttpGet("{id:int}", Name = "GetCategoryById")]
-        [RequestHeaderMatchesApiVersion("Api-Version", new [] { "1" })]
+        [HttpGet("{id}", Name = "GetCategoryById")]
+        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new [] { "1" })]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
             var ofmForGetQueryResult = await _asyncGetOfmById.GetById(id, fields);
-            if (!controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
+            if (!_controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
             {
                 return objectResult;
             }
             var expandable = ofmForGetQueryResult.ReturnedTOfmForGet.ToExpandableOfm();
             var shapedExpandable = expandable.Shape(fields); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
-            shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, fields).ToList());
+            if (_incomingHeaders.IncludeHateoas) shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, fields).ToList());
             return Ok(shapedExpandable);
         }
 
         [HttpGet(Name = "GetCategoryCollection")]
-        [RequestHeaderMatchesApiVersion("Api-Version", new[] { "1" })]
-        public async Task<IActionResult> GetCollection(SearchQueryResourceParameters resourceParameters, IncomingRawHeaders incomingRawHeaders)
+        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        public async Task<IActionResult> GetCollection(SearchQueryResourceParameters resourceParameters)
         {
             var ofmForGetCollectionQueryResult = await _asyncGetOfmCollectionIncludeByNameSearch.GetCollection(resourceParameters);
-            if (!controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
+            if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
             if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasLinksForeachExpandableOfmForGet<CategoryOfmForGet, int>(_urlHelper, nameof(CategoryApiController), resourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
             expandableOfmForGetCollection = expandableOfmForGetCollection.Shape(resourceParameters.Fields, _incomingHeaders.IncludeHateoas).ToList();
@@ -109,7 +106,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet("range/{inputString}", Name = "GetCategoriesByRangeOfIds")]
-        [RequestHeaderMatchesApiVersion("Api-Version", new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetByRangeOfIds(string inputString)
         {
             var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputString));
@@ -123,7 +120,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpPost(Name = "CreateCategory")]
-        [RequestHeaderMatchesApiVersion("Api-Version", new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> Post([FromBody] CategoryOfmForPost ofmForPost)
         {
             if (ofmForPost == null) return BadRequest();
@@ -133,37 +130,29 @@ namespace Fittify.Api.Controllers.Sport
                 return new UnprocessableEntityObjectResult(ModelState);
             }
 
-            var ofmForGet = await _asyncPostPatchDeleteForHttpMethods.Post(ofmForPost);
+            var ofmForGet = await _asyncPostForHttpMethods.Post(ofmForPost);
             
             var result = CreatedAtRoute(routeName: "GetCategoryById", routeValues: new { id = ofmForGet.Id }, value: ofmForGet);
             return result;
         }
-
-        [HttpDelete("{id:int}", Name = "DeleteCategory")]
-        [RequestHeaderMatchesApiVersion("Api-Version", new[] { "1" })]
+        
+        [HttpDelete("{id}", Name = "DeleteCategory")]
+        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> Delete(int id)
         {
-            bool successfullyDeleted = await _asyncPostPatchDeleteForHttpMethods.Delete(id);
-            if (successfullyDeleted) return NoContent();
-            else return StatusCode(409);
-
-        }
-
-        [HttpDelete("mydelete/{id:int}")]
-        [RequestHeaderMatchesApiVersion("Api-Version", new[] { "1" })]
-        public async Task<IActionResult> MyDelete(int id)
-        {
-            // Todo Refactor route, merge it with the original route and make this method use less code
-            var methodBase = typeof(CategoryApiController).GetMethod("GetByRangeOfIds");
-
-            var attribute = (HttpGetAttribute)methodBase.GetCustomAttributes(typeof(HttpGetAttribute), true)[0];
-
-            var blockingOfmForGetLists = await _asyncPostPatchDeleteForHttpMethods.MyDelete(id);
-            if (blockingOfmForGetLists.Count != 0)
+            var ofmDeletionQueryResult = await _asyncDeleteForHttpMethods.Delete(id);
+            if (ofmDeletionQueryResult.IsDeleted == false)
             {
-                foreach (var blockingOfmForGet in blockingOfmForGetLists)
+                if (ofmDeletionQueryResult.ErrorMessages.Count != 0)
                 {
-                    ModelState.AddModelError(_shortCamelCasedControllerName, blockingOfmForGet);
+                    foreach (var blockingOfmForGet in ofmDeletionQueryResult.ErrorMessages)
+                    {
+                        ModelState.AddModelError(_shortCamelCasedControllerName, blockingOfmForGet);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(_shortCamelCasedControllerName, "There was an unknown error deleting this entity. Please contact support.");
                 }
             }
 
@@ -175,8 +164,8 @@ namespace Fittify.Api.Controllers.Sport
             return NoContent();
         }
 
-        [HttpPatch("{id:int}", Name = "PartiallyUpdateCategory")]
-        [RequestHeaderMatchesApiVersion("Api-Version", new[] { "1" })]
+        [HttpPatch("{id}", Name = "PartiallyUpdateCategory")]
+        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<CategoryOfmForPatch> jsonPatchDocument)
         {
             if (jsonPatchDocument == null)
@@ -188,7 +177,7 @@ namespace Fittify.Api.Controllers.Sport
             try
             {
                 // Get entity with original values from context
-                var ofmForPatch = await _asyncPostPatchDeleteForHttpMethods.GetByIdOfmForPatch(id);
+                var ofmForPatch = await _asyncPatchForHttpMethods.GetByIdOfmForPatch(id);
                 if (ofmForPatch == null)
                 {
                     ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
@@ -199,14 +188,14 @@ namespace Fittify.Api.Controllers.Sport
                 jsonPatchDocument.ApplyTo(ofmForPatch, ModelState);
 
                 // Validating ofm
-                TryValidateModel(ofmForPatch);// This is important to catch invalid model states caused by applying the jsonPatch, for example if a required field (previously had a value) is now set to null
+                TryValidateModel(ofmForPatch); // This is important to catch invalid model states caused by applying the jsonPatch, for example if a required field that previously had a value is now set to null
                 if (!ModelState.IsValid)
                 {
                     return new UnprocessableEntityObjectResult(ModelState);
                 }
 
                 // returning the patched ofm as response
-                var ofmForGet = _asyncPostPatchDeleteForHttpMethods.UpdatePartially(ofmForPatch).Result;
+                var ofmForGet = _asyncPatchForHttpMethods.UpdatePartially(ofmForPatch).Result;
                 return new JsonResult(ofmForGet);
 
             }
@@ -215,9 +204,6 @@ namespace Fittify.Api.Controllers.Sport
                 Console.WriteLine(e);
                 throw;
             }
-
-            //var ofmForGet = await _asyncPostPatchDeleteForHttpMethods.UpdatePartially(id, jsonPatchDocument);
-            //return new JsonResult(ofmForGet);
         }
     }
 }

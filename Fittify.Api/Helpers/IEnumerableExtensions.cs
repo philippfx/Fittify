@@ -97,7 +97,7 @@ namespace Fittify.Api.Helpers
             where TOfmForGet : class
             where TId : struct
         {
-            var hateoasLinkFactory = new HateoasLinkFactory<TOfmForGet, TId>(urlhelper, controllerName);
+            var hateoasLinkFactory = new HateoasLinkFactory<TId>(urlhelper, controllerName);
             var expandableOfmForGets = new List<ExpandableOfmForGet>();
             foreach (var expandableOfmForGet in expandableOfmForGetCollection)
             {
@@ -120,7 +120,7 @@ namespace Fittify.Api.Helpers
             where TId : struct
         {
             var result = new OfmForGetCollectionObjectResult(expandableOfmForGetCollection);
-            var hateoasLinkFactory = new HateoasLinkFactory<TOfmForGet, TId>(urlhelper, controllerName);
+            var hateoasLinkFactory = new HateoasLinkFactory<TId>(urlhelper, controllerName);
             //result.Add("value", result.OfmForGets);
             result.Add(new Dictionary<string, object> { { "links", hateoasLinkFactory
                     .CreateLinksForOfmGetCollectionQueryIncludeByNameSearch(resourceParameters, hasPrevious, hasNext)

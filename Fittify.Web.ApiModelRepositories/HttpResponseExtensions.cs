@@ -9,6 +9,11 @@ namespace Fittify.Web.ApiModelRepositories
         {
             var data = response.Content.ReadAsStringAsync().Result;
 
+            // Todo dirty workaround
+            //if (data[0].ToString() != "[")
+            //{
+            //    data = "[" + data + "]";
+            //}
             //try
             //{
                 return string.IsNullOrEmpty(data) ?

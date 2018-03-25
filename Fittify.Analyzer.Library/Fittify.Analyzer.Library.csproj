@@ -8,7 +8,6 @@
     <ProjectReference Include="..\Fittify.Api.OuterFacingModels\Fittify.Api.OuterFacingModels.csproj" />
     <ProjectReference Include="..\Fittify.DataModels\Fittify.DataModels.csproj" />
     <ProjectReference Include="..\Fittify.ViewModels\Fittify.Web.ViewModels.csproj" />
-    <ProjectReference Include="..\Fittify.Web.ApiModels\Fittify.Web.ApiModels.csproj" />
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using AutoMapper;
-using Fittify.Web.ApiModels.Sport.Get;
+using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Web.ViewModels.Sport;
 
 namespace Fittify.Web.ApiModelRepositories
@@ -13,8 +13,8 @@ namespace Fittify.Web.ApiModelRepositories
         {
             Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<WorkoutForGet, WorkoutViewModel>();
-                cfg.CreateMap<ExerciseForGet, ExerciseViewModel>();
+                cfg.CreateMap<WorkoutOfmForGet, WorkoutViewModel>();
+                cfg.CreateMap<ExerciseOfmForGet, ExerciseViewModel>();
             });
         }
     }

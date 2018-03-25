@@ -12,8 +12,5 @@ namespace Fittify.Api.OuterFacingModels.Sport.Abstract
         public DateTime ExecutedOnDateTime { get; set; }
 
         public int? PreviousExerciseHistoryId { get; set; }
-
-        public virtual string RangeOfWeightLiftingSetIds { get; set; }
-        public virtual string RangeOfCardioSetIds { get; set; }
     }
 }

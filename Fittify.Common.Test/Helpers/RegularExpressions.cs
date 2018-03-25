@@ -18,6 +18,7 @@ namespace Fittify.Common.Test.Helpers
             {
                 List<string> validStrings = new List<string>()
                 {
+                    "",
                     "null",
                     "1",
                     "1000",

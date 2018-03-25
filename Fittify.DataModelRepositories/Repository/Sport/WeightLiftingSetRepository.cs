@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class WeightLiftingSetRepository : AsyncCrud<WeightLiftingSet,int>
+    public class WeightLiftingSetRepository : AsyncGetCollection<WeightLiftingSet,WeightLiftingSet,int>
     {
         public WeightLiftingSetRepository()
         {

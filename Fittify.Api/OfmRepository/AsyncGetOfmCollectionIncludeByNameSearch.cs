@@ -12,11 +12,11 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Fittify.Api.OfmRepository
 {
-    public class AsyncGetOfmCollectionIncludeByNameSearch<TCrudRepository, TEntity, TOfmForGet, TId> : AsyncGetOfm<TCrudRepository, TEntity, TOfmForGet, TId>, IAsyncGetOfmCollectionByNameSearch<TOfmForGet>
+    public class AsyncGetOfmCollectionIncludeByNameSearch<TCrudRepository, TEntity, TOfmForGet, TId> : AsyncGetOfmById<TCrudRepository, TEntity, TOfmForGet, TId>, IAsyncGetOfmCollectionByNameSearch<TOfmForGet>
         where TOfmForGet : class, IEntityUniqueIdentifier<TId>
         where TId : struct
         where TEntity : class, IEntityName<TId>
-        where TCrudRepository : class, IAsyncCrudForEntityName<TEntity, TId>
+        where TCrudRepository : class, IAsyncGetCollectionForEntityName<TEntity, TId>
     {
         protected readonly AsyncGetOfmGuardClauses<TOfmForGet, TId> AsyncGetOfmGuardClause;
         public AsyncGetOfmCollectionIncludeByNameSearch(TCrudRepository repository,
@@ -34,7 +34,7 @@ namespace Fittify.Api.OfmRepository
         {
             var ofmForGetCollectionQueryResult = new OfmForGetCollectionQueryResult<TOfmForGet>();
 
-            ofmForGetCollectionQueryResult = await AsyncGetOfmGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, resourceParameters);
+            ofmForGetCollectionQueryResult = await AsyncGetOfmGuardClause.ValidateResourceParameters(ofmForGetCollectionQueryResult, resourceParameters);
             if (ofmForGetCollectionQueryResult.ErrorMessages.Count > 0)
             {
                 return ofmForGetCollectionQueryResult;
