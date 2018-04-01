@@ -36,8 +36,7 @@ namespace Fittify.Api.Controllers.Sport
         IAsyncPatchForHttp<WorkoutHistoryOfmForPatch, int>,
         IAsyncDeleteForHttp<int>
     {
-        private readonly IAsyncGetOfmById<WorkoutHistoryOfmForGet, int> _asyncGetOfmById;
-        private readonly AsyncGetOfmCollectionForWorkoutHistory _asyncGetOfmCollection;
+        private readonly AsyncGetOfmCollectionForWorkoutHistory _asyncGetOfmForWorkoutHistory;
         private readonly IAsyncPostOfm<WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost> _asyncPostForHttpMethods;
         private readonly IAsyncPatchOfm<WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPatch, int> _asyncPatchForHttpMethods;
         private readonly IAsyncDeleteOfm<int> _asyncDeleteForHttpMethods;
@@ -61,8 +60,7 @@ namespace Fittify.Api.Controllers.Sport
             _asyncPatchForHttpMethods = new AsyncPatchOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPatch, int>(_repo);
             _asyncDeleteForHttpMethods = new AsyncDeleteOfm<WorkoutHistoryRepository, WorkoutHistory, int>(_repo, adcProvider);
             _shortCamelCasedControllerName = nameof(WorkoutHistoryApiController).ToShortCamelCasedControllerNameOrDefault();
-            _asyncGetOfmById = new AsyncGetOfmById<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
-            _asyncGetOfmCollection = new AsyncGetOfmCollectionForWorkoutHistory(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
+            _asyncGetOfmForWorkoutHistory = new AsyncGetOfmCollectionForWorkoutHistory(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
             _urlHelper = urlHelper;
             _controllerGuardClause = new ControllerGuardClauses<WorkoutHistoryOfmForGet>(this);
             _hateoasLinkFactory = new HateoasLinkFactory<int>(urlHelper, nameof(WorkoutHistoryApiController));
@@ -73,7 +71,7 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
-            var ofmForGetQueryResult = await _asyncGetOfmById.GetById(id, fields);
+            var ofmForGetQueryResult = await _asyncGetOfmForWorkoutHistory.GetById(id, fields);
             if (!_controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
             {
                 return objectResult;
@@ -88,7 +86,7 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetCollection(WorkoutHistoryResourceParameters resourceParameters)
         {
-            var ofmForGetCollectionQueryResult = await _asyncGetOfmCollection.GetCollection(resourceParameters);
+            var ofmForGetCollectionQueryResult = await _asyncGetOfmForWorkoutHistory.GetCollection(resourceParameters);
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
             if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasLinksForeachExpandableOfmForGet<WorkoutHistoryOfmForGet, int>(_urlHelper, nameof(WorkoutHistoryApiController), resourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
@@ -101,7 +99,7 @@ namespace Fittify.Api.Controllers.Sport
             dynamic result = new
             {
                 value = expandableOfmForGetCollection,
-                links = _hateoasLinkFactory.CreateLinksForOfmGetCollectionQueryIncludeByDateTimeStartEnd(resourceParameters,
+                links = _hateoasLinkFactory.CreateLinksForOfmGetForWorkoutHistory(resourceParameters,
                     ofmForGetCollectionQueryResult.HasPrevious, ofmForGetCollectionQueryResult.HasNext).ToList()
             };
             return Ok(result);

@@ -1,28 +1,52 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fittify.Api.OuterFacingModels.Sport.Get;
+using Fittify.Common.Helpers;
+using Fittify.Common.Helpers.ResourceParameters.Sport;
+using Fittify.DataModelRepositories.Helpers;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class WeightLiftingSetRepository : AsyncGetCollection<WeightLiftingSet,WeightLiftingSet,int>
+    public class WeightLiftingSetRepository : AsyncCrud<WeightLiftingSet, int> //: AsyncGetCollectionForEntityDateTimeStartEnd<WeightLiftingSet, WeightLiftingSetOfmForGet, int> // Todo implement IAsyncCrudForDateTimeStartEnd
     {
-        public WeightLiftingSetRepository()
-        {
-            
-        }
-
         public WeightLiftingSetRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
-            
+
         }
-        
-        public async Task<List<WeightLiftingSet>> GetCollectionByFkExerciseHistoryId(int exerciseHistoryId)
+
+        public override Task<WeightLiftingSet> GetById(int id)
         {
-            return await FittifyContext.Set<WeightLiftingSet>()
-                .Where(wls => wls.ExerciseHistoryId == exerciseHistoryId)
-                .ToListAsync();
+            return FittifyContext.WeightLiftingSets
+                .Include(i => i.ExerciseHistory)
+                .FirstOrDefaultAsync(wH => wH.Id == id);
+        }
+
+        public PagedList<WeightLiftingSet> GetCollection(WeightLiftingSetResourceParameters resourceParameters)
+        {
+            // Todo can be improved by calling base class and this overriding method just adds the INCLUDE statements
+            var allEntitiesQueryable = GetAll()
+                .Include(i => i.ExerciseHistory)
+                .ApplySort(resourceParameters.OrderBy,
+                    PropertyMappingService.GetPropertyMapping<WeightLiftingSetOfmForGet, WeightLiftingSet>());
+
+            if (!String.IsNullOrWhiteSpace(resourceParameters.Ids))
+            {
+                var ids = RangeString.ToCollectionOfId(resourceParameters.Ids);
+                allEntitiesQueryable = allEntitiesQueryable.Where(w => ids.Contains(w.Id));
+            }
+
+            if (resourceParameters.ExerciseHistoryId != null)
+            {
+                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.ExerciseHistoryId == resourceParameters.ExerciseHistoryId);
+            }
+
+            return PagedList<WeightLiftingSet>.Create(allEntitiesQueryable,
+                resourceParameters.PageNumber,
+                resourceParameters.PageSize);
         }
     }
 }

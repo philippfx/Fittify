@@ -47,7 +47,7 @@ namespace Fittify.Api.Controllers.Generic
             //_asyncPostPatchDeleteForHttpMethods = new AsyncPostPatchDeleteOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(_repo, urlHelper, adcProvider, this);
             //_shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
             //_asyncGetOfmById = new AsyncGetOfmCollectionIncludeByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
-            _asyncGetOfmCollectionIncludeByNameSearch = new AsyncGetOfmCollectionIncludeByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
+            //_asyncGetOfmCollectionIncludeByNameSearch = new AsyncGetOfmCollectionIncludeByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
             _urlHelper = urlHelper;
             _typeHelperService = typeHelperService;
             controllerGuardClause = new ControllerGuardClauses<CategoryOfmForGet>(this);

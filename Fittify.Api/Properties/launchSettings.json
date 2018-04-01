@@ -24,6 +24,14 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "http://localhost:52276/"
+    },
+    "Fittify.Api.TestInMemoryDb": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "api/values",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "TestInMemoryDb"
+      }
     }
   }
 }

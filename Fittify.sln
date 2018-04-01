@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.Test", "Fittify
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Test.Core", "Test.Core\Fittify.Test.Core.csproj", "{0E3AFF1D-EF4E-46E1-B910-71D41F5AB9E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Test.HumanInteraction", "Fittify.Test.HumanInteraction\Fittify.Test.HumanInteraction.csproj", "{6CFB66FE-0B73-41CD-B039-331564B6D95F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Test.Client", "Fittify.Test.HumanInteraction\Fittify.Test.Client.csproj", "{6CFB66FE-0B73-41CD-B039-331564B6D95F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Common", "Fittify.Common\Fittify.Common.csproj", "{771DA5A6-84F4-4A1A-8A9E-26458B9550F8}"
 EndProject
@@ -53,7 +53,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Common.Test", "Fitt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.OuterFacingModels.Test", "Fittify.Api.OuterFacingModels.Test\Fittify.Api.OuterFacingModels.Test.csproj", "{2B87E92D-DFB9-48CD-9097-076A62F69BD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fittify.Api.Services", "Fittify.Api.Services\Fittify.Api.Services.csproj", "{C4B6845B-2536-4E2A-9726-B8DD5FC04A1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.Services", "Fittify.Api.Services\Fittify.Api.Services.csproj", "{C4B6845B-2536-4E2A-9726-B8DD5FC04A1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

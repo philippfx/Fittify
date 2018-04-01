@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Fittify.Common;
+using Fittify.Common.IForeignKeys;
 
 namespace Fittify.DataModels.Models.Sport
 {
-    public class CardioSet : IEntityDateTimeStartEnd<int> // Todo implement IEntityDateTimeStartEnd
+    public class CardioSet : IEntityDateTimeStartEnd<int>, ICardioSetForeignKeys
     {
         public int Id { get; set; }
 

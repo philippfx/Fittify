@@ -101,7 +101,7 @@ namespace Fittify.Api.Controllers.Sport
             dynamic result = new
             {
                 value = expandableOfmForGetCollection,
-                links = _hateoasLinkFactory.CreateLinksForOfmGetCollectionQueryIncludeByDateTimeStartEnd(resourceParameters,
+                links = _hateoasLinkFactory.CreateLinksForOfmGetForCardioSet(resourceParameters,
                     ofmForGetCollectionQueryResult.HasPrevious, ofmForGetCollectionQueryResult.HasNext).ToList()
             };
             return Ok(result);

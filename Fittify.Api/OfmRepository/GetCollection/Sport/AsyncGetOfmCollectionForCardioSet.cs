@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Helpers;
@@ -27,6 +25,7 @@ namespace Fittify.Api.OfmRepository.GetCollection.Sport
             : base(repository, urlHelper, actionDescriptorCollectionProvider, propertyMappingService, typeHelperService, controller)
         {
         }
+
         public virtual async Task<OfmForGetCollectionQueryResult<CardioSetOfmForGet>> GetCollection(CardioSetResourceParameters resourceParameters)
         {
             var ofmForGetCollectionQueryResult = new OfmForGetCollectionQueryResult<CardioSetOfmForGet>();
@@ -41,11 +40,13 @@ namespace Fittify.Api.OfmRepository.GetCollection.Sport
             var pagedListEntityCollection = Repo.GetCollection(resourceParameters).CopyPropertyValuesTo(ofmForGetCollectionQueryResult);
 
             // Todo Maybe refactor to a type safe class instead of anonymous
-            dynamic paginationMetadata = new ExpandoObject();
-            paginationMetadata.totalCount = pagedListEntityCollection.TotalCount;
-            paginationMetadata.pageSize = pagedListEntityCollection.PageSize;
-            paginationMetadata.currentPage = pagedListEntityCollection.CurrentPage;
-            paginationMetadata.totalPages = pagedListEntityCollection.TotalPages;
+            var paginationMetadata = new
+            {
+                totalCount = pagedListEntityCollection.TotalCount,
+                pageSize = pagedListEntityCollection.PageSize,
+                currentPage = pagedListEntityCollection.CurrentPage,
+                totalPages = pagedListEntityCollection.TotalPages
+            };
 
             // Todo: Refactor to class taking controller as input instead of only this method
             Controller.Response.Headers.Add("X-Pagination",

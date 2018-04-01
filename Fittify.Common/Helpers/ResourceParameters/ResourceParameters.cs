@@ -1,9 +1,9 @@
-﻿namespace Fittify.Common.Helpers.ResourceParameters
+﻿using Fittify.Api.OuterFacingModels.Helpers;
+
+namespace Fittify.Common.Helpers.ResourceParameters
 {
     public class ResourceParameters : IResourceParameters
     {
-        [ValidRegularExpressionRangeOfIntIds(RegularExpressions.RangeOfIntIds)]
-        [ValidAscendingOrderRangeOfIntIds]
         public string Ids { get; set; }
 
         private const int MaxPageSize = 100;

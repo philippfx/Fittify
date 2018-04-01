@@ -7,6 +7,7 @@ using Fittify.Api.Controllers.HttpMethodInterfaces;
 using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
 using Fittify.Api.OfmRepository;
+using Fittify.Api.OfmRepository.GetCollection.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -14,6 +15,7 @@ using Fittify.Api.Services;
 using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
+using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
@@ -29,13 +31,11 @@ namespace Fittify.Api.Controllers.Sport
     public class CategoryApiController :
         Controller, 
         IAsyncGetByIdForHttp<int>,
-        IAsyncGetCollectionByNameSearchForHttp,
         IAsyncPostForHttp<CategoryOfmForPost>,
         IAsyncPatchForHttp<CategoryOfmForPatch, int>,
         IAsyncDeleteForHttp<int>
     {
-        private readonly IAsyncGetOfmById<CategoryOfmForGet, int> _asyncGetOfmById;
-        private readonly IAsyncGetOfmCollectionByNameSearch<CategoryOfmForGet> _asyncGetOfmCollectionIncludeByNameSearch;
+        private readonly AsyncGetOfmCollectionForCategory _asyncGetOfm;
         private readonly IAsyncPostOfm<CategoryOfmForGet, CategoryOfmForPost> _asyncPostForHttpMethods;
         private readonly IAsyncPatchOfm<CategoryOfmForGet, CategoryOfmForPatch, int> _asyncPatchForHttpMethods;
         private readonly IAsyncDeleteOfm<int> _asyncDeleteForHttpMethods;
@@ -59,8 +59,7 @@ namespace Fittify.Api.Controllers.Sport
             _asyncPatchForHttpMethods = new AsyncPatchOfm<CategoryRepository, Category, CategoryOfmForGet, CategoryOfmForPatch, int>(_repo);
             _asyncDeleteForHttpMethods = new AsyncDeleteOfm<CategoryRepository, Category, int>(_repo, adcProvider);
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerNameOrDefault();
-            _asyncGetOfmById = new AsyncGetOfmCollectionIncludeByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
-            _asyncGetOfmCollectionIncludeByNameSearch = new AsyncGetOfmCollectionIncludeByNameSearch<CategoryRepository, Category, CategoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
+            _asyncGetOfm = new AsyncGetOfmCollectionForCategory(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
             _urlHelper = urlHelper;
             _controllerGuardClause = new ControllerGuardClauses<CategoryOfmForGet>(this);
             _hateoasLinkFactory = new HateoasLinkFactory<int>(urlHelper, nameof(CategoryApiController));
@@ -71,7 +70,7 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new [] { "1" })]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
-            var ofmForGetQueryResult = await _asyncGetOfmById.GetById(id, fields);
+            var ofmForGetQueryResult = await _asyncGetOfm.GetById(id, fields);
             if (!_controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
             {
                 return objectResult;
@@ -84,9 +83,9 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet(Name = "GetCategoryCollection")]
         [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetCollection(SearchQueryResourceParameters resourceParameters)
+        public async Task<IActionResult> GetCollection(CategoryResourceParameters resourceParameters)
         {
-            var ofmForGetCollectionQueryResult = await _asyncGetOfmCollectionIncludeByNameSearch.GetCollection(resourceParameters);
+            var ofmForGetCollectionQueryResult = await _asyncGetOfm.GetCollection(resourceParameters);
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
             if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasLinksForeachExpandableOfmForGet<CategoryOfmForGet, int>(_urlHelper, nameof(CategoryApiController), resourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
@@ -99,7 +98,7 @@ namespace Fittify.Api.Controllers.Sport
             dynamic result = new
             {
                 value = expandableOfmForGetCollection,
-                links = _hateoasLinkFactory.CreateLinksForOfmGetCollectionQueryIncludeByNameSearch(resourceParameters,
+                links = _hateoasLinkFactory.CreateLinksForOfmGetForCategory(resourceParameters,
                     ofmForGetCollectionQueryResult.HasPrevious, ofmForGetCollectionQueryResult.HasNext).ToList()
             };
             return Ok(result);

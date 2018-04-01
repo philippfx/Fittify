@@ -9,10 +9,10 @@ namespace Fittify.Api.OuterFacingModels.Sport.Post
         public DateTime? DateTimeStart { get; set; }
         public DateTime? DateTimeEnd { get; set; }
 
-        [ForeignKey("WorkoutId")]
-        public virtual WorkoutOfmForPost Workout { get; set; }
+        //[ForeignKey("WorkoutId")]
+        //public virtual WorkoutOfmForPost Workout { get; set; }
         public int WorkoutId { get; set; }
 
-        public virtual IEnumerable<ExerciseHistoryOfmForPost> ExerciseHistories { get; set; }
+        //public virtual IEnumerable<ExerciseHistoryOfmForPost> ExerciseHistories { get; set; }
     }
 }

@@ -6,22 +6,22 @@ namespace Fittify.Test.Core.Seed
 {
     public class FittifyContextSeeder
     {
-        FittifyContext fittifyContext;
+        FittifyContext _fittifyContext;
         public void ResetSeededTestDb()
         {
-            using (fittifyContext = new FittifyContext(StaticFields.TestDbFittifyConnectionString))
+            using (_fittifyContext = new FittifyContext(StaticFields.TestDbFittifyConnectionString))
             {
                 DeleteTestDb();
-                fittifyContext.Database.EnsureCreated();
-                EnsureFreshSeedDataForTestContext(fittifyContext);
+                _fittifyContext.Database.EnsureCreated();
+                EnsureFreshSeedDataForTestContext(_fittifyContext);
             }
         }
 
         public void EnsureCreatedDbProductionContext(string dbConnectionString)
         {
-            using (fittifyContext = new FittifyContext(dbConnectionString))
+            using (_fittifyContext = new FittifyContext(dbConnectionString))
             {
-                fittifyContext.Database.EnsureCreated();
+                _fittifyContext.Database.EnsureCreated();
             }
         }
 
@@ -53,9 +53,9 @@ namespace Fittify.Test.Core.Seed
 
         public void EnsureFreshSeedDataForProductionContext(string dbConnectionString)
         {
-            using (fittifyContext = new FittifyContext(dbConnectionString))
+            using (_fittifyContext = new FittifyContext(dbConnectionString))
             {
-                Seed(fittifyContext);
+                Seed(_fittifyContext);
             }
         }
 
@@ -64,7 +64,7 @@ namespace Fittify.Test.Core.Seed
             Seed(fittifyContext);
         }
         
-        private static void Seed(FittifyContext fittifyContext)
+        public static void Seed(FittifyContext fittifyContext)
         {
             CategorySeed.Seed(fittifyContext);
             WorkoutSeed.Seed(fittifyContext);

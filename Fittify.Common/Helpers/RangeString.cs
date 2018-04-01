@@ -24,6 +24,11 @@ namespace Fittify.Common.Helpers
         /// <returns>List of ints</returns>
         public static List<int> ToCollectionOfId(string str)
         {
+            if (String.IsNullOrWhiteSpace(str))
+            {
+                return new List<int>();
+            }
+
             List<int> lstNumber = new List<int>();
 
             string[] cNumberArray = str.Split(',');

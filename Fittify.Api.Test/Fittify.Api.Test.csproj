@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Fittify.Api\Fittify.Api.csproj" />
+    <ProjectReference Include="..\Fittify.Web.View\Fittify.Web.View.csproj" />
     <ProjectReference Include="..\Test.Core\Fittify.Test.Core.csproj" />
   </ItemGroup>
 

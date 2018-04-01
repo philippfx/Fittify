@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using AspNetCore.RouteAnalyzer;
+using Fittify.Api;
 using Fittify.Web.ApiModelRepositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,7 +34,11 @@ namespace Fittify.Web.View
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory/*, FittifyContext fittifyContext*/)
         {
-            Automapper.Initialize();
+
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.IgnoreUnmapped();
+            });
 
             loggerFactory.AddConsole();
 
@@ -41,6 +46,7 @@ namespace Fittify.Web.View
             //{
                 app.UseDeveloperExceptionPage();
             //}
+
 
             app.UseFileServer();
             // is equivalent to:

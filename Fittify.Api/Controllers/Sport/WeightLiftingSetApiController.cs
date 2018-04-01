@@ -7,6 +7,7 @@ using Fittify.Api.Controllers.HttpMethodInterfaces;
 using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
 using Fittify.Api.OfmRepository;
+using Fittify.Api.OfmRepository.GetCollection.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -14,6 +15,7 @@ using Fittify.Api.Services;
 using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
+using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
@@ -25,17 +27,15 @@ using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace Fittify.Api.Controllers.Sport
 {
-    [Route("api/weightliftingset")]
+    [Route("api/weightliftingsets")]
     public class WeightLiftingSetApiController :
         Controller,
         IAsyncGetByIdForHttp<int>,
-        //IAsyncGetCollectionByByDateTimeStartEndForHttp,
         IAsyncPostForHttp<WeightLiftingSetOfmForPost>,
         IAsyncPatchForHttp<WeightLiftingSetOfmForPatch, int>,
         IAsyncDeleteForHttp<int>
     {
-        private readonly IAsyncGetOfmById<WeightLiftingSetOfmForGet, int> _asyncGetOfmById;
-        private readonly IAsyncGetOfmCollection<WeightLiftingSetOfmForGet> _asyncGetOfmCollection;
+        private readonly AsyncGetOfmCollectionForWeightLiftingSet _asyncGetOfm;
         private readonly IAsyncPostOfm<WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost> _asyncPostForHttpMethods;
         private readonly IAsyncPatchOfm<WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPatch, int> _asyncPatchForHttpMethods;
         private readonly IAsyncDeleteOfm<int> _asyncDeleteForHttpMethods;
@@ -59,8 +59,7 @@ namespace Fittify.Api.Controllers.Sport
             _asyncPatchForHttpMethods = new AsyncPatchOfm<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPatch, int>(_repo);
             _asyncDeleteForHttpMethods = new AsyncDeleteOfm<WeightLiftingSetRepository, WeightLiftingSet, int>(_repo, adcProvider);
             _shortCamelCasedControllerName = nameof(WeightLiftingSetApiController).ToShortCamelCasedControllerNameOrDefault();
-            _asyncGetOfmById = new AsyncGetOfmById<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
-            _asyncGetOfmCollection = new AsyncGetOfmCollection<WeightLiftingSetRepository, WeightLiftingSet, WeightLiftingSetOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
+            _asyncGetOfm= new AsyncGetOfmCollectionForWeightLiftingSet(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
             _urlHelper = urlHelper;
             _controllerGuardClause = new ControllerGuardClauses<WeightLiftingSetOfmForGet>(this);
             _hateoasLinkFactory = new HateoasLinkFactory<int>(urlHelper, nameof(WeightLiftingSetApiController));
@@ -71,7 +70,7 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
-            var ofmForGetQueryResult = await _asyncGetOfmById.GetById(id, fields);
+            var ofmForGetQueryResult = await _asyncGetOfm.GetById(id, fields);
             if (!_controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
             {
                 return objectResult;
@@ -84,9 +83,9 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet(Name = "GetWeightLiftingSetCollection")]
         [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetCollection(DateTimeStartEndResourceParameters resourceParameters)
+        public async Task<IActionResult> GetCollection(WeightLiftingSetResourceParameters resourceParameters)
         {
-            var ofmForGetCollectionQueryResult = await _asyncGetOfmCollection.GetCollection(resourceParameters);
+            var ofmForGetCollectionQueryResult = await _asyncGetOfm.GetCollection(resourceParameters);
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
             if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasLinksForeachExpandableOfmForGet<WeightLiftingSetOfmForGet, int>(_urlHelper, nameof(WeightLiftingSetApiController), resourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
@@ -99,26 +98,12 @@ namespace Fittify.Api.Controllers.Sport
             dynamic result = new
             {
                 value = expandableOfmForGetCollection,
-                links = _hateoasLinkFactory.CreateLinksForOfmGetCollectionQueryIncludeByDateTimeStartEnd(resourceParameters,
+                links = _hateoasLinkFactory.CreateLinksForOfmGetForWeightLiftingSet(resourceParameters,
                     ofmForGetCollectionQueryResult.HasPrevious, ofmForGetCollectionQueryResult.HasNext).ToList()
             };
             return Ok(result);
         }
-
-        [HttpGet("range/{inputString}", Name = "GetWeightLiftingSetsByRangeOfIds")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetByRangeOfIds(string inputString)
-        {
-            var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputString));
-            var ofmCollection = Mapper.Map<List<WeightLiftingSet>, List<WeightLiftingSetOfmForGet>>(entityCollection.ToList());
-            if (ofmCollection.Count == 0) // Todo mock "not found" as query paramter 
-            {
-                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
-                return new EntityNotFoundObjectResult(ModelState);
-            }
-            return Ok(ofmCollection);
-        }
-
+        
         [HttpPost(Name = "CreateWeightLiftingSet")]
         [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> Post([FromBody] WeightLiftingSetOfmForPost ofmForPost)

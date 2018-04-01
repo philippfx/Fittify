@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Web.ApiModelRepositories
 {
-    public interface IAsyncPatch<T, TId> where T : class where TId : struct
+    public interface IAsyncPatch<TReceived>
+        where TReceived : class
     {
-        Task<IActionResult> Patch(TId id, [FromBody] JsonPatchDocument<T> jsonPatchDocument);
+        Task<TReceived> Patch(JsonPatchDocument jsonPatchDocument);
     }
 }

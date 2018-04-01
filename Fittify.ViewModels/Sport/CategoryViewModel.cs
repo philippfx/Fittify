@@ -1,9 +1,11 @@
-﻿using Fittify.Web.Common;
+﻿using Fittify.Api.OuterFacingModels.Sport.Abstract;
+using Fittify.Web.Common;
 
 namespace Fittify.Web.ViewModels.Sport
 {
-    public class CategoryViewModel : UniqueIdentifier<int>
+    public class CategoryViewModel : CategoryOfmBase, IUniqueIdentifier<int>
     {
-        public string Name { get; set; }
+        public int Id { get; set; }
+        //public string Name { get; set; }
     }
 }

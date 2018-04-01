@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Web.ApiModelRepositories
 {
-    public interface IAsyncGppd<T> where T : class
+    public interface IAsyncGppd<TId, TSent, TReceived> : 
+        IAsyncGet<TReceived>,
+        IAsyncPost<TSent, TReceived>,
+        IAsyncPatch<TReceived>,
+        IAsyncDelete<TId>
+        
+        where TId : struct
+        where TSent : class
+        where TReceived : class
     {
-        Task<IEnumerable<T>> GetByRangeOfIds(string rangeOfIds);
-        
-        Task<IEnumerable<T>> Get();
-        
-        Task<T> Post(T entity);
-
-        Task<IActionResult> Put(T entity);
-        
-        Task<IActionResult> Delete();
     }
 }

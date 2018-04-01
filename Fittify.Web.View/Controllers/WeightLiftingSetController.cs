@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ApiModelRepositories;
 using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
@@ -14,12 +15,13 @@ namespace Fittify.Web.View.Controllers
     public class WeightLiftingSetWebController : Controller
     {
         [HttpPost]
-        [Route("weightliftingset/new")] /*?workouthistory={workouthistoryid:int}*/
-        public RedirectToActionResult CreateNewWeightLiftingSet([FromForm] WeightLiftingSetViewModel weightLiftingSetViewModel, [FromQuery] int workouthistoryid)
+        [Route("weightliftingsets")] /*?workouthistory={workouthistoryid:int}*/
+        public RedirectToActionResult CreateNewWeightLiftingSet([FromForm] WeightLiftingSetOfmForPost weightLiftingSetOfmForPost, [FromQuery] int workouthistoryid)
         {
-            var gppdRepoExercises = new GppdRepository<WeightLiftingSetViewModel>("http://localhost:52275/api/weightliftingsets/new");
-            var result = gppdRepoExercises.Post(weightLiftingSetViewModel).Result;
-            return RedirectToAction("historydetails", "Workout", new { workoutHistoryId = workouthistoryid });
+            //var gppdRepoExercises = new AsyncGppdRepository<,,>("http://localhost:52275/api/weightliftingsets");
+            //var result = gppdRepoExercises.Post(weightLiftingSetOfmForPost).Result;
+            //return RedirectToAction("historydetails", "Workout", new { workoutHistoryId = workouthistoryid });
+            throw new NotImplementedException();
         }
 
         [HttpPost]
@@ -82,11 +84,12 @@ namespace Fittify.Web.View.Controllers
                     }
                 }
 
-                var gppdRepoExercises = new GppdRepository<WeightLiftingSetViewModel>("http://localhost:52275/api/weightliftingsets/" + wls.Id);
-                if (jsonPatchDocument != null)
-                {
-                    var result = gppdRepoExercises.Patch(jsonPatchDocument).Result;
-                }
+                //var gppdRepoExercises = new AsyncGppdRepository<,,>("http://localhost:52275/api/weightliftingsets/" + wls.Id);
+                //if (jsonPatchDocument != null)
+                //{
+                //    var result = gppdRepoExercises.Patch(jsonPatchDocument).Result;
+                //}
+                throw new NotImplementedException();
             }
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }

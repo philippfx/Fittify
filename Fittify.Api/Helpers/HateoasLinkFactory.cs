@@ -2,6 +2,7 @@
 using Fittify.Api.Extensions;
 using Fittify.Api.OuterFacingModels;
 using Fittify.Common.Helpers.ResourceParameters;
+using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.Helpers
@@ -148,21 +149,21 @@ namespace Fittify.Api.Helpers
             return links;
         }
 
-        public IEnumerable<HateoasLink> CreateLinksForRootController(
-            ISearchQueryResourceParameters resourceParameters,
+        public IEnumerable<HateoasLink> CreateLinksForOfmGetForCardioSet(
+            CardioSetResourceParameters resourceParameters,
             bool hasPrevious, bool hasNext)
         {
             var links = new List<HateoasLink>();
 
             // self 
             links.Add(
-                new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters, UrlHelper, ResourceUriType.Current, ShortPascalCasedControllerName)
+                new HateoasLink(ResourceUriFactory.CreateResourceUriForCardioSet(resourceParameters, UrlHelper, ResourceUriType.Current, ShortPascalCasedControllerName)
                     , "self", "GET"));
 
             if (hasNext)
             {
                 links.Add(
-                    new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters, UrlHelper,
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForCardioSet(resourceParameters, UrlHelper,
                             ResourceUriType.NextPage, ShortPascalCasedControllerName),
                         "nextPage", "GET"));
             }
@@ -170,7 +171,217 @@ namespace Fittify.Api.Helpers
             if (hasPrevious)
             {
                 links.Add(
-                    new HateoasLink(ResourceUriFactory.CreateResourceUriForISearchQueryResourceParameters(resourceParameters, UrlHelper,
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForCardioSet(resourceParameters, UrlHelper,
+                            ResourceUriType.PreviousPage, ShortPascalCasedControllerName),
+                        "previousPage", "GET"));
+            }
+
+            return links;
+        }
+
+        public IEnumerable<HateoasLink> CreateLinksForOfmGetForCategory(
+            CategoryResourceParameters resourceParameters,
+            bool hasPrevious, bool hasNext)
+        {
+            var links = new List<HateoasLink>();
+
+            // self 
+            links.Add(
+                new HateoasLink(ResourceUriFactory.CreateResourceUriForCategory(resourceParameters, UrlHelper, ResourceUriType.Current, ShortPascalCasedControllerName)
+                    , "self", "GET"));
+
+            if (hasNext)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForCategory(resourceParameters, UrlHelper,
+                            ResourceUriType.NextPage, ShortPascalCasedControllerName),
+                        "nextPage", "GET"));
+            }
+
+            if (hasPrevious)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForCategory(resourceParameters, UrlHelper,
+                            ResourceUriType.PreviousPage, ShortPascalCasedControllerName),
+                        "previousPage", "GET"));
+            }
+
+            return links;
+        }
+
+        public IEnumerable<HateoasLink> CreateLinksForOfmGetForExercise(
+            ExerciseResourceParameters resourceParameters,
+            bool hasPrevious, bool hasNext)
+        {
+            var links = new List<HateoasLink>();
+
+            // self 
+            links.Add(
+                new HateoasLink(ResourceUriFactory.CreateResourceUriForExercise(resourceParameters, UrlHelper, ResourceUriType.Current, ShortPascalCasedControllerName)
+                    , "self", "GET"));
+
+            if (hasNext)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForExercise(resourceParameters, UrlHelper,
+                            ResourceUriType.NextPage, ShortPascalCasedControllerName),
+                        "nextPage", "GET"));
+            }
+
+            if (hasPrevious)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForExercise(resourceParameters, UrlHelper,
+                            ResourceUriType.PreviousPage, ShortPascalCasedControllerName),
+                        "previousPage", "GET"));
+            }
+
+            return links;
+        }
+
+        public IEnumerable<HateoasLink> CreateLinksForOfmGetForExerciseHistory(
+            ExerciseHistoryResourceParameters resourceParameters,
+            bool hasPrevious, bool hasNext)
+        {
+            var links = new List<HateoasLink>();
+
+            // self 
+            links.Add(
+                new HateoasLink(ResourceUriFactory.CreateResourceUriForExerciseHistory(resourceParameters, UrlHelper, ResourceUriType.Current, ShortPascalCasedControllerName)
+                    , "self", "GET"));
+
+            if (hasNext)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForExerciseHistory(resourceParameters, UrlHelper,
+                            ResourceUriType.NextPage, ShortPascalCasedControllerName),
+                        "nextPage", "GET"));
+            }
+
+            if (hasPrevious)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForExerciseHistory(resourceParameters, UrlHelper,
+                            ResourceUriType.PreviousPage, ShortPascalCasedControllerName),
+                        "previousPage", "GET"));
+            }
+
+            return links;
+        }
+
+        public IEnumerable<HateoasLink> CreateLinksForOfmGetForMapExerciseWorkout(
+            MapExerciseWorkoutResourceParameters resourceParameters,
+            bool hasPrevious, bool hasNext)
+        {
+            var links = new List<HateoasLink>();
+
+            // self 
+            links.Add(
+                new HateoasLink(ResourceUriFactory.CreateResourceUriForMapExerciseWorkout(resourceParameters, UrlHelper, ResourceUriType.Current, ShortPascalCasedControllerName)
+                    , "self", "GET"));
+
+            if (hasNext)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForMapExerciseWorkout(resourceParameters, UrlHelper,
+                            ResourceUriType.NextPage, ShortPascalCasedControllerName),
+                        "nextPage", "GET"));
+            }
+
+            if (hasPrevious)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForMapExerciseWorkout(resourceParameters, UrlHelper,
+                            ResourceUriType.PreviousPage, ShortPascalCasedControllerName),
+                        "previousPage", "GET"));
+            }
+
+            return links;
+        }
+
+        public IEnumerable<HateoasLink> CreateLinksForOfmGetForWeightLiftingSet(
+            WeightLiftingSetResourceParameters resourceParameters,
+            bool hasPrevious, bool hasNext)
+        {
+            var links = new List<HateoasLink>();
+
+            // self 
+            links.Add(
+                new HateoasLink(ResourceUriFactory.CreateResourceUriForWeightLiftingSet(resourceParameters, UrlHelper, ResourceUriType.Current, ShortPascalCasedControllerName)
+                    , "self", "GET"));
+
+            if (hasNext)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForWeightLiftingSet(resourceParameters, UrlHelper,
+                            ResourceUriType.NextPage, ShortPascalCasedControllerName),
+                        "nextPage", "GET"));
+            }
+
+            if (hasPrevious)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForWeightLiftingSet(resourceParameters, UrlHelper,
+                            ResourceUriType.PreviousPage, ShortPascalCasedControllerName),
+                        "previousPage", "GET"));
+            }
+
+            return links;
+        }
+
+        public IEnumerable<HateoasLink> CreateLinksForOfmGetForWorkout(
+            WorkoutResourceParameters resourceParameters,
+            bool hasPrevious, bool hasNext)
+        {
+            var links = new List<HateoasLink>();
+
+            // self 
+            links.Add(
+                new HateoasLink(ResourceUriFactory.CreateResourceUriForWorkout(resourceParameters, UrlHelper, ResourceUriType.Current, ShortPascalCasedControllerName)
+                    , "self", "GET"));
+
+            if (hasNext)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForWorkout(resourceParameters, UrlHelper,
+                            ResourceUriType.NextPage, ShortPascalCasedControllerName),
+                        "nextPage", "GET"));
+            }
+
+            if (hasPrevious)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForWorkout(resourceParameters, UrlHelper,
+                            ResourceUriType.PreviousPage, ShortPascalCasedControllerName),
+                        "previousPage", "GET"));
+            }
+
+            return links;
+        }
+
+        public IEnumerable<HateoasLink> CreateLinksForOfmGetForWorkoutHistory(
+            WorkoutHistoryResourceParameters resourceParameters,
+            bool hasPrevious, bool hasNext)
+        {
+            var links = new List<HateoasLink>();
+
+            // self 
+            links.Add(
+                new HateoasLink(ResourceUriFactory.CreateResourceUriForWorkoutHistory(resourceParameters, UrlHelper, ResourceUriType.Current, ShortPascalCasedControllerName)
+                    , "self", "GET"));
+
+            if (hasNext)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForWorkoutHistory(resourceParameters, UrlHelper,
+                            ResourceUriType.NextPage, ShortPascalCasedControllerName),
+                        "nextPage", "GET"));
+            }
+
+            if (hasPrevious)
+            {
+                links.Add(
+                    new HateoasLink(ResourceUriFactory.CreateResourceUriForWorkoutHistory(resourceParameters, UrlHelper,
                             ResourceUriType.PreviousPage, ShortPascalCasedControllerName),
                         "previousPage", "GET"));
             }

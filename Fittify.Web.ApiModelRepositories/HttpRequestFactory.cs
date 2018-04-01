@@ -6,7 +6,16 @@ namespace Fittify.Web.ApiModelRepositories
 {
     public class HttpRequestFactory
     {
-        public static async Task<HttpResponseMessage> Get(string requestUri)
+        public static async Task<HttpResponseMessage> GetSingle(string requestUri)
+        {
+            var builder = new HttpRequestBuilder()
+                .AddMethod(HttpMethod.Get)
+                .AddRequestUri(requestUri);
+
+            return await builder.SendAsync();
+        }
+
+        public static async Task<HttpResponseMessage> GetCollection(string requestUri)
         {
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Get)

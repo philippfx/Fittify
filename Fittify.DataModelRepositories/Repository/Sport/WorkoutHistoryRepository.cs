@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
+using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.DataModelRepositories.Helpers;
@@ -113,6 +114,13 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 .Include(i => i.ExerciseHistories)
                 .ApplySort(resourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<WorkoutHistoryOfmForGet, WorkoutHistory>());
+
+            if (!String.IsNullOrWhiteSpace(resourceParameters.Ids))
+            {
+                var enumerableIds = RangeString.ToCollectionOfId(resourceParameters.Ids);
+                allEntitiesQueryable = allEntitiesQueryable
+                    .Where(e => enumerableIds.Contains(e.Id));
+            }
 
             if (resourceParameters.DateTimeStart != null && resourceParameters.DateTimeEnd != null)
             {

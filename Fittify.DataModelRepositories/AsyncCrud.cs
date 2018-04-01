@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.Services;
 using Fittify.Common;
-using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Helpers;
 using Fittify.DataModels.Models;
 using Fittify.DataModels.Models.Sport;

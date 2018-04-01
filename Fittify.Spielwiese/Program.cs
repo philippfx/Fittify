@@ -8,7 +8,6 @@ using Fittify.Api;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.DataModels.Models.Sport;
 using Fittify.Web.ApiModelRepositories;
-using Fittify.Web.ApiModelRepositories.Sport;
 using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.JsonPatch;
 using Newtonsoft.Json;

@@ -49,9 +49,9 @@ namespace Fittify.DataModelRepositories
             }
         }
 
-        internal object Set(Type type)
-        {
-            throw new NotImplementedException();
-        }
+        //internal object Set(Type type)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

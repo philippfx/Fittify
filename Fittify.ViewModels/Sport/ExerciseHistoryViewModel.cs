@@ -1,14 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using Fittify.Api.OuterFacingModels.Sport.Abstract;
 using Fittify.Web.Common;
 
 namespace Fittify.Web.ViewModels.Sport
 {
-    public class ExerciseHistoryViewModel : UniqueIdentifier<int>
+    public class ExerciseHistoryViewModel : WorkoutHistoryOfmBase, IUniqueIdentifier<int>
     {
-        [ForeignKey("ExerciseId")]
-        public int? ExerciseId { get; set; }
-        public string ExerciseName { get; set; }
+        public ExerciseHistoryViewModel()
+        {
+            CurrentAndHistoricWeightLiftingSetPairs = new List<CurrentAndHistoricWeightLiftingSetPair>();
+            CurrentAndHistoricCardioSetPairs = new List<CurrentAndHistoricCardioSetPair>();
+        }
+        public int Id { get; set; }
+
+        public ExerciseViewModel Exercise { get; set; }
 
         [ForeignKey("WorkoutHistoryId")]
         public int WorkoutHistoryId { get; set; }
@@ -17,8 +23,8 @@ namespace Fittify.Web.ViewModels.Sport
         public int? PreviousExerciseHistoryId { get; set; }
         public ExerciseHistoryViewModel PreviousExerciseHistory { get; set; }
 
-        public virtual IEnumerable<CurrentAndHistoricWeightLiftingSetPair> CurrentAndHistoricWeightLiftingSetPairs { get; set; }
-        public virtual IEnumerable<CurrentAndHistoricCardioSetPair> CurrentAndHistoricCardioSetPairs { get; set; }
+        public List<CurrentAndHistoricWeightLiftingSetPair> CurrentAndHistoricWeightLiftingSetPairs { get; set; }
+        public List<CurrentAndHistoricCardioSetPair> CurrentAndHistoricCardioSetPairs { get; set; }
 
         public class CurrentAndHistoricWeightLiftingSetPair
         {

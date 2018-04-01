@@ -20,6 +20,7 @@ using Fittify.Api.Helpers;
 using Fittify.Api.Middleware;
 using Fittify.Api.Services;
 using Fittify.Common.Helpers;
+using Fittify.Test.Core.Seed;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -31,8 +32,10 @@ namespace Fittify.Api
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
-        public Startup(IConfiguration configuration)
+        private IConfiguration Configuration { get; }
+        private IHostingEnvironment HostingEnvironment { get; set; }
+
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
 
@@ -40,6 +43,8 @@ namespace Fittify.Api
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json"); // includes appsettings.json configuartion file
             Configuration = builder.Build();
+
+            HostingEnvironment = hostingEnvironment;
         }
 
 
@@ -64,7 +69,22 @@ namespace Fittify.Api
                     p.FeatureProviders.Add(new GenericControllerFeatureProvider())); 
 
             var dbConnectionString = Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
-            services.AddDbContext<FittifyContext>(options => options.UseSqlServer(dbConnectionString));
+
+            if (HostingEnvironment.IsTestInMemoryDb())
+            {
+                services.AddDbContext<FittifyContext>(options => options.UseSqlite("Data Source = FittifyTestDb.db"));
+                var intermediateServiceProvider = services.BuildServiceProvider();
+                using (var fittifyContext = intermediateServiceProvider.GetService<FittifyContext>())
+                {
+                    fittifyContext.Database.EnsureDeleted();
+                    fittifyContext.Database.EnsureCreated();
+                    FittifyContextSeeder.Seed(fittifyContext);
+                }
+            }
+            else
+            {
+                services.AddDbContext<FittifyContext>(options => options.UseSqlServer(dbConnectionString));
+            }
 
             // Is required for the UrlHelper, because it creates url to ACTIONS
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
@@ -120,8 +140,11 @@ namespace Fittify.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-
-            if (env.IsDevelopment())
+            if (env.IsTestInMemoryDb())
+            {
+                var stop = "stop";
+            }
+            if (env.IsDevelopment() || env.IsTestInMemoryDb())
             {
                 app.UseDeveloperExceptionPage();
             }

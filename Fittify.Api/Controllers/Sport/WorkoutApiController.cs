@@ -7,6 +7,7 @@ using Fittify.Api.Controllers.HttpMethodInterfaces;
 using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
 using Fittify.Api.OfmRepository;
+using Fittify.Api.OfmRepository.GetCollection.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -14,6 +15,7 @@ using Fittify.Api.Services;
 using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
+using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
@@ -29,13 +31,11 @@ namespace Fittify.Api.Controllers.Sport
     public class WorkoutApiController :
         Controller,
         IAsyncGetByIdForHttp<int>,
-        IAsyncGetCollectionByNameSearchForHttp,
         IAsyncPostForHttp<WorkoutOfmForPost>,
         IAsyncPatchForHttp<WorkoutOfmForPatch, int>,
         IAsyncDeleteForHttp<int>
     {
-        private readonly IAsyncGetOfmById<WorkoutOfmForGet, int> _asyncGetOfmById;
-        private readonly IAsyncGetOfmCollectionByNameSearch<WorkoutOfmForGet> _asyncGetOfmCollectionIncludeByNameSearch;
+        private readonly AsyncGetOfmCollectionForWorkout _asyncGetOfm;
         private readonly IAsyncPostOfm<WorkoutOfmForGet, WorkoutOfmForPost> _asyncPostForHttpMethods;
         private readonly IAsyncPatchOfm<WorkoutOfmForGet, WorkoutOfmForPatch, int> _asyncPatchForHttpMethods;
         private readonly IAsyncDeleteOfm<int> _asyncDeleteForHttpMethods;
@@ -59,8 +59,7 @@ namespace Fittify.Api.Controllers.Sport
             _asyncPatchForHttpMethods = new AsyncPatchOfm<WorkoutRepository, Workout, WorkoutOfmForGet, WorkoutOfmForPatch, int>(_repo);
             _asyncDeleteForHttpMethods = new AsyncDeleteOfm<WorkoutRepository, Workout, int>(_repo, adcProvider);
             _shortCamelCasedControllerName = nameof(WorkoutApiController).ToShortCamelCasedControllerNameOrDefault();
-            _asyncGetOfmById = new AsyncGetOfmCollectionIncludeByNameSearch<WorkoutRepository, Workout, WorkoutOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
-            _asyncGetOfmCollectionIncludeByNameSearch = new AsyncGetOfmCollectionIncludeByNameSearch<WorkoutRepository, Workout, WorkoutOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
+            _asyncGetOfm = new AsyncGetOfmCollectionForWorkout(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
             _urlHelper = urlHelper;
             _controllerGuardClause = new ControllerGuardClauses<WorkoutOfmForGet>(this);
             _hateoasLinkFactory = new HateoasLinkFactory<int>(urlHelper, nameof(WorkoutApiController));
@@ -71,7 +70,7 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
-            var ofmForGetQueryResult = await _asyncGetOfmById.GetById(id, fields);
+            var ofmForGetQueryResult = await _asyncGetOfm.GetById(id, fields);
             if (!_controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
             {
                 return objectResult;
@@ -84,9 +83,9 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet(Name = "GetWorkoutCollection")]
         [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetCollection(SearchQueryResourceParameters resourceParameters)
+        public async Task<IActionResult> GetCollection(WorkoutResourceParameters resourceParameters)
         {
-            var ofmForGetCollectionQueryResult = await _asyncGetOfmCollectionIncludeByNameSearch.GetCollection(resourceParameters);
+            var ofmForGetCollectionQueryResult = await _asyncGetOfm.GetCollection(resourceParameters);
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
             if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasLinksForeachExpandableOfmForGet<WorkoutOfmForGet, int>(_urlHelper, nameof(WorkoutApiController), resourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
@@ -99,24 +98,10 @@ namespace Fittify.Api.Controllers.Sport
             dynamic result = new
             {
                 value = expandableOfmForGetCollection,
-                links = _hateoasLinkFactory.CreateLinksForOfmGetCollectionQueryIncludeByNameSearch(resourceParameters,
+                links = _hateoasLinkFactory.CreateLinksForOfmGetForWorkout(resourceParameters,
                     ofmForGetCollectionQueryResult.HasPrevious, ofmForGetCollectionQueryResult.HasNext).ToList()
             };
             return Ok(result);
-        }
-
-        [HttpGet("range/{inputString}", Name = "GetWorkoutsByRangeOfIds")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetByRangeOfIds(string inputString)
-        {
-            var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputString));
-            var ofmCollection = Mapper.Map<List<Workout>, List<WorkoutOfmForGet>>(entityCollection.ToList());
-            if (ofmCollection.Count == 0) // Todo mock "not found" as query paramter 
-            {
-                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
-                return new EntityNotFoundObjectResult(ModelState);
-            }
-            return Ok(ofmCollection);
         }
 
         [HttpPost(Name = "CreateWorkout")]

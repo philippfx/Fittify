@@ -1,28 +1,43 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
+using Fittify.Common.Helpers.ResourceParameters.Sport;
+using Fittify.DataModelRepositories.Helpers;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class CategoryRepository : AsyncGetCollectionForEntityName<Category, CategoryOfmForGet, int>
+    public class CategoryRepository : AsyncCrud<Category, int> //: AsyncGetCollectionForEntityDateTimeStartEnd<Category, CategoryOfmForGet, int> // Todo implement IAsyncCrudForDateTimeStartEnd
     {
-        public CategoryRepository()
-        {
-            
-        }
-
         public CategoryRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
-            
+
         }
 
-        public override async Task<Category> GetById(int id)
+        public override Task<Category> GetById(int id)
         {
-            return await FittifyContext.Categories
-                .Include(i => i.Workouts)
-                .FirstOrDefaultAsync(w => w.Id == id);
+            return FittifyContext.Categories
+                .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
+        public PagedList<Category> GetCollection(CategoryResourceParameters resourceParameters)
+        {
+            // Todo can be improved by calling base class and this overriding method just adds the INCLUDE statements
+            var allEntitiesQueryable = GetAll()
+                .ApplySort(resourceParameters.OrderBy,
+                    PropertyMappingService.GetPropertyMapping<CategoryOfmForGet, Category>());
+
+            if (!String.IsNullOrWhiteSpace(resourceParameters.SearchQuery))
+            {
+                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.Name.Contains(resourceParameters.SearchQuery));
+            }
+
+            return PagedList<Category>.Create(allEntitiesQueryable,
+                resourceParameters.PageNumber,
+                resourceParameters.PageSize);
+        }
     }
 }

@@ -7,6 +7,7 @@ using Fittify.Api.Controllers.HttpMethodInterfaces;
 using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
 using Fittify.Api.OfmRepository;
+using Fittify.Api.OfmRepository.GetCollection.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -14,6 +15,7 @@ using Fittify.Api.Services;
 using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
+using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
@@ -34,8 +36,7 @@ namespace Fittify.Api.Controllers.Sport
         IAsyncPatchForHttp<ExerciseHistoryOfmForPatch, int>,
         IAsyncDeleteForHttp<int>
     {
-        private readonly IAsyncGetOfmById<ExerciseHistoryOfmForGet, int> _asyncGetOfmById;
-        private readonly IAsyncGetOfmCollection<ExerciseHistoryOfmForGet> _asyncGetOfmCollection;
+        private readonly AsyncGetOfmCollectionForExerciseHistory _asyncGetOfm;
         private readonly IAsyncPostOfm<ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost> _asyncPostForHttpMethods;
         private readonly IAsyncPatchOfm<ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPatch, int> _asyncPatchForHttpMethods;
         private readonly IAsyncDeleteOfm<int> _asyncDeleteForHttpMethods;
@@ -59,8 +60,7 @@ namespace Fittify.Api.Controllers.Sport
             _asyncPatchForHttpMethods = new AsyncPatchOfm<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPatch, int>(_repo);
             _asyncDeleteForHttpMethods = new AsyncDeleteOfm<ExerciseHistoryRepository, ExerciseHistory, int>(_repo, adcProvider);
             _shortCamelCasedControllerName = nameof(ExerciseHistoryApiController).ToShortCamelCasedControllerNameOrDefault();
-            _asyncGetOfmById = new AsyncGetOfmById<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
-            _asyncGetOfmCollection = new AsyncGetOfmCollection<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, int>(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
+            _asyncGetOfm = new AsyncGetOfmCollectionForExerciseHistory(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
             _urlHelper = urlHelper;
             _controllerGuardClause = new ControllerGuardClauses<ExerciseHistoryOfmForGet>(this);
             _hateoasLinkFactory = new HateoasLinkFactory<int>(urlHelper, nameof(ExerciseHistoryApiController));
@@ -71,7 +71,7 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
-            var ofmForGetQueryResult = await _asyncGetOfmById.GetById(id, fields);
+            var ofmForGetQueryResult = await _asyncGetOfm.GetById(id, fields);
             if (!_controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
             {
                 return objectResult;
@@ -84,9 +84,9 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet(Name = "GetExerciseHistoryCollection")]
         [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetCollection(DateTimeStartEndResourceParameters resourceParameters)
+        public async Task<IActionResult> GetCollection(ExerciseHistoryResourceParameters resourceParameters)
         {
-            var ofmForGetCollectionQueryResult = await _asyncGetOfmCollection.GetCollection(resourceParameters);
+            var ofmForGetCollectionQueryResult = await _asyncGetOfm.GetCollection(resourceParameters);
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
             if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasLinksForeachExpandableOfmForGet<ExerciseHistoryOfmForGet, int>(_urlHelper, nameof(ExerciseHistoryApiController), resourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
@@ -99,7 +99,7 @@ namespace Fittify.Api.Controllers.Sport
             dynamic result = new
             {
                 value = expandableOfmForGetCollection,
-                links = _hateoasLinkFactory.CreateLinksForOfmGetCollectionQueryIncludeByDateTimeStartEnd(resourceParameters,
+                links = _hateoasLinkFactory.CreateLinksForOfmGetForExerciseHistory(resourceParameters,
                     ofmForGetCollectionQueryResult.HasPrevious, ofmForGetCollectionQueryResult.HasNext).ToList()
             };
             return Ok(result);

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fittify.Api.Helpers;
+using Fittify.Api.OuterFacingModels.Helpers;
 using Fittify.Api.Services;
 using Fittify.Common;
+using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
 
 namespace Fittify.Api.OfmRepository
@@ -40,11 +42,20 @@ namespace Fittify.Api.OfmRepository
             await Task.Run(() =>
             {
                 var errorMessages = new List<string>();
-                if (resourceParameters.Ids == null)
+                
+                var idsAreCorrectlySyntaxed = new ValidRegularExpressionRangeOfIntIdsAttribute(RegularExpressions.RangeOfIntIds);
+                if (!idsAreCorrectlySyntaxed.IsValid(resourceParameters.Ids))
                 {
-
+                    ofmForGetCollectionQueryResult.ErrorMessages.Add(idsAreCorrectlySyntaxed.FormatErrorMessage(null));
                 }
 
+                var idsInAscendingOrderValidation = new ValidAscendingOrderRangeOfIntIdsAttribute();
+                if (!idsInAscendingOrderValidation.IsValid(resourceParameters.Ids))
+                {
+                    ofmForGetCollectionQueryResult.ErrorMessages.Add(idsInAscendingOrderValidation.FormatErrorMessage(null));
+                }
+
+                errorMessages = new List<string>();
                 if (!_typeHelperService.TypeHasProperties<TOfmForGet>(resourceParameters.OrderBy, ref errorMessages))
                 {
                     ofmForGetCollectionQueryResult.ErrorMessages.AddRange(errorMessages);

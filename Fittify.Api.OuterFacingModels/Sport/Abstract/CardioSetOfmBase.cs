@@ -10,7 +10,5 @@ namespace Fittify.Api.OuterFacingModels.Sport.Abstract
     {
         public virtual DateTime? DateTimeStart { get; set; }
         public virtual DateTime? DateTimeEnd { get; set; }
-        [Required]
-        public virtual int ExerciseHistoryId { get; set; }
     }
 }

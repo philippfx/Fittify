@@ -7,8 +7,6 @@ namespace Fittify.Api.OuterFacingModels.Sport.Abstract
 {
     public abstract class ExerciseHistoryOfmBase
     {
-        public int WorkoutHistoryId { get; set; }
-
         public DateTime ExecutedOnDateTime { get; set; }
 
         public int? PreviousExerciseHistoryId { get; set; }
