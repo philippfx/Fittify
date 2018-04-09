@@ -8,6 +8,7 @@ using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
 using Fittify.Api.OfmRepository;
 using Fittify.Api.OfmRepository.GetCollection.Sport;
+using Fittify.Api.OfmRepository.Post;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -32,12 +33,12 @@ namespace Fittify.Api.Controllers.Sport
         Controller,
         IAsyncGetByIdForHttp<int>,
         //IAsyncGetCollectionByByDateTimeStartEndForHttp,
-        IAsyncPostForHttp<WorkoutHistoryOfmForPost>,
+        //IAsyncPostForHttp<WorkoutHistoryOfmForPost>,
         IAsyncPatchForHttp<WorkoutHistoryOfmForPatch, int>,
         IAsyncDeleteForHttp<int>
     {
         private readonly AsyncGetOfmCollectionForWorkoutHistory _asyncGetOfmForWorkoutHistory;
-        private readonly IAsyncPostOfm<WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost> _asyncPostForHttpMethods;
+        private readonly AsyncPostOfmForWorkoutHistory _asyncPostForHttpMethods;
         private readonly IAsyncPatchOfm<WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPatch, int> _asyncPatchForHttpMethods;
         private readonly IAsyncDeleteOfm<int> _asyncDeleteForHttpMethods;
         private readonly WorkoutHistoryRepository _repo;
@@ -56,7 +57,8 @@ namespace Fittify.Api.Controllers.Sport
             IHttpContextAccessor httpContextAccesor)
         {
             _repo = new WorkoutHistoryRepository(fittifyContext);
-            _asyncPostForHttpMethods = new AsyncPostOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, int>(_repo);
+            //_asyncPostForHttpMethods = new AsyncPostOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, int>(_repo);
+            _asyncPostForHttpMethods = new AsyncPostOfmForWorkoutHistory(_repo);
             _asyncPatchForHttpMethods = new AsyncPatchOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPatch, int>(_repo);
             _asyncDeleteForHttpMethods = new AsyncDeleteOfm<WorkoutHistoryRepository, WorkoutHistory, int>(_repo, adcProvider);
             _shortCamelCasedControllerName = nameof(WorkoutHistoryApiController).ToShortCamelCasedControllerNameOrDefault();
@@ -105,32 +107,30 @@ namespace Fittify.Api.Controllers.Sport
             return Ok(result);
         }
 
-        [HttpGet("range/{inputString}", Name = "GetWorkoutHistoriesByRangeOfIds")]
+        [HttpPost]
         [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetByRangeOfIds(string inputString)
-        {
-            var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputString));
-            var ofmCollection = Mapper.Map<List<WorkoutHistory>, List<WorkoutHistoryOfmForGet>>(entityCollection.ToList());
-            if (ofmCollection.Count == 0) // Todo mock "not found" as query paramter 
-            {
-                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
-                return new EntityNotFoundObjectResult(ModelState);
-            }
-            return Ok(ofmCollection);
-        }
-
-        [HttpPost(Name = "CreateWorkoutHistory")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> Post([FromBody] WorkoutHistoryOfmForPost ofmForPost)
+        public async Task<IActionResult> Post([FromBody] WorkoutHistoryOfmForPost ofmForPost, [FromQuery] string includeExerciseHistories)
         {
             if (ofmForPost == null) return BadRequest();
+            if (!int.TryParse(includeExerciseHistories, out int parsedResult))
+            {
+                ModelState.AddModelError(_shortCamelCasedControllerName, "The query parameter 'includeExerciseHistories' can only take a value of 0 (=false) or 1 (=true).");
+            }
 
             if (!ModelState.IsValid)
             {
                 return new UnprocessableEntityObjectResult(ModelState);
             }
 
-            var ofmForGet = await _asyncPostForHttpMethods.Post(ofmForPost);
+            WorkoutHistoryOfmForGet ofmForGet;
+            if (parsedResult == 1)
+            {
+                ofmForGet = await _asyncPostForHttpMethods.PostIncludingExerciseHistories(ofmForPost);
+            }
+            else
+            {
+                ofmForGet = await _asyncPostForHttpMethods.Post(ofmForPost);
+            } 
 
             var result = CreatedAtRoute(routeName: "GetWorkoutHistoryById", routeValues: new { id = ofmForGet.Id }, value: ofmForGet);
             return result;
@@ -171,9 +171,9 @@ namespace Fittify.Api.Controllers.Sport
             if (jsonPatchDocument == null)
             {
                 ModelState.AddModelError(_shortCamelCasedControllerName, "You sent an empty body (null) for " + _shortCamelCasedControllerName + " with id=" + id);
-                return new EntityNotFoundObjectResult(ModelState);
+                return new UnprocessableEntityObjectResult(ModelState);
             }
-
+            
             try
             {
                 // Get entity with original values from context

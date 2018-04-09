@@ -8,7 +8,7 @@ namespace Fittify.Api.Services
 {
     public class PropertyMappingService : IPropertyMappingService
     {
-        private Dictionary<string, PropertyMappingValue> _authorPropertyMapping =
+        private readonly Dictionary<string, PropertyMappingValue> _allPropertyMapping =
             new Dictionary<string, PropertyMappingValue>(StringComparer.OrdinalIgnoreCase)
             {
                 {"Id", new PropertyMappingValue(new List<string>() {"Id"})},
@@ -25,14 +25,14 @@ namespace Fittify.Api.Services
         public PropertyMappingService()
         {
             // Todo this must be refactored to TOfmForGet and Entity!
-            propertyMappings.Add(new PropertyMapping<CardioSetOfmForGet, CardioSet>(_authorPropertyMapping));
-            propertyMappings.Add(new PropertyMapping<CategoryOfmForGet, Category>(_authorPropertyMapping));
-            propertyMappings.Add(new PropertyMapping<ExerciseHistoryOfmForGet, ExerciseHistory>(_authorPropertyMapping));
-            propertyMappings.Add(new PropertyMapping<ExerciseOfmForGet, Exercise>(_authorPropertyMapping));
-            propertyMappings.Add(new PropertyMapping<MapExerciseWorkoutOfmForGet, MapExerciseWorkout>(_authorPropertyMapping));
-            propertyMappings.Add(new PropertyMapping<WeightLiftingSetOfmForGet, WeightLiftingSet>(_authorPropertyMapping));
-            propertyMappings.Add(new PropertyMapping<WorkoutHistoryOfmForGet, WorkoutHistory>(_authorPropertyMapping));
-            propertyMappings.Add(new PropertyMapping<WorkoutOfmForGet, Workout>(_authorPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<CardioSetOfmForGet, CardioSet>(_allPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<CategoryOfmForGet, Category>(_allPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<ExerciseHistoryOfmForGet, ExerciseHistory>(_allPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<ExerciseOfmForGet, Exercise>(_allPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<MapExerciseWorkoutOfmForGet, MapExerciseWorkout>(_allPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<WeightLiftingSetOfmForGet, WeightLiftingSet>(_allPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<WorkoutHistoryOfmForGet, WorkoutHistory>(_allPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<WorkoutOfmForGet, Workout>(_allPropertyMapping));
 
         }
         public Dictionary<string, PropertyMappingValue> GetPropertyMapping

@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using Fittify.Api.OuterFacingModels.Sport.Get;
+using Fittify.Web.ApiModelRepositories;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Fittify.Test.Client.ConsumeApi
@@ -9,13 +13,58 @@ namespace Fittify.Test.Client.ConsumeApi
     public class CategoryApiController
     {
         [Test]
-        public void Should_ReturnAllWorkouts()
+        public async Task Should_ReturnSingleWorkout_WhenMinimumInfoIsQueried()
         {
             // Arrange
+            string url = StaticVariables.FittifyApiBaseUrl + "api/categories/" + 1;
 
             // Act
+            var categoryOfmForGetQueryResult =
+                await AsyncGppd.GetSingle<CategoryOfmForGet>(url);
+            var category = categoryOfmForGetQueryResult.OfmForGet;
 
             // Assert
+            string actual = JsonConvert.SerializeObject(categoryOfmForGetQueryResult.OfmForGet).ToLower();
+            string expected = "{\"id\":1,\"rangeOfWorkoutIds\":null,\"name\":\"ChestSeed\"}".ToLower();
+            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(categoryOfmForGetQueryResult.HttpStatusCode, 200);
+        }
+
+        [Test]
+        public async Task Should_ReturnNotFound_WhenIdIs0()
+        {
+            // Arrange
+            string url = StaticVariables.FittifyApiBaseUrl + "api/categories/" + 0;
+
+            // Act
+            var categoryOfmForGetQueryResult =
+                await AsyncGppd.GetSingle<CategoryOfmForGet>(url);
+            var category = categoryOfmForGetQueryResult.OfmForGet;
+
+            // Assert
+            var actual = JsonConvert.SerializeObject(categoryOfmForGetQueryResult.ErrorMessagesPresented).ToLower();
+            var expected = "{\"category\":[\"No category found for id=0\"]}".ToLower();
+            Assert.AreEqual(category, null);
+            //Assert.AreEqual(actual, expected);
+            Assert.AreEqual(categoryOfmForGetQueryResult.HttpStatusCode, 404);
+        }
+
+        [Test]
+        public async Task Should_ReturnShapedSingleWorkout_WhenQueryIncludesFields()
+        {
+            // Arrange
+            string url = StaticVariables.FittifyApiBaseUrl + "api/categories/" + 1 + "?fields=id,name";
+
+            // Act
+            var categoryOfmForGetQueryResult =
+                await AsyncGppd.GetSingle<CategoryOfmForGet>(url);
+            var category = categoryOfmForGetQueryResult.OfmForGet;
+
+            // Assert
+            string actual = JsonConvert.SerializeObject(categoryOfmForGetQueryResult.OfmForGet).ToLower();
+            string expected = "{\"id\":1,\"name\":\"ChestSeed\"}".ToLower();
+            Assert.AreEqual(actual, expected);
+            Assert.AreEqual(categoryOfmForGetQueryResult.HttpStatusCode, 200);
         }
     }
 }

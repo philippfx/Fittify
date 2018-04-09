@@ -2,6 +2,10 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/Fittify.Api",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "http://localhost:52275/",
       "sslPort": 0
@@ -21,17 +25,19 @@
       "launchBrowser": true,
       "launchUrl": "api/values",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Production"
       },
-      "applicationUrl": "http://localhost:52276/"
-    },
-    "Fittify.Api.TestInMemoryDb": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "api/values",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "TestInMemoryDb"
-      }
+      "applicationUrl": "http://localhost:52275/"
     }
+    //,
+    //"Fittify.Api.TestInMemoryDb": {
+    //  "commandName": "Project",
+    //  "launchBrowser": true,
+    //  "launchUrl": "api/values",
+    //  "environmentVariables": {
+    //    "ASPNETCORE_ENVIRONMENT": "TestInMemoryDb"
+    //  },
+    //  "applicationUrl": "http://localhost:52275/"
+    //}
   }
 }

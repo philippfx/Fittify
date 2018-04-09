@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\**" />
     <Compile Remove="ViewModels\**" />
+    <Content Remove="Services\**" />
     <Content Remove="ViewModels\**" />
+    <EmbeddedResource Remove="Services\**" />
     <EmbeddedResource Remove="ViewModels\**" />
+    <None Remove="Services\**" />
     <None Remove="ViewModels\**" />
   </ItemGroup>
   <ItemGroup>
@@ -22,9 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Fittify.ViewModels\Fittify.Web.ViewModels.csproj" />
     <ProjectReference Include="..\Fittify.Web.ApiModelRepositories\Fittify.Web.ApiModelRepositories.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

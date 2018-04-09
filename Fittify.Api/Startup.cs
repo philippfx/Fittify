@@ -185,13 +185,13 @@ namespace Fittify.Api
                 // Entity to OfmGet
                 cfg.CreateMap<Workout, WorkoutOfmForGet>()
                     .ForMember(dest => dest.RangeOfWorkoutHistoryIds, opt => opt.MapFrom(src => src.WorkoutHistories.Select(s => s.Id).ToList().ToStringOfIds()))
-                    .ForMember(dest => dest.RangeOfExerciseIds, opt => opt.MapFrom(src => src.ExercisesWorkoutsMap.Select(s => s.ExerciseId).ToList().ToStringOfIds()));
+                    .ForMember(dest => dest.RangeOfExerciseIds, opt => opt.MapFrom(src => src.MapExerciseWorkout.Select(s => s.ExerciseId.GetValueOrDefault()).ToList().ToStringOfIds()));
                 cfg.CreateMap<Category, CategoryOfmForGet>()
                     .ForMember(dest => dest.RangeOfWorkoutIds, opt => opt.MapFrom(src => src.Workouts.Select(w => w.Id).ToList().ToStringOfIds()));
                 cfg.CreateMap<CardioSet, CardioSetOfmForGet>();
                 cfg.CreateMap<WeightLiftingSet, WeightLiftingSetOfmForGet>();
                 cfg.CreateMap<Exercise, ExerciseOfmForGet>()
-                    .ForMember(dest => dest.RangeOfWorkoutIds, opt => opt.MapFrom(src => src.ExercisesWorkoutsMap.Select(w => w.Workout.Id).ToList().ToStringOfIds()))
+                    .ForMember(dest => dest.RangeOfWorkoutIds, opt => opt.MapFrom(src => src.MapExerciseWorkout.Select(w => w.Workout.Id).ToList().ToStringOfIds()))
                     .ForMember(dest => dest.RangeOfExerciseHistoryIds, opt => opt.MapFrom(src => src.ExerciseHistories.Select(s => s.Id).ToList().ToStringOfIds()));
                 cfg.CreateMap<ExerciseHistory, ExerciseHistoryOfmForGet>()
                     .ForMember(dest => dest.Exercise, opt => opt.MapFrom(src => src.Exercise))
@@ -224,10 +224,29 @@ namespace Fittify.Api
 
             app.UseMvc();
 
-            app.Run(async (context) =>
+            if (env.IsDevelopment())
             {
-                await context.Response.WriteAsync("Hello World from startup.cs If you clicked a linked after landing on this page, then the link was dead!");
-            });
+                app.Run(async (context) =>
+                {
+                    await context.Response.WriteAsync("<h1>Environment DEVELOPMENT</h1>");
+                });
+            }
+            if (env.IsProduction())
+            {
+                app.Run(async (context) =>
+                {
+                    await context.Response.WriteAsync("<h1>Environment PRODUCTION</h1>");
+                });
+            }
+            if (env.IsTestInMemoryDb())
+            {
+                app.Run(async (context) =>
+                {
+                    await context.Response.WriteAsync("<h1>Environment InMemoryDb</h1>");
+                });
+            }
+
+
         }
 
         private void ConfigureRoute(IRouteBuilder routeBuilder)

@@ -14,20 +14,20 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
     {
         public async Task<IEnumerable<ExerciseViewModel>> GetCollectionByRangeOfIds(string rangeOfIds)
         {
-            var exerciseOfmForGets =
+            var exerciseOfmCollectionQueryResult =
                 await AsyncGppd.GetCollection<ExerciseOfmForGet>(
                     "http://localhost:52275/api/exercises?ids=" + rangeOfIds);
 
-            return Mapper.Map<IEnumerable<ExerciseViewModel>>(exerciseOfmForGets);
+            return Mapper.Map<IEnumerable<ExerciseViewModel>>(exerciseOfmCollectionQueryResult.OfmForGetCollection);
         }
 
         public async Task<IEnumerable<ExerciseViewModel>> GetAll()
         {
-            var exerciseOfmForGets =
+            var exerciseOfmCollectionQueryResult =
                 await AsyncGppd.GetCollection<ExerciseOfmForGet>(
                     "http://localhost:52275/api/exercises");
 
-            return Mapper.Map<IEnumerable<ExerciseViewModel>>(exerciseOfmForGets);
+            return Mapper.Map<IEnumerable<ExerciseViewModel>>(exerciseOfmCollectionQueryResult.OfmForGetCollection);
         }
     }
 }

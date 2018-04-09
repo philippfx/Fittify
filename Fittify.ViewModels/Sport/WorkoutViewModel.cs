@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Fittify.Api.OuterFacingModels.Sport.Abstract;
-using Fittify.Web.Common;
+using Fittify.Common;
 
 namespace Fittify.Web.ViewModels.Sport
 {
-    public class WorkoutViewModel : WorkoutOfmBase, IUniqueIdentifier<int>
+    public class WorkoutViewModel : WorkoutOfmBase, IEntityUniqueIdentifier<int>
     {
         public int Id { get; set; }
         //public string Name { get; set; }

@@ -1,4 +1,5 @@
-﻿@using Fittify.Web.ViewModels.Sport
+﻿@using Fittify.Common
+@using Fittify.Web.ViewModels.Sport
 @model Fittify.Web.ViewModels.Sport.WorkoutHistoryViewModel
 
 @{
@@ -7,167 +8,323 @@
 
 <div>
     <h2>History for @Model.Workout.Name</h2>
-        <div>
-            @if (Model.DateTimeStart != null)
-            {
-                @Model.DateTimeStart.GetValueOrDefault().ToString("dd.MM.yyyy:  hh:mm'h - '")
-            }
-            else
-            {
-                <div>Workoutsession not started yet - </div><a href="~/workout/historydetails/@Model.Id/start">Start now</a>
-            }
+    <div>
+        @if (Model.DateTimeStart != null)
+        {
+            @Model.DateTimeStart.GetValueOrDefault().ToString("dd.MM.yyyy:  hh:mm'h - '")
 
-            @if (Model.DateTimeEnd != null)
+            if (Model.DateTimeEnd != null)
             {
                 @Model.DateTimeEnd.GetValueOrDefault().ToString("hh:mm'h'")
             }
             else
             {
-                <a href="~/workout/historydetails/@Model.Id/end">End now</a>
+                <div>
+                    <form action="~/workouthistories/@Model.Id/end?workouthistoryid=@Model.Id" method="post">
+                        <input type="submit" value="End now" class="btn btn-primary"/>
+                    </form>
+                </div>
             }
-        </div>
-    <form action="~/workout/HistoryDetails/@Model.Id/SavingChanges" method="post">
+        }
+        else
+        {
+            <div>Workoutsession not started yet - </div>
+            <div>
+                <form action="~/workouthistories/@Model.Id/start?workouthistoryid=@Model.Id" method="post">
+                    <input type="submit" value="Start now" class="btn btn-primary"/>
+                </form>
+            </div>
+        }
+        
+    </div>
+    <form action="~/workouts/HistoryDetails/@Model.Id/SavingChanges" method="post">
         <input type="submit" class="btn btn-primary" value="Save" style="float: right " />
         <table class="table table-striped table-hover">
-            @foreach (var exerciseHistory in Model.ExerciseHistories)
+            <form></form>
+            @if (Model.ExerciseHistories == null || Model.ExerciseHistories.Count() == 0)
             {
-                <tr>
-                    <td>
-                        <div>@exerciseHistory.Exercise.Name</div>
-                        <div>
-                            <form action="~/exercisehistory/@exerciseHistory.Id/deletion?workoutHistoryId=@exerciseHistory.WorkoutHistoryId" method="post">
-                                <input name="exerciseHistoryId" type="hidden" value="@exerciseHistory.Id" />
-                                <input type="submit" value="Delete" class="btn btn-warning btn-xs" />
-                            </form>
-                        </div>
-                    </td>
-                    @{ int countWlsInEH = 0; }
-                    @{ bool doesAddButtonExist = false; }
-                    @foreach (var currentAndHistoricWLS in exerciseHistory.CurrentAndHistoricWeightLiftingSetPairs)
-                    {
-                        countWlsInEH++;
+                <div>No exercise histories created yet</div>
+            }
+            else
+            {
+                foreach (var exerciseHistoryOfTypeWeightLifting in Model.ExerciseHistories.Where(w => w.Exercise.ExerciseType == ExerciseTypeEnum.WeightLifting.ToString()))
+                {
+                    <tr>
                         <td>
-                            <table class="table table-hover" style="text-align: center; width: 150px; margin-bottom: 0">
-                                <thead>
-                                    <tr>
-                                        <th colspan="3">Full Weight</th>
-                                        <th colspan="3">Reduced</th>
-                                        <th>Burn</th>
-                                    </tr>
-                                </thead>
+                            <div>@exerciseHistoryOfTypeWeightLifting.Exercise.Name</div>
+                            <div>
+                                <form action="~/exercisehistories/@exerciseHistoryOfTypeWeightLifting.Id/deletion?workoutHistoryId=@exerciseHistoryOfTypeWeightLifting.WorkoutHistoryId" method="post">
+                                    <input name="exerciseHistoryId" type="hidden" value="@exerciseHistoryOfTypeWeightLifting.Id" />
+                                    <input type="submit" value="X" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete?')"/>
+                                </form>
+                            </div>
+                        </td>
+                        @{ int countWlsInEH = 0; }
+                        @{ bool doesAddButtonExist = false; }
 
-                                @if (currentAndHistoricWLS.HistoricWeightLiftingSet != null)
-                                {
-                                    <tr>
-                                        <td>
-                                            @if (currentAndHistoricWLS.HistoricWeightLiftingSet?.RepetitionsFull != null)
-                                            {
-                                                @currentAndHistoricWLS.HistoricWeightLiftingSet.RepetitionsFull
-                                            }
-                                        </td>
-                                        <td>x</td>
-                                        <td style="border-right: 1px solid">
-                                            @if (currentAndHistoricWLS.HistoricWeightLiftingSet?.WeightFull != null)
-                                            {
-                                                @currentAndHistoricWLS.HistoricWeightLiftingSet.WeightFull
-                                            }
-                                        </td>
-                                        <td>
-                                            @if (currentAndHistoricWLS.HistoricWeightLiftingSet?.RepetitionsReduced != null)
-                                            {
-                                                @currentAndHistoricWLS.HistoricWeightLiftingSet.RepetitionsReduced
-                                            }
-                                        </td>
-                                        <td>x</td>
-                                        <td style="border-right: 1px solid">
-                                            @if (currentAndHistoricWLS.HistoricWeightLiftingSet?.WeightReduced != null)
-                                            {
-                                                @currentAndHistoricWLS.HistoricWeightLiftingSet.WeightReduced
-                                            }
-                                        </td>
-                                        <td>
-                                            @if (currentAndHistoricWLS.HistoricWeightLiftingSet?.WeightBurn != null)
-                                            {
-                                                @currentAndHistoricWLS.HistoricWeightLiftingSet.WeightBurn
-                                            }
-                                        </td>
-                                    </tr>
-                                }
-                                else
-                                {
-                                    <tr><td colspan="7">No recent exerciseHistory available</td></tr>
-                                }
+                        @foreach (var currentAndHistoricWLS in exerciseHistoryOfTypeWeightLifting.CurrentAndHistoricWeightLiftingSetPairs)
+                        {
+                            countWlsInEH++;
+                            <td>
+                                <table class="table table-hover" style="text-align: center; width: 150px; margin-bottom: 0">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="3">Full Weight</th>
+                                            <th colspan="3">Reduced</th>
+                                            <th>Burn</th>
+                                        </tr>
+                                    </thead>
 
-
-                                @if (currentAndHistoricWLS.CurrentWeightLiftingSet != null)
-                                {
-                                    <tr>
-                                        <td>
-                                            <input name="@(nameof(currentAndHistoricWLS.CurrentWeightLiftingSet) + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.Id) + "-" + currentAndHistoricWLS.CurrentWeightLiftingSet?.Id + "-" + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.RepetitionsFull))" type="text" style="width: 30px; text-align: center" value="@currentAndHistoricWLS.CurrentWeightLiftingSet?.RepetitionsFull" />
-                                        </td>
-                                        <td>x</td>
-                                        <td style="border-right: 1px solid">
-                                            <input name="@(nameof(currentAndHistoricWLS.CurrentWeightLiftingSet) + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.Id) + "-" + currentAndHistoricWLS.CurrentWeightLiftingSet?.Id + "-" + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.WeightFull))" type="text" style="width: 30px; text-align: center" value="@currentAndHistoricWLS.CurrentWeightLiftingSet?.WeightFull" />
-                                        </td>
-                                        <td>
-                                            <input name="@(nameof(currentAndHistoricWLS.CurrentWeightLiftingSet) + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.Id) + "-" + currentAndHistoricWLS.CurrentWeightLiftingSet?.Id + "-" + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.RepetitionsReduced))" type="text" style="width: 30px; text-align: center" value="@currentAndHistoricWLS.CurrentWeightLiftingSet?.RepetitionsReduced" />
-                                        </td>
-                                        <td>x</td>
-                                        <td style="border-right: 1px solid">
-                                            <input name="@(nameof(currentAndHistoricWLS.CurrentWeightLiftingSet) + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.Id) + "-" + currentAndHistoricWLS.CurrentWeightLiftingSet?.Id + "-" + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.WeightReduced))" type="text" style="width: 30px; text-align: center" value="@currentAndHistoricWLS.CurrentWeightLiftingSet?.WeightReduced" />
-                                        </td>
-                                        <td>
-                                            <input name="@(nameof(currentAndHistoricWLS.CurrentWeightLiftingSet) + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.Id) + "-" + currentAndHistoricWLS.CurrentWeightLiftingSet?.Id + "-" + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.WeightBurn))" type="text" style="width: 30px; text-align: center" value="@currentAndHistoricWLS.CurrentWeightLiftingSet?.WeightBurn" />
-                                        </td>
-                                    </tr>
-                                }
-                                else
-                                {
-                                    if (doesAddButtonExist == false)
+                                    @if (currentAndHistoricWLS.HistoricWeightLiftingSet != null)
                                     {
                                         <tr>
-                                            <td colspan="7">
-                                                <form action="~/weightliftingsets?workouthistoryid=@Model.Id" method="post">
-                                                    <input name="exerciseHistoryId" type="hidden" value="@exerciseHistory.Id" />
-                                                    <input type="submit" value="+" class="btn btn-primary" />
-                                                </form>
+                                            <td>
+                                                @if (currentAndHistoricWLS.HistoricWeightLiftingSet?.RepetitionsFull != null)
+                                                {
+                                                    @currentAndHistoricWLS.HistoricWeightLiftingSet.RepetitionsFull
+                                                }
+                                            </td>
+                                            <td>x</td>
+                                            <td style="border-right: 1px solid">
+                                                @if (currentAndHistoricWLS.HistoricWeightLiftingSet?.WeightFull != null)
+                                                {
+                                                    @currentAndHistoricWLS.HistoricWeightLiftingSet.WeightFull
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (currentAndHistoricWLS.HistoricWeightLiftingSet?.RepetitionsReduced != null)
+                                                {
+                                                    @currentAndHistoricWLS.HistoricWeightLiftingSet.RepetitionsReduced
+                                                }
+                                            </td>
+                                            <td>x</td>
+                                            <td style="border-right: 1px solid">
+                                                @if (currentAndHistoricWLS.HistoricWeightLiftingSet?.WeightReduced != null)
+                                                {
+                                                    @currentAndHistoricWLS.HistoricWeightLiftingSet.WeightReduced
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (currentAndHistoricWLS.HistoricWeightLiftingSet?.WeightBurn != null)
+                                                {
+                                                    @currentAndHistoricWLS.HistoricWeightLiftingSet.WeightBurn
+                                                }
                                             </td>
                                         </tr>
-                                        doesAddButtonExist = true;
                                     }
-                                }
-                            </table>
-                        </td>
-                        if (countWlsInEH == exerciseHistory.CurrentAndHistoricWeightLiftingSetPairs.Count && doesAddButtonExist != true)
+                                    else
+                                    {
+                                        <tr><td colspan="7">No recent exerciseHistory available</td></tr>
+                                    }
+
+
+                                    @if (currentAndHistoricWLS.CurrentWeightLiftingSet != null)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <input name="@(nameof(currentAndHistoricWLS.CurrentWeightLiftingSet) + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.Id) + "-" + currentAndHistoricWLS.CurrentWeightLiftingSet?.Id + "-" + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.RepetitionsFull))" type="text" style="width: 30px; text-align: center" value="@currentAndHistoricWLS.CurrentWeightLiftingSet?.RepetitionsFull" />
+                                            </td>
+                                            <td>x</td>
+                                            <td style="border-right: 1px solid">
+                                                <input name="@(nameof(currentAndHistoricWLS.CurrentWeightLiftingSet) + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.Id) + "-" + currentAndHistoricWLS.CurrentWeightLiftingSet?.Id + "-" + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.WeightFull))" type="text" style="width: 30px; text-align: center" value="@currentAndHistoricWLS.CurrentWeightLiftingSet?.WeightFull" />
+                                            </td>
+                                            <td>
+                                                <input name="@(nameof(currentAndHistoricWLS.CurrentWeightLiftingSet) + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.Id) + "-" + currentAndHistoricWLS.CurrentWeightLiftingSet?.Id + "-" + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.RepetitionsReduced))" type="text" style="width: 30px; text-align: center" value="@currentAndHistoricWLS.CurrentWeightLiftingSet?.RepetitionsReduced" />
+                                            </td>
+                                            <td>x</td>
+                                            <td style="border-right: 1px solid">
+                                                <input name="@(nameof(currentAndHistoricWLS.CurrentWeightLiftingSet) + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.Id) + "-" + currentAndHistoricWLS.CurrentWeightLiftingSet?.Id + "-" + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.WeightReduced))" type="text" style="width: 30px; text-align: center" value="@currentAndHistoricWLS.CurrentWeightLiftingSet?.WeightReduced" />
+                                            </td>
+                                            <td>
+                                                <input name="@(nameof(currentAndHistoricWLS.CurrentWeightLiftingSet) + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.Id) + "-" + currentAndHistoricWLS.CurrentWeightLiftingSet?.Id + "-" + nameof(currentAndHistoricWLS.CurrentWeightLiftingSet.WeightBurn))" type="text" style="width: 30px; text-align: center" value="@currentAndHistoricWLS.CurrentWeightLiftingSet?.WeightBurn" />
+                                            </td>
+                                            @if (currentAndHistoricWLS.CurrentWeightLiftingSet != null)
+                                            {
+                                                <td>
+                                                    <form action="~/weightliftingsets/@currentAndHistoricWLS.CurrentWeightLiftingSet.Id/deletion?workoutHistoryId=@Model.Id&weightLiftingSetId=@currentAndHistoricWLS.CurrentWeightLiftingSet.Id" method="post">
+                                                        <input type="submit" value="X" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete?')"/>
+                                                    </form>
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        if (doesAddButtonExist == false)
+                                        {
+                                            <tr>
+                                                <td colspan="7">
+                                                    <form action="~/weightliftingsets?workouthistoryid=@Model.Id" method="post">
+                                                        <input name="exerciseHistoryId" type="hidden" value="@exerciseHistoryOfTypeWeightLifting.Id" />
+                                                        <input type="submit" value="+" class="btn btn-primary" />
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            doesAddButtonExist = true;
+                                        }
+                                    }
+                                </table>
+                            </td>
+                            if (countWlsInEH == exerciseHistoryOfTypeWeightLifting.CurrentAndHistoricWeightLiftingSetPairs.Count && doesAddButtonExist == false)
+                            {
+                                <td>
+                                    <form action="~/weightliftingsets?workouthistoryid=@Model.Id" method="post">
+                                        <input name="exerciseHistoryId" type="hidden" value="@exerciseHistoryOfTypeWeightLifting.Id" />
+                                        <input type="submit" value="+" class="btn btn-primary" />
+                                    </form>
+                                </td>
+                                countWlsInEH = 0;
+                            }
+                        }
+                        
+                
+
+                        @if (exerciseHistoryOfTypeWeightLifting.CurrentAndHistoricWeightLiftingSetPairs.Count == 0)
                         {
                             <td>
                                 <form action="~/weightliftingsets?workouthistoryid=@Model.Id" method="post">
-                                    <input name="exerciseHistoryId" type="hidden" value="@exerciseHistory.Id" />
+                                    <input name="exerciseHistoryId" type="hidden" value="@exerciseHistoryOfTypeWeightLifting.Id" />
                                     <input type="submit" value="+" class="btn btn-primary" />
                                 </form>
                             </td>
-                            countWlsInEH = 0;
                         }
-                    }
-                    
-                    @if (exerciseHistory.CurrentAndHistoricWeightLiftingSetPairs.Count == 0)
-                    {
-                        <td>
-                            <form action="~/weightliftingsets?workouthistoryid=@Model.Id" method="post">
-                                <input name="exerciseHistoryId" type="hidden" value="@exerciseHistory.Id" />
-                                <input type="submit" value="+" class="btn btn-primary" />
-                            </form>
-                        </td>
-                    }
+                    </tr>
+                }
 
-                </tr>
+                foreach (var exerciseHistoryOfTypeCardio in Model.ExerciseHistories.Where(w => w.Exercise.ExerciseType == ExerciseTypeEnum.Cardio.ToString()))
+                {
+                    <tr>
+                        <td>
+                            <div>@exerciseHistoryOfTypeCardio.Exercise.Name</div>
+                            <div>
+                                <form action="~/exercisehistories/@exerciseHistoryOfTypeCardio.Id/deletion?workoutHistoryId=@exerciseHistoryOfTypeCardio.WorkoutHistoryId" method="post">
+                                    <input name="exerciseHistoryId" type="hidden" value="@exerciseHistoryOfTypeCardio.Id" />
+                                    <input type="submit" value="X" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete?')"/>
+                                </form>
+                            </div>
+                        </td>
+                        @{ int countCardioSetInEH = 0; }
+                        @{ bool doesAddButtonExist = false; }
+            
+                        @foreach (var currentAndHistoricCardioSetPair in exerciseHistoryOfTypeCardio.CurrentAndHistoricCardioSetPairs)
+                        {
+                            countCardioSetInEH++;
+                            <td>
+                                <table class="table table-hover" style="text-align: center; width: 150px; margin-bottom: 0">
+
+                                    @if (currentAndHistoricCardioSetPair.HistoricCardioSet != null)
+                                    {
+                                        <tr>
+                                            <td colspan="3">
+                                                @if (currentAndHistoricCardioSetPair.HistoricCardioSet?.DateTimeStart != null)
+                                                {
+                                                    @currentAndHistoricCardioSetPair.HistoricCardioSet?.DateTimeStart
+                                                }
+                                            </td>
+                                            <td> - </td>
+                                            <td colspan="3">
+                                                @if (currentAndHistoricCardioSetPair.HistoricCardioSet?.DateTimeEnd != null)
+                                                {
+                                                    @currentAndHistoricCardioSetPair.HistoricCardioSet?.DateTimeEnd
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr><td colspan="7">No recent exerciseHistory available</td></tr>
+                                    }
+
+
+                                    @if (currentAndHistoricCardioSetPair.CurrentCardioSet != null)
+                                    {
+                                        <tr>
+                                            <td colspan="3">
+                                                @if (currentAndHistoricCardioSetPair.CurrentCardioSet?.DateTimeStart != null)
+                                                {
+                                                    @currentAndHistoricCardioSetPair.CurrentCardioSet?.DateTimeStart
+                                                }
+                                                else
+                                                {
+                                                    <form action="~/cardiosets/@exerciseHistoryOfTypeCardio.Id/start?workouthistoryid=@Model.Id&cardioSetId=@currentAndHistoricCardioSetPair.CurrentCardioSet?.Id" method="post">
+                                                        <input name="exerciseHistoryId" type="hidden" value="@exerciseHistoryOfTypeCardio.Id" />
+                                                        <input type="submit" value="Start" class="btn btn-primary" />
+                                                    </form>
+                                                }
+                                            </td>
+                                            <td> - </td>
+                                            <td colspan="3">
+                                                @if (currentAndHistoricCardioSetPair.CurrentCardioSet?.DateTimeEnd != null)
+                                                {
+                                                    @currentAndHistoricCardioSetPair.CurrentCardioSet?.DateTimeEnd
+                                                }
+                                                else
+                                                {
+                                                    <form action="~/cardiosets/@exerciseHistoryOfTypeCardio.Id/end?workouthistoryid=@Model.Id&cardioSetId=@currentAndHistoricCardioSetPair.CurrentCardioSet?.Id" method="post">
+                                                        <input name="exerciseHistoryId" type="hidden" value="@exerciseHistoryOfTypeCardio.Id" />
+                                                        <input type="submit" value="End" class="btn btn-primary" />
+                                                    </form>
+                                                }
+                                            </td>
+                                            @if (currentAndHistoricCardioSetPair.CurrentCardioSet != null)
+                                            {
+                                                <td>
+                                                    <form action="~/cardiosets/@currentAndHistoricCardioSetPair.CurrentCardioSet.Id/deletion?workoutHistoryId=@Model.Id&cardioSetId=@currentAndHistoricCardioSetPair.CurrentCardioSet.Id" method="post">
+                                                        <input type="submit" value="X" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete?')"/>
+                                                    </form>
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        if (doesAddButtonExist == false)
+                                        {
+                                            <tr>
+                                                <td colspan="7">
+                                                    <form action="~/cardiosets?workouthistoryid=@Model.Id" method="post">
+                                                        <input name="exerciseHistoryId" type="hidden" value="@exerciseHistoryOfTypeCardio.Id" />
+                                                        <input type="submit" value="+" class="btn btn-primary" />
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            doesAddButtonExist = true;
+                                        }
+                                    }
+                                </table>
+                            </td>
+
+                            if (countCardioSetInEH == exerciseHistoryOfTypeCardio.CurrentAndHistoricCardioSetPairs.Count && doesAddButtonExist == false)
+                            {
+                                <td>
+                                    <form action="~/cardiosets?workouthistoryid=@Model.Id" method="post">
+                                        <input name="exerciseHistoryId" type="hidden" value="@exerciseHistoryOfTypeCardio.Id" />
+                                        <input type="submit" value="+" class="btn btn-primary" />
+                                    </form>
+                                </td>
+                                countCardioSetInEH = 0;
+                            }
                         }
-        </table>
+                        
+                        @if (exerciseHistoryOfTypeCardio.CurrentAndHistoricCardioSetPairs.Count == 0)
+                        {
+                            <td>
+                                <form action="~/cardiosets?workouthistoryid=@Model.Id" method="post">
+                                    <input name="exerciseHistoryId" type="hidden" value="@exerciseHistoryOfTypeCardio.Id" />
+                                    <input type="submit" value="+" class="btn btn-primary" />
+                                </form>
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+
+</table>
     </form>
 
     <form class="form-group" action="~/exercisehistories" method="post">
         <input type="submit" value="Add" class="btn btn-primary" />
-        <input type="hidden" name="workouthistoryid" value="@Model.Id"/>
+        <input type="hidden" name="workouthistoryid" value="@Model.Id" />
         <div class="col-sm-4">
             <select class="form-control" name="exerciseId">
                 <option>Please select exercise to add</option>

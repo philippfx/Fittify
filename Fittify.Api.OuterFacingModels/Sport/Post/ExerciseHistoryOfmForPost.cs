@@ -13,13 +13,13 @@ namespace Fittify.Api.OuterFacingModels.Sport.Post
 
         //[ForeignKey("ExerciseId")]
         //public ExerciseOfmForPost Exercise { get; set; }
-        //public int? ExerciseId { get; set; }
+        public int? ExerciseId { get; set; }
 
         //[ForeignKey("WorkoutHistoryId")]
         //public virtual WorkoutHistoryOfmForPost WorkoutHistory { get; set; }
-        //public int WorkoutHistoryId { get; set; }
+        public int? WorkoutHistoryId { get; set; }
 
-        public DateTime ExecutedOnDateTime { get; set; }
+        public DateTime? ExecutedOnDateTime { get; set; }
 
         [ForeignKey("PreviousExerciseHistoryId")]
         public virtual ExerciseHistoryOfmForPost PreviousExerciseHistory { get; set; }

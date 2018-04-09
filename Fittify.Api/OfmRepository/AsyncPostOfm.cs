@@ -13,11 +13,11 @@ namespace Fittify.Api.OfmRepository
         where TOfmForPost : class
         where TId : struct
     {
-        private readonly TCrudRepository _repo;
+        protected readonly TCrudRepository Repo;
 
         public AsyncPostOfm(TCrudRepository repository)
         {
-            _repo = repository;
+            Repo = repository;
         }
 
         public AsyncPostOfm()
@@ -30,7 +30,7 @@ namespace Fittify.Api.OfmRepository
             var entity = Mapper.Map<TOfmForPost, TEntity>(ofmForPost);
             try
             {
-                entity = await _repo.Create(entity);
+                entity = await Repo.Create(entity);
             }
             catch (Exception e)
             {

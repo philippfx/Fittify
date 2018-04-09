@@ -29,6 +29,7 @@ namespace Fittify.Web.View
         {
             services.AddMvc();
             services.AddRouteAnalyzer();
+            services.AddSingleton<IConfiguration>(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

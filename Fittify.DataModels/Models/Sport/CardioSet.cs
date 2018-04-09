@@ -12,7 +12,7 @@ namespace Fittify.DataModels.Models.Sport
         public DateTime? DateTimeStart { get; set; }
         public DateTime? DateTimeEnd { get; set; }
 
-        [ForeignKey("ExerciseHistoryId")]
+        //[ForeignKey("ExerciseHistoryId")]
         public virtual ExerciseHistory ExerciseHistory { get; set; }
         public int? ExerciseHistoryId { get; set; }
     }

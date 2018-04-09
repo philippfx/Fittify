@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Fittify.Api.OuterFacingModels.Sport.Abstract;
-using Fittify.Web.Common;
+using Fittify.Common;
 
 namespace Fittify.Web.ViewModels.Sport
 {
-    public class WorkoutHistoryViewModel : WorkoutHistoryOfmBase, IUniqueIdentifier<int>
+    public class WorkoutHistoryViewModel : WorkoutHistoryOfmBase, IEntityUniqueIdentifier<int>
     {
         public int Id { get; set; }
         //public DateTime? DateTimeStart { get; set; }

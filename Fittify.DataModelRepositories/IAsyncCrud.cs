@@ -16,7 +16,7 @@ namespace Fittify.DataModelRepositories
 
         Task<TEntity> Update(TEntity entity);
 
-        //Task<bool> Delete(TId id);
+        Task<EntityDeletionResult<TId>> Delete(TId id);
         Task<EntityDeletionResult<TId>> MyDelete(TId id);
 
         Task<TEntity> GetById(TId id);

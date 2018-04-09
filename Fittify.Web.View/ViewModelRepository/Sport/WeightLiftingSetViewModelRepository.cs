@@ -13,18 +13,13 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
 {
     public class WeightLiftingSetViewModelRepository : AsyncGppdRepository<int, WorkoutOfmForPost, WorkoutViewModel>
     {
-        public WeightLiftingSetViewModelRepository()
-        {
-
-        }
-
         public async Task<IEnumerable<WeightLiftingSetViewModel>> GetCollectionByExerciseHistoryId(int exerciseHistoryId)
         {
-            var exerciseHistoryWorkoutOfmForGets =
+            var exerciseHistoryOfmCollectionQueryResult =
                 await AsyncGppd.GetCollection<WeightLiftingSetOfmForGet>(
                     "http://localhost:52275/api/weightliftingsets?exerciseHistoryId=" + exerciseHistoryId);
 
-            return Mapper.Map<IEnumerable<WeightLiftingSetViewModel>>(exerciseHistoryWorkoutOfmForGets);
+            return Mapper.Map<IEnumerable<WeightLiftingSetViewModel>>(exerciseHistoryOfmCollectionQueryResult.OfmForGetCollection);
         }
     }
 }

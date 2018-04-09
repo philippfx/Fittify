@@ -51,7 +51,7 @@ namespace Fittify.Api.Controllers.Sport
             IUrlHelper urlHelper,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService,
-            IConfiguration appConfiguration,
+            //IConfiguration appConfiguration,
             IHttpContextAccessor httpContextAccesor)
         {
             _repo = new CategoryRepository(fittifyContext);

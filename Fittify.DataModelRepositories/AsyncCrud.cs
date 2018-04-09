@@ -72,8 +72,6 @@ namespace Fittify.DataModelRepositories
 
         public virtual async Task<EntityDeletionResult<TId>> MyDelete(TId id) // List<List<IEntityUniqueIdentifier<int>>>
         {
-            // Todo Refactor and make return type bool (out errors)!
-            List<List<IEntityUniqueIdentifier<int>>> returnList = new List<List<IEntityUniqueIdentifier<int>>>();
             var entityDeletionResult = new EntityDeletionResult<TId>();
 
             var entity = await GetById(id);
@@ -82,6 +80,10 @@ namespace Fittify.DataModelRepositories
             {
                 entityDeletionResult.DidEntityExist = false;
                 return entityDeletionResult;
+            }
+            else
+            {
+                entityDeletionResult.DidEntityExist = true;
             }
 
             // all context models
@@ -100,7 +102,6 @@ namespace Fittify.DataModelRepositories
                 if (IEnumerablenavPropValue != null)
                 {
                     var listnavPropValue = IEnumerablenavPropValue.ToList();
-                    //returnList.Add(listnavPropValue);
                     entityDeletionResult.EntitesThatBlockDeletion.Add(listnavPropValue);
                 }
 
@@ -158,6 +159,29 @@ namespace Fittify.DataModelRepositories
                 var msg = e.Message;
             }
             return objectsWrittenToContext >= 0;
+        }
+
+        public virtual async Task<EntityDeletionResult<TId>> Delete(TId id)
+        {
+            var entityDeletionResult = new EntityDeletionResult<TId>();
+
+            var entity = await GetById(id);
+
+            if (entity == null)
+            {
+                entityDeletionResult.DidEntityExist = false;
+                return entityDeletionResult;
+            }
+
+            FittifyContext.Set<TEntity>().Remove(entity);
+            var IsDeleted = await SaveContext();
+
+            if (!IsDeleted)
+            {
+                entityDeletionResult.IsDeleted = false;
+            }
+
+            return entityDeletionResult;
         }
     }
 }

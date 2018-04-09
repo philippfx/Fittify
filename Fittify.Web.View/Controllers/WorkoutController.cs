@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -10,16 +11,21 @@ using Fittify.Web.View.ViewModelRepository.Sport;
 using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Web.View.Controllers
 {
+    [Route("workouts")]
     public class WorkoutController : Controller
     {
         private IAsyncGppd<int, WorkoutOfmForPost, WorkoutViewModel> _asyncGppd;
-        public WorkoutController()
+        private string _fittifyApiBaseUrl;
+        public WorkoutController(IConfiguration appConfiguration)
         {
-            _asyncGppd = new AsyncGppdRepository<int, WorkoutOfmForPost, WorkoutViewModel>("http://localhost:52275/api/workouts");
+            _fittifyApiBaseUrl = appConfiguration.GetValue<string>("FittifyApiBaseUrl");
+            _asyncGppd = new AsyncGppdRepository<int, WorkoutOfmForPost, WorkoutViewModel>(_fittifyApiBaseUrl + "api/workouts");
         }
         public async Task<IActionResult> Overview()
         {
@@ -27,7 +33,7 @@ namespace Fittify.Web.View.Controllers
             return View("Overview", listWorkoutViewModel.ToList());
         }
         
-        [Route("workout/{workoutId}/associatedexercises", Name = "AssociatedExercises")]
+        [Route("{workoutId}/associatedexercises", Name = "AssociatedExercises")]
         public async Task<IActionResult> AssociatedExercises(int workoutId)
         {
             var repo = new WorkoutViewModelRepository();
@@ -36,7 +42,7 @@ namespace Fittify.Web.View.Controllers
         }
 
         [HttpPost]
-        [Route("workout/{workoutId}/associatedexercises")]
+        [Route("{workoutId}/associatedexercises")]
         public async Task<IActionResult> AssociateExercise(int workoutId, [FromForm] ExerciseViewModel exerciseViewModel)
         {
             var mapExerciseWorkout = new MapExerciseWorkoutOfmForPost()
@@ -46,12 +52,12 @@ namespace Fittify.Web.View.Controllers
             };
 
             await AsyncGppd.Post<MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForGet>(
-                "http://localhost:52275/api/mapexerciseworkouts", mapExerciseWorkout);
+                _fittifyApiBaseUrl + "api/mapexerciseworkouts", mapExerciseWorkout);
 
             return RedirectToAction("AssociatedExercises", "Workout", new { workoutId = workoutId });
         }
 
-        [Route("workout/{workoutId}/history")]
+        [Route("{workoutId}/history")]
         public async Task<IActionResult> Histories(int workoutId)
         {
             var repo = new WorkoutHistoryViewModelRepository();
@@ -59,181 +65,89 @@ namespace Fittify.Web.View.Controllers
             return View(workoutHistoryViewModels.ToList());
         }
 
-        [Route("workout/historydetails/{workouthistoryId}")]
+        [Route("historydetails/{workouthistoryId}")]
         public async Task<IActionResult> HistoryDetails(int workoutHistoryId)
         {
             var workoutHistoryViewModelRepository = new WorkoutHistoryViewModelRepository();
             var workoutHistoryViewModel =
                 await workoutHistoryViewModelRepository.GetDetailsById(workoutHistoryId);
 
-            //workoutHistoryViewModel.AllExercises =
-            //    await 
-
             return View(workoutHistoryViewModel);
         }
-        //    try
-            //    {
 
-            //        var gppdRepoExerciseHistory =
-            //            new AsyncGppdRepository<,,>(
-            //                "http://localhost:52275/api/exercisehistories?workoutHistoryId=" + workoutHistoryId);
-            //        workoutHistory.ExerciseHistories = gppdRepoExerciseHistory.GetCollection().Result.ToList();
+        [HttpPost]
+        public async Task<IActionResult> CreateNewWorkout([FromForm] WorkoutOfmForPost workoutOfmForPost)
+        {
+            var workoutOfmForGet = await AsyncGppd.Post<WorkoutOfmForPost, WorkoutOfmForGet>(
+                _fittifyApiBaseUrl + "api/workouts", workoutOfmForPost);
 
-            //        foreach (var eH in workoutHistory.ExerciseHistories)
-            //        {
-            //            var gppdRepoWeightLiftingSet =
-            //                new AsyncGppdRepository<,,>(
-            //                    "http://localhost:52275/api/weightliftingsets?exerciseHistoryId=" + eH.Id);
-            //            var currentWeightliftingSets = gppdRepoWeightLiftingSet.GetCollection().Result.ToArray();
-
-            //            WeightLiftingSetViewModel[] previousWeightliftingSets = null;
-            //            if (eH.PreviousExerciseHistoryId != null)
-            //            {
-            //                gppdRepoExerciseHistory = new AsyncGppdRepository<,,>(
-            //                    "http://localhost:52275/api/exercisehistories?workoutHistoryId=" +
-            //                    eH.PreviousExerciseHistoryId);
-            //                eH.PreviousExerciseHistory = gppdRepoExerciseHistory.GetCollection().Result.FirstOrDefault();
-
-            //                gppdRepoWeightLiftingSet = new AsyncGppdRepository<,,>(
-            //                    "http://localhost:52275/api/weightliftingsets?exerciseHistoryId=" +
-            //                    eH.PreviousExerciseHistoryId);
-            //                previousWeightliftingSets = gppdRepoWeightLiftingSet.GetCollection().Result.ToArray();
-            //            }
-
-            //            int previousWeightliftingSetsLength = previousWeightliftingSets?.Length ?? 0;
-            //            int currentWeightliftingSetsLength = currentWeightliftingSets?.Length ?? 0;
-            //            int maxValuePairs /* NumberOfColumns*/ =
-            //                Math.Max(previousWeightliftingSetsLength, currentWeightliftingSetsLength);
-
-            //            eH.CurrentAndHistoricWeightLiftingSetPairs =
-            //                new List<ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair>();
-            //            for (int i = 0; i < maxValuePairs; i++)
-            //            {
-            //                if (i < previousWeightliftingSetsLength && i < currentWeightliftingSetsLength)
-            //                {
-            //                    eH.CurrentAndHistoricWeightLiftingSetPairs.Add(
-            //                        new ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair(
-            //                            previousWeightliftingSets[i], currentWeightliftingSets[i]));
-            //                }
-
-            //                if (i < previousWeightliftingSetsLength && i >= currentWeightliftingSetsLength)
-            //                {
-            //                    eH.CurrentAndHistoricWeightLiftingSetPairs.Add(
-            //                        new ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair(
-            //                            previousWeightliftingSets[i], null));
-            //                }
-
-            //                if (i >= previousWeightliftingSetsLength && i < currentWeightliftingSetsLength)
-            //                {
-            //                    eH.CurrentAndHistoricWeightLiftingSetPairs.Add(
-            //                        new ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair(null,
-            //                            currentWeightliftingSets[i]));
-            //                }
-            //            }
-
-            //            CardioSetViewModel[] previousCardioSets = null;
-            //            CardioSetViewModel[] currentCardioSets = null;
-            //            if (eH.PreviousExerciseHistoryId != null)
-            //            {
-            //                gppdRepoExerciseHistory = new AsyncGppdRepository<,,>(
-            //                    "http://localhost:52275/api/exercisehistories?workoutHistoryId=" +
-            //                    eH.PreviousExerciseHistoryId);
-            //                eH.PreviousExerciseHistory = gppdRepoExerciseHistory.GetCollection().Result.FirstOrDefault();
-
-            //                var gppdRepoCardioSet = new AsyncGppdRepository<,,>(
-            //                    "http://localhost:52275/api/cardiosets?exerciseHistoryId=" + eH.PreviousExerciseHistoryId);
-            //                previousCardioSets = gppdRepoCardioSet.GetCollection().Result.ToArray();
-
-            //                gppdRepoCardioSet =
-            //                    new AsyncGppdRepository<,,>(
-            //                        "http://localhost:52275/api/cardiosets?exerciseHistoryId=" + eH.Id);
-            //                currentCardioSets = gppdRepoCardioSet.GetCollection().Result.ToArray();
-            //            }
-
-            //            int previousCardioSetsLength = previousCardioSets?.Length ?? 0;
-            //            int currentCardioSetsLength = currentCardioSets?.Length ?? 0;
-            //            maxValuePairs /* NumberOfColumns*/ = Math.Max(previousCardioSetsLength, currentCardioSetsLength);
-
-            //            eH.CurrentAndHistoricCardioSetPairs =
-            //                new List<ExerciseHistoryViewModel.CurrentAndHistoricCardioSetPair>();
-            //            for (int i = 0; i < maxValuePairs; i++)
-            //            {
-            //                if (i < previousCardioSetsLength && i < currentCardioSetsLength)
-            //                {
-            //                    eH.CurrentAndHistoricCardioSetPairs.ToList().Add(
-            //                        new ExerciseHistoryViewModel.CurrentAndHistoricCardioSetPair(previousCardioSets[i],
-            //                            currentCardioSets[i]));
-            //                }
-
-            //                if (i < previousCardioSetsLength && i >= currentCardioSetsLength)
-            //                {
-            //                    eH.CurrentAndHistoricCardioSetPairs.ToList().Add(
-            //                        new ExerciseHistoryViewModel.CurrentAndHistoricCardioSetPair(previousCardioSets[i],
-            //                            null));
-            //                }
-
-            //                if (i >= previousCardioSetsLength && i < currentCardioSetsLength)
-            //                {
-            //                    eH.CurrentAndHistoricCardioSetPairs.ToList().Add(
-            //                        new ExerciseHistoryViewModel.CurrentAndHistoricCardioSetPair(null,
-            //                            currentCardioSets[i]));
-            //                }
-            //            }
-
-            //            var gppdRepoExercises =
-            //                new AsyncGppdRepository<,,>("http://localhost:52275/api/exercises");
-            //            workoutHistory.AllExercises = gppdRepoExercises.GetCollection().Result.ToList();
-            //        }
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        var msg = e.Message;
-            //    }
-
-            //    return View(workoutHistory);
-            //}
-
-            //[HttpPost]
-            //[Route("workout/history/new")]
-            //public RedirectToActionResult Create([FromForm] WorkoutHistoryOfmForPost workoutHistoryOfmForPost)
-            //{
-            //    var gppdRepoExercises = new AsyncGppdRepository<,,>("http://localhost:52275/api/workouthistories");
-            //    var result = gppdRepoExercises.Post(workoutHistoryOfmForPost).Result;
-            //    return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = result.Id });
-            //}
-
-            //[HttpPost]
-            //[Route("workout")]
-            //public RedirectToActionResult Create(IFormCollection formCollection)
-            //{
-            //    var gppdRepoExercises = new AsyncGppdRepository<,,>("http://localhost:52275/api/workouts");
-            //    var workoutViewModel = new WorkoutViewModel() { Name = formCollection.FirstOrDefault(f => f.Key.ToString().ToLower() == "name").Value, CategoryId = 1 };
-            //    var result = gppdRepoExercises.Post(workoutViewModel).Result;
-            //    return RedirectToAction("Overview", "Workout");
-            //}
-
-            //[Route("workout/historydetails/{workoutHistoryId}/start")]
-            //public RedirectToActionResult StartSession(int workoutHistoryId)
-            //{
-            //    var gppdRepoExercises = new AsyncGppdRepository<,,>("http://localhost:52275/api/workouthistories/" + workoutHistoryId);
-
-            //    var jsonPatch = new JsonPatchDocument();
-            //    jsonPatch.Add("/datetimestartend/datetimestart", DateTime.Now);
-
-            //    var result = gppdRepoExercises.Patch(jsonPatch).Result;
-            //    return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = result.Id });
-            //}
-
-            //[Route("workout/historydetails/{workoutHistoryId}/end")]
-            //public RedirectToActionResult EndSession(int workoutHistoryId)
-            //{
-            //    var gppdRepoExercises = new AsyncGppdRepository<,,>("http://localhost:52275/api/workouthistories/" + workoutHistoryId);
-
-            //    var jsonPatch = new JsonPatchDocument();
-            //    jsonPatch.Add("/datetimestartend/datetimeend", DateTime.Now);
-
-            //    var result = gppdRepoExercises.Patch(jsonPatch).Result;
-            //    return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = result.Id });
-            //}
+            return RedirectToAction("AssociatedExercises", "Workout", new { workoutId = workoutOfmForGet.Id });
         }
+
+        [HttpPost]
+        [Route("HistoryDetails/{workoutHistoryId}/SavingChanges")]
+        public async Task<RedirectToActionResult> SaveChangesForSets(int workoutHistoryId, IFormCollection formCollection)
+        {
+            // The formCollection is a flat array (there is no nested item).
+            // Each form item needs to be parsed and assigned to its unique weightliftingSet
+            // Each form item's name is composed of the weightliftingSetId and the property name to be patched
+            var listWls = new List<WeightLiftingSetViewModel>();
+
+            var regexProperty = new Regex(@"^\w+-{1}\d+-{1}\w+$"); // For example "CurrentWeightLiftingSetId-98-RepetitionsFull"
+            foreach (var formItem in formCollection)
+            {
+                if (regexProperty.IsMatch(formItem.Key))
+                {
+                    if (formItem.Key.ToLower().Contains("CurrentWeightLiftingSet".ToLower()))
+                    {
+                        // Getting the weightliftingSetId
+                        int firstIndexOfIdInString = formItem.Key.IndexOf("-") + 1;
+                        int lengthOfIdString = formItem.Key.LastIndexOf("-") - firstIndexOfIdInString;
+                        var weightLiftingSetId = Int32.Parse(formItem.Key.Substring(firstIndexOfIdInString, lengthOfIdString));
+
+                        var propertyName = formItem.Key.Substring(formItem.Key.LastIndexOf("-") + 1);
+
+                        var weightLiftingSet = listWls.FirstOrDefault(wls => wls.Id == weightLiftingSetId);
+                        if (weightLiftingSet == null)
+                        {
+                            // Creating not yet created weightLiftingSetViewModel
+                            listWls.Add(new WeightLiftingSetViewModel() { Id = weightLiftingSetId });
+                            weightLiftingSet = listWls.FirstOrDefault(wls => wls.Id == weightLiftingSetId);
+                        }
+
+                        var property = weightLiftingSet?.GetType().GetProperty(propertyName);
+
+                        if (Int32.TryParse(formItem.Value, out int parsedFormValue))
+                        {
+                            property?.SetValue(weightLiftingSet, parsedFormValue);
+                        }
+                        else if (string.IsNullOrWhiteSpace(formItem.Value))
+                        {
+                            property?.SetValue(weightLiftingSet, null);
+                        }
+                    }
+                }
+            }
+
+            // Now that we have collected all data for all weightliftingSets we can create and send the PATCH request
+            // var jsonPatchCollection = new List<JsonPatchDocument>();
+
+            foreach (var wls in listWls)
+            {
+                JsonPatchDocument jsonPatchDocument = new JsonPatchDocument();
+                foreach (var prop in wls.GetType().GetProperties())
+                {
+                    if (prop.GetValue(wls) != null && !prop.Name.ToLower().Contains("id"))
+                    {
+                        var jsonPatchOperation = new Operation("replace", prop.Name, null, prop.GetValue(wls));
+                        jsonPatchDocument.Operations.Add(jsonPatchOperation);
+                    }
+                }
+
+                var result = await AsyncGppd.Patch<WeightLiftingSetOfmForGet>(
+                             _fittifyApiBaseUrl + "api/weightliftingsets/" + wls.Id, jsonPatchDocument);
+            }
+            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
+        }
+    }
 }

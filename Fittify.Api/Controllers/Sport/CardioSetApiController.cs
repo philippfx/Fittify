@@ -107,20 +107,6 @@ namespace Fittify.Api.Controllers.Sport
             return Ok(result);
         }
 
-        //[HttpGet("range/{inputString}", Name = "GetCardioSetsByRangeOfIds")]
-        //[RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
-        //public async Task<IActionResult> GetByRangeOfIds(string inputString)
-        //{
-        //    var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputString));
-        //    var ofmCollection = Mapper.Map<List<CardioSet>, List<CardioSetOfmForGet>>(entityCollection.ToList());
-        //    if (ofmCollection.Count == 0) // Todo mock "not found" as query paramter 
-        //    {
-        //        ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
-        //        return new EntityNotFoundObjectResult(ModelState);
-        //    }
-        //    return Ok(ofmCollection);
-        //}
-
         [HttpPost(Name = "CreateCardioSet")]
         [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> Post([FromBody] CardioSetOfmForPost ofmForPost)

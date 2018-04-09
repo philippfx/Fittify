@@ -1,11 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Fittify.Api.OuterFacingModels.Sport.Abstract;
-using Fittify.Web.Common;
+using Fittify.Common;
 
 namespace Fittify.Web.ViewModels.Sport
 {
-    public class CardioSetViewModel : CardioSetOfmBase, IUniqueIdentifier<int>
+    public class CardioSetViewModel : CardioSetOfmBase, IEntityUniqueIdentifier<int>
     {
         public int Id { get; set; }
 

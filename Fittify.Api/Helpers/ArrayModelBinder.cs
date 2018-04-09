@@ -29,8 +29,6 @@ namespace Fittify.Api.Helpers
                 return Task.CompletedTask;
             }
 
-
-
             // The value isn't null or whitespace, 
             // and the type of the model is enumerable. 
             // Get the enumerable's type, and a converter 

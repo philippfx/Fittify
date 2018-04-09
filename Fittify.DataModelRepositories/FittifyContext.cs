@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Fittify.DataModelRepositories
 {
@@ -49,9 +51,124 @@ namespace Fittify.DataModelRepositories
             }
         }
 
-        //internal object Set(Type type)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            DisableCascadeDeletion(modelBuilder);
+
+            SetRelationshipsAndCascadeDeletion(modelBuilder);
+
+            base.OnModelCreating(modelBuilder);
+
+            //modelBuilder.Conventions.Add<CascadeDeleteAttributeConvention>();
+        }
+
+        protected void DisableCascadeDeletion(ModelBuilder modelBuilder)
+        {
+            // Taken from https://stackoverflow.com/questions/46837617/where-are-entity-framework-core-conventions
+            // We do a metadata model loop
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                // equivalent of modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+                // and modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
+                // for EF6
+                entityType.GetForeignKeys()
+                    .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade)
+                    .ToList()
+                    .ForEach(fk => fk.DeleteBehavior = DeleteBehavior.Restrict);
+            }
+        }
+
+        protected void SetRelationshipsAndCascadeDeletion(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CardioSet>()
+                .HasOne(h => h.ExerciseHistory)
+                .WithMany(w => w.CardioSets)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Category>()
+                .HasMany(h => h.Workouts)
+                .WithOne(w => w.Category)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Exercise>()
+                .HasMany(h => h.MapExerciseWorkout)
+                .WithOne(w => w.Exercise)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Exercise>()
+                .HasMany(h => h.ExerciseHistories)
+                .WithOne(w => w.Exercise)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<ExerciseHistory>()
+                .HasOne(h => h.Exercise)
+                .WithMany(w => w.ExerciseHistories)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<ExerciseHistory>()
+                .HasOne(h => h.WorkoutHistory)
+                .WithMany(w => w.ExerciseHistories)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ExerciseHistory>()
+                .HasOne(h => h.PreviousExerciseHistory)
+                .WithMany(w => w.ParentPreviousExerciseHistory)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ExerciseHistory>()
+                .HasMany(h => h.ParentPreviousExerciseHistory)
+                .WithOne(w => w.PreviousExerciseHistory)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ExerciseHistory>()
+                .HasMany(h => h.WeightLiftingSets)
+                .WithOne(w => w.ExerciseHistory)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<ExerciseHistory>()
+                .HasMany(h => h.CardioSets)
+                .WithOne(w => w.ExerciseHistory)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<MapExerciseWorkout>()
+                .HasOne(h => h.Exercise)
+                .WithMany(w => w.MapExerciseWorkout)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MapExerciseWorkout>()
+                .HasOne(h => h.Workout)
+                .WithMany(w => w.MapExerciseWorkout)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<WeightLiftingSet>()
+                .HasOne(h => h.ExerciseHistory)
+                .WithMany(w => w.WeightLiftingSets)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Workout>()
+                .HasOne(h => h.Category)
+                .WithMany(w => w.Workouts)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Workout>()
+                .HasMany(h => h.MapExerciseWorkout)
+                .WithOne(w => w.Workout)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Workout>()
+                .HasMany(h => h.WorkoutHistories)
+                .WithOne(w => w.Workout)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<WorkoutHistory>()
+                .HasOne(h => h.Workout)
+                .WithMany(w => w.WorkoutHistories)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<WorkoutHistory>()
+                .HasMany(h => h.ExerciseHistories)
+                .WithOne(w => w.WorkoutHistory)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

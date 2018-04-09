@@ -7,8 +7,9 @@ namespace Fittify.DataModels.Models.Sport
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public ExerciseTypeEnum ExerciseType { get; set; }
 
-        public virtual IEnumerable<MapExerciseWorkout> ExercisesWorkoutsMap { get; set; }
+        public virtual IEnumerable<MapExerciseWorkout> MapExerciseWorkout { get; set; }
         public virtual IEnumerable<ExerciseHistory> ExerciseHistories { get; set; }
         
     }

@@ -3,6 +3,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Threading;
+using Fittify.DataModelRepositories;
+using Fittify.Test.Core;
 using Fittify.Test.Core.Seed;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
@@ -24,78 +26,28 @@ namespace Fittify.DbResetter
             string path = configuration.GetConnectionString("DefaultConnection");
             return path;
         }
-
-        private string GetMasterConnectionStringFromAppsettingsJson()
-        {
-            var control = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory/*, @"..\Fittify"*/));
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(control)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-
-            var configuration = builder.Build();
-
-            string path = configuration.GetConnectionString("MasterConnection");
-            return path;
-        }
-
+        
         public void DeleteDb()
         {
-            using (var master = new SqlConnection(GetMasterConnectionStringFromAppsettingsJson()))
+            using (var fittifyContext = new FittifyContext(StaticFields.MsSqlTestDbConnectionStringWork))
             {
-                string fittifyDbName;
-                var connectionString = GetFittifyConnectionStringFromAppsettingsJson();
-                using (var fittify = new SqlConnection(connectionString))
-                {
-                    fittifyDbName = fittify.Database;
-                }
-
-                //master.Open();
-
                 try
                 {
-                    master.Open();
+                    fittifyContext.Database.EnsureDeleted();
                 }
-                catch (Exception e)
+                catch(Exception ex)
                 {
-                    Console.WriteLine(fittifyDbName + "doesn't seem to exist");
+                    var msg = ex.Message;
                 }
-
-                if (master.State == ConnectionState.Open)
-                {
-                    using (var command = master.CreateCommand())
-                    {
-                        //command.CommandText =
-                        //    string.Format(@"USE master;
-                        //                    --GO
-                        //                    IF EXISTS (SELECT * FROM sys.databases WHERE name = N'{0}')
-                        //                    BEGIN
-                        //                    ALTER DATABASE {0} SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-                        //                    DROP DATABASE {0};
-                        //                    END", fittifyDbName);
-
-                        //command.ExecuteNonQuery();
-
-                        //USED TO WORK
-                        // SET SINGLE_USER will close any open connections that would prevent the drop
-                        command.CommandText
-                            = string.Format(@"IF EXISTS (SELECT * FROM sys.databases WHERE name = N'{0}')
-                                            BEGIN
-                                                ALTER DATABASE [{0}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-                                                DROP DATABASE [{0}];
-                                            END", fittifyDbName);
-
-                        command.ExecuteNonQuery();
-                    }
-                }
-                //Thread.Sleep(20000);
             }
         }
 
         public void EnsureCreatedDbContext()
         {
-            var fittifyContextSeeder = new FittifyContextSeeder();
-            fittifyContextSeeder.EnsureCreatedDbProductionContext(GetFittifyConnectionStringFromAppsettingsJson());
+            using (var fittifyContext = new FittifyContext(GetFittifyConnectionStringFromAppsettingsJson()))
+            {
+                fittifyContext.Database.EnsureCreated();
+            }
         }
 
         public void Seed()

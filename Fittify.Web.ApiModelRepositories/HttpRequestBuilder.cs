@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -7,12 +8,13 @@ namespace Fittify.Web.ApiModelRepositories
 {
     public class HttpRequestBuilder
     {
-        private HttpMethod method = null;
-        private string requestUri = "";
-        private HttpContent content = null;
-        private string bearerToken = "";
-        private string acceptHeader = "application/json";
-        private TimeSpan timeout = new TimeSpan(0, 0, 15);
+        private HttpMethod _method = null;
+        private string _requestUri = "";
+        private HttpContent _content = null;
+        private string _bearerToken = "";
+        private string _acceptHeader = "application/json";
+        private Dictionary<string, string> _customRequestHeaders = null;
+        private TimeSpan _timeout = new TimeSpan(0, 0, 15);
 
         public HttpRequestBuilder()
         {
@@ -21,37 +23,43 @@ namespace Fittify.Web.ApiModelRepositories
 
         public HttpRequestBuilder AddMethod(HttpMethod method)
         {
-            this.method = method;
+            this._method = method;
             return this;
         }
 
         public HttpRequestBuilder AddRequestUri(string requestUri)
         {
-            this.requestUri = requestUri;
+            this._requestUri = requestUri;
             return this;
         }
 
         public HttpRequestBuilder AddContent(HttpContent content)
         {
-            this.content = content;
+            this._content = content;
             return this;
         }
 
         public HttpRequestBuilder AddBearerToken(string bearerToken)
         {
-            this.bearerToken = bearerToken;
+            this._bearerToken = bearerToken;
             return this;
         }
 
         public HttpRequestBuilder AddAcceptHeader(string acceptHeader)
         {
-            this.acceptHeader = acceptHeader;
+            this._acceptHeader = acceptHeader;
             return this;
         }
 
         public HttpRequestBuilder AddTimeout(TimeSpan timeout)
         {
-            this.timeout = timeout;
+            this._timeout = timeout;
+            return this;
+        }
+
+        public HttpRequestBuilder AddCustomRequestHeaders(Dictionary<string, string> customRequestHeaders)
+        {
+            this._customRequestHeaders = customRequestHeaders;
             return this;
         }
 
@@ -63,30 +71,36 @@ namespace Fittify.Web.ApiModelRepositories
             // Setup request
             var request = new HttpRequestMessage
             {
-                Method = this.method,
-                RequestUri = new Uri(this.requestUri)
+                Method = this._method,
+                RequestUri = new Uri(this._requestUri)
             };
 
-            if (this.content != null)
+            if (this._content != null)
             {
-                request.Content = this.content;
+                request.Content = this._content;
                 //request.Content.Headers.Add("Content-Type", "application/json");
             }
 
-            if (!string.IsNullOrEmpty(this.bearerToken))
+            if (!string.IsNullOrEmpty(this._bearerToken))
                 request.Headers.Authorization =
-                    new AuthenticationHeaderValue("Bearer", this.bearerToken);
+                    new AuthenticationHeaderValue("Bearer", this._bearerToken);
 
             request.Headers.Accept.Clear();
-            if (!string.IsNullOrEmpty(this.acceptHeader))
+            if (!string.IsNullOrEmpty(this._acceptHeader))
                 request.Headers.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue(this.acceptHeader));
+                    new MediaTypeWithQualityHeaderValue(this._acceptHeader));
 
-            
+            if (this._customRequestHeaders != null)
+            {
+                foreach (var customHeader in _customRequestHeaders)
+                {
+                    request.Headers.Add(customHeader.Key, customHeader.Value);
+                }
+            }
 
             // Setup client
             var client = new System.Net.Http.HttpClient();
-            client.Timeout = this.timeout;
+            client.Timeout = this._timeout;
 
             return await client.SendAsync(request);
         }

@@ -10,11 +10,11 @@ namespace Fittify.DataModels.Models.Sport
 
         public string Name { get; set; }
 
-        [ForeignKey("CategoryId")]
+        //[ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
         public int? CategoryId { get; set; }
 
-        public virtual IEnumerable<MapExerciseWorkout> ExercisesWorkoutsMap { get; set; }
+        public virtual IEnumerable<MapExerciseWorkout> MapExerciseWorkout { get; set; }
         public virtual IEnumerable<WorkoutHistory> WorkoutHistories { get; set; }
     }
 }

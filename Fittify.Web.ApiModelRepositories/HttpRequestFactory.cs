@@ -1,6 +1,9 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
+using Newtonsoft.Json;
 
 namespace Fittify.Web.ApiModelRepositories
 {
@@ -15,11 +18,31 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
+        public static async Task<HttpResponseMessage> GetSingle(string requestUri, Dictionary<string, string> customRequestHeaders)
+        {
+            var builder = new HttpRequestBuilder()
+                .AddMethod(HttpMethod.Get)
+                .AddRequestUri(requestUri)
+                .AddCustomRequestHeaders(customRequestHeaders);
+
+            return await builder.SendAsync();
+        }
+
         public static async Task<HttpResponseMessage> GetCollection(string requestUri)
         {
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Get)
                 .AddRequestUri(requestUri);
+
+            return await builder.SendAsync();
+        }
+
+        public static async Task<HttpResponseMessage> GetCollection(string requestUri, Dictionary<string, string> customRequestHeaders)
+        {
+            var builder = new HttpRequestBuilder()
+                .AddMethod(HttpMethod.Get)
+                .AddRequestUri(requestUri)
+                .AddCustomRequestHeaders(customRequestHeaders);
 
             return await builder.SendAsync();
         }
@@ -48,15 +71,13 @@ namespace Fittify.Web.ApiModelRepositories
         }
 
         public static async Task<HttpResponseMessage> Patch(
-            string requestUri, JsonPatchDocument jsonPatchDocument /*, object value*/)
+            string requestUri, JsonPatchDocument jsonPatchDocument /*object jsonPatchDocument*/)
         {
-            //var content = JsonConvert.SerializeObject(jsonPatchDocument);
             var builder = new HttpRequestBuilder()
                 .AddMethod(new HttpMethod("PATCH"))
                 .AddRequestUri(requestUri)
-                //.AddContent(new PatchContent(value));
                 .AddContent(new PatchContent(jsonPatchDocument));
-            
+
             return await builder.SendAsync();
         }
 

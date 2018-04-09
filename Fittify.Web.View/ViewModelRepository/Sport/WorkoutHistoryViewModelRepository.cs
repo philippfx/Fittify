@@ -20,15 +20,15 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
 
         public virtual async Task<IEnumerable<WorkoutHistoryViewModel>> GetCollectionByWorkoutId(int workoutId)
         {
-            var workoutHistoriesOfmForGets = await AsyncGppd.GetCollection<WorkoutHistoryOfmForGet>("http://localhost:52275/api/workouthistories?workoutId=" + workoutId);
-            var result = Mapper.Map<IEnumerable<WorkoutHistoryViewModel>>(workoutHistoriesOfmForGets);
+            var workoutHistoryOfmCollectionQueryResult = await AsyncGppd.GetCollection<WorkoutHistoryOfmForGet>("http://localhost:52275/api/workouthistories?workoutId=" + workoutId);
+            var result = Mapper.Map<IEnumerable<WorkoutHistoryViewModel>>(workoutHistoryOfmCollectionQueryResult.OfmForGetCollection);
             return result;
         }
 
         public virtual async Task<WorkoutHistoryViewModel> GetDetailsById(int workoutHistoryId)
         {
-            var workoutHistoryOfmForGet = await AsyncGppd.GetSingle<WorkoutHistoryOfmForGet>("http://localhost:52275/api/workouthistories/" + workoutHistoryId);
-            var workoutHistoryViewModel = Mapper.Map<WorkoutHistoryViewModel>(workoutHistoryOfmForGet);
+            var workoutHistoryOfmForGetQueryResult = await AsyncGppd.GetSingle<WorkoutHistoryOfmForGet>("http://localhost:52275/api/workouthistories/" + workoutHistoryId);
+            var workoutHistoryViewModel = Mapper.Map<WorkoutHistoryViewModel>(workoutHistoryOfmForGetQueryResult.OfmForGet);
 
             try
             {
@@ -39,71 +39,7 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
                 var exerciseViewModelRepository = new ExerciseViewModelRepository();
                 var allExercises = await exerciseViewModelRepository.GetAll();
                 workoutHistoryViewModel.AllExercises = allExercises;
-
-
-                //var previousWeightLiftingSetIds = new List<int>();
-                //foreach (var eH in workoutHistoryViewModel.ExerciseHistories)
-                //{
-                //    //var gppdRepoWeightLiftingSet = new WeightLiftingSetViewModelRepository();
-                //    //var currentWeightliftingSets = gppdRepoWeightLiftingSet.GetCollectionByExerciseHistoryId(eH.Id);
-
-
-
-                //}
-
-
-                //foreach (var eH in workoutHistoryViewModel.ExerciseHistories)
-                //{
-                //    var gppdRepoWeightLiftingSet = new WeightLiftingSetViewModelRepository();
-                //    var currentWeightliftingSets = gppdRepoWeightLiftingSet.GetCollectionByExerciseHistoryId(eH.Id);
-
-                //    WeightLiftingSetViewModel[] previousWeightliftingSets = null;
-                //    if (eH.PreviousExerciseHistoryId != null)
-                //    {
-                //        gppdRepoExerciseHistory = new AsyncGppdRepository<,,>(
-                //            "http://localhost:52275/api/exercisehistories?workoutHistoryId=" +
-                //            eH.PreviousExerciseHistoryId);
-                //        eH.PreviousExerciseHistory =
-                //            await gppdRepoExerciseHistory.GetCollectionByWorkoutHistoryId(eH.PreviousExerciseHistoryId.GetValueOrDefault());
-                //        gppdRepoExerciseHistory.GetCollection().Result.FirstOrDefault();
-
-                //        gppdRepoWeightLiftingSet = new AsyncGppdRepository<,,>(
-                //            "http://localhost:52275/api/weightliftingsets?exerciseHistoryId=" +
-                //            eH.PreviousExerciseHistoryId);
-                //        previousWeightliftingSets = gppdRepoWeightLiftingSet.GetCollection().Result.ToArray();
-                //    }
-
-                //    int previousWeightliftingSetsLength = previousWeightliftingSets?.Length ?? 0;
-                //    int currentWeightliftingSetsLength = currentWeightliftingSets?.Length ?? 0;
-                //    int maxValuePairs /* NumberOfColumns*/ =
-                //        Math.Max(previousWeightliftingSetsLength, currentWeightliftingSetsLength);
-
-                //    eH.CurrentAndHistoricWeightLiftingSetPairs =
-                //        new List<ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair>();
-                //    for (int i = 0; i < maxValuePairs; i++)
-                //    {
-                //        if (i < previousWeightliftingSetsLength && i < currentWeightliftingSetsLength)
-                //        {
-                //            eH.CurrentAndHistoricWeightLiftingSetPairs.Add(
-                //                new ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair(
-                //                    previousWeightliftingSets[i], currentWeightliftingSets[i]));
-                //        }
-
-                //        if (i < previousWeightliftingSetsLength && i >= currentWeightliftingSetsLength)
-                //        {
-                //            eH.CurrentAndHistoricWeightLiftingSetPairs.Add(
-                //                new ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair(
-                //                    previousWeightliftingSets[i], null));
-                //        }
-
-                //        if (i >= previousWeightliftingSetsLength && i < currentWeightliftingSetsLength)
-                //        {
-                //            eH.CurrentAndHistoricWeightLiftingSetPairs.Add(
-                //                new ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair(null,
-                //                    currentWeightliftingSets[i]));
-                //        }
-                //    }
-
+                
                 //    CardioSetViewModel[] previousCardioSets = null;
                 //    CardioSetViewModel[] currentCardioSets = null;
                 //    if (eH.PreviousExerciseHistoryId != null)

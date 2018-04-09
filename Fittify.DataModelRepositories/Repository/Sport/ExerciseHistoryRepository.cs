@@ -59,5 +59,35 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 resourceParameters.PageNumber,
                 resourceParameters.PageSize);
         }
+
+        public ExerciseHistory GetByPreviousExerciseHistoryid(int id)
+        {
+            return FittifyContext.ExerciseHistories.FirstOrDefault(f => f.PreviousExerciseHistoryId == id);
+        }
+        
+        public override async Task<EntityDeletionResult<int>> Delete(int id)
+        {
+            FixRelationOfNextExerciseHistory(id);
+            var result = SaveContext().Result;
+            return await base.Delete(id);
+        }
+
+        public void FixRelationOfNextExerciseHistory(int id)
+        {
+            var entity = GetById(id).ConfigureAwait(false).GetAwaiter().GetResult();
+            var previousEntity = GetById(entity.PreviousExerciseHistoryId.GetValueOrDefault()).ConfigureAwait(false).GetAwaiter().GetResult();
+            var nextEntity = GetByPreviousExerciseHistoryid(id);
+
+            if (previousEntity != null && nextEntity != null)
+            {
+                nextEntity.PreviousExerciseHistory = previousEntity.PreviousExerciseHistory;
+                nextEntity.PreviousExerciseHistoryId = previousEntity.Id;
+            }
+            else if (nextEntity != null)
+            {
+                nextEntity.PreviousExerciseHistory = null;
+                nextEntity.PreviousExerciseHistoryId = null;
+            }
+        }
     }
 }

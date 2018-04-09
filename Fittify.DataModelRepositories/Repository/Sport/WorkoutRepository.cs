@@ -21,7 +21,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
         {
             return FittifyContext.Workouts
                 .Include(i => i.Category)
-                .Include(i => i.ExercisesWorkoutsMap)
+                .Include(i => i.MapExerciseWorkout)
                 .Include(i => i.WorkoutHistories)
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }

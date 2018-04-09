@@ -12,7 +12,8 @@ namespace Fittify.Api.Helpers
             ErrorMessages = new List<string>();
         }
 
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public bool DidEntityExist { get; set; } = false;
         public List<string> ErrorMessages { get; set; }
     }
 }

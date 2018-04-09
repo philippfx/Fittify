@@ -69,19 +69,20 @@ namespace Fittify.DataModelRepositories.Repository.Sport
         //    return wHD.Id;
         //}
 
-        public override async Task<WorkoutHistory> Create(WorkoutHistory newWorkoutHistory)
+        public async Task<WorkoutHistory> CreateIncludingExerciseHistories(WorkoutHistory newWorkoutHistory)
         {
             var workoutBluePrint = FittifyContext.Workouts.FirstOrDefault(w => w.Id == newWorkoutHistory.WorkoutId);
             newWorkoutHistory.Workout = workoutBluePrint;
             await FittifyContext.AddAsync(newWorkoutHistory);
             await FittifyContext.SaveChangesAsync();
             
-            newWorkoutHistory.ExerciseHistories = new List<ExerciseHistory>();
+            var listExerciseHistories = new List<ExerciseHistory>();
             foreach (var map in FittifyContext.MapExerciseWorkout.Where(map => map.WorkoutId == workoutBluePrint.Id).Include(i => i.Exercise).ToList())
             {
                 var exerciseHistory = new ExerciseHistory();
                 exerciseHistory.Exercise = map.Exercise;
                 exerciseHistory.WorkoutHistory = newWorkoutHistory;
+                exerciseHistory.WorkoutHistoryId = newWorkoutHistory.Id;
                 exerciseHistory.ExecutedOnDateTime = DateTime.Now;
 
                 // Finding the latest non null and non-empty previous exerciseHistory
@@ -93,8 +94,10 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                                               && (FittifyContext.WeightLiftingSets.OrderByDescending(o => o.Id).FirstOrDefault(wls => wls.ExerciseHistoryId == eH.Id && wls.RepetitionsFull != null) != null
                                                   || FittifyContext.CardioSets.OrderByDescending(o => o.Id).FirstOrDefault(cds => cds.ExerciseHistoryId == eH.Id) != null));
 
-                newWorkoutHistory.ExerciseHistories.ToList().Add(exerciseHistory);
+                listExerciseHistories.Add(exerciseHistory);
             }
+
+            newWorkoutHistory.ExerciseHistories = listExerciseHistories;
 
             await FittifyContext.SaveChangesAsync();
 
@@ -103,7 +106,10 @@ namespace Fittify.DataModelRepositories.Repository.Sport
 
         public override Task<WorkoutHistory> GetById(int id)
         {
-            return FittifyContext.WorkoutHistories.Include(i => i.ExerciseHistories).Include(i => i.Workout).FirstOrDefaultAsync(wH => wH.Id == id);
+            return FittifyContext.WorkoutHistories
+                .Include(i => i.ExerciseHistories)
+                .Include(i => i.Workout)
+                .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
         public PagedList<WorkoutHistory> GetCollection(WorkoutHistoryResourceParameters resourceParameters)
@@ -146,6 +152,19 @@ namespace Fittify.DataModelRepositories.Repository.Sport
             return PagedList<WorkoutHistory>.Create(allEntitiesQueryable,
                 resourceParameters.PageNumber,
                 resourceParameters.PageSize);
+        }
+
+        public override async Task<EntityDeletionResult<int>> Delete(int id)
+        {
+            var entity = GetById(id).GetAwaiter().GetResult();
+
+            var exerciseHistoryRepository = new ExerciseHistoryRepository(this.FittifyContext);
+            foreach (var exerciseHistory in entity.ExerciseHistories)
+            {
+                exerciseHistoryRepository.FixRelationOfNextExerciseHistory(exerciseHistory.Id);
+            }
+            var result = SaveContext().Result;
+            return await base.Delete(id);
         }
     }
 }

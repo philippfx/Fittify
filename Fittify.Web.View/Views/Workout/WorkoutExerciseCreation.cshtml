@@ -22,8 +22,8 @@
         @foreach (var workout in Model)
         {
             <tr>
-                <td><a href="~/Workout/@workout?.Id/RelatedExercises">@workout?.Name</a></td>
-                <td><a href="~/Workout/@workout?.Id/History">Show history</a></td>
+                <td><a href="~/workouts/@workout?.Id/RelatedExercises">@workout?.Name</a></td>
+                <td><a href="~/workouts/@workout?.Id/History">Show history</a></td>
                 <td>
                     <form action="~/workout/history/new" method="post">
                         <input name="workoutId" type="hidden" value="@workout?.Id"/>

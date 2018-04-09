@@ -14,8 +14,9 @@ namespace Fittify.DataModelRepositories.Helpers
         {
             EntitesThatBlockDeletion = new List<List<IEntityUniqueIdentifier<TId>>>();
         }
-        public bool DidEntityExist { get; set; }
-        public bool IsDeleted { get; set; }
+
+        public bool DidEntityExist { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
         public List<List<IEntityUniqueIdentifier<TId>>> EntitesThatBlockDeletion { get; set; }
     }
 }
