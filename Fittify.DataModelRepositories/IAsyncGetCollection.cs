@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Helpers;

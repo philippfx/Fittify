@@ -47,8 +47,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Common.Test", "Fitt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.OuterFacingModels.Test", "Fittify.Api.OuterFacingModels.Test\Fittify.Api.OuterFacingModels.Test.csproj", "{2B87E92D-DFB9-48CD-9097-076A62F69BD7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.Services", "Fittify.Api.Services\Fittify.Api.Services.csproj", "{C4B6845B-2536-4E2A-9726-B8DD5FC04A1E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,10 +121,6 @@ Global
 		{2B87E92D-DFB9-48CD-9097-076A62F69BD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B87E92D-DFB9-48CD-9097-076A62F69BD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B87E92D-DFB9-48CD-9097-076A62F69BD7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4B6845B-2536-4E2A-9726-B8DD5FC04A1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4B6845B-2536-4E2A-9726-B8DD5FC04A1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C4B6845B-2536-4E2A-9726-B8DD5FC04A1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4B6845B-2536-4E2A-9726-B8DD5FC04A1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -147,7 +141,6 @@ Global
 		{E4C2E774-6288-4D70-93DA-D9BE069E3258} = {61B2FCA8-F355-46A9-B5CD-231A070A4A2A}
 		{8DFD04E3-14B1-48FE-8B33-B8217B523EE2} = {E4C2E774-6288-4D70-93DA-D9BE069E3258}
 		{2B87E92D-DFB9-48CD-9097-076A62F69BD7} = {E4C2E774-6288-4D70-93DA-D9BE069E3258}
-		{C4B6845B-2536-4E2A-9726-B8DD5FC04A1E} = {416CE764-41B2-4A2E-84DA-13F47C6F5DC9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B305ABF-A3CE-4E97-BE76-377367E1E5B8}

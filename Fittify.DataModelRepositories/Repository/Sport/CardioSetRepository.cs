@@ -25,7 +25,6 @@ namespace Fittify.DataModelRepositories.Repository.Sport
 
         public PagedList<CardioSet> GetCollection(CardioSetResourceParameters resourceParameters)
         {
-            // Todo can be improved by calling base class and this overriding method just adds the INCLUDE statements
             var allEntitiesQueryable = GetAll()
                 .Include(i => i.ExerciseHistory)
                 .ApplySort(resourceParameters.OrderBy,

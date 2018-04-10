@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fittify.Api.Services\Fittify.Api.Services.csproj" />
     <ProjectReference Include="..\Fittify.Common\Fittify.Common.csproj" />
     <ProjectReference Include="..\Fittify.DataModels\Fittify.DataModels.csproj" />
   </ItemGroup>

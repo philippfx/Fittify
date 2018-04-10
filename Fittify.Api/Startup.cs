@@ -68,7 +68,7 @@ namespace Fittify.Api
                 .ConfigureApplicationPartManager(p => // supports generic controllers 
                     p.FeatureProviders.Add(new GenericControllerFeatureProvider())); 
 
-            var dbConnectionString = Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
+            string dbConnectionString = Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
 
             if (HostingEnvironment.IsTestInMemoryDb())
             {
@@ -80,6 +80,11 @@ namespace Fittify.Api
                     fittifyContext.Database.EnsureCreated();
                     FittifyContextSeeder.Seed(fittifyContext);
                 }
+            }
+            else if (HostingEnvironment.IsProduction())
+            {
+                dbConnectionString = Configuration.GetValue<string>("ConnectionStrings:SmarterAspConnection");
+                services.AddDbContext<FittifyContext>(options => options.UseSqlServer(dbConnectionString));
             }
             else
             {

@@ -55,8 +55,7 @@ namespace Fittify.Api.OfmRepository
             {
                 return ofmForGetCollectionQueryResult;
             }
-
-            //// Todo this async lacks await
+            
             var pagedListEntityCollection = Repo.GetCollection(resourceParameters);
             
             var previousPageLink = pagedListEntityCollection.HasPrevious ?

@@ -35,8 +35,7 @@ namespace Fittify.Api.OfmRepository.GetCollection.Sport
             {
                 return ofmForGetCollectionQueryResult;
             }
-
-            //// Todo this async lacks await
+            
             var pagedListEntityCollection = Repo.GetCollection(resourceParameters).CopyPropertyValuesTo(ofmForGetCollectionQueryResult);
 
             // Todo Maybe refactor to a type safe class instead of anonymous

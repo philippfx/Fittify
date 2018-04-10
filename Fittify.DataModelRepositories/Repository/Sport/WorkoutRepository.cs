@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class WorkoutRepository : AsyncCrud<Workout, int> //: AsyncGetCollectionForEntityDateTimeStartEnd<Workout, WorkoutOfmForGet, int> // Todo implement IAsyncCrudForDateTimeStartEnd
+    public class WorkoutRepository : AsyncCrud<Workout, int>
     {
         public WorkoutRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
@@ -28,7 +28,6 @@ namespace Fittify.DataModelRepositories.Repository.Sport
 
         public PagedList<Workout> GetCollection(WorkoutResourceParameters resourceParameters)
         {
-            // Todo can be improved by calling base class and this overriding method just adds the INCLUDE statements
             var allEntitiesQueryable = GetAll()
                 .Include(i => i.Category)
                 .ApplySort(resourceParameters.OrderBy,
