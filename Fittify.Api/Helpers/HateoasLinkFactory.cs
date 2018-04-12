@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Fittify.Api.Extensions;
+using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.OuterFacingModels;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.Common.Helpers.ResourceParameters.Sport;

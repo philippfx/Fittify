@@ -4,7 +4,7 @@ using System.Linq;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.DataModels.Models.Sport;
 
-namespace Fittify.Api.Services
+namespace Fittify.DataModelRepositories.Services
 {
     public class PropertyMappingService : IPropertyMappingService
     {

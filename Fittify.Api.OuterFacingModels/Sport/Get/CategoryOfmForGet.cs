@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Fittify.Api.OuterFacingModels.Helpers;
-using Fittify.Api.OuterFacingModels.Sport.Abstract;
+﻿using Fittify.Api.OuterFacingModels.Sport.Abstract;
 using Fittify.Common;
 using Fittify.Common.Helpers;
 

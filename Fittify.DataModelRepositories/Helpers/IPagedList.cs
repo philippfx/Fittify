@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Fittify.DataModelRepositories.Helpers
+﻿namespace Fittify.DataModelRepositories.Helpers
 {
     public interface IPagedList
     {

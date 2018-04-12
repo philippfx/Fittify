@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.DataModels.Models.Sport;
 using Fittify.Web.ViewModels.Sport;
-using Newtonsoft.Json.Linq;
 
 namespace Fittify.Analyzer.Library
 {

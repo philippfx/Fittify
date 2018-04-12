@@ -2,7 +2,6 @@
 using System.Linq;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Fittify.DataModelRepositories
 {
@@ -163,7 +162,7 @@ namespace Fittify.DataModelRepositories
             modelBuilder.Entity<WorkoutHistory>()
                 .HasOne(h => h.Workout)
                 .WithMany(w => w.WorkoutHistories)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<WorkoutHistory>()
                 .HasMany(h => h.ExerciseHistories)

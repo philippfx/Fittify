@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
 using System.IO;
-using System.Threading;
 using Fittify.DataModelRepositories;
 using Fittify.Test.Core;
 using Fittify.Test.Core.Seed;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 
 namespace Fittify.DbResetter

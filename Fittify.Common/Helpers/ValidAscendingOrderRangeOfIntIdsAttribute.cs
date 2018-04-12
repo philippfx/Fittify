@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Fittify.Common.Helpers;
 
-namespace Fittify.Api.OuterFacingModels.Helpers
+namespace Fittify.Common.Helpers
 {
     public class ValidAscendingOrderRangeOfIntIdsAttribute : ValidationAttribute
     {

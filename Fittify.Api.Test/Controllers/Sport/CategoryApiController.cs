@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
-using Fittify.Test.Client;
 using Fittify.Web.ApiModelRepositories;
 using Newtonsoft.Json;
 using NUnit.Framework;

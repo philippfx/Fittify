@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Fittify.Common;
+﻿using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport
 {

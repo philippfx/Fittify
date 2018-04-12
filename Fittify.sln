@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.DbResetter", "Fitti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.DataModelRepositories", "Fittify.DataModelRepositories\Fittify.DataModelRepositories.csproj", "{94892E90-F210-49C5-87C1-A33A8270A47C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Web.ViewModels", "Fittify.ViewModels\Fittify.Web.ViewModels.csproj", "{47A6D11C-256C-4263-8EC4-1FC756C1052E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Web.ViewModels", "Fittify.Web.ViewModels\Fittify.Web.ViewModels.csproj", "{47A6D11C-256C-4263-8EC4-1FC756C1052E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api", "Fittify.Api\Fittify.Api.csproj", "{FF636153-E246-4DF7-96DC-0E61D0D83970}"
 EndProject

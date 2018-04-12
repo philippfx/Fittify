@@ -16,8 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fittify.ViewModels\Fittify.Web.ViewModels.csproj" />
     <ProjectReference Include="..\Fittify.Web.ApiModelRepositories\Fittify.Web.ApiModelRepositories.csproj" />
+    <ProjectReference Include="..\Fittify.Web.ViewModels\Fittify.Web.ViewModels.csproj" />
     <ProjectReference Include="..\Fittify.Web.View\Fittify.Web.View.csproj" />
   </ItemGroup>
 

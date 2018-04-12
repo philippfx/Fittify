@@ -1,9 +1,7 @@
 ﻿using System.Linq;
-using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Helpers;
-using Fittify.DataModels.Models.Sport;
 
 namespace Fittify.DataModelRepositories
 {

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
-using Newtonsoft.Json;
 
 namespace Fittify.Web.ApiModelRepositories
 {

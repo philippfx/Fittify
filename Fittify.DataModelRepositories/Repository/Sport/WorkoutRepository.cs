@@ -47,36 +47,32 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 resourceParameters.PageNumber,
                 resourceParameters.PageSize);
         }
+
+        public override async Task<EntityDeletionResult<int>> Delete(int id)
+        {
+            var entity = GetById(id).GetAwaiter().GetResult();
+
+            var listExerciseHistoriesOfRelatedWorkout = FittifyContext.ExerciseHistories.Where(w => w.WorkoutHistory.Workout.Id == id);
+
+            List<int> listExerciseHistoryIdsRelatedToWorkout = new List<int>();
+            foreach (var eH in listExerciseHistoriesOfRelatedWorkout)
+            {
+                listExerciseHistoryIdsRelatedToWorkout.Add(eH.Id);
+            }
+
+            var listExerciseHistoriesWherePreviousEhIdAreRelatedToWorkout =
+                FittifyContext.ExerciseHistories.Where(w => listExerciseHistoryIdsRelatedToWorkout.Contains(w.PreviousExerciseHistoryId.GetValueOrDefault()));
+
+            foreach (var eH in listExerciseHistoriesWherePreviousEhIdAreRelatedToWorkout)
+            {
+                eH.PreviousExerciseHistory = null;
+                eH.PreviousExerciseHistoryId = null;
+            }
+            
+            var result = SaveContext().Result;
+
+            // Todo maybe fixing exerciseHistories that now have no previousExerciseHistory
+            return await base.Delete(id);
+        }
     }
 }
-
-
-//using System.Threading.Tasks;
-//using Fittify.Api.OuterFacingModels.Sport.Get;
-//using Fittify.DataModels.Models.Sport;
-//using Microsoft.EntityFrameworkCore;
-
-//namespace Fittify.DataModelRepositories.Repository.Sport
-//{
-//    public class WorkoutRepository : AsyncGetCollectionForEntityName<Workout, WorkoutOfmForGet, int>
-//    {
-//        public WorkoutRepository()
-//        {
-
-//        }
-
-//        public WorkoutRepository(FittifyContext fittifyContext) : base(fittifyContext)
-//        {
-
-//        }
-
-//        public override async Task<Workout> GetById(int id)
-//        {
-//            return await FittifyContext.Workouts
-//                .Include(i => i.ExercisesWorkoutsMap)
-//                .ThenInclude(i => i.Exercise)
-//                .Include(i => i.WorkoutHistories)
-//                .FirstOrDefaultAsync(w => w.Id == id);
-//        }
-//    }
-//}

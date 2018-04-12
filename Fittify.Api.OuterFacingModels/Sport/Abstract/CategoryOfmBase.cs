@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 using Fittify.Api.OuterFacingModels.Helpers;
-using Fittify.Common.Helpers;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Abstract
 {

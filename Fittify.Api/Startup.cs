@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,11 +14,11 @@ using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using AspNetCoreRateLimit;
 using Fittify.Api.Controllers.Generic;
-using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
+using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Middleware;
-using Fittify.Api.Services;
 using Fittify.Common.Helpers;
+using Fittify.DataModelRepositories.Services;
 using Fittify.Test.Core.Seed;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Diagnostics;
@@ -52,7 +51,10 @@ namespace Fittify.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddSingleton<IConfiguration>(Configuration);
+
+            //services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton(Configuration);
+
             services.AddMvc
                 (setupAction =>
                 {
@@ -145,10 +147,6 @@ namespace Fittify.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            if (env.IsTestInMemoryDb())
-            {
-                var stop = "stop";
-            }
             if (env.IsDevelopment() || env.IsTestInMemoryDb())
             {
                 app.UseDeveloperExceptionPage();
@@ -250,14 +248,6 @@ namespace Fittify.Api
                     await context.Response.WriteAsync("<h1>Environment InMemoryDb</h1>");
                 });
             }
-
-
-        }
-
-        private void ConfigureRoute(IRouteBuilder routeBuilder)
-        {
-            routeBuilder.MapRoute("Default",
-                "{controller=Category}/{id?}");
         }
     }
 }

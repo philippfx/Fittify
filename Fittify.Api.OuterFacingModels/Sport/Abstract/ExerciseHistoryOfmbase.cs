@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Fittify.Api.OuterFacingModels.Sport.Get;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Abstract
 {

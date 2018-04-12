@@ -6,29 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.json">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Fittify.Analyzer.Library\Fittify.Analyzer.Library.csproj" />
-    <ProjectReference Include="..\Fittify.Api\Fittify.Api.csproj" />
-    <ProjectReference Include="..\Fittify.ViewModels\Fittify.Web.ViewModels.csproj" />
-    <ProjectReference Include="..\Fittify.Web.View\Fittify.Web.View.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="DbConnection.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
   </ItemGroup>
 
 </Project>

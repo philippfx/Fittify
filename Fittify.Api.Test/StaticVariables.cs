@@ -1,4 +1,4 @@
-﻿namespace Fittify.Test.Client
+﻿namespace Fittify.Api.Test
 {
     public static class StaticVariables
     {

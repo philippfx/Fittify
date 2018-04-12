@@ -1,7 +1,5 @@
 ﻿using System.IO;
 using AspNetCore.RouteAnalyzer;
-using Fittify.Api;
-using Fittify.Web.ApiModelRepositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

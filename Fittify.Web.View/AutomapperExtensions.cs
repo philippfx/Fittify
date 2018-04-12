@@ -1,7 +1,7 @@
 ﻿using System;
 using AutoMapper;
 
-namespace Fittify.Api
+namespace Fittify.Web.View
 {
     public static class AutomapperExtensions
     {
@@ -51,7 +51,7 @@ namespace Fittify.Api
             profile.IgnoreUnmapped((TypeMap map) => map.SourceType == src && map.DestinationType == dest);
         }
 
-        [ObsoleteAttribute("Does not work. Use method that ignores all unmapped members instead.")]
+        [Obsolete("Does not work. Use method that ignores all unmapped members instead.")]
         public static void IgnoreUnmapped<TSrc, TDest>(this IProfileExpression profile)
         {
             profile.IgnoreUnmapped(typeof(TSrc), typeof(TDest));

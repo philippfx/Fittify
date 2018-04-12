@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Fittify.Api.Helpers.Extensions;
 
 namespace Fittify.Api.Helpers
 {

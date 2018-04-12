@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
-using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ApiModelRepositories;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 namespace Fittify.Web.View.Controllers
 {

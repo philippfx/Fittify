@@ -1,5 +1,4 @@
 ﻿@using Fittify.Common
-@using Fittify.Web.ViewModels.Sport
 @model Fittify.Web.ViewModels.Sport.WorkoutViewModel
 
 @{
@@ -43,8 +42,8 @@
     <form class="form-group" action="~/workouts/@Model.Id/associatedexercises" method="post">
         <input type="submit" value="Add" class="btn btn-primary" />
         <div class="col-sm-4">
-            <select class="form-control" name="Id">
-                <option>Please select exercise to add</option>
+            <select class="form-control" name="Id" required>
+                <option value="" selected >Please select exercise to add</option>
                 @foreach (var e in Model.AllExercises.OrderBy(o => o.Name))
                 {
                     <option value="@e.Id">@e.Name</option>
@@ -52,7 +51,7 @@
             </select>
         </div>
     </form>
-    <div>Or create and add a completel new exercise:</div>
+    <div>Or create and add a completely new exercise:</div>
     <form class="form-group" action="~/exercises?workoutId=@Model.Id" method="post">
         <div class="col-sm-4 "><input type="text" name="name" class="form-control" pattern=".{3,}" required title="Minimum 3 characters long description"/></div>
         <div class="col-sm-4">

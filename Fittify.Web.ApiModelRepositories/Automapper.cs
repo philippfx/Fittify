@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AutoMapper;
+﻿using AutoMapper;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Web.ViewModels.Sport;
 

@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Dynamic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Helpers;
 using Fittify.Api.OuterFacingModels.Sport.Get;
-using Fittify.Api.Services;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.DataModelRepositories.Repository.Sport;
+using Fittify.DataModelRepositories.Services;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;

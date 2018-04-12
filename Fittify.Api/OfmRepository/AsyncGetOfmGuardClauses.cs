@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fittify.Api.Helpers;
-using Fittify.Api.OuterFacingModels.Helpers;
-using Fittify.Api.Services;
 using Fittify.Common;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
+using Fittify.DataModelRepositories.Services;
 
 namespace Fittify.Api.OfmRepository
 {

@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
-using Fittify.Common.Helpers;
 
-namespace Fittify.Api.OuterFacingModels.Helpers
+namespace Fittify.Common.Helpers
 {
     public class ValidRegularExpressionRangeOfIntIdsAttribute : ValidationAttribute
     {

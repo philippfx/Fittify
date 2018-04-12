@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
+//using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace Fittify.Api.Helpers
 {

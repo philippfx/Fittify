@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
-using Fittify.Api.Extensions;
 using Fittify.Api.Helpers;
-using Fittify.Api.Services;
+using Fittify.Api.Helpers.Extensions;
 using Fittify.Common;
-using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories;
+using Fittify.DataModelRepositories.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 

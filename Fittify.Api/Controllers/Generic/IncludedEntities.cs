@@ -6,7 +6,7 @@ namespace Fittify.Api.Controllers.Generic
 {
     public static class IncludedEntities
     {
-        public static IReadOnlyList<TypeInfo> Types;
+        public static readonly IReadOnlyList<TypeInfo> Types;
 
         static IncludedEntities()
         {

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Reflection;
-using Fittify.Common.Helpers.ResourceParameters;
+﻿using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Microsoft.AspNetCore.Mvc;
 

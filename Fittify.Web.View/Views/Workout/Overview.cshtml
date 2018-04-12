@@ -1,5 +1,4 @@
-﻿@using Fittify.Web.ViewModels.Sport
-@model List<Fittify.Web.ViewModels.Sport.WorkoutViewModel>
+﻿@model List<Fittify.Web.ViewModels.Sport.WorkoutViewModel>
 
 @{
     ViewBag.Title = "Workouts";
@@ -18,16 +17,31 @@
             <th>
                 Start New Session
             </th>
+            <th>
+                Delete
+            </th>
         </tr>
         @foreach (var workout in Model)
         {
             <tr>
-                <td><a href="~/workouts/@workout?.Id/associatedexercises">@workout?.Name</a></td>
-                <td><a href="~/workouts/@workout?.Id/History">Show history</a></td>
+                <td>
+                    <span id="@workout?.Id">
+                        <a href="~/workouts/@workout?.Id/associatedexercises">@workout?.Name</a><span> </span>
+                        <a href="javascript:void(0)" onclick="showNameEditForm(@workout?.Id,'@workout?.Name','/workouts/@workout?.Id/patch')"><span class="glyphicon glyphicon-edit"></span></a>
+                    </span>
+                </td>
+                <td>
+                    <a href="~/workouts/@workout?.Id/History">Show history</a>
+                </td>
                 <td>
                     <form action="~/workouthistories" method="post">
                         <input name="workoutId" type="hidden" value="@workout?.Id"/>
-                        <input type="submit" onclick="return confirm('Are you sure you want to delete?')" value="Start" class="btn btn-default"/>
+                        <input type="submit" value="Start" class="btn btn-default"/>
+                    </form>
+                </td>
+                <td>
+                    <form action="~/workouts/@workout.Id/deletion?workoutId=@workout.Id" method="post">
+                        <input type="submit" value="X" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete?')"/>
                     </form>
                 </td>
             </tr>
@@ -38,3 +52,23 @@
         <input type="submit" value="Add Workout" class="btn btn-primary" />
     </form>
 </div>
+
+<script>
+    function showNameEditForm(id,name,link) {
+        document.getElementById(id).innerHTML =
+            "<form action=\"" + link + "\" method=\"post\">\
+                <input type=\"text\" name=\"name\" value=\"" + name + "\"/>\
+                <input type=\"hidden\" name=\"id\" value=\"" + id +"\"/>\
+                <button type=\"submit\" value=\"save\" class=\"btn btn-secondary btn-xs\" ><span class=\"glyphicon glyphicon-ok\"></span></button>\
+                <button type=\"button\" onClick=\"cancelNameEditForm(" + id + ", '" + name + "')\" class=\"btn btn-secondary btn-xs\" ><span class=\"glyphicon glyphicon-remove\"></span></button>\
+            </form>";
+    }
+
+    function cancelNameEditForm(id, name) {
+        document.getElementById(id).innerHTML =
+            "<span id=\"" + id + "\">\
+                <a href=\"workouts/" + id + "/associatedexercises\">" + name + "</a><span> </span>\
+                <a href=\"javascript:void(0)\" onclick=\"showNameEditForm(" + id + ",'" + name + "','/workouts/" + id + "/patch')\"><span class=\"glyphicon glyphicon-edit\"></span></a>\
+            </span>";
+    }
+</script>

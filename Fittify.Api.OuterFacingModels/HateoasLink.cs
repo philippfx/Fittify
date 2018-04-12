@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Fittify.Api.OuterFacingModels
+﻿namespace Fittify.Api.OuterFacingModels
 {
     public class HateoasLink
     {

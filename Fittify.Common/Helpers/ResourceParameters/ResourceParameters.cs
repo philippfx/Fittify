@@ -1,6 +1,4 @@
-﻿using Fittify.Api.OuterFacingModels.Helpers;
-
-namespace Fittify.Common.Helpers.ResourceParameters
+﻿namespace Fittify.Common.Helpers.ResourceParameters
 {
     public class ResourceParameters : IResourceParameters
     {
