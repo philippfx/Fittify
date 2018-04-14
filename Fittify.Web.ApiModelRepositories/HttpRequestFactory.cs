@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.JsonPatch;
 
 namespace Fittify.Web.ApiModelRepositories
 {
-    public class HttpRequestFactory
+    public static class HttpRequestFactory
     {
-        public static async Task<HttpResponseMessage> GetSingle(string requestUri)
+        public static async Task<HttpResponseMessage> GetSingle(Uri requestUri)
         {
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Get)
@@ -16,7 +17,7 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        public static async Task<HttpResponseMessage> GetSingle(string requestUri, Dictionary<string, string> customRequestHeaders)
+        public static async Task<HttpResponseMessage> GetSingle(Uri requestUri, Dictionary<string, string> customRequestHeaders)
         {
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Get)
@@ -26,7 +27,7 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        public static async Task<HttpResponseMessage> GetCollection(string requestUri)
+        public static async Task<HttpResponseMessage> GetCollection(Uri requestUri)
         {
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Get)
@@ -35,7 +36,7 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        public static async Task<HttpResponseMessage> GetCollection(string requestUri, Dictionary<string, string> customRequestHeaders)
+        public static async Task<HttpResponseMessage> GetCollection(Uri requestUri, Dictionary<string, string> customRequestHeaders)
         {
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Get)
@@ -46,7 +47,7 @@ namespace Fittify.Web.ApiModelRepositories
         }
 
         public static async Task<HttpResponseMessage> Post(
-            string requestUri, object value)
+            Uri requestUri, object value)
         {
             var content = new JsonContent(value).ReadAsStringAsync().Result;
             var builder = new HttpRequestBuilder()
@@ -58,7 +59,7 @@ namespace Fittify.Web.ApiModelRepositories
         }
 
         public static async Task<HttpResponseMessage> Put(
-            string requestUri, object value)
+            Uri requestUri, object value)
         {
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Put)
@@ -69,7 +70,7 @@ namespace Fittify.Web.ApiModelRepositories
         }
 
         public static async Task<HttpResponseMessage> Patch(
-            string requestUri, JsonPatchDocument jsonPatchDocument /*object jsonPatchDocument*/)
+            Uri requestUri, JsonPatchDocument jsonPatchDocument /*object jsonPatchDocument*/)
         {
             var builder = new HttpRequestBuilder()
                 .AddMethod(new HttpMethod("PATCH"))
@@ -79,7 +80,7 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        public static async Task<HttpResponseMessage> Delete(string requestUri)
+        public static async Task<HttpResponseMessage> Delete(Uri requestUri)
         {
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Delete)

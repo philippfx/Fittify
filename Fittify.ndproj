@@ -1,79 +1,86 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<NDepend AppName="Fittify" Platform="DotNet" FileWrittenByProductVersion="2017.3.2.9010">
+<NDepend AppName="Fittify" Platform="DotNet" FileWrittenByProductVersion="2018.1.0.9030">
   <OutputDir KeepXmlFiles="False">C:\Users\PhilippPrivate\Documents\Visual Studio 2017\Projects\Fittify\NDependOut</OutputDir>
   <Assemblies>
-    <Name>Fittify.Angular</Name>
-    <Name>Fittify.Api</Name>
-    <Name>Fittify.Api.OuterFacingModels</Name>
-    <Name>Fittify.Api.OuterFacingModels.Test</Name>
-    <Name>Fittify.Common</Name>
-    <Name>Fittify.DataModelRepositories</Name>
+    <Name>Fittify.Web.View</Name>
     <Name>Fittify.DataModels</Name>
     <Name>Fittify.DbResetter</Name>
-    <Name>Fittify.Web.ApiModelRepositories</Name>
-    <Name>Fittify.Web.ApiModels</Name>
-    <Name>Fittify.Web.Common</Name>
-    <Name>Fittify.Web.View</Name>
+    <Name>Fittify.DataModelRepositories</Name>
     <Name>Fittify.Web.ViewModels</Name>
+    <Name>Fittify.Api</Name>
+    <Name>Fittify.Api.OuterFacingModels</Name>
+    <Name>Fittify.Common</Name>
+    <Name>Fittify.Web.ApiModelRepositories</Name>
   </Assemblies>
   <FrameworkAssemblies>
     <Name>System.Runtime</Name>
+    <Name>System.Diagnostics.Debug</Name>
+    <Name>AutoMapper</Name>
     <Name>Microsoft.AspNetCore.Hosting.Abstractions</Name>
+    <Name>Microsoft.Extensions.Configuration.Abstractions</Name>
     <Name>Microsoft.Extensions.DependencyInjection.Abstractions</Name>
     <Name>Microsoft.AspNetCore.Http.Abstractions</Name>
-    <Name>System.Diagnostics.Debug</Name>
+    <Name>Microsoft.Extensions.Logging.Abstractions</Name>
+    <Name>Microsoft.AspNetCore.Routing</Name>
     <Name>System.Threading.Tasks</Name>
     <Name>Microsoft.AspNetCore.Mvc.Core</Name>
     <Name>Microsoft.AspNetCore.Mvc.ViewFeatures</Name>
+    <Name>Microsoft.AspNetCore.JsonPatch</Name>
+    <Name>Microsoft.AspNetCore.Mvc.Abstractions</Name>
+    <Name>Microsoft.AspNetCore.Http.Features</Name>
+    <Name>System.Collections</Name>
+    <Name>System.Text.RegularExpressions</Name>
+    <Name>Microsoft.Extensions.Primitives</Name>
     <Name>Microsoft.AspNetCore.Hosting</Name>
     <Name>Microsoft.AspNetCore</Name>
-    <Name>Microsoft.AspNetCore.Mvc</Name>
-    <Name>Microsoft.AspNetCore.Diagnostics</Name>
-    <Name>Microsoft.AspNetCore.StaticFiles</Name>
-    <Name>AutoMapper</Name>
-    <Name>Microsoft.Extensions.Configuration.Abstractions</Name>
-    <Name>Microsoft.Extensions.Logging.Abstractions</Name>
-    <Name>Microsoft.AspNetCore.Routing</Name>
-    <Name>Microsoft.EntityFrameworkCore</Name>
-    <Name>System.ComponentModel</Name>
-    <Name>Microsoft.AspNetCore.Cors</Name>
-    <Name>Microsoft.AspNetCore.Mvc.Abstractions</Name>
-    <Name>System.Linq.Expressions</Name>
-    <Name>Microsoft.AspNetCore.Diagnostics.Abstractions</Name>
-    <Name>System.Collections</Name>
-    <Name>Microsoft.AspNetCore.JsonPatch</Name>
-    <Name>NLog.Web.AspNetCore</Name>
     <Name>Microsoft.Extensions.Configuration</Name>
     <Name>System.IO.FileSystem</Name>
     <Name>Microsoft.Extensions.Configuration.FileExtensions</Name>
     <Name>Microsoft.Extensions.Configuration.Json</Name>
-    <Name>Microsoft.Extensions.Configuration.Binder</Name>
-    <Name>Microsoft.Extensions.Logging.Debug</Name>
-    <Name>Newtonsoft.Json</Name>
-    <Name>System.Linq</Name>
-    <Name>Microsoft.EntityFrameworkCore.SqlServer</Name>
-    <Name>Microsoft.AspNetCore.Mvc.Formatters.Xml</Name>
-    <Name>Microsoft.AspNetCore.Http.Features</Name>
-    <Name>Microsoft.Extensions.Primitives</Name>
-    <Name>Microsoft.AspNetCore.Mvc.Formatters.Json</Name>
-    <Name>System.Console</Name>
-    <Name>System.ComponentModel.Annotations</Name>
-    <Name>System.Text.RegularExpressions</Name>
-    <Name>nunit.framework</Name>
-    <Name>System.Runtime.Extensions</Name>
-    <Name>System.Linq.Queryable</Name>
-    <Name>System.Data.SqlClient</Name>
-    <Name>Fittify.Test.Core</Name>
-    <Name>System.Data.Common</Name>
-    <Name>System.Net.Http</Name>
+    <Name>Microsoft.AspNetCore.Mvc</Name>
     <Name>AspNetCore.RouteAnalyzer</Name>
     <Name>Microsoft.Extensions.Logging.Console</Name>
+    <Name>Microsoft.AspNetCore.Diagnostics</Name>
+    <Name>Microsoft.AspNetCore.StaticFiles</Name>
+    <Name>Microsoft.Extensions.Configuration.Binder</Name>
+    <Name>System.Linq</Name>
+    <Name>System.Runtime.Extensions</Name>
+    <Name>Fittify.Test.Core</Name>
+    <Name>Microsoft.EntityFrameworkCore</Name>
+    <Name>System.Console</Name>
+    <Name>System.Linq.Expressions</Name>
+    <Name>System.Linq.Queryable</Name>
+    <Name>Microsoft.EntityFrameworkCore.SqlServer</Name>
+    <Name>System.Linq.Dynamic.Core</Name>
+    <Name>System.ComponentModel.Annotations</Name>
+    <Name>Microsoft.Extensions.DependencyInjection</Name>
+    <Name>Microsoft.AspNetCore.Mvc.Formatters.Json</Name>
+    <Name>System.ComponentModel</Name>
+    <Name>Marvin.Cache.Headers</Name>
+    <Name>AspNetCoreRateLimit</Name>
+    <Name>Microsoft.AspNetCore.Cors</Name>
+    <Name>Microsoft.AspNetCore.Diagnostics.Abstractions</Name>
+    <Name>System.Xml.XmlSerializer</Name>
+    <Name>System.Xml.ReaderWriter</Name>
+    <Name>System.ComponentModel.TypeConverter</Name>
+    <Name>NLog.Web.AspNetCore</Name>
+    <Name>Microsoft.Extensions.Caching.Memory</Name>
+    <Name>Microsoft.Extensions.Options</Name>
+    <Name>Microsoft.Extensions.Logging.Debug</Name>
+    <Name>Newtonsoft.Json</Name>
+    <Name>Microsoft.AspNetCore.Routing.Abstractions</Name>
+    <Name>Microsoft.AspNetCore.Mvc.Formatters.Xml</Name>
+    <Name>Microsoft.EntityFrameworkCore.Sqlite</Name>
+    <Name>Microsoft.CSharp</Name>
+    <Name>System.Threading</Name>
+    <Name>System.Net.Http</Name>
+    <Name>System.Net.Primitives</Name>
   </FrameworkAssemblies>
   <Dirs>
-    <Dir>C:\Users\PhilippPrivate\Documents\Visual Studio 2017\Projects\Fittify\Fittify.Angular\bin\debug\netcoreapp2.0</Dir>
-    <Dir>C:\Users\PhilippPrivate\Documents\Visual Studio 2017\Projects\Fittify\Fittify.Spielwiese\bin\debug\netcoreapp2.0</Dir>
-    <Dir>C:\Users\PhilippPrivate\Documents\Visual Studio 2017\Projects\Fittify\Fittify.Api.OuterFacingModels.Test\bin\debug\netcoreapp2.0</Dir>
+    <Dir>C:\Users\PhilippPrivate\Documents\Visual Studio 2017\Projects\Fittify\Fittify.Web.View\bin\debug\netcoreapp2.0</Dir>
+    <Dir>C:\Users\PhilippPrivate\Documents\Visual Studio 2017\Projects\Fittify\Fittify.DataModels\bin\debug\netcoreapp2.0</Dir>
     <Dir>C:\Users\PhilippPrivate\Documents\Visual Studio 2017\Projects\Fittify\Fittify.DbResetter\bin\debug\netcoreapp2.0</Dir>
+    <Dir>C:\Users\PhilippPrivate\Documents\Visual Studio 2017\Projects\Fittify\Fittify.Api\bin\debug\netcoreapp2.0</Dir>
     <Dir>C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.0</Dir>
     <Dir>C:\Program Files\dotnet\store\x64\netcoreapp2.0</Dir>
     <Dir>C:\Program Files\dotnet\sdk\NuGetFallbackFolder</Dir>
@@ -337,7 +344,7 @@ select 100d * debt.ToManDay() / timeToDev.ToManDay()
 // *Estimated number of man-day to develop 1000 logicial lines of code*
 // setting found in NDepend Project Properties > Issue and Debt.
 //
-// Debt documentation: http://www.ndepend.com/docs/technical-debt#Debt
+// Debt documentation: https://www.ndepend.com/docs/technical-debt#Debt
 //
 // This quality gates fails if the estimated debt is more than 30%
 // of the estimated effort to develop the code base, and warns if the 
@@ -357,7 +364,7 @@ Issues.Sum(i => i.Debt).ToManDay()
 // However you can refer to the default Quality Gate **Percentage Debt**.
 //
 // The Debt is defined as the sum of estimated effort to fix all issues.
-// Debt documentation: http://www.ndepend.com/docs/technical-debt#Debt
+// Debt documentation: https://www.ndepend.com/docs/technical-debt#Debt
 //</Description>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <QualityGate Name="New Debt since Baseline" Unit="man-days" />
 failif value > 2 man-days
@@ -374,7 +381,7 @@ select (debt - debtInBaseline).ToManDay()
 //
 // This Quality Gate warns if this estimated effort is positive.
 //
-// Debt documentation: http://www.ndepend.com/docs/technical-debt#Debt
+// Debt documentation: https://www.ndepend.com/docs/technical-debt#Debt
 //</Description>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <QualityGate Name="Debt Rating per Namespace" Unit="namespaces" />
 failif count > 0 namespaces
@@ -431,7 +438,7 @@ Issues.Sum(i => i.AnnualInterest).ToManDay()
 // per issue, or assign a **Severity** level for each issue. Some thresholds
 // defined in *Project Properties > Issue and Debt > Annual Interest* are
 // used to infer an Annual-Interest value from a Severity level.
-// Annual Interest documentation: http://www.ndepend.com/docs/technical-debt#AnnualInterest
+// Annual Interest documentation: https://www.ndepend.com/docs/technical-debt#AnnualInterest
 //</Description>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <QualityGate Name="New Annual Interest since Baseline" Unit="man-days" />
 failif value > 2 man-days
@@ -452,7 +459,7 @@ select (ai - aiInBaseline).ToManDay()
 // per issue, or assign a **Severity** level for each issue. Some thresholds
 // defined in *Project Properties > Issue and Debt > Annual Interest* are
 // used to infer an Annual-Interest value from a Severity level.
-// Annual Interest documentation: http://www.ndepend.com/docs/technical-debt#AnnualInterest
+// Annual Interest documentation: https://www.ndepend.com/docs/technical-debt#AnnualInterest
 //</Description>]]></Query>
     </Group>
     <Group Name="Hot Spots" Active="True" ShownInReport="True">
@@ -805,7 +812,7 @@ select new {
 // Types where *NbLinesOfCode > 200* are extremely complex 
 // to develop and maintain.
 // See the definition of the NbLinesOfCode metric here 
-// http://www.ndepend.com/docs/code-metrics#NbLinesOfCode
+// https://www.ndepend.com/docs/code-metrics#NbLinesOfCode
 //
 // Maybe you are facing the **God Class** phenomenon:
 // A **God Class** is a class that controls way too many other classes 
@@ -948,7 +955,7 @@ select new {
 methodsAssigningFields ,   
 
    // See definition of Size of Instances metric here:
-   // http://www.ndepend.com/docs/code-metrics#SizeOfInst
+   // https://www.ndepend.com/docs/code-metrics#SizeOfInst
    t.SizeOfInst,
 
    Debt = fields.Count().Linear(15, 1, 200, 10).ToHours().ToDebt(),
@@ -1027,13 +1034,13 @@ select new {
 // why should I create a new method for each processe if I can only add an *if*.
 //
 // See the definition of the *CyclomaticComplexity* metric here:
-// http://www.ndepend.com/docs/code-metrics#CC
+// https://www.ndepend.com/docs/code-metrics#CC
 //
 // See the definition of the *ILCyclomaticComplexity* metric here:
-// http://www.ndepend.com/docs/code-metrics#ILCC
+// https://www.ndepend.com/docs/code-metrics#ILCC
 //
 // See the definition of the *ILNestingDepth* metric here:
-// http://www.ndepend.com/docs/code-metrics#ILNestingDepth
+// https://www.ndepend.com/docs/code-metrics#ILNestingDepth
 //</Description>
 
 //<HowToFix>
@@ -1056,6 +1063,7 @@ select new {
 //</HowToFix>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Avoid methods with too many parameters</Name>
 warnif count > 0 from m in JustMyCode.Methods where 
+  !m.FullName.Contains("Fittify.Api.Controllers") &&
   m.NbParameters >= 7
   orderby m.NbParameters descending
 select new { 
@@ -1074,7 +1082,7 @@ select new {
 // This rule matches methods with 7 or more parameters.
 // Such method is painful to call and might degrade performance.
 // See the definition of the *NbParameters* metric here: 
-// http://www.ndepend.com/docs/code-metrics#NbParameters
+// https://www.ndepend.com/docs/code-metrics#NbParameters
 //</Description>
 
 //<HowToFix>
@@ -1120,7 +1128,7 @@ select new {
 // and provokes coupling higher than necessary.
 //
 // See the definition of the *NbOverloads* metric here 
-// http://www.ndepend.com/docs/code-metrics#NbOverloads
+// https://www.ndepend.com/docs/code-metrics#NbOverloads
 //</Description>
 
 //<HowToFix>
@@ -1182,8 +1190,8 @@ select new {
 // at least 20 lines of code. Such method might need to be more commented.
 //
 // See the definitions of the *Comments metric* here:
-// http://www.ndepend.com/docs/code-metrics#PercentageComment
-// http://www.ndepend.com/docs/code-metrics#NbLinesOfComment
+// https://www.ndepend.com/docs/code-metrics#PercentageComment
+// https://www.ndepend.com/docs/code-metrics#NbLinesOfComment
 // 
 // Notice that only comments about the method implementation
 // (comments in method body) are taken account.
@@ -1236,7 +1244,7 @@ warnif count > 0 from t in JustMyCode.Types where
 // This rule is based on the *LCOM code metric*,
 // LCOM stands for **Lack Of Cohesion of Methods**.
 // See the definition of the LCOM metric here 
-// http://www.ndepend.com/docs/code-metrics#LCOM
+// https://www.ndepend.com/docs/code-metrics#LCOM
 //
 // The LCOM metric measures the fact that most methods are using most fields.
 // A class is considered utterly cohesive (which is good)
@@ -1332,7 +1340,7 @@ let methods = t.Methods.Where(
 where 
 
 // Low Quality types     Metrics' definitions are available here:
-//     http://www.ndepend.com/docs/code-metrics#MetricsOnTypes
+//     https://www.ndepend.com/docs/code-metrics#MetricsOnTypes
 (  // Types with too many methods
    fields.Count() > 20 ||
 
@@ -1480,13 +1488,13 @@ warnif count > 0 from m in JustMyCode.Methods where
   !m.IsAsync &&
  
 // Low Quality methods// Metrics' definitions
-(  m.NbLinesOfCode > 30 ||          // http://www.ndepend.com/docs/code-metrics#NbLinesOfCode
-   m.NbILInstructions > 200 ||      // http://www.ndepend.com/docs/code-metrics#NbILInstructions
-   m.CyclomaticComplexity > 20 ||   // http://www.ndepend.com/docs/code-metrics#CC
-   m.ILCyclomaticComplexity > 50 || // http://www.ndepend.com/docs/code-metrics#ILCC
-   m.ILNestingDepth > 4 ||          // http://www.ndepend.com/docs/code-metrics#ILNestingDepth
-   m.NbParameters > 5 ||            // http://www.ndepend.com/docs/code-metrics#NbParameters
-   m.NbVariables > 8 ||             // http://www.ndepend.com/docs/code-metrics#NbVariables
+(  m.NbLinesOfCode > 30 ||          // https://www.ndepend.com/docs/code-metrics#NbLinesOfCode
+   m.NbILInstructions > 200 ||      // https://www.ndepend.com/docs/code-metrics#NbILInstructions
+   m.CyclomaticComplexity > 20 ||   // https://www.ndepend.com/docs/code-metrics#CC
+   m.ILCyclomaticComplexity > 50 || // https://www.ndepend.com/docs/code-metrics#ILCC
+   m.ILNestingDepth > 4 ||          // https://www.ndepend.com/docs/code-metrics#ILNestingDepth
+   m.NbParameters > 5 ||            // https://www.ndepend.com/docs/code-metrics#NbParameters
+   m.NbVariables > 8 ||             // https://www.ndepend.com/docs/code-metrics#NbVariables
    m.NbOverloads > 6 )
 select new { 
    m, 
@@ -1497,7 +1505,7 @@ select new {
    m.ILNestingDepth, 
    m.NbParameters, 
    m.NbVariables, 
-   m.NbOverloads, // http://www.ndepend.com/docs/code-metrics#NbOverloads
+   m.NbOverloads, // https://www.ndepend.com/docs/code-metrics#NbOverloads
 
    // Constant Debt estimation, since for such method rules in category "Code Smells" 
    // accurately estimate the Debt.
@@ -1656,7 +1664,7 @@ select new {
 //
 // The method complexity is measured through the code metric
 // *Cyclomatic Complexity* defined here:
-// http://www.ndepend.com/docs/code-metrics#CC
+// https://www.ndepend.com/docs/code-metrics#CC
 //
 // This rule warns when a method already complex
 // (i.e with *Cyclomatic Complexity* higher than 6)
@@ -1666,7 +1674,7 @@ select new {
 // to be available at analysis time, because the *Cyclomatic Complexity*
 // is inferred from the source code and source code location
 // is inferred from PDB files. See:
-// http://www.ndepend.com/docs/ndepend-analysis-inputs-explanation
+// https://www.ndepend.com/docs/ndepend-analysis-inputs-explanation
 //
 // To visualize changes in code, right-click a matched method and select:
 //
@@ -1744,12 +1752,12 @@ select new {
 //
 // The method size is measured through the code metric
 // *# Lines of Code* defined here:
-// http://www.ndepend.com/docs/code-metrics#NbLinesOfCode
+// https://www.ndepend.com/docs/code-metrics#NbLinesOfCode
 //
 // This rule needs assemblies PDB files 
 // to be available at analysis time, because the *# Lines of Code*
 // is inferred from PDB files. See:
-// http://www.ndepend.com/docs/ndepend-analysis-inputs-explanation
+// https://www.ndepend.com/docs/ndepend-analysis-inputs-explanation
 //
 // To visualize changes in code, right-click a matched method and select:
 //
@@ -2115,7 +2123,7 @@ select new {
    baseClasses, 
    // The metric value DepthOfInheritance takes account
    // of third-party base classessee its definition here:
-   // http://www.ndepend.com/docs/code-metrics#DIT
+   // https://www.ndepend.com/docs/code-metrics#DIT
    t.DepthOfInheritance,
    Debt = (baseClasses.Count() -2)*3.ToMinutes().ToDebt(),
    Severity = Severity.Medium
@@ -2221,7 +2229,11 @@ from mBase in t.InstanceMethods
 where  mBase.IsVirtual &&
       !mBase.IsThirdParty &&
       !mBase.IsAbstract && 
-      !mBase.IsExplicitInterfaceImpl
+      !mBase.IsExplicitInterfaceImpl &&
+      !mBase.IsPropertyGetter &&
+      !mBase.IsPropertySetter &&
+      !mBase.IsIndexerGetter &&
+      !mBase.IsIndexerSetter
 from mOverride in mBase.OverridesDirectDerived
 where !mOverride.IsUsing(mBase) &&
        JustMyCode.Contains(mOverride)  // Don't warn on generated code
@@ -2369,7 +2381,8 @@ let testAttributes = Types
                      .Where(t => t.IsAttributeClass && t.SimpleName.Contains("Test")).ToArray()
 
 from t in JustMyCode.Types
-where  t.IsClass &&
+where !t.FullName.Contains("Fittify.Api.OuterFacingModels.Sport.Post") &&
+      t.IsClass &&
     //!t.IsPublic &&   // if you are developing a framework, 
                        // you might not want to match public classes
       !t.IsStatic && 
@@ -2455,6 +2468,7 @@ warnif count > 0
 let testAttributes = ThirdParty.Types
                      .Where(t => t.IsAttributeClass && 
                             ( t.SimpleName.Contains("Test") || 
+                              t.SimpleName.Contains("Fact") || 
                               t.SimpleName.Contains("SetUp") || 
                               t.SimpleName.Contains("TearDown") )
                      ).ToArray()
@@ -2716,8 +2730,11 @@ select new {
 //</HowToFix>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Avoid empty interfaces</Name>
 warnif count > 0 from t in JustMyCode.Types where 
+   t.FullName!= "Fittify.Api.OuterFacingModels.Sport.Abstract.IOfmForGet" &&
+   t.FullName!= "Fittify.DataModelRepositories.Services.IPropertyMapping" &&
    t.IsInterface && 
-   t.NbMethods == 0
+   t.NbMethods == 0 &&
+  !t.InterfacesImplemented.Any()
 select new { 
    t, 
    t.TypesThatImplementMe,
@@ -2726,8 +2743,7 @@ select new {
 }
 
 //<Description>
-// Interfaces define members that provide 
-// a behavior or usage contract. 
+// Interfaces define members that provide a behavior or usage contract. 
 // The functionality that is described by the interface 
 // can be adopted by any type, regardless of where the type 
 // appears in the inheritance hierarchy. 
@@ -2745,6 +2761,12 @@ select new {
 // or the properties of the attribute, to identify the target types. 
 // If the identification must occur at compile time, 
 // then it is acceptable to use an empty interface.
+//
+// Note that if an interface is empty but implements at least one 
+// other interface, it won't be matched by this rule.
+// Such interface can be considered as not empty,
+// since implementing it means that sub-interfaces members
+// must be implemented.
 //</Description>
 
 //<HowToFix>
@@ -3103,16 +3125,23 @@ select new {
 // You can then refactor this code query to adapt it to your needs and transform it into a code rule.
 //</Description>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Classes that are candidate to be turned into structures</Name>
-
-warnif count > 0 from t in JustMyCode.Types where 
+warnif count > 0 
+from t in JustMyCode.Types where 
   t.IsClass &&
  !t.IsGeneratedByCompiler &&
  !t.IsStatic &&
-  t.SizeOfInst > 0 &&
-  t.SizeOfInst <= 8 &&    // Structure instance must not be too big, 
-                          // else it degrades performance.
+ !t.IsGeneric &&
 
   t.NbChildren == 0 &&    // Must not have children
+
+  t.Constructors.All(c => c.NbParameters > 0) && // Must not have parameterless ctor, struct cannot have custom parameterless ctor
+
+  t.IsImmutable && // Structures should be immutable type.
+
+  // Must have fields and all fields must be of value-type
+  t.InstanceFields.Count() > 0 &&
+  t.InstanceFields.All(f => f.FieldType != null) &&
+  t.InstanceFields.All(f => f.FieldType.IsStructure || f.FieldType.IsEnumeration) &&
 
   // Must not implement interfaces to avoid boxing mismatch 
   // when structures implements interfaces.
@@ -3138,8 +3167,7 @@ warnif count > 0 from t in JustMyCode.Types where
 
   // && t.IsSealed    <-- You might want to add this condition 
   //                      to restraint the set.
-  // && t.IsImmutable <-- Structures should be immutable type.
-  // && t.!IsPublic   <-- You might want to add this condition if 
+  // && !t.IsPubliclyVisible  <-- You might want to add this condition if 
   //                      you are developping a framework with classes 
   //                      that are intended to be sub-classed by 
   //                      your clients.
@@ -3170,12 +3198,17 @@ select new {
 // This rule matches classes that looks like being *lightweight values*.
 // The characterization of such class is:
 //
-// • Its instances have a small *memory footprint* (at most 8 bytes)
+// • It has instance fields.
 //
-// • Its instances have a memory footprint greater than zero
-// (i.e the class has at least one instance field).
+// • All instance fields are typed with value-types (primitive, structure or enumeration)
+//
+// • It is immutable (the value of its instance fields cannot be modified once the constructor ended).
 //
 // • It implements no interfaces.
+//
+// • It has no parameterless construtor.
+//
+// • It is not generic.
 //
 // • It has no derived classes.
 //
@@ -3380,28 +3413,38 @@ select new {
 //</HowToFix>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Instances size shouldn't be too big</Name>
 warnif count > 0 from t in JustMyCode.Types where 
-  t.SizeOfInst > 64 &&
+  t.SizeOfInst > 128 && 
+
+  // You might want to restrict this rule only on structure, since the cost of copying instance data at each method call might be prohibitive
+  // t.IsStructure &&
 
   // Discard types that represent WPF, WindowsForm and ASP.NET forms and controls and EntityFramwork classes.
   t.BaseClasses.All(bc => !bc.ParentNamespace.Name.StartsWithAny(
-     "System.Windows", "System.Web.UI", "System.Web", "Microsoft.EntityFramework"))
+     "System.Windows", "System.Web.UI", "System.Web", "Microsoft.EntityFramework",
+     // Discard types related to these namespaces that typically require large instances size
+     "System.ComponentModel", "System.Xml", 
+     // Just add more component vendors here if needed
+     "DevExpress"))
 
   orderby t.SizeOfInst descending
 select new { 
    t, 
    t.SizeOfInst, 
    t.InstanceFields,
-   Debt = t.SizeOfInst.Linear(64,2, 2048, 60).ToMinutes().ToDebt(),
+   t.BaseClasses,
+   Debt = t.SizeOfInst.Linear(128,10, 2048, 120).ToMinutes().ToDebt(),
 
    // The annual interest varies linearly from interests for severity Medium for 64 bytes per instance
    // to twice interests for severity High for 2048 bytes per instance
-   AnnualInterest = t.SizeOfInst.Linear(64,      Severity.Medium.AnnualInterestThreshold().Value.TotalMinutes, 
-                                        2048, 2*(Severity.High.AnnualInterestThreshold().Value.TotalMinutes)).ToMinutes().ToAnnualInterest()
+   AnnualInterest = (t.SizeOfInst.Linear(128,    Severity.Medium.AnnualInterestThreshold().Value.TotalMinutes, 
+                                        2048, 2*(Severity.High.AnnualInterestThreshold().Value.TotalMinutes))
+                    )*(t.IsStructure ? 10 : 1) // Multiply interest by 10 for structures
+                    .ToMinutes().ToAnnualInterest()
    
 }
 
 //<Description>
-// Types where *SizeOfInst > 64* might degrade performance 
+// Types where *SizeOfInst > 128* might degrade performance 
 // if many instances are created at runtime. 
 // They can also be hard to maintain. 
 //
@@ -3413,65 +3456,33 @@ select new {
 // and WindowsForm forms and controls nor Entity Framework
 // special classes.
 //
+// Some other namespaces like *System.ComponentModel* or *System.Xml*
+// have base classes that typically imply large instances size
+// so this rule doesn't match these situations.
+//
+// This rule doesn't match custom *DevExpress* component
+// and it is easy to modify this rule ro append other component vendors
+// to avoid false positives.
+//
 // See the definition of the *SizeOfInst* metric here 
-// http://www.ndepend.com/docs/code-metrics#SizeOfInst
+// https://www.ndepend.com/docs/code-metrics#SizeOfInst
 //</Description>
 
 //<HowToFix>
-// A type with a large *SizeOInst* value hold *directly* 
+// A type with a large *SizeOfInst* value hold *directly* 
 // a lot of data. Typically, you can group this data into 
 // smaller types that can then be composed.
 //
 // The estimated Debt, which means the effort to fix such issue,
-// varies linearly from interests for severity Medium for 64 bytes per instance
-// to twice interests for severity High for 2048 bytes per instance.
-//</HowToFix>]]></Query>
-      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Boxing/unboxing should be avoided</Name>
-warnif count > 0 from m in JustMyCode.Methods where 
-  m.IsUsingBoxing || 
-  m.IsUsingUnboxing
-select new { 
-   m, 
-   m.NbLinesOfCode, 
-   m.IsUsingBoxing, 
-   m.IsUsingUnboxing,
-   Debt = 5.ToMinutes().ToDebt(),
-   Severity = Severity.Low
-} 
-
-//<Description>
-// *Boxing* is the process of converting a value type to the type 
-// *object* or to any interface type implemented by this value 
-// type. When the CLR boxes a value type, it wraps the value 
-// inside a *System.Object* and stores it on the managed heap.
+// varies linearly from severity **Medium** for 128 bytes per instance
+// to twice interests for severity **High** for 2048 bytes per instance.
 //
-// *Unboxing* extracts the value type from the object. Boxing 
-// is implicit; unboxing is explicit.
-//
-// The concept of boxing and unboxing underlies the C# unified 
-// view of the type system in which a value of any type can 
-// be treated as an object. More about *boxing* and *unboxing*
-// here: https://msdn.microsoft.com/en-us/library/yz2be5wk.aspx
-//
-// This rule has been disabled by default to avoid noise in
-// issues found by the NDepend default rule set. If boxing/unboxing
-// is important to your team, please re-activate this rule
-//</Description>
-
-//<HowToFix>
-// Thanks to .NET generic, and especially thanks to 
-// generic collections, *boxing* and *unboxing* should 
-// be rarely used. Hence in most situations the code can 
-// be refactored to avoid relying on *boxing* and *unboxing*.
-// See for example:
-// http://stackoverflow.com/questions/4403055/boxing-unboxing-and-generics
-//
-// With a performance profiler, indentify methods that consume 
-// a lot of CPU time. If such method uses *boxing* or 
-// *unboxing*, especially in a **loop**, make sure to refactor it.
-//
-// By default issues of this rule have a **Low** severity
-// because they reflect more an advice than a problem.
+// The estimated annual interest of issues of this rule is 10 times higher
+// for structures, because large structures have a significant performance cost.
+// Indeed, each time such structure *value* is passed as a method parameter 
+// it gets copied to a new local variable
+// (note that the word *value* is more appropriate than the word *instance* for structures).
+// For this reason, such structure should be declared as class.
 //</HowToFix>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Attribute classes should be sealed</Name>
 warnif count > 0 from t in Application.Types where 
@@ -3639,6 +3650,53 @@ select new {
 // The estimated Debt, which means the effort to fix such issue,
 // is equal to 15 minutes plus 2 minutes per instance field.
 //</HowToFix>]]></Query>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Boxing/unboxing should be avoided</Name>
+warnif count > 0 from m in JustMyCode.Methods where 
+  m.IsUsingBoxing || 
+  m.IsUsingUnboxing
+select new { 
+   m, 
+   m.NbLinesOfCode, 
+   m.IsUsingBoxing, 
+   m.IsUsingUnboxing,
+   Debt = 5.ToMinutes().ToDebt(),
+   Severity = Severity.Low
+} 
+
+//<Description>
+// *Boxing* is the process of converting a value type to the type 
+// *object* or to any interface type implemented by this value 
+// type. When the CLR boxes a value type, it wraps the value 
+// inside a *System.Object* and stores it on the managed heap.
+//
+// *Unboxing* extracts the value type from the object. Boxing 
+// is implicit; unboxing is explicit.
+//
+// The concept of boxing and unboxing underlies the C# unified 
+// view of the type system in which a value of any type can 
+// be treated as an object. More about *boxing* and *unboxing*
+// here: https://msdn.microsoft.com/en-us/library/yz2be5wk.aspx
+//
+// **This rule has been disabled by default** to avoid noise in
+// issues found by the NDepend default rule set. If boxing/unboxing
+// is important to your team, just re-activate this rule.
+//</Description>
+
+//<HowToFix>
+// Thanks to .NET generic, and especially thanks to 
+// generic collections, *boxing* and *unboxing* should 
+// be rarely used. Hence in most situations the code can 
+// be refactored to avoid relying on *boxing* and *unboxing*.
+// See for example:
+// http://stackoverflow.com/questions/4403055/boxing-unboxing-and-generics
+//
+// With a performance profiler, indentify methods that consume 
+// a lot of CPU time. If such method uses *boxing* or 
+// *unboxing*, especially in a **loop**, make sure to refactor it.
+//
+// By default issues of this rule have a **Low** severity
+// because they reflect more an advice than a problem.
+//</HowToFix>]]></Query>
     </Group>
     <Group Name="Architecture" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Avoid namespaces mutually dependent</Name>
@@ -3702,7 +3760,7 @@ let highLevelNamespaceLoc = highLevelNamespace.NbLinesOfCode ?? (highLevelNamesp
 let annualInterestPerIssue = 
    // Such issue has at least a Severity.Medium, never a Severity.Low
    Math.Max(Severity.Medium.AnnualInterestThreshold().Value.TotalSeconds, 
-            ((3600 + lowLevelNamespaceLoc + highLevelNamespaceLoc) / lowLevelTypesMethodsUser.Length).Value)
+            ((3600 + lowLevelNamespaceLoc + highLevelNamespaceLoc) / Math.Max(1,lowLevelTypesMethodsUser.Length)).Value)
    .ToSeconds().ToAnnualInterest()
 
 // Select in details types and methods involved in the coupling lowLevelNamespace using highLevelNamespace
@@ -3744,7 +3802,7 @@ select new {
 // Entangled code that is not properly layered and structured**.
 //
 // More on this in our white books relative to partitioning code.
-// http://www.ndepend.com/docs/white-books
+// https://www.ndepend.com/docs/white-books
 //</Description>
 
 //<HowToFix>
@@ -3904,7 +3962,7 @@ select new {
 // Read our white books relative to partitioning code, 
 // to know more about namespaces dependency cycles, and why avoiding them 
 // is a *simple yet efficient* solution to clean the architecture of a code base.
-// http://www.ndepend.com/docs/white-books
+// https://www.ndepend.com/docs/white-books
 //</Description>
 
 //<HowToFix>
@@ -3971,7 +4029,7 @@ select new {
 // and Visual Studio projects** explains in details valid and invalid
 // reasons to use assemblies.
 // Download it here:
-// http://www.ndepend.com/Res/NDependWhiteBook_Assembly.pdf
+// https://www.ndepend.com/Res/NDependWhiteBook_Assembly.pdf
 //</HowToFix>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>UI layer shouldn't use directly DB types</Name>
         
@@ -4279,7 +4337,7 @@ select new {
 //
 // This rules use the default code metric on assembly
 // *Normalized Distance from the Main Sequence* explained here: 
-// http://www.ndepend.com/docs/code-metrics#DitFromMainSeq
+// https://www.ndepend.com/docs/code-metrics#DitFromMainSeq
 //
 // These concepts have been originally introduced by *Robert C. Martin*
 // in 1994 in this paper: http://www.objectmentor.com/resources/articles/oodmetrc.pdf
@@ -4394,7 +4452,7 @@ select new {
 //</HowToFix>]]></Query>
     </Group>
     <Group Name="API Breaking Changes" Active="True" ShownInReport="True">
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Types</Name>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Types</Name>
 
 warnif count > 0 from t in codeBase.OlderVersion().Application.Types
 where t.IsPubliclyVisible && 
@@ -4439,7 +4497,7 @@ select new {
 // because an API Breaking change can provoque significant
 // friction with consumers of the API.
 //</HowToFix>]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Methods</Name>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>API Breaking Changes: Methods</Name>
 warnif count > 0 from m in codeBase.OlderVersion().Application.Methods
 where m.IsPubliclyVisible && 
 
@@ -4677,8 +4735,8 @@ select new {
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Avoid changing enumerations Flags status</Name>
 warnif count > 0 
 
-let oldFlags = codeBase.OlderVersion().ThirdParty.Types.WithFullName("System.FlagsAttribute").SingleOrDefault()
-let newFlags = ThirdParty.Types.WithFullName("System.FlagsAttribute").SingleOrDefault()
+let oldFlags = codeBase.OlderVersion().ThirdParty.Types.WithFullName("System.FlagsAttribute").FirstOrDefault()
+let newFlags = ThirdParty.Types.WithFullName("System.FlagsAttribute").FirstOrDefault()
 where oldFlags != null && newFlags != null
 
 from t in Application.Types where
@@ -4903,7 +4961,7 @@ select new {
 //
 // • the actual percentage coverage
 //
-// • the abstracness of types used, because relying on classes instead of 
+// • the abstractness of types used, because relying on classes instead of 
 // interfaces makes the code more difficult to test
 //
 // • the method visibility because testing private or protected
@@ -5393,7 +5451,7 @@ select new {
 //</HowToFix>]]></Query>
       <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Test Methods</Name>
 
-let testAttr = ThirdParty.Types.WithNameIn("TestAttribute", "TestCaseAttribute")
+let testAttr = ThirdParty.Types.WithNameIn("FactAttribute", "TestAttribute", "TestCaseAttribute")
 let testMethods = Methods.TaggedWithAnyAttributes(testAttr)
 from m in testMethods 
 select m
@@ -5418,7 +5476,7 @@ select m
 //</Description>]]></Query>
       <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Methods directly called by test Methods</Name>
 
-let testAttr = ThirdParty.Types.WithNameIn("TestAttribute", "TestCaseAttribute")
+let testAttr = ThirdParty.Types.WithNameIn("FactAttribute", "TestAttribute", "TestCaseAttribute")
 let testMethods = Methods.TaggedWithAnyAttributes(testAttr).ToHashSet()
 
 // --- Uncomment this line if your test methods are in dedicated test assemblies ---
@@ -5458,7 +5516,7 @@ select new { m ,
 //</Description>]]></Query>
       <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Methods directly and indirectly called by test Methods</Name>
 
-let testAttr = from t in ThirdParty.Types.WithNameIn("TestAttribute", "TestCaseAttribute") select t
+let testAttr = from t in ThirdParty.Types.WithNameIn("FactAttribute", "TestAttribute", "TestCaseAttribute") select t
 let testMethods = Methods.TaggedWithAnyAttributes(testAttr)
 
 // --- Uncomment this line if your test methods are in dedicated test assemblies ---
@@ -6067,10 +6125,22 @@ where !t.IsGeneratedByCompiler &&
       !t.IsEnumeration &&
        // Only one type user…
        t.TypesUsingMe.Count() == 1 
+
 let couldBeNestedIn = t.TypesUsingMe.Single()
 where !couldBeNestedIn.IsGeneratedByCompiler &&
+      !couldBeNestedIn.IsInterface && // Cannot nest a type in an interface
        // …declared in the same namespace
-       couldBeNestedIn.ParentNamespace == t.ParentNamespace
+       couldBeNestedIn.ParentNamespace == t.ParentNamespace &&
+
+       // Don't advise to move a base class
+       // or an interface into one of its child type.
+      !couldBeNestedIn.DeriveFrom(t) &&
+      !couldBeNestedIn.Implement(t)
+
+       // Require that t doesn't contain any extension method.
+       // Types with extension methods cannot be nested.
+where  t.Methods.All(m => !m.IsExtensionMethod)
+
 select new { 
    t, 
    couldBeNestedIn,
@@ -6091,6 +6161,9 @@ select new {
 //
 // Declaring a type as private into a parent type **promotes encapsulation**.
 // The scope from which the type can be consumed is then reduced to a minimum.
+//
+// This rule doesn't match classes with extension methods
+// because such class cannot be nested in another type.
 //</Description>
 
 //<HowToFix>
@@ -6145,6 +6218,7 @@ warnif count > 0 from f in JustMyCode.Fields where
  !f.IsInitOnly && 
  !f.IsLiteral && 
  !f.IsEnumValue &&
+ !f.IsProtected &&
  !f.HasAttribute("System.Xml.Serialization.XmlAttributeAttribute".AllowNoMatch()) &&
  !f.HasAttribute("System.Runtime.Serialization.DataMemberAttribute".AllowNoMatch())
 
@@ -6416,7 +6490,7 @@ select new {
 //
 // This query relies on the property
 // *NDepend.CodeModel.IMember.ShouldBePublic*
-// http://www.ndepend.com/api/webframe.html?NDepend.API~NDepend.CodeModel.IMember~ShouldBePublic.html 
+// https://www.ndepend.com/api/webframe.html?NDepend.API~NDepend.CodeModel.IMember~ShouldBePublic.html 
 //
 // This is just a code query, it is not intended to advise
 // you to declare the method as *public*, but to inform you
@@ -6455,7 +6529,7 @@ select new {
 //
 // This source code of this rule is based on the conditon 
 // *IField.IsImmutable*.
-// http://www.ndepend.com/api/webframe.html?NDepend.API~NDepend.CodeModel.IField~IsImmutable.html
+// https://www.ndepend.com/api/webframe.html?NDepend.API~NDepend.CodeModel.IField~IsImmutable.html
 //
 // A field that matches the condition *IsImmutable* 
 // is a field that is assigned only by constructors 
@@ -6725,6 +6799,7 @@ select new {
                 
 warnif count > 0 
 from f in JustMyCode.Fields where 
+  f.FullName != "Fittify.Web.ApiModelRepositories.AsyncGppdRepository<TId,TSent,TReceived>.HttpResponse" &&
   !f.IsEnumValue &&
   !f.IsImmutable && 
   !f.IsInitOnly &&
@@ -7064,6 +7139,9 @@ warnif count > 0 from f in JustMyCode.Fields where
   !( 
     // Instance field name starting with a lower-case letter
     (f.Name.Length >= 1 && char.IsLetter(f.Name[0]) && char.IsLower(f.Name[0])) ||
+
+  // Instance field name starting with a lower-case letter
+    (f.Name.Length >= 1 && char.IsLetter(f.Name[0]) && char.IsUpper(f.Name[0])) ||
 
     // Instance field name starting with "_" followed with a lower-case letter
     (f.Name.Length >= 2 && f.Name.StartsWith("_") && char.IsLetter(f.Name[1]) && char.IsLower(f.Name[1])) ||
@@ -7415,7 +7493,13 @@ select new {
 // or eventually split the type in several more fine-grained types.
 //</HowToFix>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Avoid methods with name too long</Name>
-warnif count > 0 from m in JustMyCode.Methods where 
+warnif count > 0 
+
+// First get test method for which we allow long names
+let testAttr = ThirdParty.Types.WithNameIn("FactAttribute", "TestAttribute", "TestCaseAttribute")
+let testMethods = Methods.TaggedWithAnyAttributes(testAttr).ToHashSet()
+
+from m in JustMyCode.Methods where 
 
  // Explicit Interface Implementation methods are 
  // discarded because their names are prefixed 
@@ -7424,7 +7508,13 @@ warnif count > 0 from m in JustMyCode.Methods where
  !m.IsGeneratedByCompiler &&
  ((!m.IsSpecialName && m.SimpleName.Length > 40) ||
    // Property getter/setter are prefixed with "get_" "set_" of length 4.
-  ( m.IsSpecialName && m.SimpleName.Length - 4 > 40))
+  ( m.IsSpecialName && m.SimpleName.Length - 4 > 40)) &&
+
+ // Don't match test methods
+ !testMethods.Contains(m) &&
+ !m.SimpleName.Contains("Test") &&
+ !m.ParentType.SimpleName.Contains("Test") &&
+ !m.ParentNamespace.Name.Contains("Test")
 
 orderby m.SimpleName.Length descending
 
@@ -7441,6 +7531,10 @@ select new {
 // This might also be an indication that a method is doing too much.
 //
 // This rule matches methods with names with more than 40 characters.
+//
+// However it is considered as a good practice to name unit tests 
+// in such a way with a very expressive name, hence this rule doens't match
+// methods tagged with *FactAttribute*, *TestAttribute* and *TestCaseAttribute*.
 //</Description>
 
 //<HowToFix>
@@ -7601,8 +7695,9 @@ select new {
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Don't call your method Dispose</Name>
 warnif count > 0
 from m in JustMyCode.Methods.WithSimpleName("Dispose")
-where !m.ParentType.Implement("System.IDisposable".AllowNoMatch()) &&
-       m.OverriddensBase.Count() == 0    // Can't change the name of an override
+where !m.ParentType.Implement("System.IDisposable".AllowNoMatch()) 
+   &&  m.OverriddensBase.Count() == 0    // Can't change the name of an override
+   && !m.IsNewSlot  // new slot also means override of an intreface method 
 select new {
    m,
    Debt = 15.ToMinutes().ToDebt(),
@@ -7649,6 +7744,154 @@ select new {
 // To fix a violation of this rule,
 // Rename the method, or transform it into an operation that can fail.
 //</HowToFix>]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Properties and fields that represent a collection of items should be named Items.</Name>
+warnif count > 0 
+
+let collectionTypes = Types.Where(t => 
+   t.Implement("System.Collections.Generic.IEnumerable<T>".AllowNoMatch()) &&
+   t.IsGeneric && 
+   t.FullName != "System.Collections.Generic.IDictionary<TKey,TValue>" &&
+  !t.Implement("System.Collections.Generic.IDictionary<TKey,TValue>".AllowNoMatch()) &&
+   t.FullName != "System.Collections.Generic.IReadOnlyDictionary<TKey,TValue>" &&
+  !t.Implement("System.Collections.Generic.IReadOnlyDictionary<TKey,TValue>".AllowNoMatch())).ToHashSet()
+
+let properties = from m in JustMyCode.Methods
+where (m.IsPropertyGetter || m.IsPropertySetter) && 
+      collectionTypes.Contains(m.ReturnType)
+select new { Member = (IMember)m, Type = m.ReturnType }
+
+let fields = from f in JustMyCode.Fields
+where collectionTypes.Contains(f.FieldType)
+select new { Member = (IMember)f, Type = f.FieldType }
+
+from pair in properties.Concat(fields)
+let identifier = pair.Member.SimpleName
+where !identifier.EndsWith("s") &&
+      !identifier.Contains('<') // Remove potential generated fields like backing fields, and also potential generated properties accessors
+
+let identifierRefined = identifier.Replace("get_", "").Replace("set_", "")
+let words = identifierRefined.GetWords()
+where !words.Any(word => 
+          word.EndsWith("s") ||  // Don't warn if any word ends with an s
+          word == "Empty")       // Don't warn if any word in the identifier is Empty
+
+select new { pair.Member, pair.Type  }
+
+//<Description>
+// A good practice to make the code more readable and more predictable
+// is to name properties and fields typed with a collection of *items*
+// with the plural form of *Items*.
+//
+// Depending on the domain of your application, a proper identfier could be
+// *NewDirectories*, *Words*, *Values*, *UpdatedDates*.
+//
+// Also this rule doesn't warn when any word in the identifier ends with an *s*.
+// This way identifiers like **TasksToRun**, **KeysDisabled**, **VersionsSupported**,
+// **ChildrenFilesPath**, **DatedValuesDescending**, **ApplicationNodesChanged**
+// or **ListOfElementsInResult** are valid and won't be seen as violations.
+//
+// Moreover this rule won't warn for a field or property with an identifier
+// that contain the word **Empty**.
+// This is a common pattern to define an immutable and empty collection instance 
+// shared.
+//
+// Before inspecting properties and fields, this rule gathers 
+// application and third-party collection types that might be returned 
+// by a property or a field. To do so this rule searches types that implement 
+// *IEnumerable<T>* except:
+//
+// - Non generic types: Often a non generic type is not seen as a collection.
+//   For example *System.String* implements *IEnumerable<char>*, but a string
+//   is rarely named as a collection of characters. In others words,
+//   we have much more strings in our program named like *FirstName*
+//   than named like *EndingCharacters*.
+//
+// - Dictionaries types: A dictionary is more than a collection of pairs, 
+//   it is a mapping from one domain to another. A common practice is to suffix
+//   the name of a dictionary with *Map* *Table* or *Dictionary*, 
+//   although often dictionaries names satify this rule with names like
+//   *GuidsToPersons* or *PersonsByNames*.
+//</Description>
+
+//<HowToFix>
+// Just rename the fields and properties accordingly,
+// by making plural the word in the identifier
+// that describes best the *items* in the collection.
+//
+// For example:
+//
+// - **ListOfDir** can be renamed **Directories**.
+//
+// - **Children** can be renamed **ChildrenItems**
+//
+// - **QueueForCache** can be renamed **QueueOfItemsForCache**
+//</HowToFix>]]></Query>
+      <Query Active="False" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>DDD ubiquitous language check</Name>
+warnif count > 0
+
+// Update to your core domain namespace(s)
+let coreDomainNamespaces = Application.Namespaces.WithNameLike("TrainTrain.Domain")
+ 
+// Update your vocabulary list
+let vocabulary = new [] {
+"Train", "Coach", "Coaches", "Seat", "Seats",
+"Reservation", "Fulfilled", "Booking", "Book", "Reserve", "Confirm"
+}.ToHashSet()
+ 
+let technicalWords = new [] { "get", "set", "Get", "Set", "Add" }.ToHashSet()
+let multiWordsVocabulary = vocabulary.Where(w => w.GetWords().Length >= 2)
+ 
+// Append multi-words words in vocabulary
+let multiWordsWords = multiWordsVocabulary.SelectMany(w => w.GetWords())
+let vocabulary2 = vocabulary.Concat(multiWordsWords).ToHashSet()
+let vocabulary3 = vocabulary2.Concat(technicalWords).ToHashSet()
+ 
+from ce in coreDomainNamespaces.ChildTypesAndMembers()
+let tokens = ce.SimpleName.GetWords().Select(w => w.FirstCharToUpper()).ToArray()
+ 
+where !(ce.IsMethod && ce.AsMethod.IsConstructor) && // No vocabulary in ctor
+      !(ce.IsField && ce.AsField.IsGeneratedByCompiler) &&  // Remove compiler generated backing fields, their vocabulary is in property
+      !(vocabulary3.Any(vocable => tokens.Contains(vocable)))
+ 
+let wordsNotInVocabulary = tokens.Where(w => !(vocabulary2.Contains(w) && string.IsNullOrEmpty(w))).ToArray()
+ 
+select new { ce,
+  wordsNotInVocabulary = string.Join(", ",wordsNotInVocabulary)
+}
+
+//<Description>
+// The language used in identifiers of classes, methods and fields of the **core domain**, 
+// should be based on the **Domain Model**.
+// This constraint is known as **ubiquitous language** in **Domain Driven Design (DDD)**
+// and it reflects the need to be rigorous with naming, 
+// since software doesn't cope well with ambiguity.
+//
+// This rule is disabled per default 
+// because its source code needs to be customized to work, 
+// both with the **core domain** namespace name 
+// (that contains classes and types to be checked),
+// and with the list of domain language terms.
+//
+// If a term needs to be used both with singular and plural forms, 
+// both forms need to be mentioned,
+// like **Seat** and **Seats** for example. Notice that this default rule is related with
+// the other default rule *Collection properties and fields names should end with s* 
+// defined in the *Naming Convention* group.
+//
+// This rule implementation relies on the NDepend API 
+// **ExtensionMethodsString.GetWords(this string identifier)** 
+// extension method that extracts terms 
+// from classes, methods and fields identifiers in a smart way.
+//</Description>
+
+//<HowToFix>
+// For each violation, this rule provides the list of **words not in vocabulary**.
+//
+// To fix a violation of this rule, either rename the concerned code element
+// or update the domain language terms list defined in this rule source code,
+// with the missing term(s).
+//</HowToFix>
+]]></Query>
     </Group>
     <Group Name="Source Files Organization" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Avoid referencing source file out of Visual Studio project directory</Name>
@@ -8306,7 +8549,7 @@ select new {
 // use *Int64*. If backward compatibility requires a smaller data type, use 
 // *Byte* or *Int16*.
 //</HowToFix>]]></Query>
-        <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Do not raise too general exception types</Name>
+        <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Do not raise too general exception types</Name>
                     
 warnif count > 0 
 
@@ -9267,7 +9510,7 @@ select a
 // in which case this results in cumulative effect.
 //
 // Online documentation:
-// http://www.ndepend.com/docs/cqlinq-syntax#NotMyCode
+// https://www.ndepend.com/docs/cqlinq-syntax#NotMyCode
 //</Description>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Discard generated Namespaces from JustMyCode</Name>             
 notmycode
@@ -9305,7 +9548,7 @@ select n
 // in which case this results in cumulative effect.
 //
 // Online documentation:
-// http://www.ndepend.com/docs/cqlinq-syntax#NotMyCode
+// https://www.ndepend.com/docs/cqlinq-syntax#NotMyCode
 //</Description>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Discard generated Types from JustMyCode</Name>             
 notmycode
@@ -9335,7 +9578,7 @@ from t in Application.Types where
   t.IsDelegate ||
 
   // Discard ASP.NET page types generated by aspnet_compiler.exe
-  // See: http://www.ndepend.com/FAQ.aspx#ASPNET
+  // See: https://www.ndepend.com/FAQ.aspx#ASPNET
   t.ParentNamespace.Name.EqualsAny("ASP", "__ASP") ||
 
   // Discard ASP.NET special types
@@ -9409,7 +9652,7 @@ select t
 // in which case this results in cumulative effect.
 //
 // Online documentation:
-// http://www.ndepend.com/docs/cqlinq-syntax#NotMyCode
+// https://www.ndepend.com/docs/cqlinq-syntax#NotMyCode
 //</Description>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Discard generated and designer Methods from JustMyCode</Name>
 notmycode 
@@ -9485,7 +9728,7 @@ select new { m, m.NbLinesOfCode }
 // in which case this results in cumulative effect.
 //
 // Online documentation:
-// http://www.ndepend.com/docs/cqlinq-syntax#NotMyCode
+// https://www.ndepend.com/docs/cqlinq-syntax#NotMyCode
 //</Description>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Discard generated Fields from JustMyCode</Name>
 notmycode
@@ -9549,7 +9792,7 @@ select f
 // in which case this results in cumulative effect.
 //
 // Online documentation:
-// http://www.ndepend.com/docs/cqlinq-syntax#NotMyCode
+// https://www.ndepend.com/docs/cqlinq-syntax#NotMyCode
 //</Description>]]></Query>
       <Query Active="False" DisplayList="False" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>JustMyCode code elements</Name>
 from elem in JustMyCode.CodeElements
@@ -9618,7 +9861,7 @@ select new {
 //<Description>
 // An issue is considered worsened if its *debt* increased since the baseline.
 //
-// Debt documentation: http://www.ndepend.com/docs/technical-debt#Debt
+// Debt documentation: https://www.ndepend.com/docs/technical-debt#Debt
 //</Description>
 ]]></Query>
         <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <TrendMetric Name="# Issues with severity Blocker" Unit="issues"/>
@@ -9724,7 +9967,8 @@ select new {
    issues = rule.Issues(), 
    debt = rule.Debt(), 
    annualInterest = rule.AnnualInterest(),
-   maxSeverity = rule.IsViolated() ? (Severity?)rule.Issues().Max(i => i.Severity) : null
+   maxSeverity = rule.IsViolated() && rule.Issues().Any() ? 
+                 (Severity?)rule.Issues().Max(i => i.Severity) : null
 }
 
 //<Description>
@@ -9745,7 +9989,8 @@ select new {
    issues = rule.Issues(), 
    debt = rule.Debt(), 
    annualInterest = rule.AnnualInterest(),
-   maxSeverity = rule.Issues().Max(i => i.Severity)
+   maxSeverity = rule.IsViolated() && rule.Issues().Any() ? 
+                 (Severity?)rule.Issues().Max(i => i.Severity) : null
 }
 
 //<Description>
@@ -9765,7 +10010,8 @@ select new {
    issues = rule.Issues(), 
    debt = rule.Debt(), 
    annualInterest = rule.AnnualInterest(),
-   maxSeverity = rule.Issues().Max(i => i.Severity)
+   maxSeverity = rule.IsViolated() && rule.Issues().Any() ? 
+                 (Severity?)rule.Issues().Max(i => i.Severity) : null
 }
 
 //<Description>
@@ -9851,7 +10097,7 @@ select 100d * debt.ToManDay() / timeToDev.ToManDay()
 // *Estimated number of man-day to develop 1000 logicial lines of code*
 // setting found in NDepend Project Properties > Issue and Debt.
 //
-// Debt documentation: http://www.ndepend.com/docs/technical-debt#Debt
+// Debt documentation: https://www.ndepend.com/docs/technical-debt#Debt
 // </Description>]]></Query>
         <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <TrendMetric Name="Debt (Metric)" Unit="man-days" />
 Issues.Sum(i => i.Debt).ToManDay()
@@ -9860,7 +10106,7 @@ Issues.Sum(i => i.Debt).ToManDay()
 // This Trend Metric name is suffixed with (Metric)
 // to avoid query name collision with the Quality Gate with same name.
 //
-// Debt documentation: http://www.ndepend.com/docs/technical-debt#Debt
+// Debt documentation: https://www.ndepend.com/docs/technical-debt#Debt
 //</Description>]]></Query>
         <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <TrendMetric Name="New Debt since Baseline (Metric)" Unit="man-days" />
 let debt = Issues.Sum(i => i.Debt)
@@ -9873,7 +10119,7 @@ select (debt - debtInBaseline).ToManDay()
 //
 // Debt added (or fixed if negative) since baseline.
 //
-// Debt documentation: http://www.ndepend.com/docs/technical-debt#Debt
+// Debt documentation: https://www.ndepend.com/docs/technical-debt#Debt
 //</Description>]]></Query>
         <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <TrendMetric Name="Annual Interest (Metric)" Unit="man-days" />
 Issues.Sum(i => i.AnnualInterest).ToManDay()
@@ -9882,7 +10128,7 @@ Issues.Sum(i => i.AnnualInterest).ToManDay()
 // This Trend Metric name is suffixed with (Metric)
 // to avoid query name collision with the Quality Gate with same name.
 //
-// Annual Interest documentation: http://www.ndepend.com/docs/technical-debt#AnnualInterest
+// Annual Interest documentation: https://www.ndepend.com/docs/technical-debt#AnnualInterest
 //</Description>]]></Query>
         <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <TrendMetric Name="New Annual Interest since Baseline (Metric)" Unit="man-days" />
 let ai = Issues.Sum(i => i.AnnualInterest)
@@ -9895,7 +10141,7 @@ select (ai - aiInBaseline).ToManDay()
 //
 // Annual Interest added (or fixed if negative) since baseline.
 //
-// Annual Interest documentation: http://www.ndepend.com/docs/technical-debt#AnnualInterest
+// Annual Interest documentation: https://www.ndepend.com/docs/technical-debt#AnnualInterest
 //</Description>]]></Query>
         <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <TrendMetric Name="Breaking Point" Unit="years"/>
 (Issues.Sum(i =>i.Debt).BreakingPoint(Issues.Sum(i =>i.AnnualInterest))).TotalYears()
@@ -9909,7 +10155,7 @@ select (ai - aiInBaseline).ToManDay()
 //
 // Hence the *breaking point* is the point in time from now, when not fixing the issues cost as much as fixing the issue.
 //
-// Breaking Point documentation: http://www.ndepend.com/docs/technical-debt#BreakingPoint
+// Breaking Point documentation: https://www.ndepend.com/docs/technical-debt#BreakingPoint
 // </Description>]]></Query>
         <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <TrendMetric Name="Breaking Point of Blocker / Critical / High Issues" Unit="years"/>
 let issues = Issues.Where(i => i.Severity.EqualsAny(Severity.Blocker, Severity.Critical, Severity.High))
@@ -9924,7 +10170,7 @@ select (issues.Sum(i =>i.Debt).BreakingPoint(issues.Sum(i =>i.AnnualInterest))).
 //
 // Hence the *breaking point* is the point in time from now, when not fixing the issues cost as much as fixing the issue.
 //
-// Breaking Point documentation: http://www.ndepend.com/docs/technical-debt#BreakingPoint
+// Breaking Point documentation: https://www.ndepend.com/docs/technical-debt#BreakingPoint
 // </Description>]]></Query>
       </Group>
       <Group Name="Code Size" Active="True" ShownInReport="False">
@@ -9967,7 +10213,7 @@ Application.Assemblies.SelectMany(
 //
 // If a value 0 is obtained, it means that at analysis time,
 // assemblies PDB files were not available.
-// http://www.ndepend.com/docs/ndepend-analysis-inputs-explanation
+// https://www.ndepend.com/docs/ndepend-analysis-inputs-explanation
 //
 // So far source files cannot be matched by a code query.
 // However editing the query "Application Types" and then
@@ -10511,7 +10757,7 @@ select new {
 // The query result includes types changed directly used, and the **depth of usage**
 // of types indirectly used, *depth of usage* as defined in the documentation of
 // *DepthOfIsUsingAny()* NDepend API method:
-// http://www.ndepend.com/api/webframe.html?NDepend.API~NDepend.CodeModel.ExtensionMethodsSequenceUsage~DepthOfIsUsingAny.html
+// https://www.ndepend.com/api/webframe.html?NDepend.API~NDepend.CodeModel.ExtensionMethodsSequenceUsage~DepthOfIsUsingAny.html
 //</Description>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>New methods</Name>
 from m in Application.Methods where 
@@ -10615,7 +10861,7 @@ select new {
 // The query result includes methods changed directly used, and the **depth of usage**
 // of methods indirectly used, *depth of usage* as defined in the documentation of
 // *DepthOfIsUsingAny()* NDepend API method:
-// http://www.ndepend.com/api/webframe.html?NDepend.API~NDepend.CodeModel.ExtensionMethodsSequenceUsage~DepthOfIsUsingAny.html
+// https://www.ndepend.com/api/webframe.html?NDepend.API~NDepend.CodeModel.ExtensionMethodsSequenceUsage~DepthOfIsUsingAny.html
 //</Description>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>New fields</Name>
 from f in Application.Fields where 
@@ -10749,7 +10995,7 @@ select new {
 // types users.
 //
 // See the definition of the TypeRank metric here: 
-// http://www.ndepend.com/docs/code-metrics#TypeRank
+// https://www.ndepend.com/docs/code-metrics#TypeRank
 //
 // This code query lists the 100 application types 
 // with the higher rank.
@@ -10788,7 +11034,7 @@ select new {
 // of callers.
 //
 // See the definition of the MethodRank metric here: 
-// http://www.ndepend.com/docs/code-metrics#MethodRank
+// https://www.ndepend.com/docs/code-metrics#MethodRank
 //
 // This code query lists the 100 application methods 
 // with the higher rank.
@@ -10876,7 +11122,7 @@ select new { a, a.Level }
 //<Description>
 // This code query lists assemblies ordered by **Level** values.
 // See the definition of the *AssemblyLevel* metric here:
-// http://www.ndepend.com/docs/code-metrics#Level
+// https://www.ndepend.com/docs/code-metrics#Level
 //</Description>]]></Query>
       <Query Active="True" DisplayList="False" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>High-level to low-level namespaces (Level)</Name>
 from n in Application.Namespaces orderby n.Level descending
@@ -10885,7 +11131,7 @@ select new { n, n.Level }
 //<Description>
 // This code query lists namespaces ordered by **Level** values.
 // See the definition of the *NamespaceLevel* metric here:
-// http://www.ndepend.com/docs/code-metrics#Level
+// https://www.ndepend.com/docs/code-metrics#Level
 //</Description>]]></Query>
       <Query Active="True" DisplayList="False" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>High-level to low-level types (Level)</Name>
 from t in Application.Types orderby t.Level descending
@@ -10894,7 +11140,7 @@ select new { t, t.Level }
 //<Description>
 // This code query lists types ordered by **Level** values.
 // See the definition of the *TypeLevel* metric here:
-// http://www.ndepend.com/docs/code-metrics#Level
+// https://www.ndepend.com/docs/code-metrics#Level
 //</Description>]]></Query>
       <Query Active="True" DisplayList="False" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>High-level to low-level methods (Level)</Name>
 from m in Application.Methods orderby m.Level descending
@@ -10903,7 +11149,7 @@ select new { m, m.Level }
 //<Description>
 // This code query lists methods ordered by **Level** values.
 // See the definition of the *MethodLevel* metric here:
-// http://www.ndepend.com/docs/code-metrics#Level
+// https://www.ndepend.com/docs/code-metrics#Level
 //</Description>]]></Query>
     </Group>
     <Group Name="Samples of Custom rules" Active="False" ShownInReport="False">
@@ -11175,7 +11421,7 @@ select new {
 // Both the string **@"N1.N2"** and the threshold **100** can be adapted to your own needs.
 //
 // To execute this sample rule, coverage data must be imported.
-// More info here: http://www.ndepend.com/docs/code-coverage
+// More info here: https://www.ndepend.com/docs/code-coverage
 //</Description>
 
 //<HowToFix>
@@ -11198,7 +11444,7 @@ select new {
 // Both the string **@"Asm"** and the threshold **100** can be adapted to your own needs.
 //
 // To execute this sample rule, coverage data must be imported.
-// More info here: http://www.ndepend.com/docs/code-coverage
+// More info here: https://www.ndepend.com/docs/code-coverage
 //</Description>
 
 //<HowToFix>
@@ -11222,7 +11468,7 @@ select new {
 // can be adapted to your own needs.
 //
 // To execute this sample rule, coverage data must be imported.
-// More info here: http://www.ndepend.com/docs/code-coverage
+// More info here: https://www.ndepend.com/docs/code-coverage
 //</Description>
 
 //<HowToFix>
@@ -11247,7 +11493,7 @@ select new {
 // can be adapted to your own needs.
 //
 // To execute this sample rule, coverage data must be imported.
-// More info here: http://www.ndepend.com/docs/code-coverage
+// More info here: https://www.ndepend.com/docs/code-coverage
 //</Description>
 
 //<HowToFix>

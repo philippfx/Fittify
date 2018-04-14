@@ -64,7 +64,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet("{id}", Name = "GetMapExerciseWorkoutById")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
             var ofmForGetQueryResult = await _asyncGetOfm.GetById(id, fields);
@@ -79,7 +79,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet(Name = "GetMapExerciseWorkoutCollection")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetCollection(MapExerciseWorkoutResourceParameters resourceParameters)
         {
             var ofmForGetCollectionQueryResult = await _asyncGetOfm.GetCollection(resourceParameters);
@@ -102,7 +102,7 @@ namespace Fittify.Api.Controllers.Sport
         }
         
         [HttpPost(Name = "CreateMapExerciseWorkout")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> Post([FromBody] MapExerciseWorkoutOfmForPost ofmForPost)
         {
             if (ofmForPost == null) return BadRequest();
@@ -119,7 +119,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpDelete("{id}", Name = "DeleteMapExerciseWorkout")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> Delete(int id)
         {
             var ofmDeletionQueryResult = await _asyncDeleteForHttpMethods.Delete(id);
@@ -147,7 +147,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpPatch("{id}", Name = "PartiallyUpdateMapExerciseWorkout")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<MapExerciseWorkoutOfmForPatch> jsonPatchDocument)
         {
             if (jsonPatchDocument == null)

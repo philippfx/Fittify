@@ -14,8 +14,8 @@ namespace Fittify.Api.Controllers
     [Route("api")]
     public class RootController : Controller
     {
-        private IUrlHelper _urlHelper;
-        private IActionDescriptorCollectionProvider _provider;
+        private readonly IUrlHelper _urlHelper;
+        private readonly IActionDescriptorCollectionProvider _provider;
         private readonly IConfiguration _appConfiguration;
         private readonly IncomingHeaders _incomingHeaders;
 

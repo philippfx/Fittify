@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.Helpers
 {
-    public class ResourceUriFactory
+    public static class ResourceUriFactory
     {
         public static string CreateResourceUriForIResourceParameters(
             IResourceParameters resourceParameters,

@@ -42,7 +42,7 @@ namespace Fittify.Api.OfmRepository
             {
                 var errorMessages = new List<string>();
                 
-                var idsAreCorrectlySyntaxed = new ValidRegularExpressionRangeOfIntIdsAttribute(RegularExpressions.RangeOfIntIds);
+                var idsAreCorrectlySyntaxed = new ValidRegularExpressionRangeOfIntIdsAttribute(FittifyRegularExpressions.RangeOfIntIds);
                 if (!idsAreCorrectlySyntaxed.IsValid(resourceParameters.Ids))
                 {
                     ofmForGetCollectionQueryResult.ErrorMessages.Add(idsAreCorrectlySyntaxed.FormatErrorMessage(null));

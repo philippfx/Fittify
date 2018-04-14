@@ -15,7 +15,7 @@ namespace Fittify.DataModelRepositories
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TId : struct
     {
-        protected readonly FittifyContext FittifyContext;
+        protected FittifyContext FittifyContext;
         protected IPropertyMappingService PropertyMappingService;
 
 
@@ -40,15 +40,9 @@ namespace Fittify.DataModelRepositories
 
         public virtual async Task<TEntity> Create(TEntity entity)
         {
-            try
-            {
-                await FittifyContext.Set<TEntity>().AddAsync(entity);
-                await SaveContext();
-            }
-            catch (Exception e)
-            {
-                var msg = e.Message;
-            }
+            await FittifyContext.Set<TEntity>().AddAsync(entity);
+            await SaveContext();
+            
             return entity;
         }
 
@@ -94,10 +88,10 @@ namespace Fittify.DataModelRepositories
             
             foreach (var navProp in thisModelsNavProperties)
             {
-                var IEnumerablenavPropValue = navProp.GetValue(entity) as IEnumerable<IEntityUniqueIdentifier<TId>>;
-                if (IEnumerablenavPropValue != null)
+                var enumerablenavPropValue = navProp.GetValue(entity) as IEnumerable<IEntityUniqueIdentifier<TId>>;
+                if (enumerablenavPropValue != null)
                 {
-                    var listnavPropValue = IEnumerablenavPropValue.ToList();
+                    var listnavPropValue = enumerablenavPropValue.ToList();
                     entityDeletionResult.EntitesThatBlockDeletion.Add(listnavPropValue);
                 }
 

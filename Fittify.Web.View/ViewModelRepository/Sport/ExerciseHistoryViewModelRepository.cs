@@ -13,17 +13,17 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
 {
     public class ExerciseHistoryViewModelRepository : AsyncGppdRepository<int, WorkoutOfmForPost, WorkoutViewModel>
     {
-        private string _fittifyApiBaseUrl;
-
-        public ExerciseHistoryViewModelRepository(string fittifyApiBaseUrl)
+        private Uri _fittifyApiBaseUri;
+         
+        public ExerciseHistoryViewModelRepository(Uri fittifyApiBaseUri)
         {
-            _fittifyApiBaseUrl = fittifyApiBaseUrl;
+            _fittifyApiBaseUri = fittifyApiBaseUri;
         }
         public async Task<ExerciseHistoryViewModel> GetSingleById(int id)
         {
             var exerciseHistoryOfmCollectionQueryResult =
                 await AsyncGppd.GetCollection<ExerciseHistoryOfmForGet>(
-                    _fittifyApiBaseUrl + "api/exercisehistories/" + id);
+                    new Uri(_fittifyApiBaseUri, "api/exercisehistories/" + id));
 
             return Mapper.Map<ExerciseHistoryViewModel>(exerciseHistoryOfmCollectionQueryResult.OfmForGetCollection);
         }
@@ -32,7 +32,7 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
         {
             var exerciseHistoryOfmCollectionQueryResult =
                 await AsyncGppd.GetCollection<IEnumerable<ExerciseHistoryOfmForGet>>(
-                    _fittifyApiBaseUrl + "api/exercisehistories?workoutHistoryId=" + workoutHistoryId);
+                    new Uri(_fittifyApiBaseUri, "api/exercisehistories?workoutHistoryId=" + workoutHistoryId));
 
             return Mapper.Map<IEnumerable<ExerciseHistoryViewModel>>(exerciseHistoryOfmCollectionQueryResult.OfmForGetCollection);
         }
@@ -42,7 +42,7 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
             // Current ExerciseHistories
             var currentExerciseHistoryOfmCollectionQueryResult =
                 await AsyncGppd.GetCollection<ExerciseHistoryOfmForGet>(
-                    _fittifyApiBaseUrl + "api/exercisehistories?workoutHistoryId=" + workoutHistoryId);
+                    new Uri(_fittifyApiBaseUri, "api/exercisehistories?workoutHistoryId=" + workoutHistoryId));
 
             if (currentExerciseHistoryOfmCollectionQueryResult.HttpStatusCode == 404)
             {
@@ -52,7 +52,7 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
             var exerciseHistoryViewModels =
                 Mapper.Map<IEnumerable<ExerciseHistoryViewModel>>(currentExerciseHistoryOfmCollectionQueryResult.OfmForGetCollection);
 
-            var weightLiftingSetViewModelRepository = new WeightLiftingSetViewModelRepository(_fittifyApiBaseUrl);
+            var weightLiftingSetViewModelRepository = new WeightLiftingSetViewModelRepository(_fittifyApiBaseUri);
             foreach (var exerciseHistoryOfmForGet in currentExerciseHistoryOfmCollectionQueryResult.OfmForGetCollection.Where(w => w.Exercise.ExerciseType == ExerciseTypeEnum.WeightLifting.ToString()))
             {
                 WeightLiftingSetViewModel[] previousWeightLiftingSetViewModels = null;
@@ -102,7 +102,7 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
                 }
             }
 
-            var cardioSetViewModelRepository = new CardioSetViewModelRepository(_fittifyApiBaseUrl);
+            var cardioSetViewModelRepository = new CardioSetViewModelRepository(_fittifyApiBaseUri);
             foreach (var exerciseHistoryOfmForGet in currentExerciseHistoryOfmCollectionQueryResult.OfmForGetCollection.Where(w => w.Exercise.ExerciseType == ExerciseTypeEnum.Cardio.ToString()))
             {
                 CardioSetViewModel[] previousCardioSetViewModels = null;

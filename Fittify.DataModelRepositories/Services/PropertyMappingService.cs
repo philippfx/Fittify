@@ -20,7 +20,7 @@ namespace Fittify.DataModelRepositories.Services
                 {"DateTimeEnd", new PropertyMappingValue(new List<string>() {"DateTimeEnd"})},
             };
 
-        private IList<IPropertyMapping> propertyMappings = new List<IPropertyMapping>();
+        private readonly IList<IPropertyMapping> propertyMappings = new List<IPropertyMapping>();
 
         public PropertyMappingService()
         {

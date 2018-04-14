@@ -11,7 +11,7 @@ namespace Fittify.Web.ApiModelRepositories
 {
     public static class AsyncGppd
     {
-        public static async Task<OfmCollectionQueryResult<TOfmForGet>> GetCollection<TOfmForGet>(string requestBaseUri) where TOfmForGet : class
+        public static async Task<OfmCollectionQueryResult<TOfmForGet>> GetCollection<TOfmForGet>(Uri requestBaseUri) where TOfmForGet : class
         {
             var ofmQueryResult = new OfmCollectionQueryResult<TOfmForGet>();
             try
@@ -21,9 +21,9 @@ namespace Fittify.Web.ApiModelRepositories
                 ofmQueryResult.HttpStatusMessage = httpResponse.StatusCode.ToString();
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
-                if (!Regex.Match(ofmQueryResult.HttpStatusCode.ToString(), RegularExpressions.HttpStatusCodeStartsWith2).Success)
+                if (!Regex.Match(ofmQueryResult.HttpStatusCode.ToString(), FittifyRegularExpressions.HttpStatusCodeStartsWith2).Success)
                 {
-                    ofmQueryResult.ErrorMessagesPresented = httpResponse.ContentAsType<IDictionary<string, object>>();
+                    ofmQueryResult.ErrorMessagesPresented = httpResponse.ContentAsType<IReadOnlyDictionary<string, object>>();
                 }
                 else
                 {
@@ -37,7 +37,7 @@ namespace Fittify.Web.ApiModelRepositories
             return ofmQueryResult;
         }
 
-        public static async Task<OfmQueryResult<TOfmForGet>> GetSingle<TOfmForGet>(string requestBaseUri) where TOfmForGet : class
+        public static async Task<OfmQueryResult<TOfmForGet>> GetSingle<TOfmForGet>(Uri requestBaseUri) where TOfmForGet : class
         {
             var ofmQueryResult = new OfmQueryResult<TOfmForGet>();
             try
@@ -47,9 +47,9 @@ namespace Fittify.Web.ApiModelRepositories
                 ofmQueryResult.HttpStatusMessage = httpResponse.StatusCode.ToString();
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
-                if (!Regex.Match(ofmQueryResult.HttpStatusCode.ToString(), RegularExpressions.HttpStatusCodeStartsWith2).Success)
+                if (!Regex.Match(ofmQueryResult.HttpStatusCode.ToString(), FittifyRegularExpressions.HttpStatusCodeStartsWith2).Success)
                 {
-                    ofmQueryResult.ErrorMessagesPresented = httpResponse.ContentAsType<IDictionary<string,object>>();
+                    ofmQueryResult.ErrorMessagesPresented = httpResponse.ContentAsType<IReadOnlyDictionary<string,object>>();
                 }
                 else
                 {
@@ -63,21 +63,21 @@ namespace Fittify.Web.ApiModelRepositories
             return ofmQueryResult;
         }
 
-        public static async Task<TOfmForGet> Post<TOfmForPost, TOfmForGet>(string requestBaseUri, TOfmForPost ofmForPost) where TOfmForPost : class where TOfmForGet : class
+        public static async Task<TOfmForGet> Post<TOfmForPost, TOfmForGet>(Uri requestBaseUri, TOfmForPost ofmForPost) where TOfmForPost : class where TOfmForGet : class
         {
             var httpResponse = await HttpRequestFactory.Post(requestBaseUri, ofmForPost);
             var outputModel = httpResponse.ContentAsType<TOfmForGet>();
             return outputModel;
         }
 
-        public static async Task<TOfmForGet> Patch<TOfmForGet>(string requestBaseUri, JsonPatchDocument /*object */jsonPatchDocument)
+        public static async Task<TOfmForGet> Patch<TOfmForGet>(Uri requestBaseUri, JsonPatchDocument /*object */jsonPatchDocument)
         {
             var httpResponse = await HttpRequestFactory.Patch(requestBaseUri, jsonPatchDocument);
             var outputModel = httpResponse.ContentAsType<TOfmForGet>();
             return outputModel;
         }
 
-        public static async Task<IActionResult> Delete(string requestBaseUri, Controller controller)
+        public static async Task<IActionResult> Delete(Uri requestBaseUri, Controller controller)
         {
             var httpResponse = await HttpRequestFactory.Delete(requestBaseUri);
             if ((int) httpResponse.StatusCode == 204)

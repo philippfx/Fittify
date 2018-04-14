@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.OuterFacingModels.Sport.Get;
@@ -10,17 +11,17 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
 {
     public class WeightLiftingSetViewModelRepository : AsyncGppdRepository<int, WorkoutOfmForPost, WorkoutViewModel>
     {
-        private readonly string _fittifyApiBaseUrl;
+        private readonly Uri _fittifyApiBaseUri;
 
-        public WeightLiftingSetViewModelRepository(string fittifyApiBaseUrl)
+        public WeightLiftingSetViewModelRepository(Uri fittifyApiBaseUri)
         {
-            _fittifyApiBaseUrl = fittifyApiBaseUrl;
+            _fittifyApiBaseUri = fittifyApiBaseUri;
         }
         public async Task<IEnumerable<WeightLiftingSetViewModel>> GetCollectionByExerciseHistoryId(int exerciseHistoryId)
         {
             var exerciseHistoryOfmCollectionQueryResult =
                 await AsyncGppd.GetCollection<WeightLiftingSetOfmForGet>(
-                    _fittifyApiBaseUrl + "api/weightliftingsets?exerciseHistoryId=" + exerciseHistoryId);
+                    new Uri(_fittifyApiBaseUri, "api/weightliftingsets?exerciseHistoryId=" + exerciseHistoryId));
 
             return Mapper.Map<IEnumerable<WeightLiftingSetViewModel>>(exerciseHistoryOfmCollectionQueryResult.OfmForGetCollection);
         }

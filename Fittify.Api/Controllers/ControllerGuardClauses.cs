@@ -8,8 +8,8 @@ namespace Fittify.Api.Controllers
 {
     public sealed class ControllerGuardClauses<TOfmForGet> where TOfmForGet : class
     {
-        private Controller _controller;
-        private string _shortCamelCasedControllerName;
+        private readonly Controller _controller;
+        private readonly string _shortCamelCasedControllerName;
         public ControllerGuardClauses(Controller controller)
         {
             _controller = controller;

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Web.ApiModelRepositories;
 using Newtonsoft.Json;
@@ -13,11 +14,11 @@ namespace Fittify.Test.Client.ConsumeApi
         public async Task Should_ReturnSingleWorkout_WhenMinimumInfoIsQueried()
         {
             // Arrange
-            string url = StaticVariables.FittifyApiBaseUrl + "api/categories/" + 1;
+            var uri = new Uri(StaticVariables.FittifyApiBaseUrl + "api/categories/" + 1);
 
             // Act
             var categoryOfmForGetQueryResult =
-                await AsyncGppd.GetSingle<CategoryOfmForGet>(url);
+                await AsyncGppd.GetSingle<CategoryOfmForGet>(uri);
             var category = categoryOfmForGetQueryResult.OfmForGet;
 
             // Assert
@@ -31,11 +32,11 @@ namespace Fittify.Test.Client.ConsumeApi
         public async Task Should_ReturnNotFound_WhenIdIs0()
         {
             // Arrange
-            string url = StaticVariables.FittifyApiBaseUrl + "api/categories/" + 0;
+            Uri uri = new Uri(StaticVariables.FittifyApiBaseUrl + "api/categories/" + 0);
 
             // Act
             var categoryOfmForGetQueryResult =
-                await AsyncGppd.GetSingle<CategoryOfmForGet>(url);
+                await AsyncGppd.GetSingle<CategoryOfmForGet>(uri);
             var category = categoryOfmForGetQueryResult.OfmForGet;
 
             // Assert
@@ -50,11 +51,11 @@ namespace Fittify.Test.Client.ConsumeApi
         public async Task Should_ReturnShapedSingleWorkout_WhenQueryIncludesFields()
         {
             // Arrange
-            string url = StaticVariables.FittifyApiBaseUrl + "api/categories/" + 1 + "?fields=id,name";
+            var uri = new Uri(StaticVariables.FittifyApiBaseUrl + "api/categories/" + 1 + "?fields=id,name");
 
             // Act
             var categoryOfmForGetQueryResult =
-                await AsyncGppd.GetSingle<CategoryOfmForGet>(url);
+                await AsyncGppd.GetSingle<CategoryOfmForGet>(uri);
             var category = categoryOfmForGetQueryResult.OfmForGet;
 
             // Assert

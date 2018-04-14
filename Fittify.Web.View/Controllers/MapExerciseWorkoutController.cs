@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Web.ApiModelRepositories;
@@ -10,10 +11,10 @@ namespace Fittify.Web.View.Controllers
     [Route("mapexerciseworkout")]
     public class MapExerciseWorkoutController : Controller
     {
-        private readonly string _fittifyApiBaseUrl;
+        private readonly Uri _fittifyApiBaseUri;
         public MapExerciseWorkoutController(IConfiguration appConfiguration)
         {
-            _fittifyApiBaseUrl = appConfiguration.GetValue<string>("FittifyApiBaseUrl");
+            _fittifyApiBaseUri = new Uri(appConfiguration.GetValue<string>("FittifyApiBaseUrl"));
         }
         
         [HttpPost]
@@ -21,10 +22,10 @@ namespace Fittify.Web.View.Controllers
         public async Task<RedirectToActionResult> Delete([FromQuery] int workoutId, [FromQuery] int exerciseId)
         {
             var mapExerciseWorkoutOfmForGetResult = await AsyncGppd.GetCollection<MapExerciseWorkoutOfmForGet>(
-                _fittifyApiBaseUrl + "api/mapexerciseworkouts?workoutId=" + workoutId + "&exerciseId=" + exerciseId);
+                new Uri(_fittifyApiBaseUri, "api/mapexerciseworkouts?workoutId=" + workoutId + "&exerciseId=" + exerciseId));
 
             await AsyncGppd.Delete(
-                _fittifyApiBaseUrl + "api/mapexerciseworkouts/" + mapExerciseWorkoutOfmForGetResult.OfmForGetCollection.Single().Id, this);
+                new Uri(_fittifyApiBaseUri, "api/mapexerciseworkouts/" + mapExerciseWorkoutOfmForGetResult.OfmForGetCollection.Single().Id), this);
 
             return RedirectToAction("AssociatedExercises", "Workout", new { workoutId = workoutId });
         }

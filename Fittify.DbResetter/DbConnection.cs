@@ -7,9 +7,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.DbResetter
 {
-    public class DbResetterConnection
+    public static class Connection
     {
-        private string GetFittifyConnectionStringFromAppsettingsJson()
+        private static string GetFittifyConnectionStringFromAppsettingsJson()
         {
             var control = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory/*, @"..\Fittify"*/));
 
@@ -23,7 +23,7 @@ namespace Fittify.DbResetter
             return path;
         }
         
-        public void DeleteDb()
+        public static void DeleteDb()
         {
             using (var fittifyContext = new FittifyContext(StaticFields.MsSqlTestDbConnectionStringWork))
             {
@@ -38,7 +38,7 @@ namespace Fittify.DbResetter
             }
         }
 
-        public void EnsureCreatedDbContext()
+        public static void EnsureCreatedDbContext()
         {
             using (var fittifyContext = new FittifyContext(GetFittifyConnectionStringFromAppsettingsJson()))
             {
@@ -46,7 +46,7 @@ namespace Fittify.DbResetter
             }
         }
 
-        public void Seed()
+        public static void Seed()
         {
             var fittifyContextSeeder = new FittifyContextSeeder();
             fittifyContextSeeder.EnsureFreshSeedDataForProductionContext(GetFittifyConnectionStringFromAppsettingsJson());

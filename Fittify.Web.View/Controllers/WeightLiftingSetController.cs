@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ApiModelRepositories;
@@ -10,17 +11,17 @@ namespace Fittify.Web.View.Controllers
     [Route("weightliftingsets")]
     public class WeightLiftingSetWebController : Controller
     {
-        private string _fittifyApiBaseUrl;
+        private readonly Uri _fittifyApiBaseUri;
         public WeightLiftingSetWebController(IConfiguration appConfiguration)
         {
-            _fittifyApiBaseUrl = appConfiguration.GetValue<string>("FittifyApiBaseUrl");
+            _fittifyApiBaseUri = new Uri(appConfiguration.GetValue<string>("FittifyApiBaseUrl"));
         }
 
         [HttpPost]
         public async Task<RedirectToActionResult> CreateNewWeightLiftingSet([FromForm] WeightLiftingSetOfmForPost weightLiftingSetOfmForPost, [FromQuery] int workoutHistoryId)
         {
             await AsyncGppd.Post<WeightLiftingSetOfmForPost, WeightLiftingSetOfmForGet>(
-                _fittifyApiBaseUrl + "api/weightliftingsets", weightLiftingSetOfmForPost);
+                new Uri(_fittifyApiBaseUri, "api/weightliftingsets"), weightLiftingSetOfmForPost);
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }
@@ -30,7 +31,7 @@ namespace Fittify.Web.View.Controllers
         public async Task<RedirectToActionResult> Delete(/*[Bind("id")] int weightLiftingSetId,*/ [FromQuery] int workoutHistoryId, [FromQuery] int weightLiftingSetId)
         {
             await AsyncGppd.Delete(
-                _fittifyApiBaseUrl + "api/weightliftingsets/" + weightLiftingSetId, this);
+                new Uri(_fittifyApiBaseUri, "api/weightliftingsets/" + weightLiftingSetId), this);
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }

@@ -13,15 +13,16 @@ namespace Fittify.Web.ApiModelRepositories
         where TSent : class
         where TReceived : class
     {
-        protected string RequestBaseUri;
+        protected Uri RequestBaseUri;
         protected HttpResponseMessage HttpResponse;
-        public AsyncGppdRepository(string requestBaseUri)
+        public AsyncGppdRepository(Uri requestBaseUri)
         {
             RequestBaseUri = requestBaseUri;
         }
 
         public AsyncGppdRepository()
         {
+            
         }
 
         public virtual async Task<TReceived> GetSingle(TId id)
@@ -73,11 +74,6 @@ namespace Fittify.Web.ApiModelRepositories
         {
             HttpResponse = await HttpRequestFactory.Delete(RequestBaseUri);
             return new JsonResult("not implemented");
-        }
-
-        public Task<TReceived> GetSingle()
-        {
-            throw new NotImplementedException();
         }
     }
 }

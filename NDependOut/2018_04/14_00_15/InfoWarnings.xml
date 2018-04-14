@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<InfoWarnings>
+  <Info>Begin full analysis with NDepend v2018.1.0</Info>
+  <Info>Compare with analysis result obtained on 2018 April - 13 Friday 17:49  (which is the analysis result with date closest to 30 days ago)</Info>
+  <Info>Concurrent mode</Info>
+  <Info>.NET Assemblies loaded from {C:\Users\PhilippPrivate\Documents\Visual Studio 2017\Projects\Fittify\Fittify.Web.View\bin\debug\netcoreapp2.0} 
+   Fittify.Web.View.dll   v1.0.0.0
+   Fittify.Web.ViewModels.dll   v1.0.0.0
+   Fittify.Api.OuterFacingModels.dll   v1.0.0.0
+   Fittify.Common.dll   v1.0.0.0
+   Fittify.Web.ApiModelRepositories.dll   v1.0.0.0</Info>
+  <Info>.NET Assembly loaded from {C:\Users\PhilippPrivate\Documents\Visual Studio 2017\Projects\Fittify\Fittify.DataModels\bin\debug\netcoreapp2.0} 
+   Fittify.DataModels.dll   v1.0.0.0</Info>
+  <Info>.NET Assemblies loaded from {C:\Users\PhilippPrivate\Documents\Visual Studio 2017\Projects\Fittify\Fittify.DbResetter\bin\debug\netcoreapp2.0} 
+   Fittify.DbResetter.dll   v1.0.0.0
+   Fittify.DataModelRepositories.dll   v1.0.0.0
+   Fittify.Test.Core.dll   v1.0.0.0</Info>
+  <Info>.NET Assembly loaded from {C:\Users\PhilippPrivate\Documents\Visual Studio 2017\Projects\Fittify\Fittify.Api\bin\debug\netcoreapp2.0} 
+   Fittify.Api.dll   v1.0.0.0</Info>
+  <Info>.NET Assemblies loaded from {C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.0}  [ 0 , 19 ]
+   System.Runtime.dll   v4.2.0.0
+   System.Diagnostics.Debug.dll   v4.1.0.0
+   System.Threading.Tasks.dll   v4.1.0.0
+   System.Collections.dll   v4.1.0.0
+   System.Text.RegularExpressions.dll   v4.2.0.0
+   System.IO.FileSystem.dll   v4.1.0.0
+   System.Linq.dll   v4.2.0.0
+   System.Runtime.Extensions.dll   v4.2.0.0
+   System.Console.dll   v4.1.0.0
+   System.Linq.Expressions.dll   v4.2.0.0
+   System.Linq.Queryable.dll   v4.0.3.0
+   System.ComponentModel.Annotations.dll   v4.2.0.0
+   System.ComponentModel.dll   v4.0.3.0
+   System.Xml.XmlSerializer.dll   v4.1.0.0
+   System.Xml.ReaderWriter.dll   v4.2.0.0
+   System.ComponentModel.TypeConverter.dll   v4.2.0.0
+   Microsoft.CSharp.dll   v4.0.3.0
+   System.Threading.dll   v4.1.0.0
+   System.Net.Http.dll   v4.2.0.0
+   System.Net.Primitives.dll   v4.1.0.0</Info>
+  <Info>.NET Assemblies loaded from {C:\Program Files\dotnet\shared\Microsoft.NETCore.App\2.0.0}  [ 20 , 20 ]
+   mscorlib.dll   v4.0.0.0</Info>
+  <Info>.NET Assemblies loaded from {C:\Program Files\dotnet\store\x64\netcoreapp2.0}  [ 0 , 19 ]
+   .\Microsoft.AspNetCore.Hosting.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.Abstractions.dll   v2.0.0.0
+   .\Microsoft.Extensions.Configuration.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll   v2.0.0.0
+   .\Microsoft.Extensions.DependencyInjection.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Http.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Abstractions.dll   v2.0.0.0
+   .\Microsoft.Extensions.Logging.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Routing\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Routing.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Mvc.Core\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Core.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Mvc.ViewFeatures\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.ViewFeatures.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.JsonPatch\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.JsonPatch.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Mvc.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Abstractions.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Http.Features\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Features.dll   v2.0.0.0
+   .\Microsoft.Extensions.Primitives\2.0.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Hosting\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.dll   v2.0.0.0
+   .\Microsoft.AspNetCore\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.dll   v2.0.0.0
+   .\Microsoft.Extensions.Configuration\2.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll   v2.0.0.0
+   .\Microsoft.Extensions.Configuration.FileExtensions\2.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.FileExtensions.dll   v2.0.0.0
+   .\Microsoft.Extensions.Configuration.Json\2.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Json.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Mvc\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.dll   v2.0.0.0
+   .\Microsoft.Extensions.Logging.Console\2.0.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Console.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Diagnostics\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Diagnostics.dll   v2.0.0.0</Info>
+  <Info>.NET Assemblies loaded from {C:\Program Files\dotnet\store\x64\netcoreapp2.0}  [ 20 , 33 ]
+   .\Microsoft.AspNetCore.StaticFiles\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.StaticFiles.dll   v2.0.0.0
+   .\Microsoft.Extensions.Configuration.Binder\2.0.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll   v2.0.0.0
+   .\Microsoft.EntityFrameworkCore\2.0.0\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll   v2.0.0.0
+   .\Microsoft.EntityFrameworkCore.SqlServer\2.0.0\lib\netstandard2.0\Microsoft.EntityFrameworkCore.SqlServer.dll   v2.0.0.0
+   .\Microsoft.Extensions.DependencyInjection\2.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Mvc.Formatters.Json\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Formatters.Json.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Cors\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Cors.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Diagnostics.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Diagnostics.Abstractions.dll   v2.0.0.0
+   .\Microsoft.Extensions.Caching.Memory\2.0.0\lib\netstandard2.0\Microsoft.Extensions.Caching.Memory.dll   v2.0.0.0
+   .\Microsoft.Extensions.Options\2.0.0\lib\netstandard2.0\Microsoft.Extensions.Options.dll   v2.0.0.0
+   .\Microsoft.Extensions.Logging.Debug\2.0.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Debug.dll   v2.0.0.0
+   .\Newtonsoft.Json\10.0.1\lib\netstandard1.3\Newtonsoft.Json.dll   v10.0.0.0
+   .\Microsoft.AspNetCore.Routing.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Routing.Abstractions.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Mvc.Formatters.Xml\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Formatters.Xml.dll   v2.0.0.0</Info>
+  <Info>.NET Assemblies loaded from {C:\Users\PhilippPrivate\.nuget\packages} 
+   .\AutoMapper\6.2.2\lib\netstandard1.3\AutoMapper.dll   v6.2.2.0
+   .\AspNetCore.RouteAnalyzer\0.5.1\lib\netcoreapp2.0\AspNetCore.RouteAnalyzer.dll   v0.5.0.0
+   .\System.Linq.Dynamic.Core\1.0.8.2\lib\netstandard2.0\System.Linq.Dynamic.Core.dll   v0.0.0.0
+   .\Marvin.Cache.Headers\1.1.0\lib\netstandard1.6\Marvin.Cache.Headers.dll   v1.1.0.0
+   .\AspNetCoreRateLimit\2.1.0\lib\netstandard1.6\AspNetCoreRateLimit.dll   v1.0.6.0
+   .\NLog.Web.AspNetCore\4.5.0-beta04\lib\netstandard2.0\NLog.Web.AspNetCore.dll   v4.0.0.0</Info>
+  <Warning>Assembly {Microsoft.EntityFrameworkCore.Sqlite} is referenced by {Fittify.Api} but is not found.</Warning>
+  <Info>173 source files parsed ; all source files found ; all source files in-sync with PDB</Info>
+  <Info>0 code rule has been extracted from code.</Info>
+  <Info>No dependency cycle detected in assemblies referencement graph.</Info>
+  <Info>Do merge code generated by compiler into application code.</Info>
+  <Info>Log trend metrics values.</Info>
+  <Warning>1 quality gate warns.
+  - 'New Annual Interest since Baseline' value 0.0083 man-days greater than warn threshold 2 man-days</Warning>
+  <Error>2 quality gates fail.
+  - 'New Blocker / Critical / High Issues' value 1 issues greater than fail threshold 0 issues
+  - 'Critical Rules Violated' value 1 rules greater than fail threshold 0 rules</Error>
+  <Info>NDepend analysis done. Duration: 00:06</Info>
+</InfoWarnings>

@@ -2,7 +2,7 @@
 
 namespace Fittify.Common.Helpers
 {
-    public class ValidAscendingOrderRangeOfIntIdsAttribute : ValidationAttribute
+    public sealed class ValidAscendingOrderRangeOfIntIdsAttribute : ValidationAttribute
     {
         public override bool IsValid(object value)
         {

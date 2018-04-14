@@ -11,20 +11,21 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
 {
     public class WorkoutViewModelRepository : AsyncGppdRepository<int, WorkoutOfmForPost, WorkoutViewModel>
     {
-        private string _fittifyApiBaseUrl;
+        private Uri _fittifyApiBaseUri;
 
-        public WorkoutViewModelRepository(string fittifyApiBaseUrl)
+        public WorkoutViewModelRepository(Uri fittifyApiBaseUri)
         {
-            _fittifyApiBaseUrl = fittifyApiBaseUrl;
+            _fittifyApiBaseUri = fittifyApiBaseUri;
         }
 
         public override async Task<WorkoutViewModel> GetSingle(int id)
         {
             var workoutOfmForGetQueryResult =
-                await AsyncGppd.GetSingle<WorkoutOfmForGet>(_fittifyApiBaseUrl + "api/workouts/" + id);
+                await AsyncGppd.GetSingle<WorkoutOfmForGet>(
+                    new Uri(_fittifyApiBaseUri, "api/workouts/" + id));
             var workoutViewModel = Mapper.Map<WorkoutViewModel>(workoutOfmForGetQueryResult.OfmForGet);
 
-            var exerciseViewModelRepository = new ExerciseViewModelRepository(_fittifyApiBaseUrl);
+            var exerciseViewModelRepository = new ExerciseViewModelRepository(_fittifyApiBaseUri);
             if (!String.IsNullOrWhiteSpace(workoutOfmForGetQueryResult.OfmForGet.RangeOfExerciseIds))
             {
                 var associatedExercises = await exerciseViewModelRepository.GetCollectionByRangeOfIds(workoutOfmForGetQueryResult.OfmForGet.RangeOfExerciseIds);

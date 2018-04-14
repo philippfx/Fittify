@@ -66,7 +66,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet("{id}", Name = "GetWorkoutHistoryById")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
             var ofmForGetQueryResult = await _asyncGetOfmForWorkoutHistory.GetById(id, fields);
@@ -81,7 +81,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet(Name = "GetWorkoutHistoryCollection")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetCollection(WorkoutHistoryResourceParameters resourceParameters)
         {
             var ofmForGetCollectionQueryResult = await _asyncGetOfmForWorkoutHistory.GetCollection(resourceParameters);
@@ -104,7 +104,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpPost]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> Post([FromBody] WorkoutHistoryOfmForPost ofmForPost, [FromQuery] string includeExerciseHistories)
         {
             if (ofmForPost == null) return BadRequest();
@@ -133,7 +133,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpDelete("{id}", Name = "DeleteWorkoutHistory")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> Delete(int id)
         {
             var ofmDeletionQueryResult = await _asyncDeleteForHttpMethods.Delete(id);
@@ -161,7 +161,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpPatch("{id}", Name = "PartiallyUpdateWorkoutHistory")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<WorkoutHistoryOfmForPatch> jsonPatchDocument)
         {
             if (jsonPatchDocument == null)

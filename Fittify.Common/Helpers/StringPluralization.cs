@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Fittify.Common.Helpers
 {
-    public class StringPluralization
+    public static class StringPluralization
     {
         private static readonly IList<string> Unpluralizables = new List<string>
             { "equipment", "information", "rice", "money", "species", "series", "fish", "sheep", "deer" };

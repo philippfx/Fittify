@@ -1,7 +1,7 @@
 ﻿namespace Fittify.Web.ApiModelRepositories
 {
     public interface IAsyncGppd<TId, TSent, TReceived> : 
-        IAsyncGet<TReceived>,
+        IAsyncGet<TId, TReceived>,
         IAsyncPost<TSent, TReceived>,
         IAsyncPatch<TReceived>,
         IAsyncDelete<TId>

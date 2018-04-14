@@ -9,25 +9,20 @@ namespace Fittify.Web.ApiModelRepositories
     public class HttpRequestBuilder
     {
         private HttpMethod _method = null;
-        private string _requestUri = "";
+        private Uri _requestUri = null;
         private HttpContent _content = null;
         private string _bearerToken = "";
         private string _acceptHeader = "application/json";
         private Dictionary<string, string> _customRequestHeaders = null;
         private TimeSpan _timeout = new TimeSpan(0, 0, 15);
-
-        public HttpRequestBuilder()
-        {
-
-        }
-
+        
         public HttpRequestBuilder AddMethod(HttpMethod method)
         {
             this._method = method;
             return this;
         }
 
-        public HttpRequestBuilder AddRequestUri(string requestUri)
+        public HttpRequestBuilder AddRequestUri(Uri requestUri)
         {
             this._requestUri = requestUri;
             return this;
@@ -72,7 +67,7 @@ namespace Fittify.Web.ApiModelRepositories
             var request = new HttpRequestMessage
             {
                 Method = this._method,
-                RequestUri = new Uri(this._requestUri)
+                RequestUri = _requestUri
             };
 
             if (this._content != null)

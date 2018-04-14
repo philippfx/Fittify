@@ -65,7 +65,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet("{id}", Name = "GetCategoryById")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new [] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new [] { "1" })]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
             var ofmForGetQueryResult = await _asyncGetOfm.GetById(id, fields);
@@ -80,7 +80,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet(Name = "GetCategoryCollection")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetCollection(CategoryResourceParameters resourceParameters)
         {
             var ofmForGetCollectionQueryResult = await _asyncGetOfm.GetCollection(resourceParameters);
@@ -103,7 +103,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet("range/{inputString}", Name = "GetCategoriesByRangeOfIds")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetByRangeOfIds(string inputString)
         {
             var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputString));
@@ -117,7 +117,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpPost(Name = "CreateCategory")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> Post([FromBody] CategoryOfmForPost ofmForPost)
         {
             if (ofmForPost == null) return BadRequest();
@@ -134,7 +134,7 @@ namespace Fittify.Api.Controllers.Sport
         }
         
         [HttpDelete("{id}", Name = "DeleteCategory")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> Delete(int id)
         {
             var ofmDeletionQueryResult = await _asyncDeleteForHttpMethods.Delete(id);
@@ -162,7 +162,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpPatch("{id}", Name = "PartiallyUpdateCategory")]
-        [RequestHeaderMatchesApiVersion(ConstantPropertyNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<CategoryOfmForPatch> jsonPatchDocument)
         {
             if (jsonPatchDocument == null)

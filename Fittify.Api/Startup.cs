@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using AspNetCoreRateLimit;
-using Fittify.Api.Controllers.Generic;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Middleware;
@@ -66,9 +65,7 @@ namespace Fittify.Api
                 {
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver();
-                })
-                .ConfigureApplicationPartManager(p => // supports generic controllers 
-                    p.FeatureProviders.Add(new GenericControllerFeatureProvider())); 
+                }); 
 
             string dbConnectionString = Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
 

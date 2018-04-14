@@ -22,11 +22,11 @@ namespace Fittify.Web.View.Controllers
     public class WorkoutController : Controller
     {
         private IAsyncGppd<int, WorkoutOfmForPost, WorkoutViewModel> _asyncGppd;
-        private string _fittifyApiBaseUrl;
+        private Uri _fittifyApiBaseUri;
         public WorkoutController(IConfiguration appConfiguration)
         {
-            _fittifyApiBaseUrl = appConfiguration.GetValue<string>("FittifyApiBaseUrl");
-            _asyncGppd = new AsyncGppdRepository<int, WorkoutOfmForPost, WorkoutViewModel>(_fittifyApiBaseUrl + "api/workouts");
+            _fittifyApiBaseUri = new Uri(appConfiguration.GetValue<string>("FittifyApiBaseUrl"));
+            _asyncGppd = new AsyncGppdRepository<int, WorkoutOfmForPost, WorkoutViewModel>(new Uri(_fittifyApiBaseUri, "api/workouts"));
         }
         public async Task<IActionResult> Overview()
         {
@@ -37,7 +37,7 @@ namespace Fittify.Web.View.Controllers
         [Route("{workoutId}/associatedexercises", Name = "AssociatedExercises")]
         public async Task<IActionResult> AssociatedExercises(int workoutId)
         {
-            var repo = new WorkoutViewModelRepository(_fittifyApiBaseUrl);
+            var repo = new WorkoutViewModelRepository(_fittifyApiBaseUri);
             var workoutViewModel = await repo.GetSingle(workoutId);
             return View(workoutViewModel);
         }
@@ -53,7 +53,7 @@ namespace Fittify.Web.View.Controllers
             };
 
             await AsyncGppd.Post<MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForGet>(
-                _fittifyApiBaseUrl + "api/mapexerciseworkouts", mapExerciseWorkout);
+                new Uri(_fittifyApiBaseUri, "api/mapexerciseworkouts"), mapExerciseWorkout);
 
             return RedirectToAction("AssociatedExercises", "Workout", new { workoutId = workoutId });
         }
@@ -61,7 +61,7 @@ namespace Fittify.Web.View.Controllers
         [Route("{workoutId}/history")]
         public async Task<IActionResult> Histories(int workoutId)
         {
-            var repo = new WorkoutHistoryViewModelRepository(_fittifyApiBaseUrl);
+            var repo = new WorkoutHistoryViewModelRepository(_fittifyApiBaseUri);
             var workoutHistoryViewModels = await repo.GetCollectionByWorkoutId(workoutId);
             return View(workoutHistoryViewModels?.ToList());
         }
@@ -69,7 +69,7 @@ namespace Fittify.Web.View.Controllers
         [Route("historydetails/{workouthistoryId}")]
         public async Task<IActionResult> HistoryDetails(int workoutHistoryId)
         {
-            var workoutHistoryViewModelRepository = new WorkoutHistoryViewModelRepository(_fittifyApiBaseUrl);
+            var workoutHistoryViewModelRepository = new WorkoutHistoryViewModelRepository(_fittifyApiBaseUri);
             var workoutHistoryViewModel =
                 await workoutHistoryViewModelRepository.GetDetailsById(workoutHistoryId);
 
@@ -80,7 +80,7 @@ namespace Fittify.Web.View.Controllers
         public async Task<IActionResult> CreateNewWorkout([FromForm] WorkoutOfmForPost workoutOfmForPost)
         {
             var workoutOfmForGet = await AsyncGppd.Post<WorkoutOfmForPost, WorkoutOfmForGet>(
-                _fittifyApiBaseUrl + "api/workouts", workoutOfmForPost);
+                new Uri(_fittifyApiBaseUri, "api/workouts"), workoutOfmForPost);
 
             return RedirectToAction("AssociatedExercises", "Workout", new { workoutId = workoutOfmForGet.Id });
         }
@@ -90,7 +90,7 @@ namespace Fittify.Web.View.Controllers
         public async Task<RedirectToActionResult> Delete(/*[Bind("id")] int workoutId,*/ [FromQuery] int workoutId/*, [FromQuery] int workoutHistoryId*/)
         {
             await AsyncGppd.Delete(
-                _fittifyApiBaseUrl + "api/workouts/" + workoutId, this);
+                new Uri(_fittifyApiBaseUri, "api/workouts/" + workoutId), this);
 
             return RedirectToAction("Overview", "Workout", null);
         }
@@ -104,7 +104,7 @@ namespace Fittify.Web.View.Controllers
             jsonPatchDocument.Replace("/" + nameof(workoutOfmForPatch.Name), workoutOfmForPatch.Name);
 
             var result = await AsyncGppd.Patch<WeightLiftingSetOfmForGet>(
-            _fittifyApiBaseUrl + "api/workouts/" + workoutOfmForPatch.Id, jsonPatchDocument);
+            new Uri(_fittifyApiBaseUri, "api/workouts/" + workoutOfmForPatch.Id), jsonPatchDocument);
 
             return RedirectToAction("Overview", "Workout", null);
         }
@@ -170,7 +170,7 @@ namespace Fittify.Web.View.Controllers
                 }
 
                 var result = await AsyncGppd.Patch<WeightLiftingSetOfmForGet>(
-                             _fittifyApiBaseUrl + "api/weightliftingsets/" + wls.Id, jsonPatchDocument);
+                             new Uri(_fittifyApiBaseUri, "api/weightliftingsets/" + wls.Id), jsonPatchDocument);
             }
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }

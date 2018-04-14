@@ -23,16 +23,16 @@ namespace Fittify.Api.Middleware
             IHeaderDictionary headers = httpContext.Request.Headers; // at runtime headers are of type FrameRequestHeaders
             var headerDictionary = new Dictionary<string, StringValues>(headers);
 
-            headerDictionary[ConstantPropertyNames.ApiVersion] = new StringValues(1.ToString());
+            headerDictionary[ConstantHttpHeaderNames.ApiVersion] = new StringValues(1.ToString());
 
-            if (headers[ConstantPropertyNames.ApiVersion].IsDefault()) // checking for "null"
+            if (headers[ConstantHttpHeaderNames.ApiVersion].IsDefault()) // checking for "null"
             {
-                headers.Add(ConstantPropertyNames.ApiVersion, _appConfiguration.GetValue<string>("LatestApiVersion"));
+                headers.Add(ConstantHttpHeaderNames.ApiVersion, _appConfiguration.GetValue<string>("LatestApiVersion"));
             }
 
-            if (headers[ConstantPropertyNames.IncludeHateoas].IsDefault()) // checking for "null"
+            if (headers[ConstantHttpHeaderNames.IncludeHateoas].IsDefault()) // checking for "null"
             {
-                headers.Add(ConstantPropertyNames.IncludeHateoas, "0");
+                headers.Add(ConstantHttpHeaderNames.IncludeHateoas, "0");
             }
 
             await _next.Invoke(httpContext);

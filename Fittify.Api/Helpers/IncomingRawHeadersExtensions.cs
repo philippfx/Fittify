@@ -24,7 +24,7 @@ namespace Fittify.Api.Helpers
             var latestSupportedApiVersion = appConfiguration.GetValue<int>("LatestApiVersion");
             if (!String.IsNullOrWhiteSpace(incomingRawHeaders.ApiVersion))
             {
-                var unacceptableIncomingApiVersionErrorMessage = "The header '" + ConstantPropertyNames.ApiVersion.ToLower() + "' can only take an integer value of greater than or equal to '1'. The latest supported version is " + latestSupportedApiVersion;
+                var unacceptableIncomingApiVersionErrorMessage = "The header '" + ConstantHttpHeaderNames.ApiVersion.ToLower() + "' can only take an integer value of greater than or equal to '1'. The latest supported version is " + latestSupportedApiVersion;
                 if (!int.TryParse(incomingRawHeaders.ApiVersion, out var incomingApiVersion))
                 {
                     errorMessages.Add(unacceptableIncomingApiVersionErrorMessage);
@@ -37,7 +37,7 @@ namespace Fittify.Api.Helpers
             }
             else
             {
-                errorMessages.Add("A header '" + ConstantPropertyNames.ApiVersion.ToLower() + "' must be specified and take an integer value greater than or equal to '1'. The latest supported version is " + latestSupportedApiVersion);
+                errorMessages.Add("A header '" + ConstantHttpHeaderNames.ApiVersion.ToLower() + "' must be specified and take an integer value greater than or equal to '1'. The latest supported version is " + latestSupportedApiVersion);
             }
 
             if (errorMessages.Count > 0)

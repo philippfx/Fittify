@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace Fittify.Common.Helpers
 {
-    public class ValidRegularExpressionRangeOfIntIdsAttribute : ValidationAttribute
+    public sealed class ValidRegularExpressionRangeOfIntIdsAttribute : ValidationAttribute
     {
         private readonly string _pattern;
         public ValidRegularExpressionRangeOfIntIdsAttribute(string pattern)
@@ -19,7 +19,7 @@ namespace Fittify.Common.Helpers
         }
         public override string FormatErrorMessage(string name)
         {
-            this.ErrorMessage = "Your concatenated range of integer ids is badly formatted. It must meet the regular expression '" + RegularExpressions.RangeOfIntIds.Replace("\\", "") + "'";
+            this.ErrorMessage = "Your concatenated range of integer ids is badly formatted. It must meet the regular expression '" + FittifyRegularExpressions.RangeOfIntIds.Replace("\\", "") + "'";
 
             return this.ErrorMessage;
         }

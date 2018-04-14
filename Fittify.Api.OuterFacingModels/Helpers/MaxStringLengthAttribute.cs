@@ -3,9 +3,9 @@ using Fittify.Common.Extensions;
 
 namespace Fittify.Api.OuterFacingModels.Helpers
 {
-    public class MaxStringLengthAttribute : StringLengthAttribute
+    public sealed class MaxStringLengthAttribute : StringLengthAttribute
     {
-        private int _maximumLength;
+        private readonly int _maximumLength;
 
         public MaxStringLengthAttribute(int maximumLength) : base(maximumLength)
         {

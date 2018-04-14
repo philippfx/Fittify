@@ -12,17 +12,17 @@ namespace Fittify.Web.View.Controllers
     [Route("cardiosets")]
     public class CardioSetController : Controller
     {
-        private readonly string _fittifyApiBaseUrl;
+        private readonly Uri _fittifyApiBaseUri;
         public CardioSetController(IConfiguration appConfiguration)
         {
-            _fittifyApiBaseUrl = appConfiguration.GetValue<string>("FittifyApiBaseUrl");
+            _fittifyApiBaseUri = new Uri(appConfiguration.GetValue<string>("FittifyApiBaseUrl"));
         }
 
         [HttpPost]
         public async Task<RedirectToActionResult> CreateNewCardioSet([FromForm] CardioSetOfmForPost cardioSetOfmForPost, [FromQuery] int workoutHistoryId) 
         {
             await AsyncGppd.Post<CardioSetOfmForPost, CardioSetOfmForGet>(
-                _fittifyApiBaseUrl + "api/cardiosets", cardioSetOfmForPost);
+                new Uri(_fittifyApiBaseUri, "api/cardiosets"), cardioSetOfmForPost);
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }
@@ -35,7 +35,7 @@ namespace Fittify.Web.View.Controllers
             jsonPatch.Replace("/datetimestart", DateTime.Now);
 
             var result = await AsyncGppd.Patch<CardioSetOfmForGet>(
-                _fittifyApiBaseUrl + "api/cardiosets/" + cardioSetId, jsonPatch);
+                new Uri(_fittifyApiBaseUri, "api/cardiosets/" + cardioSetId), jsonPatch);
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }
@@ -48,7 +48,7 @@ namespace Fittify.Web.View.Controllers
             jsonPatch.Replace("/datetimeend", DateTime.Now);
 
             var result =  await AsyncGppd.Patch<CardioSetOfmForGet>(
-                _fittifyApiBaseUrl + "api/cardiosets/" + cardioSetId, jsonPatch);
+                new Uri(_fittifyApiBaseUri, "api/cardiosets/" + cardioSetId), jsonPatch);
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }
@@ -58,7 +58,7 @@ namespace Fittify.Web.View.Controllers
         public async Task<RedirectToActionResult> Delete(/*[Bind("id")] int cardioSetId,*/ [FromQuery] int workoutHistoryId, [FromQuery] int cardioSetId)
         {
             await AsyncGppd.Delete(
-                _fittifyApiBaseUrl + "api/cardiosets/" + cardioSetId, this);
+                new Uri(_fittifyApiBaseUri, "api/cardiosets/" + cardioSetId), this);
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }

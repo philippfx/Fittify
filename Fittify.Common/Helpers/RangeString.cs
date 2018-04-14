@@ -9,7 +9,7 @@ namespace Fittify.Common.Helpers
     {
         public static bool ValidateInputString(string str)
         {
-            if (Regex.IsMatch(str, RegularExpressions.RangeOfIntIds))
+            if (Regex.IsMatch(str, FittifyRegularExpressions.RangeOfIntIds))
             {
                 return false;
             }

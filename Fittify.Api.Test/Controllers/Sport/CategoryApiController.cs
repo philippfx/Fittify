@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Web.ApiModelRepositories;
@@ -14,11 +15,11 @@ namespace Fittify.Api.Test.Controllers.Sport
         public async Task Should_ReturnSingleWorkout_WhenMinimumInfoIsQueried()
         {
             // Arrange
-            string url = StaticVariables.FittifyApiBaseUrl + "api/categories/" + 1;
+            var uri = new Uri(StaticVariables.FittifyApiBaseUri + "api/categories/" + 1);
 
             // Act
-            var categoryQueryResult = await HttpRequestFactory.GetSingle(url);
-            categoryQueryResult = await HttpRequestFactory.GetSingle(url, new Dictionary<string, string>() { { "Include-Hateoas", "1" } });
+            var categoryQueryResult = await HttpRequestFactory.GetSingle(uri);
+            categoryQueryResult = await HttpRequestFactory.GetSingle(uri, new Dictionary<string, string>() { { "Include-Hateoas", "1" } });
             var httpResponseContentAsString = categoryQueryResult.ContentAsString();
             // Assert
             string actual = httpResponseContentAsString.ToLower();
@@ -31,11 +32,11 @@ namespace Fittify.Api.Test.Controllers.Sport
         public async Task Should_ReturnNotFound_WhenIdIs0()
         {
             // Arrange
-            string url = StaticVariables.FittifyApiBaseUrl + "api/categories/" + 0;
+            var uri = new Uri(StaticVariables.FittifyApiBaseUri + "api/categories/" + 0);
 
             // Act
             var categoryOfmForGetQueryResult =
-                await AsyncGppd.GetSingle<CategoryOfmForGet>(url);
+                await AsyncGppd.GetSingle<CategoryOfmForGet>(uri);
             var category = categoryOfmForGetQueryResult.OfmForGet;
 
             // Assert
@@ -50,11 +51,11 @@ namespace Fittify.Api.Test.Controllers.Sport
         public async Task Should_ReturnShapedSingleWorkout_WhenQueryIncludesFields()
         {
             // Arrange
-            string url = StaticVariables.FittifyApiBaseUrl + "api/categories/" + 1 + "?fields=id,name";
+            var uri = new Uri(StaticVariables.FittifyApiBaseUri + "api/categories/" + 1 + "?fields=id,name");
 
             // Act
             var categoryOfmForGetQueryResult =
-                await AsyncGppd.GetSingle<CategoryOfmForGet>(url);
+                await AsyncGppd.GetSingle<CategoryOfmForGet>(uri);
             var category = categoryOfmForGetQueryResult.OfmForGet;
 
             // Assert
@@ -68,11 +69,11 @@ namespace Fittify.Api.Test.Controllers.Sport
         public async Task Should_ReturnSingleWorkout_HateoasIsIncluded()
         {
             // Arrange
-            string url = StaticVariables.FittifyApiBaseUrl + "api/categories/" + 1;
+            var uri = new Uri(StaticVariables.FittifyApiBaseUri + "api/categories/" + 1);
 
             // Act
-            var categoryQueryResult = await HttpRequestFactory.GetSingle(url);
-            categoryQueryResult = await HttpRequestFactory.GetSingle(url, new Dictionary<string, string>() { { "Include-Hateoas", "1" } });
+            var categoryQueryResult = await HttpRequestFactory.GetSingle(uri);
+            categoryQueryResult = await HttpRequestFactory.GetSingle(uri, new Dictionary<string, string>() { { "Include-Hateoas", "1" } });
             var httpResponseContentAsString = categoryQueryResult.ContentAsString();
             // Assert
             string actual = httpResponseContentAsString.ToLower();

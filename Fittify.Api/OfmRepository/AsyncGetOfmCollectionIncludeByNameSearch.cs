@@ -18,7 +18,7 @@ namespace Fittify.Api.OfmRepository
         where TEntity : class, IEntityName<TId>
         where TCrudRepository : class, IAsyncGetCollectionForEntityName<TEntity, TId>
     {
-        protected readonly AsyncGetOfmGuardClauses<TOfmForGet, TId> AsyncGetOfmGuardClause;
+        //protected readonly AsyncGetOfmGuardClauses<TOfmForGet, TId> AsyncGetOfmGuardClause;
         public AsyncGetOfmCollectionIncludeByNameSearch(TCrudRepository repository,
             IUrlHelper urlHelper,
             IActionDescriptorCollectionProvider actionDescriptorCollectionProvider,
@@ -27,7 +27,7 @@ namespace Fittify.Api.OfmRepository
             Controller controller) 
             : base(repository, urlHelper, actionDescriptorCollectionProvider, propertyMappingService, typeHelperService, controller)
         {
-            AsyncGetOfmGuardClause = new AsyncGetOfmGuardClauses<TOfmForGet, TId>(TypeHelperService);
+            //AsyncGetOfmGuardClause = new AsyncGetOfmGuardClauses<TOfmForGet, TId>(TypeHelperService);
         }
         
         public virtual async Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(ISearchQueryResourceParameters resourceParameters)

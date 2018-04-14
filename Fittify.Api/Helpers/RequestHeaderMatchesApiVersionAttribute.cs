@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ActionConstraints;
 namespace Fittify.Api.Helpers
 {
     [AttributeUsage(AttributeTargets.All, Inherited = true, AllowMultiple = true)]
-    public class RequestHeaderMatchesApiVersionAttribute : Attribute, IActionConstraint
+    public sealed class RequestHeaderMatchesApiVersionAttribute : Attribute, IActionConstraint
     {
         private readonly string[] _versions;
         private readonly string _requestHeaderToMatch;

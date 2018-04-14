@@ -11,40 +11,35 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
 {
     public class WorkoutHistoryViewModelRepository : AsyncGppdRepository<int, WorkoutHistoryOfmForPost, WorkoutHistoryViewModel>
     {
-        private readonly string _fittifyApiBaseUrl;
+        private readonly Uri _fittifyApiBaseUri;
 
-        public WorkoutHistoryViewModelRepository(string fittifyApiBaseUrl)
+        public WorkoutHistoryViewModelRepository(Uri fittifyApiBaseUri)
         {
-            _fittifyApiBaseUrl = fittifyApiBaseUrl;
+            _fittifyApiBaseUri = fittifyApiBaseUri;
         }
 
         public virtual async Task<IEnumerable<WorkoutHistoryViewModel>> GetCollectionByWorkoutId(int workoutId)
         {
-            var workoutHistoryOfmCollectionQueryResult = await AsyncGppd.GetCollection<WorkoutHistoryOfmForGet>(_fittifyApiBaseUrl + "api/workouthistories?workoutId=" + workoutId);
+            var workoutHistoryOfmCollectionQueryResult = await AsyncGppd.GetCollection<WorkoutHistoryOfmForGet>(
+                new Uri(_fittifyApiBaseUri, "api/workouthistories?workoutId=" + workoutId));
             var result = Mapper.Map<IEnumerable<WorkoutHistoryViewModel>>(workoutHistoryOfmCollectionQueryResult.OfmForGetCollection);
             return result;
         }
 
         public virtual async Task<WorkoutHistoryViewModel> GetDetailsById(int workoutHistoryId)
         {
-            var workoutHistoryOfmForGetQueryResult = await AsyncGppd.GetSingle<WorkoutHistoryOfmForGet>(_fittifyApiBaseUrl + "api/workouthistories/" + workoutHistoryId);
+            var workoutHistoryOfmForGetQueryResult = await AsyncGppd.GetSingle<WorkoutHistoryOfmForGet>(
+                new Uri(_fittifyApiBaseUri, "api/workouthistories/" + workoutHistoryId));
             var workoutHistoryViewModel = Mapper.Map<WorkoutHistoryViewModel>(workoutHistoryOfmForGetQueryResult.OfmForGet);
+            
+            var gppdRepoExerciseHistory = new ExerciseHistoryViewModelRepository(_fittifyApiBaseUri);
 
-            try
-            {
-                var gppdRepoExerciseHistory = new ExerciseHistoryViewModelRepository(_fittifyApiBaseUrl);
+            workoutHistoryViewModel.ExerciseHistories = await gppdRepoExerciseHistory.GetCollectionByWorkoutHistoryId(workoutHistoryViewModel.Id);
 
-                workoutHistoryViewModel.ExerciseHistories = await gppdRepoExerciseHistory.GetCollectionByWorkoutHistoryId(workoutHistoryViewModel.Id);
-
-                var exerciseViewModelRepository = new ExerciseViewModelRepository(_fittifyApiBaseUrl);
-                var allExercises = await exerciseViewModelRepository.GetAll();
-                workoutHistoryViewModel.AllExercises = allExercises;
-            }
-            catch (Exception e)
-            {
-                var msg = e.Message;
-            }
-
+            var exerciseViewModelRepository = new ExerciseViewModelRepository(_fittifyApiBaseUri);
+            var allExercises = await exerciseViewModelRepository.GetAll();
+            workoutHistoryViewModel.AllExercises = allExercises;
+            
             return workoutHistoryViewModel;
         }
     }

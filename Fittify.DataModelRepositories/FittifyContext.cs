@@ -14,7 +14,7 @@ namespace Fittify.DataModelRepositories
             
         }
         
-        private string _dbConnectionString;
+        private readonly string _dbConnectionString;
         /// <summary>
         /// Initialize context with dbConnectionString
         /// </summary>
@@ -27,7 +27,7 @@ namespace Fittify.DataModelRepositories
             }
             else
             {
-                throw new NullReferenceException("The dbConnectionString is null");
+                throw new ArgumentNullException("dbConnectionString");
             }
             OnConfiguring(new DbContextOptionsBuilder());
         }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ApiModelRepositories;
@@ -10,17 +11,17 @@ namespace Fittify.Web.View.Controllers
     [Route("exercises")]
     public class ExerciseController : Controller
     {
-        private readonly string _fittifyApiBaseUrl;
+        private readonly Uri _fittifyApiBaseUri;
         public ExerciseController(IConfiguration appConfiguration)
         {
-            _fittifyApiBaseUrl = appConfiguration.GetValue<string>("FittifyApiBaseUrl");
+            _fittifyApiBaseUri = new Uri(appConfiguration.GetValue<string>("FittifyApiBaseUrl"));
         }
 
         [HttpPost]
         public async Task<RedirectToActionResult> AddExercise([FromForm] ExerciseOfmForPost exerciseOfmForPost, [FromQuery] int workoutId)
         {
             var exerciseOfmForGet = await AsyncGppd.Post<ExerciseOfmForPost, ExerciseOfmForGet>(
-                _fittifyApiBaseUrl + "api/exercises", exerciseOfmForPost);
+                new Uri(_fittifyApiBaseUri + "api/exercises"), exerciseOfmForPost);
 
             var mapExerciseWorkout = new MapExerciseWorkoutOfmForPost()
             {
@@ -29,7 +30,7 @@ namespace Fittify.Web.View.Controllers
             };
 
             await AsyncGppd.Post<MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForGet>(
-                _fittifyApiBaseUrl + "api/mapexerciseworkouts", mapExerciseWorkout);
+                new Uri(_fittifyApiBaseUri + "api/mapexerciseworkouts"), mapExerciseWorkout);
 
             return RedirectToAction("AssociatedExercises", "Workout", new { workoutId = workoutId });
         }
