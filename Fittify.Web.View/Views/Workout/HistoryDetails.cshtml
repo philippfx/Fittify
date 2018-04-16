@@ -46,15 +46,22 @@
             }
             else
             {
-                foreach (var exerciseHistoryOfTypeWeightLifting in Model.ExerciseHistories.Where(w => w.Exercise.ExerciseType == ExerciseTypeEnum.WeightLifting.ToString()))
+                foreach (var exerciseHistoryOfTypeWeightLifting in Model.ExerciseHistories.Where(w => w.Exercise?.ExerciseType == ExerciseTypeEnum.WeightLifting.ToString()))
                 {
                     <tr>
                         <td>
-                            <div>@exerciseHistoryOfTypeWeightLifting.Exercise.Name</div>
+                            @if(exerciseHistoryOfTypeWeightLifting.Exercise != null)
+                            {
+                                <div>@exerciseHistoryOfTypeWeightLifting.Exercise.Name</div>
+                            }
+                            else
+                            {
+                                <div style="font-style: italic;">Deleted Exercise</div>
+                            }
                             <div>
                                 <form action="~/exercisehistories/@exerciseHistoryOfTypeWeightLifting.Id/deletion?workoutHistoryId=@exerciseHistoryOfTypeWeightLifting.WorkoutHistoryId" method="post">
                                     <input name="exerciseHistoryId" type="hidden" value="@exerciseHistoryOfTypeWeightLifting.Id" />
-                                    <input type="submit" value="X" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete?')"/>
+                                    <input type="submit" value="X" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete?')" />
                                 </form>
                             </div>
                         </td>
@@ -190,11 +197,18 @@
                     </tr>
                 }
 
-                foreach (var exerciseHistoryOfTypeCardio in Model.ExerciseHistories.Where(w => w.Exercise.ExerciseType == ExerciseTypeEnum.Cardio.ToString()))
+                foreach (var exerciseHistoryOfTypeCardio in Model.ExerciseHistories.Where(w => w.Exercise?.ExerciseType == ExerciseTypeEnum.Cardio.ToString()))
                 {
                     <tr>
                         <td>
+                            @if(@exerciseHistoryOfTypeCardio.Exercise != null)
+                            {
                             <div>@exerciseHistoryOfTypeCardio.Exercise.Name</div>
+                            }
+                            else
+                            {
+                            <div style="font-style: italic;">Deleted Exercise</div>
+                            }
                             <div>
                                 <form action="~/exercisehistories/@exerciseHistoryOfTypeCardio.Id/deletion?workoutHistoryId=@exerciseHistoryOfTypeCardio.WorkoutHistoryId" method="post">
                                     <input name="exerciseHistoryId" type="hidden" value="@exerciseHistoryOfTypeCardio.Id" />

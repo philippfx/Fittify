@@ -25,7 +25,7 @@ namespace Fittify.DbResetter
         
         public static void DeleteDb()
         {
-            using (var fittifyContext = new FittifyContext(StaticFields.MsSqlTestDbConnectionStringWork))
+            using (var fittifyContext = new FittifyContext(GetFittifyConnectionStringFromAppsettingsJson()))
             {
                 try
                 {
@@ -42,7 +42,14 @@ namespace Fittify.DbResetter
         {
             using (var fittifyContext = new FittifyContext(GetFittifyConnectionStringFromAppsettingsJson()))
             {
-                fittifyContext.Database.EnsureCreated();
+                try
+                {
+                    fittifyContext.Database.EnsureCreated();
+                }
+                catch (Exception ex)
+                {
+                    var msg = ex.Message;
+                }
             }
         }
 

@@ -53,7 +53,7 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
                 Mapper.Map<IEnumerable<ExerciseHistoryViewModel>>(currentExerciseHistoryOfmCollectionQueryResult.OfmForGetCollection);
 
             var weightLiftingSetViewModelRepository = new WeightLiftingSetViewModelRepository(_fittifyApiBaseUri);
-            foreach (var exerciseHistoryOfmForGet in currentExerciseHistoryOfmCollectionQueryResult.OfmForGetCollection.Where(w => w.Exercise.ExerciseType == ExerciseTypeEnum.WeightLifting.ToString()))
+            foreach (var exerciseHistoryOfmForGet in currentExerciseHistoryOfmCollectionQueryResult.OfmForGetCollection.Where(w => w.Exercise?.ExerciseType == ExerciseTypeEnum.WeightLifting.ToString()))
             {
                 WeightLiftingSetViewModel[] previousWeightLiftingSetViewModels = null;
                 if (exerciseHistoryOfmForGet.PreviousExerciseHistoryId != null)
@@ -103,7 +103,7 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
             }
 
             var cardioSetViewModelRepository = new CardioSetViewModelRepository(_fittifyApiBaseUri);
-            foreach (var exerciseHistoryOfmForGet in currentExerciseHistoryOfmCollectionQueryResult.OfmForGetCollection.Where(w => w.Exercise.ExerciseType == ExerciseTypeEnum.Cardio.ToString()))
+            foreach (var exerciseHistoryOfmForGet in currentExerciseHistoryOfmCollectionQueryResult.OfmForGetCollection.Where(w => w.Exercise?.ExerciseType == ExerciseTypeEnum.Cardio.ToString()))
             {
                 CardioSetViewModel[] previousCardioSetViewModels = null;
                 if (exerciseHistoryOfmForGet.PreviousExerciseHistoryId != null)

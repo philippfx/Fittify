@@ -28,6 +28,7 @@ namespace Fittify.Web.View.Controllers
             _fittifyApiBaseUri = new Uri(appConfiguration.GetValue<string>("FittifyApiBaseUrl"));
             _asyncGppd = new AsyncGppdRepository<int, WorkoutOfmForPost, WorkoutViewModel>(new Uri(_fittifyApiBaseUri, "api/workouts"));
         }
+
         public async Task<IActionResult> Overview()
         {
             var listWorkoutViewModel = await _asyncGppd.GetCollection();
@@ -103,7 +104,7 @@ namespace Fittify.Web.View.Controllers
 
             jsonPatchDocument.Replace("/" + nameof(workoutOfmForPatch.Name), workoutOfmForPatch.Name);
 
-            var result = await AsyncGppd.Patch<WeightLiftingSetOfmForGet>(
+            var result = await AsyncGppd.Patch<WorkoutOfmForGet>(
             new Uri(_fittifyApiBaseUri, "api/workouts/" + workoutOfmForPatch.Id), jsonPatchDocument);
 
             return RedirectToAction("Overview", "Workout", null);
