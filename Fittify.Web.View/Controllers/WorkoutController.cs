@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -10,14 +11,18 @@ using Fittify.Web.ApiModelRepositories;
 using Fittify.Web.View.ViewModelRepository.Sport;
 //using Fittify.Web.ApiModels.Sport.Post;
 using Fittify.Web.ViewModels.Sport;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Fittify.Web.View.Controllers
 {
+    [Authorize]
     [Route("workouts")]
     public class WorkoutController : Controller
     {
@@ -30,6 +35,8 @@ namespace Fittify.Web.View.Controllers
         }
         public async Task<IActionResult> Overview()
         {
+            await WriteOutIdentityInformation();
+
             var listWorkoutViewModel = await _asyncGppd.GetCollection();
             return View("Overview", listWorkoutViewModel.ToList());
         }
@@ -173,6 +180,25 @@ namespace Fittify.Web.View.Controllers
                              new Uri(_fittifyApiBaseUri, "api/weightliftingsets/" + wls.Id), jsonPatchDocument);
             }
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
+        }
+
+        private async Task WriteOutIdentityInformation()
+        {
+            // get the saved identity token
+            string identityToken = await HttpContext
+                .GetTokenAsync("id_token");
+
+            //var identityToken = await HttpContext.Authentication
+            //    .GetTokenAsync(OpenIdConnectParameterNames.IdToken);
+
+            // write it out
+            Debug.WriteLine($"Identity token: {identityToken}");
+
+            // write out the user claims
+            foreach (var claim in User.Claims)
+            {
+                Debug.WriteLine($"Claim type: {claim.Type} - Claim value: {claim.Value}");
+            }
         }
     }
 }

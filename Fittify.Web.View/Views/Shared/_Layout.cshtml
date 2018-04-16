@@ -29,8 +29,15 @@
                     <li><a href="#">About</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li><a href="~/account/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                    }
                 </ul>
             </div>
         </div>
