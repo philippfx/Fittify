@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Fittify.DataModelRepositories;
 using Fittify.DataModels.Models.Sport;
 
@@ -102,7 +103,14 @@ namespace Fittify.Test.Core.Seed.Sport
                     }
                 }
 
-                fittifyContext.SaveChanges();
+                try
+                {
+                    fittifyContext.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    var msg = e.Message;
+                }
             }
         }
     }

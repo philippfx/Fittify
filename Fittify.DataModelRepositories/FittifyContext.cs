@@ -102,7 +102,7 @@ namespace Fittify.DataModelRepositories
             modelBuilder.Entity<ExerciseHistory>()
                 .HasOne(h => h.Exercise)
                 .WithMany(w => w.ExerciseHistories)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ExerciseHistory>()
                 .HasOne(h => h.WorkoutHistory)
