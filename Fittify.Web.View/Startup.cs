@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using AspNetCore.RouteAnalyzer;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -29,23 +33,7 @@ namespace Fittify.Web.View
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //    .AddCookie(o => o.LoginPath = new PathString("/account/login"))
-            //    .AddOpenIdConnect(o =>
-            //    {
-            //        //o.SignInScheme = "oidc";
-            //        //o.SignOutScheme = "oidc";
-            //        o.Authority = "https://localhost:44364/";
-            //        o.RequireHttpsMetadata = true; // ensures working over TLS
-            //        o.ClientId = "fittifyclient";
-            //        //o.Scope = new List<string>() { "openid", "profile" }; // READ ONLY ???
-            //        o.ResponseType = "code id_token";
-            //        //o.CallbackPath = new PathString(); // can be used to alternate https://localhost:44328/signin-oidc
-            //        //o.SignInScheme = "Cookie";
-            //        o.SignInScheme = "oidc";
-            //        o.SaveTokens = true;
-            //    });
-
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services.AddAuthentication(options => {
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
@@ -58,13 +46,45 @@ namespace Fittify.Web.View
                     options.ClientId = "fittifyclient";
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
+                    options.Scope.Add("address");
                     options.ResponseType = "code id_token";
                     //options.CallbackPath = new PathString("...");
+                    //options.SignedOutCallbackPath = new PathString("...");
                     options.SignInScheme = "Cookies";
                     //options.SignOutScheme = "oidc";
                     options.SaveTokens = true;
                     options.ClientSecret = "secret";
                     options.GetClaimsFromUserInfoEndpoint = true;
+
+                    // In Asp.Net Core 2.0, redundant claims are deleted before returning the token. You can remove this "deletion", for example for "amr" claims, like this:
+                    //options.ClaimActions.Remove("amr");
+                    // The following code does not apply to asp.net core 2.0 anymore
+                    options.Events = new OpenIdConnectEvents() // clears all claims to get rid of the redundant onces and asks for the needed onces only 
+                    {
+                        OnTokenValidated = tokenValidatedContext =>
+                        {
+                            //var identity = tokenValidatedContext.Principal.Identity as ClaimsIdentity;
+                            //var subjectClaim = identity.Claims.FirstOrDefault(z => z.Type == "sub");
+                            //var newClaimsIdentity = new ClaimsIdentity(
+                            //    tokenValidatedContext.Scheme);
+                            //Add claims
+                            var claims = new List<Claim>
+                            {
+                                new Claim(ClaimTypes.Role, "rolename")
+                            };
+                            var claimsIdentity = new ClaimsIdentity(claims);
+                            tokenValidatedContext.Principal.AddIdentity(claimsIdentity);
+
+                            //[...]
+
+                            return Task.FromResult(0);
+                        },
+                        OnUserInformationReceived = userInformationReceivedContext =>
+                        {
+                            userInformationReceivedContext.User.Remove("address");
+                            return Task.FromResult(0);
+                        }
+                    };
                 });
 
             services.AddMvc();

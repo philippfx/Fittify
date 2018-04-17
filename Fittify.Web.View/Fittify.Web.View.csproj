@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AspNetCore.RouteAnalyzer" Version="0.5.1" />
+    <PackageReference Include="IdentityModel" Version="3.6.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.0.0" />
@@ -28,6 +29,14 @@
   <ItemGroup>
     <ProjectReference Include="..\Fittify.Web.ApiModelRepositories\Fittify.Web.ApiModelRepositories.csproj" />
     <ProjectReference Include="..\Fittify.Web.ViewModels\Fittify.Web.ViewModels.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Authentication.Cookies">
+      <HintPath>..\..\..\Users\seifert-1\.nuget\packages\microsoft.aspnetcore.authentication.cookies\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Authentication.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect">
+      <HintPath>..\..\..\Users\seifert-1\.nuget\packages\microsoft.aspnetcore.authentication.openidconnect\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Authentication.OpenIdConnect.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

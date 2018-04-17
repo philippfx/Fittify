@@ -25,6 +25,7 @@ namespace Marvin.IDP
                     {
                         new Claim("given_name", "Frank"),
                         new Claim("family_name", "Underwood"),
+                        new Claim("address", "1, Main Road")
                     }
                 },
                 new TestUser
@@ -37,6 +38,7 @@ namespace Marvin.IDP
                     {
                         new Claim("given_name", "Claire"),
                         new Claim("family_name", "Underwood"),
+                        new Claim("address", "2, Big Street")
                     }
                 }
             };
@@ -47,7 +49,8 @@ namespace Marvin.IDP
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(), // ensures that subjectId is returned
-                new IdentityResources.Profile() // ensures that claims are returned
+                new IdentityResources.Profile(), // ensures that claims are returned
+                new IdentityResources.Address()
             };
         }
 
@@ -67,12 +70,17 @@ namespace Marvin.IDP
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Address
                     },
                     ClientSecrets =
                     {
                         new Secret("secret".Sha256())
                     },
+                    PostLogoutRedirectUris =
+                    {
+                        "https://localhost:44328/signout-callback-oidc"
+                    }
                     //AlwaysIncludeUserClaimsInIdToken = true
                 }
             };
