@@ -11,9 +11,12 @@ using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Fittify.Web.View
 {
@@ -38,7 +41,10 @@ namespace Fittify.Web.View
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 })
-                .AddCookie()
+                .AddCookie(options =>
+                {
+                    options.AccessDeniedPath = "/authorization/accessdenied";
+                })
                 .AddOpenIdConnect(options =>
                 {
                     options.Authority = "https://localhost:44364/";
@@ -47,6 +53,14 @@ namespace Fittify.Web.View
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
                     options.Scope.Add("address");
+                    options.Scope.Add("roles");
+                    options.Scope.Add("fittifyapi");
+                    options.ClaimActions.MapCustomJson("role", jobj => jobj["role"].ToString());
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        RoleClaimType = "role"
+                    };
+                    
                     options.ResponseType = "code id_token";
                     //options.CallbackPath = new PathString("...");
                     //options.SignedOutCallbackPath = new PathString("...");
@@ -63,17 +77,18 @@ namespace Fittify.Web.View
                     {
                         OnTokenValidated = tokenValidatedContext =>
                         {
+
                             //var identity = tokenValidatedContext.Principal.Identity as ClaimsIdentity;
                             //var subjectClaim = identity.Claims.FirstOrDefault(z => z.Type == "sub");
                             //var newClaimsIdentity = new ClaimsIdentity(
                             //    tokenValidatedContext.Scheme);
                             //Add claims
-                            var claims = new List<Claim>
-                            {
-                                new Claim(ClaimTypes.Role, "rolename")
-                            };
-                            var claimsIdentity = new ClaimsIdentity(claims);
-                            tokenValidatedContext.Principal.AddIdentity(claimsIdentity);
+                            //var claims = new List<Claim>
+                            //{
+                            //    new Claim(ClaimTypes.Role, "role")
+                            //};
+                            //var claimsIdentity = new ClaimsIdentity(claims);
+                            //tokenValidatedContext.Principal.AddIdentity(claimsIdentity);
 
                             //[...]
 
@@ -87,6 +102,7 @@ namespace Fittify.Web.View
                     };
                 });
 
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc();
             services.AddRouteAnalyzer();
             services.AddSingleton<IConfiguration>(Configuration);

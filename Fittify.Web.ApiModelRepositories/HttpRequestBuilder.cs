@@ -94,7 +94,7 @@ namespace Fittify.Web.ApiModelRepositories
             }
 
             // Setup client
-            var client = new System.Net.Http.HttpClient();
+            var client = new HttpClient();
             client.Timeout = this._timeout;
 
             return await client.SendAsync(request);

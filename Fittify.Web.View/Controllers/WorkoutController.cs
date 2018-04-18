@@ -27,25 +27,27 @@ namespace Fittify.Web.View.Controllers
     public class WorkoutController : Controller
     {
         private IAsyncGppd<int, WorkoutOfmForPost, WorkoutViewModel> _asyncGppd;
+        private IHttpContextAccessor _httpContextAccessor;
         private Uri _fittifyApiBaseUri;
-        public WorkoutController(IConfiguration appConfiguration)
+        public WorkoutController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             _fittifyApiBaseUri = new Uri(appConfiguration.GetValue<string>("FittifyApiBaseUrl"));
-            _asyncGppd = new AsyncGppdRepository<int, WorkoutOfmForPost, WorkoutViewModel>(new Uri(_fittifyApiBaseUri, "api/workouts"));
+            _asyncGppd = new AsyncGppdOfmRepository<int, WorkoutOfmForPost, WorkoutViewModel>(new Uri(_fittifyApiBaseUri, "api/workouts"));
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Overview()
         {
             await WriteOutIdentityInformation();
 
-            var listWorkoutViewModel = await _asyncGppd.GetCollection();
+            var listWorkoutViewModel = await _asyncGppd.GetCollection(_httpContextAccessor);
             return View("Overview", listWorkoutViewModel.ToList());
         }
         
         [Route("{workoutId}/associatedexercises", Name = "AssociatedExercises")]
         public async Task<IActionResult> AssociatedExercises(int workoutId)
         {
-            var repo = new WorkoutViewModelRepository(_fittifyApiBaseUri);
+            var repo = new WorkoutViewModelRepository(_fittifyApiBaseUri, _httpContextAccessor);
             var workoutViewModel = await repo.GetSingle(workoutId);
             return View(workoutViewModel);
         }
@@ -69,7 +71,7 @@ namespace Fittify.Web.View.Controllers
         [Route("{workoutId}/history")]
         public async Task<IActionResult> Histories(int workoutId)
         {
-            var repo = new WorkoutHistoryViewModelRepository(_fittifyApiBaseUri);
+            var repo = new WorkoutHistoryViewModelRepository(_fittifyApiBaseUri, _httpContextAccessor);
             var workoutHistoryViewModels = await repo.GetCollectionByWorkoutId(workoutId);
             return View(workoutHistoryViewModels?.ToList());
         }
@@ -77,7 +79,7 @@ namespace Fittify.Web.View.Controllers
         [Route("historydetails/{workouthistoryId}")]
         public async Task<IActionResult> HistoryDetails(int workoutHistoryId)
         {
-            var workoutHistoryViewModelRepository = new WorkoutHistoryViewModelRepository(_fittifyApiBaseUri);
+            var workoutHistoryViewModelRepository = new WorkoutHistoryViewModelRepository(_fittifyApiBaseUri, _httpContextAccessor);
             var workoutHistoryViewModel =
                 await workoutHistoryViewModelRepository.GetDetailsById(workoutHistoryId);
 

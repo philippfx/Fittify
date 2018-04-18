@@ -19,6 +19,7 @@ using Fittify.Api.Middleware;
 using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories.Services;
 using Fittify.Test.Core.Seed;
+using IdentityServer4.AccessTokenValidation;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +54,15 @@ namespace Fittify.Api
 
             //services.AddSingleton<IConfiguration>(Configuration);
             services.AddSingleton(Configuration);
+
+            services.AddAuthentication(
+                    IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = "https://localhost:44364/"; // Auth Server
+                    options.RequireHttpsMetadata = true; // only for development
+                    options.ApiName = "fittifyapi"; // API Resource Id
+                });
 
             services.AddMvc
                 (setupAction =>
@@ -221,6 +231,8 @@ namespace Fittify.Api
 
             //app.UseResponseCaching();
             //app.UseHttpCacheHeaders();
+
+            app.UseAuthentication();
 
             app.UseMvc();
 

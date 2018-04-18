@@ -15,6 +15,7 @@ using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModelRepositories.Services;
 using Fittify.DataModels.Models.Sport;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,7 @@ using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 namespace Fittify.Api.Controllers.Sport
 {
     [Route("api/workouts")]
+    [Authorize]
     public class WorkoutApiController :
         Controller,
         IAsyncGetByIdForHttp<int>,

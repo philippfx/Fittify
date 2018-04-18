@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Fittify.Web.ApiModelRepositories
 {
@@ -27,11 +30,18 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        public static async Task<HttpResponseMessage> GetCollection(Uri requestUri)
+        public static async Task<HttpResponseMessage> GetCollection(Uri requestUri, IHttpContextAccessor httpContextAccessor)
         {
+            string accessToken = string.Empty;
+
+            var currentContext = httpContextAccessor.HttpContext;
+
+            accessToken = await AuthenticationHttpContextExtensions.GetTokenAsync(currentContext, OpenIdConnectParameterNames.AccessToken);
+
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Get)
-                .AddRequestUri(requestUri);
+                .AddRequestUri(requestUri)
+                .AddBearerToken(accessToken);
 
             return await builder.SendAsync();
         }

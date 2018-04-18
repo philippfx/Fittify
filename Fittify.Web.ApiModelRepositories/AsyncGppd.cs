@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fittify.Common.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,14 +12,14 @@ namespace Fittify.Web.ApiModelRepositories
 {
     public static class AsyncGppd
     {
-        public static async Task<OfmCollectionQueryResult<TOfmForGet>> GetCollection<TOfmForGet>(Uri requestBaseUri) where TOfmForGet : class
+        public static async Task<OfmCollectionQueryResult<TOfmForGet>> GetCollection<TOfmForGet>(Uri requestBaseUri, IHttpContextAccessor httpContextAccessor) where TOfmForGet : class
         {
             var ofmQueryResult = new OfmCollectionQueryResult<TOfmForGet>();
             try
             {
-                var httpResponse = await HttpRequestFactory.GetCollection(requestBaseUri);
-                ofmQueryResult.HttpStatusCode = (int)httpResponse.StatusCode;
-                ofmQueryResult.HttpStatusMessage = httpResponse.StatusCode.ToString();
+                var httpResponse = await HttpRequestFactory.GetCollection(requestBaseUri, httpContextAccessor);
+                ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
+                //ofmQueryResult.HttpStatusMessage = httpResponse.StatusCode.ToString();
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
                 if (!Regex.Match(ofmQueryResult.HttpStatusCode.ToString(), FittifyRegularExpressions.HttpStatusCodeStartsWith2).Success)
@@ -43,8 +44,8 @@ namespace Fittify.Web.ApiModelRepositories
             try
             {
                 var httpResponse = await HttpRequestFactory.GetSingle(requestBaseUri);
-                ofmQueryResult.HttpStatusCode = (int)httpResponse.StatusCode;
-                ofmQueryResult.HttpStatusMessage = httpResponse.StatusCode.ToString();
+                ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
+                //ofmQueryResult.HttpStatusMessage = httpResponse.StatusCode.ToString();
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
                 if (!Regex.Match(ofmQueryResult.HttpStatusCode.ToString(), FittifyRegularExpressions.HttpStatusCodeStartsWith2).Success)
