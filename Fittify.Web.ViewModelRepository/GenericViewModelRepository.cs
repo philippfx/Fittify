@@ -21,12 +21,10 @@ namespace Fittify.Web.ViewModelRepository
         where TResourceParameters : class
         where TOfmForPost : class
     {
-        protected readonly Uri FittifyApiBaseUri;
         protected readonly GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TResourceParameters> AsyncGppdOfmWorkout;
 
-        public GenericViewModelRepository(Uri fittifyApiBaseUri, IConfiguration appConfiguration, string mappedControllerActionKey)
+        public GenericViewModelRepository(IConfiguration appConfiguration, string mappedControllerActionKey)
         {
-            FittifyApiBaseUri = fittifyApiBaseUri;
             AsyncGppdOfmWorkout = new GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TResourceParameters>(appConfiguration, mappedControllerActionKey);
         }
 

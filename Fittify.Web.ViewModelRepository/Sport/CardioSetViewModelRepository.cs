@@ -4,26 +4,28 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ApiModelRepositories;
 using Fittify.Web.ViewModels.Sport;
+using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Web.ViewModelRepository.Sport
 {
-    public class CardioSetViewModelRepository : AsyncViewModelRepository<int, WorkoutOfmForPost, WorkoutViewModel>
+    public class CardioSetViewModelRepository : GenericViewModelRepository<int, CardioSetViewModel, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetResourceParameters>
     {
-        private readonly Uri _fittifyApiBaseUri;
-
-        public CardioSetViewModelRepository(Uri fittifyApiBaseUri)
+        private GenericAsyncGppdOfm<int, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetResourceParameters> asyncGppdOfmCardioSet;
+        public CardioSetViewModelRepository(IConfiguration appConfiguration)
+            : base(appConfiguration, "CardioSet")
         {
-            _fittifyApiBaseUri = fittifyApiBaseUri;
+            asyncGppdOfmCardioSet = new GenericAsyncGppdOfm<int, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetResourceParameters>(appConfiguration, "CardioSet");
         }
-        public async Task<IEnumerable<CardioSetViewModel>> GetCollectionByExerciseHistoryId(int exerciseHistoryId)
-        {
-            var exerciseHistoryOfmCollectionQueryResult =
-                await AsyncGppd.GetCollection<CardioSetOfmForGet>(
-                    new Uri(_fittifyApiBaseUri, "api/cardiosets?exerciseHistoryId=" + exerciseHistoryId));
+        //public async Task<IEnumerable<CardioSetViewModel>> GetCollectionByExerciseHistoryId(int exerciseHistoryId)
+        //{
+        //    var exerciseHistoryOfmCollectionQueryResult =
+        //        await AsyncGppd.GetCollection<CardioSetOfmForGet>(
+        //            new Uri(_fittifyApiBaseUri, "api/cardiosets?exerciseHistoryId=" + exerciseHistoryId));
 
-            return Mapper.Map<IEnumerable<CardioSetViewModel>>(exerciseHistoryOfmCollectionQueryResult.OfmForGetCollection);
-        }
+        //    return Mapper.Map<IEnumerable<CardioSetViewModel>>(exerciseHistoryOfmCollectionQueryResult.OfmForGetCollection);
+        //}
     }
 }

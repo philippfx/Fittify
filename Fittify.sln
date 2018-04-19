@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Common.Test", "Fitt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.OuterFacingModels.Test", "Fittify.Api.OuterFacingModels.Test\Fittify.Api.OuterFacingModels.Test.csproj", "{2B87E92D-DFB9-48CD-9097-076A62F69BD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fittify.Web.ViewModelRepository", "Fittify.Web.ViewModelRepository\Fittify.Web.ViewModelRepository.csproj", "{44841D86-B9C1-48A8-9454-82ED29084C80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Web.ViewModelRepository", "Fittify.Web.ViewModelRepository\Fittify.Web.ViewModelRepository.csproj", "{44841D86-B9C1-48A8-9454-82ED29084C80}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

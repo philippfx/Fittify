@@ -24,7 +24,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Fittify.Web.ApiModelRepositories\Fittify.Web.ApiModelRepositories.csproj" />
     <ProjectReference Include="..\Fittify.Web.ViewModelRepository\Fittify.Web.ViewModelRepository.csproj" />
     <ProjectReference Include="..\Fittify.Web.ViewModels\Fittify.Web.ViewModels.csproj" />
   </ItemGroup>

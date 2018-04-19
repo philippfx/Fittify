@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
-using Fittify.Web.ApiModelRepositories;
+using Fittify.Web.ViewModelRepository.Sport;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,26 +12,35 @@ namespace Fittify.Web.View.Controllers
     [Route("workouthistories")]
     public class WorkoutHistoryController : Controller
     {
-        private readonly Uri _fittifyApiBaseUri;
+        private readonly WorkoutHistoryViewModelRepository _workoutHistoryViewModelRepository;
         public WorkoutHistoryController(IConfiguration appConfiguration)
         {
-            _fittifyApiBaseUri = new Uri(appConfiguration.GetValue<string>("FittifyApiBaseUrl"));
+            _workoutHistoryViewModelRepository = new WorkoutHistoryViewModelRepository(appConfiguration);
         }
 
         [HttpPost]
         public async Task<RedirectToActionResult> Create([FromForm] WorkoutHistoryOfmForPost workoutHistoryOfmForPost)
         {
-            var workoutHistoryOfmForGet = await AsyncGppd.Post<WorkoutHistoryOfmForPost, WorkoutHistoryOfmForGet>(
-                new Uri(_fittifyApiBaseUri, "api/workouthistories?IncludeExerciseHistories=1"), workoutHistoryOfmForPost);
-            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryOfmForGet.Id });
+            var postResult = await _workoutHistoryViewModelRepository.Create(workoutHistoryOfmForPost);
+
+            if ((int)postResult.HttpStatusCode != 201)
+            {
+                // Todo: Do something when posting failed
+            }
+
+            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = postResult.ViewModel.Id });
         }
 
         [HttpPost]
         [Route("{id}/deletion")]
         public async Task<RedirectToActionResult> Delete([Bind("id")] int workoutHistoryId, [FromQuery] int workoutId/*, [FromQuery] int workoutHistoryId*/)
         {
-            await AsyncGppd.Delete(
-                new Uri(_fittifyApiBaseUri, "api/workouthistories/" + workoutHistoryId), this);
+            var deleteResult = await _workoutHistoryViewModelRepository.Delete(workoutHistoryId);
+
+            if ((int)deleteResult.HttpStatusCode != 204)
+            {
+                // Todo: Do something when deleting failed
+            }
 
             return RedirectToAction("Histories", "Workout", new { workoutId = workoutId });
         }
@@ -43,8 +52,12 @@ namespace Fittify.Web.View.Controllers
             var jsonPatch = new JsonPatchDocument();
             jsonPatch.Replace("/datetimestart", DateTime.Now);
 
-            await AsyncGppd.Patch<WorkoutHistoryOfmForGet>(
-                new Uri(_fittifyApiBaseUri, "api/workouthistories/" + workoutHistoryId), jsonPatch);
+            var patchResult = await _workoutHistoryViewModelRepository.PartiallyUpdate(workoutHistoryId, jsonPatch);
+
+            if ((int)patchResult.HttpStatusCode != 200)
+            {
+                // Todo: Do something when posting failed
+            }
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }
@@ -56,8 +69,12 @@ namespace Fittify.Web.View.Controllers
             var jsonPatch = new JsonPatchDocument();
             jsonPatch.Replace("/datetimeend", DateTime.Now);
 
-            await AsyncGppd.Patch<WorkoutHistoryOfmForGet>(
-                new Uri(_fittifyApiBaseUri, "api/workouthistories/" + workoutHistoryId), jsonPatch);
+            var patchResult = await _workoutHistoryViewModelRepository.PartiallyUpdate(workoutHistoryId, jsonPatch);
+
+            if ((int)patchResult.HttpStatusCode != 200)
+            {
+                // Todo: Do something when posting failed
+            }
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }

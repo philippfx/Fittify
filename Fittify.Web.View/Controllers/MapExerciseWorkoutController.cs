@@ -2,7 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
-using Fittify.Web.ApiModelRepositories;
+using Fittify.Common.Helpers.ResourceParameters.Sport;
+using Fittify.Web.ViewModelRepository.Sport;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -11,21 +12,35 @@ namespace Fittify.Web.View.Controllers
     [Route("mapexerciseworkout")]
     public class MapExerciseWorkoutController : Controller
     {
-        private readonly Uri _fittifyApiBaseUri;
+        private MapExerciseWorkoutViewModelRepository _mapExerciseWorkoutViewModelRepository;
+
         public MapExerciseWorkoutController(IConfiguration appConfiguration)
         {
-            _fittifyApiBaseUri = new Uri(appConfiguration.GetValue<string>("FittifyApiBaseUrl"));
+            _mapExerciseWorkoutViewModelRepository = new MapExerciseWorkoutViewModelRepository(appConfiguration);
         }
         
         [HttpPost]
         [Route("deletion")]
         public async Task<RedirectToActionResult> Delete([FromQuery] int workoutId, [FromQuery] int exerciseId)
         {
-            var mapExerciseWorkoutOfmForGetResult = await AsyncGppd.GetCollection<MapExerciseWorkoutOfmForGet>(
-                new Uri(_fittifyApiBaseUri, "api/mapexerciseworkouts?workoutId=" + workoutId + "&exerciseId=" + exerciseId));
+            var getMapExerciseWorkoutViewModelResult = await _mapExerciseWorkoutViewModelRepository.GetCollection(new MapExerciseWorkoutResourceParameters()
+            {
+                ExerciseId = exerciseId,
+                WorkoutId = workoutId
+            });
 
-            await AsyncGppd.Delete(
-                new Uri(_fittifyApiBaseUri, "api/mapexerciseworkouts/" + mapExerciseWorkoutOfmForGetResult.OfmForGetCollection.Single().Id), this);
+            if ((int)getMapExerciseWorkoutViewModelResult.HttpStatusCode != 200)
+            {
+                // Todo: Do something when getting failed
+            }
+
+            var deleteMapExerciseWorkoutViewModelResult = await _mapExerciseWorkoutViewModelRepository.Delete(
+                getMapExerciseWorkoutViewModelResult.ViewModelForGetCollection.First().Id);
+
+            if ((int)deleteMapExerciseWorkoutViewModelResult.HttpStatusCode != 204)
+            {
+                // Todo: Do something when deleting failed
+            }
 
             return RedirectToAction("AssociatedExercises", "Workout", new { workoutId = workoutId });
         }
