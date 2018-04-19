@@ -7,9 +7,9 @@ using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ApiModelRepositories;
 using Fittify.Web.ViewModels.Sport;
 
-namespace Fittify.Web.View.ViewModelRepository.Sport
+namespace Fittify.Web.ViewModelRepository.Sport
 {
-    public class CardioSetViewModelRepository : AsyncGppdRepository<int, WorkoutOfmForPost, WorkoutViewModel>
+    public class CardioSetViewModelRepository : AsyncViewModelRepository<int, WorkoutOfmForPost, WorkoutViewModel>
     {
         private readonly Uri _fittifyApiBaseUri;
 

@@ -5,6 +5,7 @@ using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ApiModelRepositories;
+using Fittify.Web.ViewModelRepository.Sport;
 using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -16,17 +17,17 @@ namespace Fittify.Web.View.Controllers
     public class ExerciseController : Controller
     {
         private readonly Uri _fittifyApiBaseUri;
-        private readonly AsyncGppdRepository<int, ExerciseOfmForPost, ExerciseViewModel> _asyncGppd;
+        private readonly AsyncViewModelRepository<int, ExerciseOfmForPost, ExerciseViewModel> _asyncGppdOfm;
 
         public ExerciseController(IConfiguration appConfiguration)
         {
             _fittifyApiBaseUri = new Uri(appConfiguration.GetValue<string>("FittifyApiBaseUrl"));
-            _asyncGppd = new AsyncGppdRepository<int, ExerciseOfmForPost, ExerciseViewModel>(new Uri(_fittifyApiBaseUri, "api/exercises"));
+            _asyncGppdOfm = new AsyncViewModelRepository<int, ExerciseOfmForPost, ExerciseViewModel>(new Uri(_fittifyApiBaseUri, "api/exercises"));
         }
 
         public async Task<IActionResult> Overview()
         {
-            var listWorkoutViewModel = await _asyncGppd.GetCollection();
+            var listWorkoutViewModel = await _asyncGppdOfm.GetCollection();
             return View("Overview", listWorkoutViewModel.ToList());
         }
 

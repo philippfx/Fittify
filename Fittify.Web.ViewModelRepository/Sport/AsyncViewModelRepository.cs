@@ -2,36 +2,37 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Fittify.Web.ApiModelRepositories;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Fittify.Web.ApiModelRepositories
+namespace Fittify.Web.ViewModelRepository.Sport
 {
 
-    public class AsyncGppdRepository<TId, TSent, TReceived> : IAsyncGppd<TId, TSent, TReceived>
+    public class AsyncViewModelRepository<TId, TOfmForPost, TViewModelReceived> : IAsyncGppd<TId, TOfmForPost, TViewModelReceived>
         where TId : struct
-        where TSent : class
-        where TReceived : class
+        where TOfmForPost : class
+        where TViewModelReceived : class
     {
         protected Uri RequestBaseUri;
         protected HttpResponseMessage HttpResponse;
-        public AsyncGppdRepository(Uri requestBaseUri)
+        public AsyncViewModelRepository(Uri requestBaseUri)
         {
             RequestBaseUri = requestBaseUri;
         }
 
-        public AsyncGppdRepository()
+        public AsyncViewModelRepository()
         {
             
         }
 
-        public virtual async Task<TReceived> GetSingle(TId id)
+        public virtual async Task<TViewModelReceived> GetSingle(TId id)
         {
-            TReceived outputModel = null;
+            TViewModelReceived outputModel = null;
             try
             {
                 HttpResponse = await HttpRequestFactory.GetSingle(RequestBaseUri);
-                outputModel = HttpResponse.ContentAsType<TReceived>();
+                outputModel = HttpResponse.ContentAsType<TViewModelReceived>();
             }
             catch (Exception e)
             {
@@ -40,13 +41,13 @@ namespace Fittify.Web.ApiModelRepositories
             return outputModel;
         }
 
-        public virtual async Task<IEnumerable<TReceived>> GetCollection()
+        public virtual async Task<IEnumerable<TViewModelReceived>> GetCollection()
         {
-            IEnumerable<TReceived> outputModel = null;
+            IEnumerable<TViewModelReceived> outputModel = null;
             try
             {
                 HttpResponse = await HttpRequestFactory.GetCollection(RequestBaseUri);
-                outputModel = HttpResponse.ContentAsType<IEnumerable<TReceived>>();
+                outputModel = HttpResponse.ContentAsType<IEnumerable<TViewModelReceived>>();
             }
             catch (Exception e)
             {
@@ -55,18 +56,18 @@ namespace Fittify.Web.ApiModelRepositories
             return outputModel;
         }
 
-        public virtual async Task<TReceived> Post(TSent entity)
+        public virtual async Task<TViewModelReceived> Post(TOfmForPost entity)
         {
             HttpResponse = await HttpRequestFactory.Post(RequestBaseUri, entity);
             var resultString = HttpResponse.ContentAsString();
-            var outputModel = HttpResponse.ContentAsType<TReceived>();
+            var outputModel = HttpResponse.ContentAsType<TViewModelReceived>();
             return outputModel;
         }
         
-        public virtual async Task<TReceived> Patch(JsonPatchDocument jsonPatchDocument)
+        public virtual async Task<TViewModelReceived> Patch(JsonPatchDocument jsonPatchDocument)
         {
             HttpResponse = await HttpRequestFactory.Patch(RequestBaseUri, jsonPatchDocument);
-            var outputModel = HttpResponse.ContentAsType<TReceived>();
+            var outputModel = HttpResponse.ContentAsType<TViewModelReceived>();
             return outputModel;
         }
 

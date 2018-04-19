@@ -168,13 +168,8 @@ namespace Fittify.DataModelRepositories
             }
 
             FittifyContext.Set<TEntity>().Remove(entity);
-            var IsDeleted = await SaveContext();
-
-            if (!IsDeleted)
-            {
-                entityDeletionResult.IsDeleted = false;
-            }
-
+            entityDeletionResult.IsDeleted = await SaveContext();
+            
             return entityDeletionResult;
         }
     }

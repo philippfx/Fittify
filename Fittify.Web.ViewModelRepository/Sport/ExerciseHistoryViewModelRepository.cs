@@ -9,9 +9,9 @@ using Fittify.Common;
 using Fittify.Web.ApiModelRepositories;
 using Fittify.Web.ViewModels.Sport;
 
-namespace Fittify.Web.View.ViewModelRepository.Sport
+namespace Fittify.Web.ViewModelRepository.Sport
 {
-    public class ExerciseHistoryViewModelRepository : AsyncGppdRepository<int, WorkoutOfmForPost, WorkoutViewModel>
+    public class ExerciseHistoryViewModelRepository : AsyncViewModelRepository<int, WorkoutOfmForPost, WorkoutViewModel>
     {
         private Uri _fittifyApiBaseUri;
          
@@ -44,7 +44,7 @@ namespace Fittify.Web.View.ViewModelRepository.Sport
                 await AsyncGppd.GetCollection<ExerciseHistoryOfmForGet>(
                     new Uri(_fittifyApiBaseUri, "api/exercisehistories?workoutHistoryId=" + workoutHistoryId));
 
-            if (currentExerciseHistoryOfmCollectionQueryResult.HttpStatusCode == 404)
+            if ((int)currentExerciseHistoryOfmCollectionQueryResult.HttpStatusCode == 404)
             {
                 return new List<ExerciseHistoryViewModel>();
             }

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ApiModelRepositories;
 using Fittify.Web.ViewModels.Sport;
-using AutoMapper;
 
-namespace Fittify.Web.View.ViewModelRepository.Sport
+namespace Fittify.Web.ViewModelRepository.Sport
 {
-    public class WorkoutHistoryViewModelRepository : AsyncGppdRepository<int, WorkoutHistoryOfmForPost, WorkoutHistoryViewModel>
+    public class WorkoutHistoryViewModelRepository : AsyncViewModelRepository<int, WorkoutHistoryOfmForPost, WorkoutHistoryViewModel>
     {
         private readonly Uri _fittifyApiBaseUri;
 
