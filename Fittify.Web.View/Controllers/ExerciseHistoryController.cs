@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
-using Fittify.Web.ApiModelRepositories;
+using Fittify.Web.ViewModelRepository.Sport;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -12,17 +12,22 @@ namespace Fittify.Web.View.Controllers
     public class ExerciseHistoryController : Controller
     {
         private readonly Uri _fittifyApiBaseUri;
+        private ExerciseHistoryViewModelRepository _exerciseHistoryViewModelRepository;
+
         public ExerciseHistoryController(IConfiguration appConfiguration)
         {
-            _fittifyApiBaseUri = new Uri(appConfiguration.GetValue<string>("FittifyApiBaseUrl"));
+            _exerciseHistoryViewModelRepository = new ExerciseHistoryViewModelRepository(appConfiguration);
         }
 
         [HttpPost]
-        public async Task<RedirectToActionResult> AddExerciseHistory([FromForm] ExerciseHistoryOfmForPost exerciseHistoryOfmForPost)
+        public async Task<RedirectToActionResult> CreateExerciseHistory([FromForm] ExerciseHistoryOfmForPost exerciseHistoryOfmForPost)
         {
-            await AsyncGppd.Post<ExerciseHistoryOfmForPost, ExerciseHistoryOfmForGet>(
-                new Uri(_fittifyApiBaseUri, "api/exercisehistories"), exerciseHistoryOfmForPost);
+            var postResult = await _exerciseHistoryViewModelRepository.Create(exerciseHistoryOfmForPost);
 
+            if ((int)postResult.HttpStatusCode != 201)
+            {
+                // Todo: Do something when posting failed
+            }
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = exerciseHistoryOfmForPost.WorkoutHistoryId });
         }
 
@@ -30,8 +35,12 @@ namespace Fittify.Web.View.Controllers
         [Route("{id?}/deletion")]
         public async Task<RedirectToActionResult> Delete([Bind("id")] int exerciseHistoryId, [FromQuery] int workoutHistoryId)
         {
-            await AsyncGppd.Delete(
-                new Uri(_fittifyApiBaseUri, "api/exercisehistories/" + exerciseHistoryId), this);
+            var deleteResult = await _exerciseHistoryViewModelRepository.Delete(exerciseHistoryId);
+
+            if ((int)deleteResult.HttpStatusCode != 204)
+            {
+                // Todo: Do something when deleting failed
+            }
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }

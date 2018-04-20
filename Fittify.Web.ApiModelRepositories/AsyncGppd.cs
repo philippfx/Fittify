@@ -17,12 +17,11 @@ namespace Fittify.Web.ApiModelRepositories
             var ofmQueryResult = new OfmCollectionQueryResult<TOfmForGet>();
             try
             {
-                var httpResponse = await HttpRequestFactory.GetCollection(requestBaseUri, httpContextAccessor);
+                var httpResponse = await HttpRequestFactory.GetCollection(requestBaseUri);
                 ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
-                //ofmQueryResult.HttpStatusMessage = httpResponse.StatusCode.ToString();
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
-                if (!Regex.Match(ofmQueryResult.HttpStatusCode.ToString(), FittifyRegularExpressions.HttpStatusCodeStartsWith2).Success)
+                if (!Regex.Match(((int)ofmQueryResult.HttpStatusCode).ToString(), FittifyRegularExpressions.HttpStatusCodeStartsWith2).Success)
                 {
                     ofmQueryResult.ErrorMessagesPresented = httpResponse.ContentAsType<IReadOnlyDictionary<string, object>>();
                 }
@@ -45,7 +44,6 @@ namespace Fittify.Web.ApiModelRepositories
             {
                 var httpResponse = await HttpRequestFactory.GetSingle(requestBaseUri);
                 ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
-                //ofmQueryResult.HttpStatusMessage = httpResponse.StatusCode.ToString();
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
                 if (!Regex.Match(ofmQueryResult.HttpStatusCode.ToString(), FittifyRegularExpressions.HttpStatusCodeStartsWith2).Success)

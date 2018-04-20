@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Test.Core\Fittify.Test.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Sport\" />
+  </ItemGroup>
+
 </Project>

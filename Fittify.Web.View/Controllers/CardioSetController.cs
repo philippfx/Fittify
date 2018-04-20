@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
-using Fittify.Web.ApiModelRepositories;
+using Fittify.Web.ViewModelRepository.Sport;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -13,16 +13,22 @@ namespace Fittify.Web.View.Controllers
     public class CardioSetController : Controller
     {
         private readonly Uri _fittifyApiBaseUri;
+        private readonly CardioSetViewModelRepository _cardioSetViewModelRepository;
         public CardioSetController(IConfiguration appConfiguration)
         {
-            _fittifyApiBaseUri = new Uri(appConfiguration.GetValue<string>("FittifyApiBaseUrl"));
+            _cardioSetViewModelRepository = new CardioSetViewModelRepository(appConfiguration);
+
         }
 
         [HttpPost]
-        public async Task<RedirectToActionResult> CreateNewCardioSet([FromForm] CardioSetOfmForPost cardioSetOfmForPost, [FromQuery] int workoutHistoryId) 
+        public async Task<RedirectToActionResult> CreateNewCardioSet([FromForm] CardioSetOfmForPost cardioSetOfmForPost, [FromQuery] int workoutHistoryId)
         {
-            await AsyncGppd.Post<CardioSetOfmForPost, CardioSetOfmForGet>(
-                new Uri(_fittifyApiBaseUri, "api/cardiosets"), cardioSetOfmForPost);
+            var postResult = await _cardioSetViewModelRepository.Create(cardioSetOfmForPost);
+
+            if ((int)postResult.HttpStatusCode != 201)
+            {
+                // Todo: Do something when posting failed
+            }
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }
@@ -34,8 +40,12 @@ namespace Fittify.Web.View.Controllers
             var jsonPatch = new JsonPatchDocument();
             jsonPatch.Replace("/datetimestart", DateTime.Now);
 
-            var result = await AsyncGppd.Patch<CardioSetOfmForGet>(
-                new Uri(_fittifyApiBaseUri, "api/cardiosets/" + cardioSetId), jsonPatch);
+            var patchResult = await _cardioSetViewModelRepository.PartiallyUpdate(cardioSetId, jsonPatch);
+
+            if ((int)patchResult.HttpStatusCode != 200)
+            {
+                // Todo: Do something when posting failed
+            }
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }
@@ -47,8 +57,12 @@ namespace Fittify.Web.View.Controllers
             var jsonPatch = new JsonPatchDocument();
             jsonPatch.Replace("/datetimeend", DateTime.Now);
 
-            var result =  await AsyncGppd.Patch<CardioSetOfmForGet>(
-                new Uri(_fittifyApiBaseUri, "api/cardiosets/" + cardioSetId), jsonPatch);
+            var patchResult = await _cardioSetViewModelRepository.PartiallyUpdate(cardioSetId, jsonPatch);
+
+            if ((int)patchResult.HttpStatusCode != 200)
+            {
+                // Todo: Do something when posting failed
+            }
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }
@@ -57,8 +71,12 @@ namespace Fittify.Web.View.Controllers
         [Route("{id}/deletion")]
         public async Task<RedirectToActionResult> Delete(/*[Bind("id")] int cardioSetId,*/ [FromQuery] int workoutHistoryId, [FromQuery] int cardioSetId)
         {
-            await AsyncGppd.Delete(
-                new Uri(_fittifyApiBaseUri, "api/cardiosets/" + cardioSetId), this);
+            var deleteResult = await _cardioSetViewModelRepository.Delete(cardioSetId);
+
+            if ((int)deleteResult.HttpStatusCode != 204)
+            {
+                // Todo: Do something when posting failed
+            }
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }

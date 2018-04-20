@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
-using Fittify.Web.ApiModelRepositories;
+using Fittify.Common.Helpers.ResourceParameters.Sport;
+using Fittify.Web.ViewModelRepository.Sport;
 using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -16,37 +17,36 @@ namespace Fittify.Web.View.Controllers
     [Route("exercises")]
     public class ExerciseController : Controller
     {
-        private readonly Uri _fittifyApiBaseUri;
-        private readonly AsyncGppdOfmRepository<int, ExerciseOfmForPost, ExerciseViewModel> _asyncGppdOfmRepository;
+        private readonly ExerciseViewModelRepository _exerciseViewModelRepository;
         private IHttpContextAccessor _httpContextAccessor;
 
         public ExerciseController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
-            _fittifyApiBaseUri = new Uri(appConfiguration.GetValue<string>("FittifyApiBaseUrl"));
-            _asyncGppdOfmRepository = new AsyncGppdOfmRepository<int, ExerciseOfmForPost, ExerciseViewModel>(new Uri(_fittifyApiBaseUri, "api/exercises"));
+            _exerciseViewModelRepository = new ExerciseViewModelRepository(appConfiguration);
             _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Overview()
         {
-            var listWorkoutViewModel = await _asyncGppdOfmRepository.GetCollection(_httpContextAccessor);
-            return View("Overview", listWorkoutViewModel.ToList());
+            var exerciseViewModelCollectionResult = await _exerciseViewModelRepository.GetCollection(new ExerciseResourceParameters());
+
+            if ((int)exerciseViewModelCollectionResult.HttpStatusCode != 200)
+            {
+                // Todo: Do something when posting failed
+            }
+            
+            return View("Overview", exerciseViewModelCollectionResult.ViewModelForGetCollection.ToList());
         }
 
         [HttpPost]
-        public async Task<RedirectToActionResult> AddExercise([FromForm] ExerciseOfmForPost exerciseOfmForPost, [FromQuery] int workoutId)
+        public async Task<RedirectToActionResult> CreateExercise([FromForm] ExerciseOfmForPost exerciseOfmForPost, [FromQuery] int workoutId)
         {
-            var exerciseOfmForGet = await AsyncGppd.Post<ExerciseOfmForPost, ExerciseOfmForGet>(
-                new Uri(_fittifyApiBaseUri + "api/exercises"), exerciseOfmForPost);
+            var postResult = await _exerciseViewModelRepository.Create(exerciseOfmForPost);
 
-            //var mapExerciseWorkout = new MapExerciseWorkoutOfmForPost()
-            //{
-            //    WorkoutId = workoutId,
-            //    ExerciseId = exerciseOfmForGet.Id
-            //};
-
-            await AsyncGppd.Post<ExerciseOfmForPost, ExerciseOfmForGet>(
-                new Uri(_fittifyApiBaseUri + "api/exercises"), exerciseOfmForPost);
+            if ((int)postResult.HttpStatusCode != 201)
+            {
+                // Todo: Do something when posting failed
+            }
 
             return RedirectToAction("Overview", "Exercise", new { workoutId = workoutId });
         }
@@ -55,8 +55,12 @@ namespace Fittify.Web.View.Controllers
         [Route("{id}/deletion")]
         public async Task<RedirectToActionResult> Delete(int id)
         {
-            await AsyncGppd.Delete(
-                new Uri(_fittifyApiBaseUri, "api/exercises/" + id), this);
+            var deleteResult = await _exerciseViewModelRepository.Delete(id);
+
+            if ((int)deleteResult.HttpStatusCode != 204)
+            {
+                // Todo: Do something when deleting failed
+            }
 
             return RedirectToAction("Overview", "Exercise", null);
         }
@@ -69,8 +73,12 @@ namespace Fittify.Web.View.Controllers
 
             jsonPatchDocument.Replace("/" + nameof(exerciseOfmForPatch.Name), exerciseOfmForPatch.Name);
 
-            var result = await AsyncGppd.Patch<ExerciseOfmForGet>(
-            new Uri(_fittifyApiBaseUri, "api/exercises/" + id), jsonPatchDocument);
+            var patchResult = await _exerciseViewModelRepository.PartiallyUpdate(id, jsonPatchDocument);
+
+            if ((int)patchResult.HttpStatusCode != 200)
+            {
+                // Todo: Do something when posting failed
+            }
 
             return RedirectToAction("Overview", "Exercise", null);
         }

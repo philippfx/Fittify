@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
-using Fittify.Web.ApiModelRepositories;
+using Fittify.Web.ViewModelRepository.Sport;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -11,17 +11,21 @@ namespace Fittify.Web.View.Controllers
     [Route("weightliftingsets")]
     public class WeightLiftingSetWebController : Controller
     {
-        private readonly Uri _fittifyApiBaseUri;
+        private readonly WeightLiftingSetViewModelRepository _weightLiftingSetViewModelRepository;
         public WeightLiftingSetWebController(IConfiguration appConfiguration)
         {
-            _fittifyApiBaseUri = new Uri(appConfiguration.GetValue<string>("FittifyApiBaseUrl"));
+            _weightLiftingSetViewModelRepository = new WeightLiftingSetViewModelRepository(appConfiguration);
         }
 
         [HttpPost]
         public async Task<RedirectToActionResult> CreateNewWeightLiftingSet([FromForm] WeightLiftingSetOfmForPost weightLiftingSetOfmForPost, [FromQuery] int workoutHistoryId)
         {
-            await AsyncGppd.Post<WeightLiftingSetOfmForPost, WeightLiftingSetOfmForGet>(
-                new Uri(_fittifyApiBaseUri, "api/weightliftingsets"), weightLiftingSetOfmForPost);
+            var postResult = await _weightLiftingSetViewModelRepository.Create(weightLiftingSetOfmForPost);
+
+            if ((int)postResult.HttpStatusCode != 201)
+            {
+                // Todo: Do something when posting failed
+            }
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }
@@ -30,8 +34,12 @@ namespace Fittify.Web.View.Controllers
         [Route("{id}/deletion")]
         public async Task<RedirectToActionResult> Delete(/*[Bind("id")] int weightLiftingSetId,*/ [FromQuery] int workoutHistoryId, [FromQuery] int weightLiftingSetId)
         {
-            await AsyncGppd.Delete(
-                new Uri(_fittifyApiBaseUri, "api/weightliftingsets/" + weightLiftingSetId), this);
+            var deleteResult = await _weightLiftingSetViewModelRepository.Delete(weightLiftingSetId);
+
+            if ((int)deleteResult.HttpStatusCode != 204)
+            {
+                // Todo: Do something when posting failed
+            }
 
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }
