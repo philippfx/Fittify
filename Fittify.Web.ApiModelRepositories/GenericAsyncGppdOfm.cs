@@ -18,21 +18,21 @@ namespace Fittify.Web.ApiModelRepositories
         where TOfmForPost : class
 
     {
-        private readonly IConfiguration _appConfiguration;
-        private readonly string _mappedControllerActionKey;
+        protected readonly IConfiguration AppConfiguration;
+        protected readonly string MappedControllerActionKey;
 
         public GenericAsyncGppdOfm(IConfiguration appConfiguration, string mappedControllerActionKey)
         {
-            _appConfiguration = appConfiguration;
-            _mappedControllerActionKey = mappedControllerActionKey;
+            AppConfiguration = appConfiguration;
+            MappedControllerActionKey = mappedControllerActionKey;
         }
 
         public virtual async Task<OfmQueryResult<TOfmForGet>> GetSingle(TId id)
         {
             var ofmQueryResult = new OfmQueryResult<TOfmForGet>();
             var uri = new Uri(
-                _appConfiguration.GetValue<string>("FittifyApiBaseUrl")
-                + _appConfiguration.GetValue<string>("MappedFittifyApiActions:" + _mappedControllerActionKey)
+                AppConfiguration.GetValue<string>("FittifyApiBaseUrl")
+                + AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
                 + "/" + id
                 );
             try
@@ -96,8 +96,8 @@ namespace Fittify.Web.ApiModelRepositories
             }
 
             var uri = new Uri(
-                _appConfiguration.GetValue<string>("FittifyApiBaseUrl") +
-                _appConfiguration.GetValue<string>("MappedFittifyApiActions:" + _mappedControllerActionKey)
+                AppConfiguration.GetValue<string>("FittifyApiBaseUrl") +
+                AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
             );
 
             var httpResponse = await HttpRequestFactory.GetCollection(new Uri(uri + queryParamter));
@@ -120,8 +120,8 @@ namespace Fittify.Web.ApiModelRepositories
         {
             var ofmQueryResult = new OfmQueryResult<TOfmForGet>();
             var uri = new Uri(
-                _appConfiguration.GetValue<string>("FittifyApiBaseUrl") +
-                _appConfiguration.GetValue<string>("MappedFittifyApiActions:" + _mappedControllerActionKey)
+                AppConfiguration.GetValue<string>("FittifyApiBaseUrl") +
+                AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
             );
             var httpResponse = await HttpRequestFactory.Post(uri, ofmForPost);
             ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
@@ -142,8 +142,8 @@ namespace Fittify.Web.ApiModelRepositories
         {
             var ofmQueryResult = new OfmQueryResult<TOfmForGet>();
             var uri = new Uri(
-                _appConfiguration.GetValue<string>("FittifyApiBaseUrl")
-                + _appConfiguration.GetValue<string>("MappedFittifyApiActions:" + _mappedControllerActionKey)
+                AppConfiguration.GetValue<string>("FittifyApiBaseUrl")
+                + AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
                 + "/" + id
             );
             var httpResponse = await HttpRequestFactory.Delete(uri);
@@ -165,8 +165,8 @@ namespace Fittify.Web.ApiModelRepositories
         {
             var ofmQueryResult = new OfmQueryResult<TOfmForGet>();
             var uri = new Uri(
-                _appConfiguration.GetValue<string>("FittifyApiBaseUrl")
-                + _appConfiguration.GetValue<string>("MappedFittifyApiActions:" + _mappedControllerActionKey)
+                AppConfiguration.GetValue<string>("FittifyApiBaseUrl")
+                + AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
                 + "/" + id
             );
             var httpResponse = await HttpRequestFactory.Patch(uri, jsonPatchDocument);

@@ -21,17 +21,17 @@ namespace Fittify.Web.ViewModelRepository
         where TResourceParameters : class
         where TOfmForPost : class
     {
-        protected readonly GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TResourceParameters> AsyncGppdOfmWorkout;
+        protected readonly GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TResourceParameters> GenericAsyncGppdOfmWorkout;
 
         public GenericViewModelRepository(IConfiguration appConfiguration, string mappedControllerActionKey)
         {
-            AsyncGppdOfmWorkout = new GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TResourceParameters>(appConfiguration, mappedControllerActionKey);
+            GenericAsyncGppdOfmWorkout = new GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TResourceParameters>(appConfiguration, mappedControllerActionKey);
         }
 
         public virtual async Task<ViewModelQueryResult<TViewModel>> GetById(TId id)
         {
 
-            var ofmQueryResult = await AsyncGppdOfmWorkout.GetSingle(id);
+            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.GetSingle(id);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<TViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
@@ -51,7 +51,7 @@ namespace Fittify.Web.ViewModelRepository
 
         public virtual async Task<ViewModelCollectionQueryResult<TViewModel>> GetCollection(TResourceParameters resourceParameters)
         {
-            var ofmCollectionQueryResult = await AsyncGppdOfmWorkout.GetCollection(resourceParameters);
+            var ofmCollectionQueryResult = await GenericAsyncGppdOfmWorkout.GetCollection(resourceParameters);
 
             var workoutViewModelCollectionQueryResult = new ViewModelCollectionQueryResult<TViewModel>();
             workoutViewModelCollectionQueryResult.HttpStatusCode = ofmCollectionQueryResult.HttpStatusCode;
@@ -71,7 +71,7 @@ namespace Fittify.Web.ViewModelRepository
 
         public virtual async Task<ViewModelQueryResult<TViewModel>> Create(TOfmForPost workoutOfmForPost)
         {
-            var ofmQueryResult = await AsyncGppdOfmWorkout.Post(workoutOfmForPost);
+            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.Post(workoutOfmForPost);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<TViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
@@ -91,7 +91,7 @@ namespace Fittify.Web.ViewModelRepository
 
         public virtual async Task<ViewModelQueryResult<TViewModel>> Delete(TId id)
         {
-            var ofmQueryResult = await AsyncGppdOfmWorkout.Delete(id);
+            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.Delete(id);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<TViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
@@ -111,7 +111,7 @@ namespace Fittify.Web.ViewModelRepository
 
         public virtual async Task<ViewModelQueryResult<TViewModel>> PartiallyUpdate(TId id, JsonPatchDocument jsonPatchDocument)
         {
-            var ofmQueryResult = await AsyncGppdOfmWorkout.Patch(id, jsonPatchDocument);
+            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.Patch(id, jsonPatchDocument);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<TViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;

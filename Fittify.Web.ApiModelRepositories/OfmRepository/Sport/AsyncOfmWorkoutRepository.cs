@@ -9,17 +9,15 @@ using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Binder;
 
-namespace Fittify.Web.ApiModelRepositories.OfmRepository.GetCollection.Sport
+namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
 {
-    public class AsyncGppdOfmWorkout
+    public class AsyncOfmWorkoutRepository
     {
         private IConfiguration _appConfiguration;
 
-        public AsyncGppdOfmWorkout(IConfiguration appConfiguration)
+        public AsyncOfmWorkoutRepository(IConfiguration appConfiguration)
         {
             _appConfiguration = appConfiguration;
         }

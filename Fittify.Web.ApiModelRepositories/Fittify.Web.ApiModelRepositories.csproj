@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Fittify.Web.ViewModels\Fittify.Web.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="OfmRepository\GetCollection\" />
+  </ItemGroup>
+
 </Project>
