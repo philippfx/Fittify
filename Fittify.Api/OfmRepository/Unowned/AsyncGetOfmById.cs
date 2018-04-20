@@ -8,7 +8,7 @@ using Fittify.DataModelRepositories.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Fittify.Api.OfmRepository
+namespace Fittify.Api.OfmRepository.Unowned
 {
     public class AsyncGetOfmById<TCrudRepository, TEntity, TOfmForGet, TId> : IAsyncGetOfmById<TOfmForGet, TId>
         where TOfmForGet : class, IEntityUniqueIdentifier<TId>

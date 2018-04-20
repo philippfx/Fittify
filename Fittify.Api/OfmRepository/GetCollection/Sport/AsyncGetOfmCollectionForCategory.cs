@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Helpers;
+using Fittify.Api.OfmRepository.Unowned;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters.Sport;

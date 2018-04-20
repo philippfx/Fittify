@@ -7,6 +7,7 @@ using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ApiModelRepositories;
 using Fittify.Web.ViewModels.Sport;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Configuration;
 
@@ -16,12 +17,14 @@ namespace Fittify.Web.ViewModelRepository.Sport
     {
         private GenericAsyncGppdOfm<int, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutResourceParameters> asyncGppdOfmWorkout;
         private IConfiguration _appConfiguration;
+        private IHttpContextAccessor _httpContextAccessor;
 
-        public WorkoutViewModelRepository(IConfiguration appConfiguration) 
-            : base(appConfiguration, "Workout")
+        public WorkoutViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor) 
+            : base(appConfiguration, httpContextAccessor, "Workout")
         {
-            asyncGppdOfmWorkout = new GenericAsyncGppdOfm<int, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutResourceParameters>(appConfiguration, "Workout");
+            asyncGppdOfmWorkout = new GenericAsyncGppdOfm<int, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutResourceParameters>(appConfiguration, httpContextAccessor, "Workout");
             _appConfiguration = appConfiguration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public override async Task<ViewModelQueryResult<WorkoutViewModel>> GetById(int id)
@@ -41,7 +44,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
                 workoutViewModelQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
             }
 
-            var exerciseViewModelRepository = new ExerciseViewModelRepository(_appConfiguration);
+            var exerciseViewModelRepository = new ExerciseViewModelRepository(_appConfiguration, HttpContextAccessor);
             if (!String.IsNullOrWhiteSpace(ofmQueryResult.OfmForGet.RangeOfExerciseIds))
             {
                 var exerciseViewModelCollectionQuery = await exerciseViewModelRepository.GetCollection(

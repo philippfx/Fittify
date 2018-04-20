@@ -13,7 +13,8 @@ namespace Fittify.Test.Core.Seed.Sport
                 fittifyContext.Add(new Workout()
                 {
                     Name = "MondayChestSeed",
-                    CategoryId = fittifyContext.Categories.FirstOrDefault(f => f.Name == "ChestSeed").Id
+                    CategoryId = fittifyContext.Categories.FirstOrDefault(f => f.Name == "ChestSeed").Id,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -22,7 +23,8 @@ namespace Fittify.Test.Core.Seed.Sport
                 fittifyContext.Add(new Workout()
                 {
                     Name = "WednesdayBackSeed",
-                    CategoryId = fittifyContext.Categories.FirstOrDefault(f => f.Name == "BackSeed").Id
+                    CategoryId = fittifyContext.Categories.FirstOrDefault(f => f.Name == "BackSeed").Id,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -31,7 +33,8 @@ namespace Fittify.Test.Core.Seed.Sport
                 fittifyContext.Add(new Workout()
                 {
                     Name = "FridayLegSeed",
-                    CategoryId = fittifyContext.Categories.FirstOrDefault(f => f.Name == "LegsSeed").Id
+                    CategoryId = fittifyContext.Categories.FirstOrDefault(f => f.Name == "LegsSeed").Id,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 

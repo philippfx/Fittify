@@ -20,27 +20,32 @@ namespace Fittify.Test.Core.Seed.Sport
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "InclinedBenchPressSeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "InclinedBenchPressSeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "DumbBellFlySeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "DumbBellFlySeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "NegativeBenchPressSeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "NegativeBenchPressSeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SitupsSeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SitupsSeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SpinningBikeSeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SpinningBikeSeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                     }
 
@@ -49,27 +54,32 @@ namespace Fittify.Test.Core.Seed.Sport
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "DeadLiftSeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "DeadLiftSeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SeatedPullDownSeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SeatedPullDownSeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "RowSeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "RowSeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SitupsSeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SitupsSeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SpinningBikeSeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SpinningBikeSeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                     }
 
@@ -78,27 +88,32 @@ namespace Fittify.Test.Core.Seed.Sport
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SquatSeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SquatSeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "LegCurlSeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "LegCurlSeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "CalfRaiseSeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "CalfRaiseSeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SitupsSeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SitupsSeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                         fittifyContext.Add(new MapExerciseWorkout()
                         {
                             WorkoutId = workout.Id,
-                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SpinningBikeSeed").Id
+                            ExerciseId = fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SpinningBikeSeed").Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                     }
                 }

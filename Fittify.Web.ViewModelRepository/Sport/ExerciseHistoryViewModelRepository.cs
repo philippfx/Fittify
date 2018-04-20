@@ -9,6 +9,7 @@ using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ApiModelRepositories;
 using Fittify.Web.ViewModels.Sport;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Web.ViewModelRepository.Sport
@@ -18,10 +19,10 @@ namespace Fittify.Web.ViewModelRepository.Sport
         private GenericAsyncGppdOfm<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryResourceParameters> asyncGppdOfmExerciseHistory;
         private IConfiguration _appConfiguration;
 
-        public ExerciseHistoryViewModelRepository(IConfiguration appConfiguration)
-            : base(appConfiguration, "ExerciseHistory")
+        public ExerciseHistoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+            : base(appConfiguration, httpContextAccessor, "ExerciseHistory")
         {
-            asyncGppdOfmExerciseHistory = new GenericAsyncGppdOfm<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryResourceParameters>(appConfiguration, "ExerciseHistory");
+            asyncGppdOfmExerciseHistory = new GenericAsyncGppdOfm<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryResourceParameters>(appConfiguration, httpContextAccessor, "ExerciseHistory");
             _appConfiguration = appConfiguration;
         }
         //public async Task<ExerciseHistoryViewModel> GetSingleById(int id)
@@ -51,7 +52,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
             var exerciseHistoryViewModels =
                 exerciseHistoryViewModelCollectionQueryResult.ViewModelForGetCollection;
             
-            var weightLiftingSetViewModelRepository = new WeightLiftingSetViewModelRepository(_appConfiguration);
+            var weightLiftingSetViewModelRepository = new WeightLiftingSetViewModelRepository(_appConfiguration, HttpContextAccessor);
             foreach (var exerciseHistoryOfmForGet in exerciseHistoryViewModelCollectionQueryResult.ViewModelForGetCollection.Where(w => w.Exercise?.ExerciseType == ExerciseTypeEnum.WeightLifting.ToString()))
             {
                 WeightLiftingSetViewModel[] previousWeightLiftingSetViewModels = null;
@@ -110,7 +111,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
                 }
             }
 
-            var cardioSetViewModelRepository = new CardioSetViewModelRepository(_appConfiguration);
+            var cardioSetViewModelRepository = new CardioSetViewModelRepository(_appConfiguration, HttpContextAccessor);
             foreach (var exerciseHistoryOfmForGet in exerciseHistoryViewModelCollectionQueryResult.ViewModelForGetCollection.Where(w => w.Exercise?.ExerciseType == ExerciseTypeEnum.Cardio.ToString()))
             {
                 CardioSetViewModel[] previousCardioSetViewModels = null;

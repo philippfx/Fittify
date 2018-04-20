@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ViewModelRepository.Sport;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -13,9 +14,9 @@ namespace Fittify.Web.View.Controllers
     public class WorkoutHistoryController : Controller
     {
         private readonly WorkoutHistoryViewModelRepository _workoutHistoryViewModelRepository;
-        public WorkoutHistoryController(IConfiguration appConfiguration)
+        public WorkoutHistoryController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
-            _workoutHistoryViewModelRepository = new WorkoutHistoryViewModelRepository(appConfiguration);
+            _workoutHistoryViewModelRepository = new WorkoutHistoryViewModelRepository(appConfiguration, httpContextAccessor);
         }
 
         [HttpPost]

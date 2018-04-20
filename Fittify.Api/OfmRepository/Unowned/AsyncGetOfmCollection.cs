@@ -10,13 +10,13 @@ using Fittify.DataModelRepositories.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Fittify.Api.OfmRepository
+namespace Fittify.Api.OfmRepository.Unowned
 {
     public class AsyncGetOfmCollection<TCrudRepository, TEntity, TOfmForGet, TId> : IAsyncGetOfmCollection<TOfmForGet>
         where TOfmForGet : class, IEntityUniqueIdentifier<TId>
         where TId : struct
         where TEntity : class, IEntityUniqueIdentifier<TId>
-        where TCrudRepository : class, IAsyncCrud<TEntity, TId>, IAsyncGetCollection<TEntity, TId>
+        where TCrudRepository : class, IAsyncCrudOwned<TEntity, TId>, IAsyncGetCollection<TEntity, TId>
     {
         protected readonly TCrudRepository Repo;
         protected readonly IActionDescriptorCollectionProvider Adcp;

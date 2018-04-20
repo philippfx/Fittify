@@ -25,7 +25,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 fittifyContext.ExerciseHistories.Add(new ExerciseHistory()
@@ -34,7 +35,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 fittifyContext.ExerciseHistories.Add(new ExerciseHistory()
@@ -43,7 +45,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 fittifyContext.ExerciseHistories.Add(new ExerciseHistory()
@@ -52,7 +55,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 fittifyContext.ExerciseHistories.Add(new ExerciseHistory()
@@ -61,7 +65,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -75,7 +80,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "SeatedPullDownSeed";
@@ -85,7 +91,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "RowSeed";
@@ -95,7 +102,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "SitupsSeed";
@@ -105,7 +113,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "SpinningBikeSeed";
@@ -115,7 +124,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -129,7 +139,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "LegCurlSeed";
@@ -139,7 +150,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "CalfRaiseSeed";
@@ -149,7 +161,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "SitupsSeed";
@@ -159,7 +172,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "SpinningBikeSeed";
@@ -169,7 +183,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -186,7 +201,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "DumbBellFlySeed";
@@ -197,7 +213,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "NegativeBenchPressSeed";
@@ -208,7 +225,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "SitupsSeed";
@@ -219,7 +237,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "SpinningBikeSeed";
@@ -229,7 +248,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -244,7 +264,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "SeatedPullDownSeed";
@@ -255,7 +276,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "RowSeed";
@@ -266,7 +288,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "SitupsSeed";
@@ -277,7 +300,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "SpinningBikeSeed";
@@ -287,7 +311,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -302,7 +327,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "LegCurlSeed";
@@ -313,7 +339,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "CalfRaiseSeed";
@@ -324,7 +351,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "SitupsSeed";
@@ -335,7 +363,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 previousExerciseName = "SpinningBikeSeed";
@@ -345,7 +374,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     ExecutedOnDateTime = executedOnDateTime,
                     WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                         w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                    PreviousExerciseHistoryId = previousExerciseId
+                    PreviousExerciseHistoryId = previousExerciseId,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
 
                 fittifyContext.SaveChanges();
@@ -361,7 +391,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
 
                     previousExerciseName = "DumbBellFlySeed";
@@ -372,7 +403,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
 
                     previousExerciseName = "NegativeBenchPressSeed";
@@ -383,7 +415,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
 
                     previousExerciseName = "SitupsSeed";
@@ -394,7 +427,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
 
                     previousExerciseName = "SpinningBikeSeed";
@@ -404,7 +438,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
                 }
 
@@ -419,7 +454,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
 
                     previousExerciseName = "SeatedPullDownSeed";
@@ -430,7 +466,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
 
                     previousExerciseName = "RowSeed";
@@ -441,7 +478,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
 
                     previousExerciseName = "SitupsSeed";
@@ -452,7 +490,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
 
                     previousExerciseName = "SpinningBikeSeed";
@@ -462,7 +501,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
                 }
 
@@ -477,7 +517,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
 
                     previousExerciseName = "LegCurlSeed";
@@ -488,7 +529,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
 
                     previousExerciseName = "CalfRaiseSeed";
@@ -499,7 +541,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
 
                     previousExerciseName = "SitupsSeed";
@@ -510,7 +553,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
 
                     previousExerciseName = "SpinningBikeSeed";
@@ -520,7 +564,8 @@ namespace Fittify.Test.Core.Seed.Sport
                         ExecutedOnDateTime = executedOnDateTime,
                         WorkoutHistoryId = fittifyContext.WorkoutHistories.FirstOrDefault(w =>
                             w.DateTimeStart < executedOnDateTime && executedOnDateTime < w.DateTimeEnd).Id,
-                        PreviousExerciseHistoryId = previousExerciseId
+                        PreviousExerciseHistoryId = previousExerciseId,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
                 }
 

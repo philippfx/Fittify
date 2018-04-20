@@ -10,32 +10,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class ExerciseHistoryRepository : AsyncCrud<ExerciseHistory, int> //: AsyncGetCollectionForEntityDateTimeStartEnd<ExerciseHistory, ExerciseHistoryOfmForGet, int> // Todo implement IAsyncCrudForDateTimeStartEnd
+    public class ExerciseHistoryRepository : AsyncCrudOwned<ExerciseHistory, int> //: AsyncGetCollectionForEntityDateTimeStartEnd<ExerciseHistory, ExerciseHistoryOfmForGet, int> // Todo implement IAsyncCrudForDateTimeStartEnd
     {
         public ExerciseHistoryRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
 
         }
 
-        public override Task<ExerciseHistory> GetById(int id)
+        public override Task<ExerciseHistory> GetById(int id, Guid ownerGuid)
         {
             return FittifyContext.ExerciseHistories
                 .Include(i => i.Exercise)
                 .Include(i => i.WorkoutHistory)
                 .Include(i => i.WeightLiftingSets)
                 .Include(i => i.CardioSets)
-                .FirstOrDefaultAsync(wH => wH.Id == id);
+                .FirstOrDefaultAsync(wH => wH.Id == id && wH.OwnerGuid == ownerGuid);
         }
 
-        public PagedList<ExerciseHistory> GetCollection(ExerciseHistoryResourceParameters resourceParameters)
+        public PagedList<ExerciseHistory> GetCollection(ExerciseHistoryResourceParameters resourceParameters, Guid ownerGuid)
         {
-            var allEntitiesQueryable = GetAll()
+            var allEntitiesQueryable = GetAll(ownerGuid)
                 .Include(i => i.Exercise)
                 .Include(i => i.WorkoutHistory)
                 .Include(i => i.WeightLiftingSets)
                 .Include(i => i.CardioSets)
                 .ApplySort(resourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<ExerciseHistoryOfmForGet, ExerciseHistory>());
+
+            allEntitiesQueryable = allEntitiesQueryable.Where(o => o.OwnerGuid == ownerGuid);
 
             if (!String.IsNullOrWhiteSpace(resourceParameters.Ids))
             {
@@ -63,17 +65,19 @@ namespace Fittify.DataModelRepositories.Repository.Sport
             return FittifyContext.ExerciseHistories.FirstOrDefault(f => f.PreviousExerciseHistoryId == id);
         }
         
-        public override async Task<EntityDeletionResult<int>> Delete(int id)
+        public override async Task<EntityDeletionResult<int>> Delete(int id, Guid ownerGuid)
         {
-            FixRelationOfNextExerciseHistory(id);
+            FixRelationOfNextExerciseHistory(id, ownerGuid);
             var result = SaveContext().Result;
-            return await base.Delete(id);
+            return await base.Delete(id, ownerGuid);
         }
 
-        public void FixRelationOfNextExerciseHistory(int id)
+        public void FixRelationOfNextExerciseHistory(int id, Guid ownerGuid)
         {
-            var entity = GetById(id).ConfigureAwait(false).GetAwaiter().GetResult();
-            var previousEntity = GetById(entity.PreviousExerciseHistoryId.GetValueOrDefault()).ConfigureAwait(false).GetAwaiter().GetResult();
+            var entity = GetById(id, ownerGuid).ConfigureAwait(false).GetAwaiter().GetResult();
+            if (entity == null) return;
+
+            var previousEntity = GetById(entity.PreviousExerciseHistoryId.GetValueOrDefault(), ownerGuid).ConfigureAwait(false).GetAwaiter().GetResult();
             var nextEntity = GetByPreviousExerciseHistoryid(id);
 
             if (previousEntity != null && nextEntity != null)

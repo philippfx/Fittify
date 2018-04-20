@@ -1,4 +1,6 @@
-﻿namespace Fittify.Common.Helpers.ResourceParameters
+﻿using System;
+
+namespace Fittify.Common.Helpers.ResourceParameters
 {
     public interface IResourceParameters
     {

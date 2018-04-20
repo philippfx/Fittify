@@ -4,7 +4,7 @@ using Fittify.Common;
 using Fittify.DataModelRepositories;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Fittify.Api.OfmRepository
+namespace Fittify.Api.OfmRepository.Unowned
 {
     public class AsyncDeleteOfm<TCrudRepository, TEntity, TId> :
         IAsyncDeleteOfm<TId>

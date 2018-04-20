@@ -18,7 +18,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     {
                         DateTimeStart = eH.ExecutedOnDateTime + TimeSpan.FromMinutes(20),
                         DateTimeEnd = eH.ExecutedOnDateTime + TimeSpan.FromMinutes(30),
-                        ExerciseHistoryId = eH.Id
+                        ExerciseHistoryId = eH.Id,
+                        OwnerGuid = StaticFields.TestOwnerGuid
                     });
                 }
             }

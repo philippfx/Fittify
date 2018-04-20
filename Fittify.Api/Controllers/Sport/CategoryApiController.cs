@@ -8,6 +8,7 @@ using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.OfmRepository;
 using Fittify.Api.OfmRepository.GetCollection.Sport;
+using Fittify.Api.OfmRepository.Unowned;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -18,6 +19,7 @@ using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModelRepositories.Services;
 using Fittify.DataModels.Models.Sport;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -137,6 +139,10 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> Delete(int id)
         {
+            var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();
+            var ownerGuid = new Guid(stringOwnerGuid);
+
             var ofmDeletionQueryResult = await _asyncDeleteForHttpMethods.Delete(id);
             if (ofmDeletionQueryResult.IsDeleted == false)
             {

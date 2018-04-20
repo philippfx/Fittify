@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
@@ -8,26 +9,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class CardioSetRepository : AsyncCrud<CardioSet, int> //: AsyncGetCollectionForEntityDateTimeStartEnd<CardioSet, CardioSetOfmForGet, int> // Todo implement IAsyncCrudForDateTimeStartEnd
+    public class CardioSetRepository : AsyncCrudOwned<CardioSet, int> //: AsyncGetCollectionForEntityDateTimeStartEnd<CardioSet, CardioSetOfmForGet, int> // Todo implement IAsyncCrudForDateTimeStartEnd
     {
         public CardioSetRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
             
         }
 
-        public override Task<CardioSet> GetById(int id)
+        public override Task<CardioSet> GetById(int id, Guid ownerGuid)
         {
             return FittifyContext.CardioSets
                 .Include(i => i.ExerciseHistory)
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public PagedList<CardioSet> GetCollection(CardioSetResourceParameters resourceParameters)
+        public PagedList<CardioSet> GetCollection(CardioSetResourceParameters resourceParameters, Guid ownerGuid)
         {
-            var allEntitiesQueryable = GetAll()
+            var allEntitiesQueryable = GetAll(ownerGuid)
                 .Include(i => i.ExerciseHistory)
                 .ApplySort(resourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<CardioSetOfmForGet, CardioSet>());
+
+            allEntitiesQueryable = allEntitiesQueryable.Where(o => o.OwnerGuid == ownerGuid);
 
             if (resourceParameters.DateTimeStart != null && resourceParameters.DateTimeEnd != null)
             {

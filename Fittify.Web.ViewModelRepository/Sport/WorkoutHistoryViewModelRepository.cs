@@ -8,6 +8,7 @@ using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ApiModelRepositories;
 using Fittify.Web.ApiModelRepositories.OfmRepository.Sport;
 using Fittify.Web.ViewModels.Sport;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Web.ViewModelRepository.Sport
@@ -17,10 +18,10 @@ namespace Fittify.Web.ViewModelRepository.Sport
         private readonly AsyncWorkoutHistoryOfmRepository asyncGppdOfmWorkoutHistory;
         private readonly IConfiguration _appConfiguration;
 
-        public WorkoutHistoryViewModelRepository(IConfiguration appConfiguration)
-            : base(appConfiguration, "WorkoutHistory")
+        public WorkoutHistoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+            : base(appConfiguration, httpContextAccessor, "WorkoutHistory")
         {
-            asyncGppdOfmWorkoutHistory = new AsyncWorkoutHistoryOfmRepository(appConfiguration, "WorkoutHistory");
+            asyncGppdOfmWorkoutHistory = new AsyncWorkoutHistoryOfmRepository(appConfiguration, httpContextAccessor, "WorkoutHistory");
             _appConfiguration = appConfiguration;
         }
 
@@ -50,7 +51,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
             var workoutHistoryOfmForGetQueryResult = await base.GetById(id);
 
             // ExerciseHistories
-            var exerciseHistoryViewModelRepository = new ExerciseHistoryViewModelRepository(_appConfiguration);
+            var exerciseHistoryViewModelRepository = new ExerciseHistoryViewModelRepository(_appConfiguration, HttpContextAccessor);
 
             var exerciseHistoryViewModelCollectionQueryResult 
                 = await exerciseHistoryViewModelRepository.GetCollection(
@@ -60,7 +61,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
                 = exerciseHistoryViewModelCollectionQueryResult.ViewModelForGetCollection;
 
             // Exercises
-            var exerciseViewModelRepository = new ExerciseViewModelRepository(_appConfiguration);
+            var exerciseViewModelRepository = new ExerciseViewModelRepository(_appConfiguration, HttpContextAccessor);
 
             var exerciseViewModelCollectionQueryResult
                 = await exerciseViewModelRepository.GetCollection(

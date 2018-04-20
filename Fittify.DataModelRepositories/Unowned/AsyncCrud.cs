@@ -10,7 +10,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories
 {
-
     public abstract class AsyncCrud<TEntity, TId> : IAsyncCrud<TEntity, TId>
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TId : struct
@@ -60,56 +59,56 @@ namespace Fittify.DataModelRepositories
             return (from prop in propertiesList where prop.PropertyType.IsGenericType select prop.GetValue(entity) into propValue select propValue as IList).All(propList => propList == null || propList.Count <= 0);
         }
 
-        public virtual async Task<EntityDeletionResult<TId>> MyDelete(TId id) // List<List<IEntityUniqueIdentifier<int>>>
-        {
-            var entityDeletionResult = new EntityDeletionResult<TId>();
+        //public virtual async Task<EntityDeletionResult<TId>> MyDelete(TId id) // List<List<IEntityUniqueIdentifier<int>>>
+        //{
+        //    var entityDeletionResult = new EntityDeletionResult<TId>();
 
-            var entity = await GetById(id);
+        //    var entity = await GetById(id);
 
-            if (entity == null)
-            {
-                entityDeletionResult.DidEntityExist = false;
-                return entityDeletionResult;
-            }
-            else
-            {
-                entityDeletionResult.DidEntityExist = true;
-            }
+        //    if (entity == null)
+        //    {
+        //        entityDeletionResult.DidEntityExist = false;
+        //        return entityDeletionResult;
+        //    }
+        //    else
+        //    {
+        //        entityDeletionResult.DidEntityExist = true;
+        //    }
 
-            // all context models
-            var modelData = FittifyContext.Model.GetEntityTypes()
-                .Select(t => new
-                {
-                    t.ClrType.Name,
-                    NavigationProperties = t.GetNavigations().Select(x => x.PropertyInfo)
-                });
-            
-            var thisModelsNavProperties = modelData.FirstOrDefault(w => w.Name == entity.GetType().Name).NavigationProperties;
-            
-            foreach (var navProp in thisModelsNavProperties)
-            {
-                var enumerablenavPropValue = navProp.GetValue(entity) as IEnumerable<IEntityUniqueIdentifier<TId>>;
-                if (enumerablenavPropValue != null)
-                {
-                    var listnavPropValue = enumerablenavPropValue.ToList();
-                    entityDeletionResult.EntitesThatBlockDeletion.Add(listnavPropValue);
-                }
+        //    // all context models
+        //    var modelData = FittifyContext.Model.GetEntityTypes()
+        //        .Select(t => new
+        //        {
+        //            t.ClrType.Name,
+        //            NavigationProperties = t.GetNavigations().Select(x => x.PropertyInfo)
+        //        });
 
-                var singlenavPropValue = navProp.GetValue(entity) as IEntityUniqueIdentifier<TId>;
-                if (singlenavPropValue != null)
-                {
-                    //returnList.Add(new List<IEntityUniqueIdentifier<TId>>() { singlenavPropValue });
-                    entityDeletionResult.EntitesThatBlockDeletion.Add(new List<IEntityUniqueIdentifier<TId>>() { singlenavPropValue });
-                }
-            }
+        //    var thisModelsNavProperties = modelData.FirstOrDefault(w => w.Name == entity.GetType().Name).NavigationProperties;
 
-            if (entityDeletionResult.EntitesThatBlockDeletion.Count > 0)
-            {
-                entityDeletionResult.IsDeleted = false;
-            }
+        //    foreach (var navProp in thisModelsNavProperties)
+        //    {
+        //        var enumerablenavPropValue = navProp.GetValue(entity) as IEnumerable<IEntityUniqueIdentifier<TId>>;
+        //        if (enumerablenavPropValue != null)
+        //        {
+        //            var listnavPropValue = enumerablenavPropValue.ToList();
+        //            entityDeletionResult.EntitesThatBlockDeletion.Add(listnavPropValue);
+        //        }
 
-            return entityDeletionResult;
-        }
+        //        var singlenavPropValue = navProp.GetValue(entity) as IEntityUniqueIdentifier<TId>;
+        //        if (singlenavPropValue != null)
+        //        {
+        //            //returnList.Add(new List<IEntityUniqueIdentifier<TId>>() { singlenavPropValue });
+        //            entityDeletionResult.EntitesThatBlockDeletion.Add(new List<IEntityUniqueIdentifier<TId>>() { singlenavPropValue });
+        //        }
+        //    }
+
+        //    if (entityDeletionResult.EntitesThatBlockDeletion.Count > 0)
+        //    {
+        //        entityDeletionResult.IsDeleted = false;
+        //    }
+
+        //    return entityDeletionResult;
+        //}
 
         //public virtual async Task<bool> Delete(TId id)
         //{
@@ -153,9 +152,15 @@ namespace Fittify.DataModelRepositories
 
         public virtual async Task<EntityDeletionResult<TId>> Delete(TId id)
         {
-            var entityDeletionResult = new EntityDeletionResult<TId>();
-
             var entity = await GetById(id);
+            if(entity == null) return new EntityDeletionResult<TId>() { DidEntityExist = false, IsDeleted = false };
+
+            return await Delete(entity);
+        }
+
+        public virtual async Task<EntityDeletionResult<TId>> Delete(TEntity entity)
+        {
+            var entityDeletionResult = new EntityDeletionResult<TId>();
 
             if (entity == null)
             {
@@ -169,7 +174,7 @@ namespace Fittify.DataModelRepositories
 
             FittifyContext.Set<TEntity>().Remove(entity);
             entityDeletionResult.IsDeleted = await SaveContext();
-            
+
             return entityDeletionResult;
         }
     }

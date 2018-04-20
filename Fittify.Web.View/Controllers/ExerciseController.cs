@@ -22,7 +22,7 @@ namespace Fittify.Web.View.Controllers
 
         public ExerciseController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
-            _exerciseViewModelRepository = new ExerciseViewModelRepository(appConfiguration);
+            _exerciseViewModelRepository = new ExerciseViewModelRepository(appConfiguration, httpContextAccessor);
             _httpContextAccessor = httpContextAccessor;
         }
 

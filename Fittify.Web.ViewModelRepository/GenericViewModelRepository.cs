@@ -9,6 +9,7 @@ using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ApiModelRepositories;
 using Fittify.Web.ViewModelRepository.Sport;
 using Fittify.Web.ViewModels.Sport;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Configuration;
 
@@ -22,10 +23,12 @@ namespace Fittify.Web.ViewModelRepository
         where TOfmForPost : class
     {
         protected readonly GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TResourceParameters> GenericAsyncGppdOfmWorkout;
+        protected readonly IHttpContextAccessor HttpContextAccessor;
 
-        public GenericViewModelRepository(IConfiguration appConfiguration, string mappedControllerActionKey)
+        public GenericViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey)
         {
-            GenericAsyncGppdOfmWorkout = new GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TResourceParameters>(appConfiguration, mappedControllerActionKey);
+            GenericAsyncGppdOfmWorkout = new GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TResourceParameters>(appConfiguration, httpContextAccessor, mappedControllerActionKey);
+            HttpContextAccessor = httpContextAccessor;
         }
 
         public virtual async Task<ViewModelQueryResult<TViewModel>> GetById(TId id)

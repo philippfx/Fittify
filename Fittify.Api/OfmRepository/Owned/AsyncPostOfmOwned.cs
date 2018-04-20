@@ -4,10 +4,10 @@ using AutoMapper;
 using Fittify.Common;
 using Fittify.DataModelRepositories;
 
-namespace Fittify.Api.OfmRepository
+namespace Fittify.Api.OfmRepository.Owned
 {
-    public class AsyncPostOfm<TCrudRepository, TEntity, TOfmForGet, TOfmForPost, TId> : IAsyncPostOfm<TOfmForGet, TOfmForPost>
-        where TCrudRepository : IAsyncCrud<TEntity, TId>
+    public class AsyncPostOfmOwned<TCrudRepository, TEntity, TOfmForGet, TOfmForPost, TId> : IAsyncPostOfmOwned<TOfmForGet, TOfmForPost>
+        where TCrudRepository : IAsyncCrudOwned<TEntity, TId>
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TOfmForGet : class, IEntityUniqueIdentifier<TId>
         where TOfmForPost : class
@@ -15,22 +15,22 @@ namespace Fittify.Api.OfmRepository
     {
         protected readonly TCrudRepository Repo;
 
-        public AsyncPostOfm(TCrudRepository repository)
+        public AsyncPostOfmOwned(TCrudRepository repository)
         {
             Repo = repository;
         }
 
-        public AsyncPostOfm()
+        public AsyncPostOfmOwned()
         {
             
         }
 
-        public virtual async Task<TOfmForGet> Post(TOfmForPost ofmForPost)
+        public virtual async Task<TOfmForGet> Post(TOfmForPost ofmForPost, Guid ownerGuid)
         {
             var entity = Mapper.Map<TOfmForPost, TEntity>(ofmForPost);
             try
             {
-                entity = await Repo.Create(entity);
+                entity = await Repo.Create(entity, ownerGuid);
             }
             catch (Exception e)
             {

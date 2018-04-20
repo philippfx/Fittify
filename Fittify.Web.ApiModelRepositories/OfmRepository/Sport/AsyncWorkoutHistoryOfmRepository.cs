@@ -8,14 +8,15 @@ using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
 {
     public class AsyncWorkoutHistoryOfmRepository : GenericAsyncGppdOfm<int, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryResourceParameters>
     {
-        public AsyncWorkoutHistoryOfmRepository(IConfiguration appConfiguration, string mappedControllerActionKey)
-            : base(appConfiguration, mappedControllerActionKey)
+        public AsyncWorkoutHistoryOfmRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey)
+            : base(appConfiguration, httpContextAccessor, mappedControllerActionKey)
         {
             
         }

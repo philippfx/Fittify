@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Fittify.Api.OfmRepository
+namespace Fittify.Api.OfmRepository.Unowned
 {
     public interface IAsyncPatchOfm<TOfmForGet, TOfmForPatch, TId>
         where TOfmForGet : class

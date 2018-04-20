@@ -1,19 +1,24 @@
 ﻿using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Helpers;
+using Fittify.DataModelRepositories.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories
 {
 
-    public class AsyncGetCollection<TEntity, TOfmForGet, TId> : AsyncCrud<TEntity, TId>, IAsyncGetCollection<TEntity,TId>
+    public class AsyncGetCollection<TEntity, TOfmForGet, TId> : /*AsyncCrud<TEntity, TId>,*/ IAsyncGetCollection<TEntity,TId>
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TOfmForGet : class
         where TId : struct
     {
+        private PropertyMappingService _propertyMappingService;
+        private FittifyContext _fittifyContext;
 
-        protected AsyncGetCollection(FittifyContext fittifyContext) : base(fittifyContext)
+        protected AsyncGetCollection(FittifyContext fittifyContext) //: base(fittifyContext)
         {
-
+            _fittifyContext = fittifyContext;
+            _propertyMappingService = new PropertyMappingService();
         }
 
         protected AsyncGetCollection()
@@ -28,9 +33,9 @@ namespace Fittify.DataModelRepositories
             //    .AsQueryable();
 
             var allEntitiesQueryableBeforePaging =
-                GetAll()
+                _fittifyContext.Set<TEntity>().AsNoTracking()
                     .ApplySort(resourceParameters.OrderBy,
-                        PropertyMappingService.GetPropertyMapping<TOfmForGet, TEntity>());
+                        _propertyMappingService.GetPropertyMapping<TOfmForGet, TEntity>());
 
             return PagedList<TEntity>.Create(allEntitiesQueryableBeforePaging,
                 resourceParameters.PageNumber,

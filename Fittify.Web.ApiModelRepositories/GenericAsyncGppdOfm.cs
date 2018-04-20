@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fittify.Common.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Configuration;
 
@@ -20,11 +21,13 @@ namespace Fittify.Web.ApiModelRepositories
     {
         protected readonly IConfiguration AppConfiguration;
         protected readonly string MappedControllerActionKey;
+        protected IHttpContextAccessor HttpContextAccessor;
 
-        public GenericAsyncGppdOfm(IConfiguration appConfiguration, string mappedControllerActionKey)
+        public GenericAsyncGppdOfm(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey)
         {
             AppConfiguration = appConfiguration;
             MappedControllerActionKey = mappedControllerActionKey;
+            HttpContextAccessor = httpContextAccessor;
         }
 
         public virtual async Task<OfmQueryResult<TOfmForGet>> GetSingle(TId id)
@@ -100,7 +103,7 @@ namespace Fittify.Web.ApiModelRepositories
                 AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
             );
 
-            var httpResponse = await HttpRequestFactory.GetCollection(new Uri(uri + queryParamter));
+            var httpResponse = await HttpRequestFactory.GetCollection(new Uri(uri + queryParamter), HttpContextAccessor);
             ofmCollectionQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmCollectionQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 

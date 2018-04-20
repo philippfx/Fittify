@@ -7,6 +7,7 @@ using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.OfmRepository;
 using Fittify.Api.OfmRepository.GetCollection.Sport;
+using Fittify.Api.OfmRepository.Owned;
 using Fittify.Api.OfmRepository.Post;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
@@ -35,8 +36,8 @@ namespace Fittify.Api.Controllers.Sport
     {
         private readonly AsyncGetOfmCollectionForWorkoutHistory _asyncGetOfmForWorkoutHistory;
         private readonly AsyncPostOfmForWorkoutHistory _asyncPostForHttpMethods;
-        private readonly IAsyncPatchOfm<WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPatch, int> _asyncPatchForHttpMethods;
-        private readonly IAsyncDeleteOfm<int> _asyncDeleteForHttpMethods;
+        private readonly IAsyncPatchOfmOwned<WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPatch, int> _asyncPatchForHttpMethods;
+        private readonly IAsyncDeleteOfmOwned<int> _asyncDeleteForHttpMethods;
         private readonly WorkoutHistoryRepository _repo;
         private readonly string _shortCamelCasedControllerName;
         private readonly IUrlHelper _urlHelper;
@@ -55,8 +56,8 @@ namespace Fittify.Api.Controllers.Sport
             _repo = new WorkoutHistoryRepository(fittifyContext);
             //_asyncPostForHttpMethods = new AsyncPostOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, int>(_repo);
             _asyncPostForHttpMethods = new AsyncPostOfmForWorkoutHistory(_repo);
-            _asyncPatchForHttpMethods = new AsyncPatchOfm<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPatch, int>(_repo);
-            _asyncDeleteForHttpMethods = new AsyncDeleteOfm<WorkoutHistoryRepository, WorkoutHistory, int>(_repo, adcProvider);
+            _asyncPatchForHttpMethods = new AsyncPatchOfmOwned<WorkoutHistoryRepository, WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPatch, int>(_repo);
+            _asyncDeleteForHttpMethods = new AsyncDeleteOfmOwned<WorkoutHistoryRepository, WorkoutHistory, int>(_repo, adcProvider);
             _shortCamelCasedControllerName = nameof(WorkoutHistoryApiController).ToShortCamelCasedControllerNameOrDefault();
             _asyncGetOfmForWorkoutHistory = new AsyncGetOfmCollectionForWorkoutHistory(_repo, urlHelper, adcProvider, propertyMappingService, typeHelperService, this);
             _urlHelper = urlHelper;
@@ -69,7 +70,11 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
-            var ofmForGetQueryResult = await _asyncGetOfmForWorkoutHistory.GetById(id, fields);
+            var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();
+            var ownerGuid = new Guid(stringOwnerGuid);
+
+            var ofmForGetQueryResult = await _asyncGetOfmForWorkoutHistory.GetById(id, fields, ownerGuid);
             if (!_controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
             {
                 return objectResult;
@@ -84,7 +89,11 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetCollection(WorkoutHistoryResourceParameters resourceParameters)
         {
-            var ofmForGetCollectionQueryResult = await _asyncGetOfmForWorkoutHistory.GetCollection(resourceParameters);
+            var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();
+            var ownerGuid = new Guid(stringOwnerGuid);
+
+            var ofmForGetCollectionQueryResult = await _asyncGetOfmForWorkoutHistory.GetCollection(resourceParameters, ownerGuid);
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
             if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasLinksForeachExpandableOfmForGet<WorkoutHistoryOfmForGet, int>(_urlHelper, nameof(WorkoutHistoryApiController), resourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
@@ -107,6 +116,10 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> Post([FromBody] WorkoutHistoryOfmForPost ofmForPost, [FromQuery] string includeExerciseHistories)
         {
+            var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();
+            var ownerGuid = new Guid(stringOwnerGuid);
+
             if (ofmForPost == null) return BadRequest();
             if (!int.TryParse(includeExerciseHistories, out int parsedResult))
             {
@@ -125,7 +138,7 @@ namespace Fittify.Api.Controllers.Sport
             }
             else
             {
-                ofmForGet = await _asyncPostForHttpMethods.Post(ofmForPost);
+                ofmForGet = await _asyncPostForHttpMethods.Post(ofmForPost, ownerGuid);
             } 
 
             var result = CreatedAtRoute(routeName: "GetWorkoutHistoryById", routeValues: new { id = ofmForGet.Id }, value: ofmForGet);
@@ -136,7 +149,11 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> Delete(int id)
         {
-            var ofmDeletionQueryResult = await _asyncDeleteForHttpMethods.Delete(id);
+            var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();
+            var ownerGuid = new Guid(stringOwnerGuid);
+
+            var ofmDeletionQueryResult = await _asyncDeleteForHttpMethods.Delete(id, ownerGuid);
             if (ofmDeletionQueryResult.IsDeleted == false)
             {
                 if (ofmDeletionQueryResult.ErrorMessages.Count != 0)
@@ -164,6 +181,10 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<WorkoutHistoryOfmForPatch> jsonPatchDocument)
         {
+            var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();
+            var ownerGuid = new Guid(stringOwnerGuid);
+
             if (jsonPatchDocument == null)
             {
                 ModelState.AddModelError(_shortCamelCasedControllerName, "You sent an empty body (null) for " + _shortCamelCasedControllerName + " with id=" + id);
@@ -173,7 +194,7 @@ namespace Fittify.Api.Controllers.Sport
             try
             {
                 // Get entity with original values from context
-                var ofmForPatch = await _asyncPatchForHttpMethods.GetByIdOfmForPatch(id);
+                var ofmForPatch = await _asyncPatchForHttpMethods.GetByIdOfmForPatch(id, ownerGuid);
                 if (ofmForPatch == null)
                 {
                     ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
@@ -191,7 +212,7 @@ namespace Fittify.Api.Controllers.Sport
                 }
 
                 // returning the patched ofm as response
-                var ofmForGet = _asyncPatchForHttpMethods.UpdatePartially(ofmForPatch).Result;
+                var ofmForGet = _asyncPatchForHttpMethods.UpdatePartially(ofmForPatch, ownerGuid).Result;
                 return new JsonResult(ofmForGet);
 
             }

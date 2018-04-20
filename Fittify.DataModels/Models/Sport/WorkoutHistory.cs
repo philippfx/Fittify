@@ -4,7 +4,7 @@ using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport
 {
-    public class WorkoutHistory : IEntityDateTimeStartEnd<int>
+    public class WorkoutHistory : IEntityDateTimeStartEnd<int>, IEntityOwner
     {
         public int Id { get; set; }
 
@@ -16,5 +16,7 @@ namespace Fittify.DataModels.Models.Sport
         public int? WorkoutId { get; set; }
 
         public virtual IEnumerable<ExerciseHistory> ExerciseHistories { get; set; }
+
+        public Guid OwnerGuid { get; set; }
     }
 }

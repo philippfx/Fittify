@@ -1,8 +1,9 @@
-﻿using Fittify.Common;
+﻿using System;
+using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport
 {
-    public class WeightLiftingSet : IEntityUniqueIdentifier<int>
+    public class WeightLiftingSet : IEntityUniqueIdentifier<int>, IEntityOwner
     {
         public int Id { get; set; }
 
@@ -17,6 +18,8 @@ namespace Fittify.DataModels.Models.Sport
         //[ForeignKey("ExerciseHistoryId")]
         public virtual ExerciseHistory ExerciseHistory { get; set; }
         public int? ExerciseHistoryId { get; set; }
+
+        public Guid OwnerGuid { get; set; }
         
     }
 }

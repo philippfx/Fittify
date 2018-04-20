@@ -4,7 +4,7 @@ using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport
 {
-    public class ExerciseHistory : IEntityUniqueIdentifier<int>
+    public class ExerciseHistory : IEntityUniqueIdentifier<int>, IEntityOwner
     {
         public int Id { get; set; }
 
@@ -30,5 +30,7 @@ namespace Fittify.DataModels.Models.Sport
 
         public virtual IEnumerable<WeightLiftingSet> WeightLiftingSets { get; set; }
         public virtual IEnumerable<CardioSet> CardioSets { get; set; }
+
+        public Guid OwnerGuid { get; set; }
     }
 }

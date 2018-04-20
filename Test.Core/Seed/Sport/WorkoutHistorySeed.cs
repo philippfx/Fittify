@@ -23,7 +23,8 @@ namespace Fittify.Test.Core.Seed.Sport
                 {
                     DateTimeStart = SessionStart,
                     DateTimeEnd = SessionEnd,
-                    WorkoutId = fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
+                    WorkoutId = fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -38,7 +39,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     DateTimeStart = SessionStart,
                     DateTimeEnd = SessionEnd,
                     WorkoutId =
-                        fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
+                        fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -52,7 +54,8 @@ namespace Fittify.Test.Core.Seed.Sport
                 {
                     DateTimeStart = SessionStart,
                     DateTimeEnd = SessionEnd,
-                    WorkoutId = fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
+                    WorkoutId = fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -67,7 +70,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     DateTimeStart = SessionStart,
                     DateTimeEnd = SessionEnd,
                     WorkoutId =
-                        fittifyContext.Workouts.FirstOrDefault(w => w.Name == "MondayChestSeed").Id
+                        fittifyContext.Workouts.FirstOrDefault(w => w.Name == "MondayChestSeed").Id,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -82,7 +86,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     DateTimeStart = SessionStart,
                     DateTimeEnd = SessionEnd,
                     WorkoutId =
-                        fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
+                        fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -96,7 +101,8 @@ namespace Fittify.Test.Core.Seed.Sport
                 {
                     DateTimeStart = SessionStart,
                     DateTimeEnd = SessionEnd,
-                    WorkoutId = fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
+                    WorkoutId = fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -111,7 +117,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     DateTimeStart = SessionStart,
                     DateTimeEnd = SessionEnd,
                     WorkoutId =
-                        fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
+                        fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -126,7 +133,8 @@ namespace Fittify.Test.Core.Seed.Sport
                     DateTimeStart = SessionStart,
                     DateTimeEnd = SessionEnd,
                     WorkoutId =
-                        fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
+                        fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 
@@ -140,7 +148,8 @@ namespace Fittify.Test.Core.Seed.Sport
                 {
                     DateTimeStart = SessionStart,
                     DateTimeEnd = SessionEnd,
-                    WorkoutId = fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id
+                    WorkoutId = fittifyContext.Workouts.FirstOrDefault(w => w.Name == workout).Id,
+                    OwnerGuid = StaticFields.TestOwnerGuid
                 });
             }
 

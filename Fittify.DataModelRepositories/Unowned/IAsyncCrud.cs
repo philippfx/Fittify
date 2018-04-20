@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Common;
@@ -17,13 +18,13 @@ namespace Fittify.DataModelRepositories
         Task<TEntity> Update(TEntity entity);
 
         Task<EntityDeletionResult<TId>> Delete(TId id);
-        Task<EntityDeletionResult<TId>> MyDelete(TId id);
+        //Task<EntityDeletionResult<TId>> MyDelete(TId id);
 
         Task<TEntity> GetById(TId id);
 
         IQueryable<TEntity> GetAll();
 
-        Task<IEnumerable<TEntity>> GetByCollectionOfIds(IEnumerable<TId> rangeOfIds);
+        //Task<IEnumerable<TEntity>> GetByCollectionOfIds(IEnumerable<TId> rangeOfIds);
 
         Task<bool> SaveContext();
     }

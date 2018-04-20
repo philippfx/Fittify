@@ -29,7 +29,8 @@ namespace Fittify.Test.Core.Seed.Sport
                                 WeightReduced = 5,
                                 RepetitionsReduced = 20,
                                 WeightBurn = 0,
-                                ExerciseHistoryId = exerciseHistories[i - 1].Id
+                                ExerciseHistoryId = exerciseHistories[i - 1].Id,
+                                OwnerGuid = StaticFields.TestOwnerGuid
                             });
                         }
                     }
@@ -44,7 +45,8 @@ namespace Fittify.Test.Core.Seed.Sport
                                 WeightReduced = 20,
                                 RepetitionsReduced = 8,
                                 WeightBurn = 10,
-                                ExerciseHistoryId = exerciseHistories[i - 1].Id
+                                ExerciseHistoryId = exerciseHistories[i - 1].Id,
+                                OwnerGuid = StaticFields.TestOwnerGuid
                             });
                         }
                     }
@@ -59,7 +61,8 @@ namespace Fittify.Test.Core.Seed.Sport
                                 WeightReduced = 20,
                                 RepetitionsReduced = 8,
                                 WeightBurn = 10,
-                                ExerciseHistoryId = exerciseHistories[i - 1].Id
+                                ExerciseHistoryId = exerciseHistories[i - 1].Id,
+                                OwnerGuid = StaticFields.TestOwnerGuid
                             });
                         }
                     }
@@ -72,7 +75,8 @@ namespace Fittify.Test.Core.Seed.Sport
                             WeightReduced = 20,
                             RepetitionsReduced = 8,
                             WeightBurn = 10,
-                            ExerciseHistoryId = exerciseHistories[i - 1].Id
+                            ExerciseHistoryId = exerciseHistories[i - 1].Id,
+                            OwnerGuid = StaticFields.TestOwnerGuid
                         });
                     }
                 }

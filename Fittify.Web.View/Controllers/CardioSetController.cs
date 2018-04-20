@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ViewModelRepository.Sport;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -14,9 +15,9 @@ namespace Fittify.Web.View.Controllers
     {
         private readonly Uri _fittifyApiBaseUri;
         private readonly CardioSetViewModelRepository _cardioSetViewModelRepository;
-        public CardioSetController(IConfiguration appConfiguration)
+        public CardioSetController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
-            _cardioSetViewModelRepository = new CardioSetViewModelRepository(appConfiguration);
+            _cardioSetViewModelRepository = new CardioSetViewModelRepository(appConfiguration, httpContextAccessor);
 
         }
 

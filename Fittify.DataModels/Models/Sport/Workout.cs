@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport
 {
-    public class Workout : IEntityName<int>
+    public class Workout : IEntityName<int>, IEntityOwner
     {
         public int Id { get; set; }
 
@@ -15,5 +16,7 @@ namespace Fittify.DataModels.Models.Sport
 
         public virtual IEnumerable<MapExerciseWorkout> MapExerciseWorkout { get; set; }
         public virtual IEnumerable<WorkoutHistory> WorkoutHistories { get; set; }
+
+        public Guid OwnerGuid { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ViewModelRepository.Sport;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -12,9 +13,9 @@ namespace Fittify.Web.View.Controllers
     public class WeightLiftingSetWebController : Controller
     {
         private readonly WeightLiftingSetViewModelRepository _weightLiftingSetViewModelRepository;
-        public WeightLiftingSetWebController(IConfiguration appConfiguration)
+        public WeightLiftingSetWebController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
-            _weightLiftingSetViewModelRepository = new WeightLiftingSetViewModelRepository(appConfiguration);
+            _weightLiftingSetViewModelRepository = new WeightLiftingSetViewModelRepository(appConfiguration, httpContextAccessor);
         }
 
         [HttpPost]

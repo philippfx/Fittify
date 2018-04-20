@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
@@ -8,29 +9,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class MapExerciseWorkoutRepository : AsyncCrud<MapExerciseWorkout, int>
+    public class MapExerciseWorkoutRepository : AsyncCrudOwned<MapExerciseWorkout, int>
     {
         public MapExerciseWorkoutRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
 
         }
 
-        public override Task<MapExerciseWorkout> GetById(int id)
+        public override Task<MapExerciseWorkout> GetById(int id, Guid ownerGuid)
         {
             return FittifyContext.MapExerciseWorkout
                 .Include(i => i.Exercise)
                 .Include(i => i.Workout)
-                .FirstOrDefaultAsync(wH => wH.Id == id);
+                .FirstOrDefaultAsync(wH => wH.Id == id && wH.OwnerGuid == ownerGuid);
         }
 
-        public PagedList<MapExerciseWorkout> GetCollection(MapExerciseWorkoutResourceParameters resourceParameters)
+        public PagedList<MapExerciseWorkout> GetCollection(MapExerciseWorkoutResourceParameters resourceParameters, Guid ownerGuid)
         {
-            var allEntitiesQueryable = GetAll()
+            var allEntitiesQueryable = GetAll(ownerGuid)
                 .Include(i => i.Exercise)
                 .Include(i => i.Workout)
                 .ApplySort(resourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<MapExerciseWorkoutOfmForGet, MapExerciseWorkout>());
 
+            allEntitiesQueryable = allEntitiesQueryable.Where(o => o.OwnerGuid == ownerGuid);
             
             if (resourceParameters.ExerciseId != null)
             {

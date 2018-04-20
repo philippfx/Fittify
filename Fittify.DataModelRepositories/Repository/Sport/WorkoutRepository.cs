@@ -10,28 +10,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class WorkoutRepository : AsyncCrud<Workout, int>
+    public class WorkoutRepository : AsyncCrudOwned<Workout, int>
     {
         public WorkoutRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
 
         }
 
-        public override Task<Workout> GetById(int id)
+        public override Task<Workout> GetById(int id, Guid ownerGuid)
         {
             return FittifyContext.Workouts
                 .Include(i => i.Category)
                 .Include(i => i.MapExerciseWorkout)
                 .Include(i => i.WorkoutHistories)
-                .FirstOrDefaultAsync(wH => wH.Id == id);
+                .FirstOrDefaultAsync(wH => wH.Id == id && wH.OwnerGuid == ownerGuid);
         }
 
-        public PagedList<Workout> GetCollection(WorkoutResourceParameters resourceParameters)
+        public PagedList<Workout> GetCollection(WorkoutResourceParameters resourceParameters, Guid ownerGuid)
         {
-            var allEntitiesQueryable = GetAll()
+            var allEntitiesQueryable = GetAll(ownerGuid)
                 .Include(i => i.Category)
                 .ApplySort(resourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<WorkoutOfmForGet, Workout>());
+
+            allEntitiesQueryable = allEntitiesQueryable.Where(w => w.OwnerGuid == ownerGuid);
 
             if (!String.IsNullOrWhiteSpace(resourceParameters.SearchQuery))
             {
@@ -48,9 +50,10 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 resourceParameters.PageSize);
         }
 
-        public override async Task<EntityDeletionResult<int>> Delete(int id)
+        public override async Task<EntityDeletionResult<int>> Delete(int id, Guid ownerGuid)
         {
-            var entity = GetById(id).GetAwaiter().GetResult();
+            var entity = GetById(id, ownerGuid).GetAwaiter().GetResult();
+            if (entity == null) return new EntityDeletionResult<int>() {DidEntityExist = false, IsDeleted = false };
 
             var listExerciseHistoriesOfRelatedWorkout = FittifyContext.ExerciseHistories.Where(w => w.WorkoutHistory.Workout.Id == id);
 
@@ -72,7 +75,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
             var result = SaveContext().Result;
 
             // Todo maybe fixing exerciseHistories that now have no previousExerciseHistory
-            return await base.Delete(id);
+            return await base.Delete(entity);
         }
     }
 }

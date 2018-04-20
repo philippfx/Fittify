@@ -10,24 +10,26 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class ExerciseRepository : AsyncCrud<Exercise, int>
+    public class ExerciseRepository : AsyncCrudOwned<Exercise, int>
     {
         public ExerciseRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
 
         }
 
-        public override Task<Exercise> GetById(int id)
+        public override Task<Exercise> GetById(int id, Guid ownerGuid)
         {
             return FittifyContext.Exercises
-                .FirstOrDefaultAsync(wH => wH.Id == id);
+                .FirstOrDefaultAsync(wH => wH.Id == id && wH.OwnerGuid == ownerGuid);
         }
 
-        public PagedList<Exercise> GetCollection(ExerciseResourceParameters resourceParameters)
+        public PagedList<Exercise> GetCollection(ExerciseResourceParameters resourceParameters, Guid ownerGuid)
         {
-            var allEntitiesQueryable = GetAll()
+            var allEntitiesQueryable = GetAll(ownerGuid)
                 .ApplySort(resourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<ExerciseOfmForGet, Exercise>());
+
+            allEntitiesQueryable = allEntitiesQueryable.Where(o => o.OwnerGuid == ownerGuid);
 
             if (!String.IsNullOrWhiteSpace(resourceParameters.Ids))
             {

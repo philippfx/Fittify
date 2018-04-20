@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Helpers;
+using Fittify.Api.OfmRepository.Owned;
+using Fittify.Api.OfmRepository.Unowned;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
@@ -13,7 +16,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Fittify.Api.OfmRepository.GetCollection.Sport
 {
-    public class AsyncGetOfmCollectionForWorkout : AsyncGetOfmById<WorkoutRepository, Workout, WorkoutOfmForGet, int>
+    public class AsyncGetOfmCollectionForWorkout : AsyncGetOfmByIdOwned<WorkoutRepository, Workout, WorkoutOfmForGet, int>
     {
         public AsyncGetOfmCollectionForWorkout(WorkoutRepository repository,
             IUrlHelper urlHelper,
@@ -24,7 +27,7 @@ namespace Fittify.Api.OfmRepository.GetCollection.Sport
             : base(repository, urlHelper, actionDescriptorCollectionProvider, propertyMappingService, typeHelperService, controller)
         {
         }
-        public virtual async Task<OfmForGetCollectionQueryResult<WorkoutOfmForGet>> GetCollection(WorkoutResourceParameters resourceParameters)
+        public virtual async Task<OfmForGetCollectionQueryResult<WorkoutOfmForGet>> GetCollection(WorkoutResourceParameters resourceParameters, Guid ownerGuid)
         {
             var ofmForGetCollectionQueryResult = new OfmForGetCollectionQueryResult<WorkoutOfmForGet>();
 
@@ -34,7 +37,7 @@ namespace Fittify.Api.OfmRepository.GetCollection.Sport
                 return ofmForGetCollectionQueryResult;
             }
             
-            var pagedListEntityCollection = Repo.GetCollection(resourceParameters).CopyPropertyValuesTo(ofmForGetCollectionQueryResult);
+            var pagedListEntityCollection = Repo.GetCollection(resourceParameters, ownerGuid).CopyPropertyValuesTo(ofmForGetCollectionQueryResult);
 
             // Todo Maybe refactor to a type safe class instead of anonymous
             var paginationMetadata = new

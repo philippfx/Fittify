@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class WorkoutHistoryRepository : AsyncCrud<WorkoutHistory, int>
+    public class WorkoutHistoryRepository : AsyncCrudOwned<WorkoutHistory, int>
     {
         public WorkoutHistoryRepository()
         {
@@ -58,21 +58,23 @@ namespace Fittify.DataModelRepositories.Repository.Sport
             return newWorkoutHistory;
         }
 
-        public override Task<WorkoutHistory> GetById(int id)
+        public override Task<WorkoutHistory> GetById(int id, Guid ownerGuid)
         {
             return FittifyContext.WorkoutHistories
                 .Include(i => i.ExerciseHistories)
                 .Include(i => i.Workout)
-                .FirstOrDefaultAsync(wH => wH.Id == id);
+                .FirstOrDefaultAsync(wH => wH.Id == id && wH.OwnerGuid == ownerGuid);
         }
 
-        public PagedList<WorkoutHistory> GetCollection(WorkoutHistoryResourceParameters resourceParameters)
+        public PagedList<WorkoutHistory> GetCollection(WorkoutHistoryResourceParameters resourceParameters, Guid ownerGuid)
         {
-            var allEntitiesQueryable = GetAll()
+            var allEntitiesQueryable = GetAll(ownerGuid)
                 .Include(i => i.Workout)
                 .Include(i => i.ExerciseHistories)
                 .ApplySort(resourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<WorkoutHistoryOfmForGet, WorkoutHistory>());
+
+            allEntitiesQueryable = allEntitiesQueryable.Where(o => o.OwnerGuid == ownerGuid);
 
             if (!String.IsNullOrWhiteSpace(resourceParameters.Ids))
             {
@@ -107,17 +109,18 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 resourceParameters.PageSize);
         }
 
-        public override async Task<EntityDeletionResult<int>> Delete(int id)
+        public override async Task<EntityDeletionResult<int>> Delete(int id, Guid ownerGuid)
         {
-            var entity = GetById(id).GetAwaiter().GetResult();
+            var entity = GetById(id, ownerGuid).GetAwaiter().GetResult();
+            if (entity == null) return new EntityDeletionResult<int>(){ DidEntityExist = false, IsDeleted = false};
 
             var exerciseHistoryRepository = new ExerciseHistoryRepository(this.FittifyContext);
             foreach (var exerciseHistory in entity.ExerciseHistories)
             {
-                exerciseHistoryRepository.FixRelationOfNextExerciseHistory(exerciseHistory.Id);
+                exerciseHistoryRepository.FixRelationOfNextExerciseHistory(exerciseHistory.Id, ownerGuid);
             }
             var result = SaveContext().Result;
-            return await base.Delete(id);
+            return await base.Delete(entity);
         }
     }
 }

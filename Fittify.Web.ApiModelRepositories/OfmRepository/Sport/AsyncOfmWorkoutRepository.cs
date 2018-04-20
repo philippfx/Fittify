@@ -8,6 +8,7 @@ using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Configuration;
 
@@ -16,10 +17,12 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
     public class AsyncOfmWorkoutRepository
     {
         private IConfiguration _appConfiguration;
+        private IHttpContextAccessor _httpContextAccessor;
 
-        public AsyncOfmWorkoutRepository(IConfiguration appConfiguration)
+        public AsyncOfmWorkoutRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             _appConfiguration = appConfiguration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public virtual async Task<OfmQueryResult<WorkoutOfmForGet>> GetSingle(int id)
@@ -96,7 +99,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
             );
 
             //var httpResponse = await HttpRequestFactory.GetCollection(new Uri(_fittifyApiBaseUri + "api/workouts" + queryParamter));
-            var httpResponse = await HttpRequestFactory.GetCollection(new Uri(uri + queryParamter));
+            var httpResponse = await HttpRequestFactory.GetCollection(new Uri(uri + queryParamter), _httpContextAccessor);
             ofmCollectionQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmCollectionQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 

@@ -3,7 +3,7 @@ using AutoMapper;
 using Fittify.Common;
 using Fittify.DataModelRepositories;
 
-namespace Fittify.Api.OfmRepository
+namespace Fittify.Api.OfmRepository.Unowned
 {
     public class AsyncPatchOfm<TCrudRepository, TEntity, TOfmForGet, TOfmForPatch, TId> :
         IAsyncPatchOfm<TOfmForGet, TOfmForPatch, TId>
