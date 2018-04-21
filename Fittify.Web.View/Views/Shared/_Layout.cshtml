@@ -1,4 +1,7 @@
 ﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Authorization.Policy
+@inject IAuthorizationService AuthorizationService
 <!DOCTYPE html>
 
 <html>
@@ -63,9 +66,14 @@
                 <p>
                     <a href="~/categories">Categories</a>
                 </p>
-                <p>
-                    <a href="#">Link</a>
-                </p>
+                @{ var mypolicyAuthorizationResult = await AuthorizationService.AuthorizeAsync(User, "PayingUserFromNL"); }
+                @if (mypolicyAuthorizationResult.Succeeded == true)
+                {
+                    <p>
+                        <a href="#">PayingUserFromNL</a>
+                    </p>
+                }
+                
             </div>
             <!-- Render left sidebar ends -->
             <!-- Render main section starts -->

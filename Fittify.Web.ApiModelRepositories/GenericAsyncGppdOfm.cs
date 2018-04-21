@@ -40,7 +40,7 @@ namespace Fittify.Web.ApiModelRepositories
                 );
             try
             {
-                var httpResponse = await HttpRequestFactory.GetSingle(uri);
+                var httpResponse = await HttpRequestFactory.GetSingle(uri, HttpContextAccessor);
                 ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -126,7 +126,7 @@ namespace Fittify.Web.ApiModelRepositories
                 AppConfiguration.GetValue<string>("FittifyApiBaseUrl") +
                 AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
             );
-            var httpResponse = await HttpRequestFactory.Post(uri, ofmForPost);
+            var httpResponse = await HttpRequestFactory.Post(uri, ofmForPost, HttpContextAccessor);
             ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -149,7 +149,7 @@ namespace Fittify.Web.ApiModelRepositories
                 + AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
                 + "/" + id
             );
-            var httpResponse = await HttpRequestFactory.Delete(uri);
+            var httpResponse = await HttpRequestFactory.Delete(uri, HttpContextAccessor);
             ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -172,7 +172,7 @@ namespace Fittify.Web.ApiModelRepositories
                 + AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
                 + "/" + id
             );
-            var httpResponse = await HttpRequestFactory.Patch(uri, jsonPatchDocument);
+            var httpResponse = await HttpRequestFactory.Patch(uri, jsonPatchDocument, HttpContextAccessor);
             ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 

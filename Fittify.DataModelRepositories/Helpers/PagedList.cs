@@ -38,8 +38,8 @@ namespace Fittify.DataModelRepositories.Helpers
 
         public static PagedList<T> Create(IQueryable<T> source, int pageNumber, int pageSize)
         {
-            var count = source.Count();
-            var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            var count = source.Count(); // database call to get count
+            var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList(); // database call to get entities
             return new PagedList<T>(items, count, pageNumber, pageSize);
         }
     }

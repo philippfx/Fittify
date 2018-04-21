@@ -26,9 +26,12 @@ namespace Fittify.DataModelRepositories.Repository.Sport
 
         public PagedList<WeightLiftingSet> GetCollection(WeightLiftingSetResourceParameters resourceParameters, Guid ownerGuid)
         {
-            var allEntitiesQueryable = GetAll(ownerGuid)
-                .Include(i => i.ExerciseHistory)
-                .ApplySort(resourceParameters.OrderBy,
+            var allEntitiesQueryable =
+                FittifyContext.Set<WeightLiftingSet>()
+                    .Where(o => o.OwnerGuid == ownerGuid)
+                    .AsNoTracking()
+                    .Include(i => i.ExerciseHistory)
+                    .ApplySort(resourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<WeightLiftingSetOfmForGet, WeightLiftingSet>());
 
             if (!String.IsNullOrWhiteSpace(resourceParameters.Ids))

@@ -135,10 +135,10 @@ namespace Fittify.DataModelRepositories
             return null;
         }
         
-        public virtual IQueryable<TEntity> GetAll(Guid ownerGuid)
-        {
-            return FittifyContext.Set<TEntity>().Where(o => o.OwnerGuid == ownerGuid).AsNoTracking();
-        }
+        //public virtual IQueryable<TEntity> GetAll(Guid ownerGuid) // Cannot be generalized, because entites may be public OR owned (exercises)
+        //{
+        //    return FittifyContext.Set<TEntity>().Where(o => o.OwnerGuid == ownerGuid).AsNoTracking();
+        //}
 
         //public virtual async Task<IEnumerable<TEntity>> GetByCollectionOfIds(IEnumerable<TId> collectionOfIds)
         //{

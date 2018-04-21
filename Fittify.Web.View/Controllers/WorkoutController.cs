@@ -10,6 +10,7 @@ using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ViewModelRepository.Sport;
 using Fittify.Web.ViewModels.Sport;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -40,6 +41,7 @@ namespace Fittify.Web.View.Controllers
         public async Task<IActionResult> Overview()
         {
             await WriteOutIdentityInformation();
+            await WriteOutAccessInformation();
 
             var queryResult = await _workoutViewModelRepo.GetCollection(new WorkoutResourceParameters());
             List<WorkoutViewModel> listWorkoutViewModel = null;
@@ -274,6 +276,26 @@ namespace Fittify.Web.View.Controllers
 
             // write it out
             Debug.WriteLine($"Identity token: {identityToken}");
+
+            // write out the user claims
+            foreach (var claim in User.Claims)
+            {
+                Debug.WriteLine($"Claim type: {claim.Type} - Claim value: {claim.Value}");
+            }
+        }
+
+        private async Task WriteOutAccessInformation()
+        {
+            var discoveryClient = new DiscoveryClient("https://localhost:44364/");
+            var metaDataResponse = await discoveryClient.GetAsync();
+
+            var userInfoClient = new UserInfoClient(metaDataResponse.UserInfoEndpoint);
+
+            var accesstoken =
+                await AuthenticationHttpContextExtensions.GetTokenAsync(this.HttpContext, OpenIdConnectParameterNames.AccessToken);
+
+            // write it out
+            Debug.WriteLine($"Access token: {accesstoken}");
 
             // write out the user claims
             foreach (var claim in User.Claims)

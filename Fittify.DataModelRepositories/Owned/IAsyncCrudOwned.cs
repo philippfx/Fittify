@@ -22,7 +22,7 @@ namespace Fittify.DataModelRepositories
 
         Task<TEntity> GetById(TId id, Guid ownerGuid);
 
-        IQueryable<TEntity> GetAll(Guid ownerGuid);
+        //IQueryable<TEntity> GetAll(Guid ownerGuid);
 
         //PagedList<TEntity> GetCollection(IResourceParameters resourceParameters, Guid ownerGuid);
 

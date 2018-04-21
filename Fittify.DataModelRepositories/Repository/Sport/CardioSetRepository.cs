@@ -25,9 +25,12 @@ namespace Fittify.DataModelRepositories.Repository.Sport
 
         public PagedList<CardioSet> GetCollection(CardioSetResourceParameters resourceParameters, Guid ownerGuid)
         {
-            var allEntitiesQueryable = GetAll(ownerGuid)
-                .Include(i => i.ExerciseHistory)
-                .ApplySort(resourceParameters.OrderBy,
+            var allEntitiesQueryable =
+                FittifyContext.Set<CardioSet>()
+                    .Where(o => o.OwnerGuid == ownerGuid)
+                    .AsNoTracking()
+                    .Include(i => i.ExerciseHistory)
+                    .ApplySort(resourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<CardioSetOfmForGet, CardioSet>());
 
             allEntitiesQueryable = allEntitiesQueryable.Where(o => o.OwnerGuid == ownerGuid);

@@ -11,11 +11,16 @@ namespace Fittify.Web.ApiModelRepositories
 {
     public static class HttpRequestFactory
     {
-        public static async Task<HttpResponseMessage> GetSingle(Uri requestUri)
+        public static async Task<HttpResponseMessage> GetSingle(Uri requestUri, IHttpContextAccessor httpContextAccessor)
         {
+            string accessToken = string.Empty;
+            var currentContext = httpContextAccessor.HttpContext;
+            accessToken = await AuthenticationHttpContextExtensions.GetTokenAsync(currentContext, OpenIdConnectParameterNames.AccessToken);
+
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Get)
-                .AddRequestUri(requestUri);
+                .AddRequestUri(requestUri)
+                .AddBearerToken(accessToken);
 
             return await builder.SendAsync();
         }
@@ -33,9 +38,7 @@ namespace Fittify.Web.ApiModelRepositories
         public static async Task<HttpResponseMessage> GetCollection(Uri requestUri, IHttpContextAccessor httpContextAccessor)
         {
             string accessToken = string.Empty;
-
             var currentContext = httpContextAccessor.HttpContext;
-
             accessToken = await AuthenticationHttpContextExtensions.GetTokenAsync(currentContext, OpenIdConnectParameterNames.AccessToken);
 
             var builder = new HttpRequestBuilder()
@@ -57,13 +60,17 @@ namespace Fittify.Web.ApiModelRepositories
         }
 
         public static async Task<HttpResponseMessage> Post(
-            Uri requestUri, object value)
+            Uri requestUri, object value, IHttpContextAccessor httpContextAccessor)
         {
-            var content = new JsonContent(value).ReadAsStringAsync().Result;
+            string accessToken = string.Empty;
+            var currentContext = httpContextAccessor.HttpContext;
+            accessToken = await AuthenticationHttpContextExtensions.GetTokenAsync(currentContext, OpenIdConnectParameterNames.AccessToken);
+
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Post)
                 .AddRequestUri(requestUri)
-                .AddContent(new JsonContent(value));
+                .AddContent(new JsonContent(value))
+                .AddBearerToken(accessToken);
             
             return await builder.SendAsync();
         }
@@ -80,21 +87,31 @@ namespace Fittify.Web.ApiModelRepositories
         }
 
         public static async Task<HttpResponseMessage> Patch(
-            Uri requestUri, JsonPatchDocument jsonPatchDocument /*object jsonPatchDocument*/)
+            Uri requestUri, JsonPatchDocument jsonPatchDocument /*object jsonPatchDocument*/, IHttpContextAccessor httpContextAccessor)
         {
+            string accessToken = string.Empty;
+            var currentContext = httpContextAccessor.HttpContext;
+            accessToken = await AuthenticationHttpContextExtensions.GetTokenAsync(currentContext, OpenIdConnectParameterNames.AccessToken);
+
             var builder = new HttpRequestBuilder()
                 .AddMethod(new HttpMethod("PATCH"))
                 .AddRequestUri(requestUri)
-                .AddContent(new PatchContent(jsonPatchDocument));
+                .AddContent(new PatchContent(jsonPatchDocument))
+                .AddBearerToken(accessToken);
 
             return await builder.SendAsync();
         }
 
-        public static async Task<HttpResponseMessage> Delete(Uri requestUri)
+        public static async Task<HttpResponseMessage> Delete(Uri requestUri, IHttpContextAccessor httpContextAccessor)
         {
+            string accessToken = string.Empty;
+            var currentContext = httpContextAccessor.HttpContext;
+            accessToken = await AuthenticationHttpContextExtensions.GetTokenAsync(currentContext, OpenIdConnectParameterNames.AccessToken);
+
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Delete)
-                .AddRequestUri(requestUri);
+                .AddRequestUri(requestUri)
+                .AddBearerToken(accessToken);
 
             return await builder.SendAsync();
         }

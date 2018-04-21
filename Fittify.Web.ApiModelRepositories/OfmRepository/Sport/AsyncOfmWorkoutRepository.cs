@@ -35,7 +35,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
                 );
             try
             {
-                var httpResponse = await HttpRequestFactory.GetSingle(uri);
+                var httpResponse = await HttpRequestFactory.GetSingle(uri, _httpContextAccessor);
                 ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -124,7 +124,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
             );
             try
             {
-                var httpResponse = await HttpRequestFactory.Post(uri, workoutOfmForPost);
+                var httpResponse = await HttpRequestFactory.Post(uri, workoutOfmForPost, _httpContextAccessor);
                 ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -154,7 +154,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
             );
             try
             {
-                var httpResponse = await HttpRequestFactory.Delete(uri);
+                var httpResponse = await HttpRequestFactory.Delete(uri, _httpContextAccessor);
                 ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -183,7 +183,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
             );
             try
             {
-                var httpResponse = await HttpRequestFactory.Patch(uri, jsonPatchDocument);
+                var httpResponse = await HttpRequestFactory.Patch(uri, jsonPatchDocument, _httpContextAccessor);
                 ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 

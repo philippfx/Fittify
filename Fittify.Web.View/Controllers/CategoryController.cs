@@ -7,6 +7,7 @@ using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ViewModelRepository.Sport;
 using Fittify.Web.ViewModels.Sport;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -17,9 +18,9 @@ namespace Fittify.Web.View.Controllers
     public class CategoryController : Controller
     {
         private readonly CategoryViewModelRepository _categoryViewModelRepository;
-        public CategoryController(IConfiguration appConfiguration)
+        public CategoryController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
-            _categoryViewModelRepository = new CategoryViewModelRepository(appConfiguration);
+            _categoryViewModelRepository = new CategoryViewModelRepository(appConfiguration, httpContextAccessor);
         }
 
         public async Task<IActionResult> Overview()

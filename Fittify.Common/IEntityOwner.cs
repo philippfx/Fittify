@@ -6,6 +6,6 @@ namespace Fittify.Common
 {
     public interface IEntityOwner
     {
-        Guid OwnerGuid { get; set; }
+        Guid? OwnerGuid { get; set; }
     }
 }
