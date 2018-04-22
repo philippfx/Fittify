@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Common;
 using Fittify.DataModelRepositories;
+using Fittify.DataModelRepositories.Owned;
 
 namespace Fittify.Api.OfmRepository.Owned
 {

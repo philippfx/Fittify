@@ -41,6 +41,7 @@ namespace Fittify.Web.ApiModelRepositories
             try
             {
                 var httpResponse = await HttpRequestFactory.GetSingle(uri, HttpContextAccessor);
+                var contentAsString = httpResponse.Content.ReadAsStringAsync();
                 ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -104,6 +105,7 @@ namespace Fittify.Web.ApiModelRepositories
             );
 
             var httpResponse = await HttpRequestFactory.GetCollection(new Uri(uri + queryParamter), HttpContextAccessor);
+            var contentAsString = httpResponse.Content.ReadAsStringAsync();
             ofmCollectionQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmCollectionQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Fittify.Api.Authorization;
 using Fittify.Api.Controllers.HttpMethodInterfaces;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
@@ -67,6 +68,8 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet("{id}", Name = "GetWorkoutById")]
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        //[Authorize(Policy = "MustOwnEntityIntId")]
+        [AuthorizeOwnerIntId(typeof(WorkoutRepository))]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
             var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
@@ -134,6 +137,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpDelete("{id}", Name = "DeleteWorkout")]
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [AuthorizeOwnerIntId(typeof(WorkoutRepository))]
         public async Task<IActionResult> Delete(int id)
         {
             var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
@@ -166,6 +170,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpPatch("{id}", Name = "PartiallyUpdateWorkout")]
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [AuthorizeOwnerIntId(typeof(WorkoutRepository))]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<WorkoutOfmForPatch> jsonPatchDocument)
         {
             var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;

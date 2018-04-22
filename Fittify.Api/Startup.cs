@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.DataModelRepositories;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using AspNetCoreRateLimit;
+using Fittify.Api.Authorization;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Middleware;
@@ -20,6 +22,7 @@ using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories.Services;
 using Fittify.Test.Core.Seed;
 using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -75,7 +78,9 @@ namespace Fittify.Api
                 {
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver();
-                }); 
+                });
+
+
 
             string dbConnectionString = Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
 
@@ -99,6 +104,48 @@ namespace Fittify.Api
             {
                 services.AddDbContext<FittifyContext>(options => options.UseSqlServer(dbConnectionString));
             }
+
+
+            //try
+            //{
+            //    services.AddAuthorization(authorizationOptions =>
+            //    {
+            //        authorizationOptions.AddPolicy(
+            //            "MustOwnWorkout",
+            //            policyBuilder =>
+            //            {
+            //                policyBuilder.RequireAuthenticatedUser();
+            //                policyBuilder.AddRequirements(new MustOwnWorkoutRequirement());
+            //            });
+            //    });
+            //    services.AddScoped<IAuthorizationHandler, MustOwnWorkoutHandler>();
+            //}
+            //catch (Exception e)
+            //{
+            //    var msg = e.Message;
+            //}
+
+            //try
+            //{
+            //    services.AddAuthorization(authorizationOptions =>
+            //    {
+            //        authorizationOptions.AddPolicy(
+            //            "MustOwnEntityIntId",
+            //            policyBuilder =>
+            //            {
+            //                policyBuilder.RequireAuthenticatedUser();
+            //                policyBuilder.AddRequirements(new MustOwnEntityIntIdRequirement());
+            //            });
+            //    });
+            //    services.AddScoped<IAuthorizationHandler, MustOwnEntityIntIdHandler>();
+            //    //services.AddScoped(typeof(IAuthorizationHandlerT<,,>), typeof(MustOwnEntityHandler<,,>));
+            //    //services.AddScoped(typeof(IAuthorizationHandler), typeof(MustOwnEntityHandler<,,>));
+            //}
+            //catch (Exception e)
+            //{
+            //    var msg = e.Message;
+            //}
+
 
             // Is required for the UrlHelper, because it creates url to ACTIONS
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();

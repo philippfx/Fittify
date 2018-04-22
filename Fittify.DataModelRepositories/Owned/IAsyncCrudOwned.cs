@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Common;
-using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Helpers;
 
-namespace Fittify.DataModelRepositories
+namespace Fittify.DataModelRepositories.Owned
 {
-    public interface IAsyncCrudOwned<TEntity, TId> 
+    public interface IAsyncCrudOwned<TEntity, TId>
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TId : struct
     {
-        Task<bool> DoesEntityExist(TId id, Guid ownerGuid);
+        bool IsEntityOwner(TId id, Guid ownerGuid);
+
+        Task<bool> DoesEntityExist(TId id);
 
         Task<TEntity> Create(TEntity entity, Guid ownerGuid);
 
@@ -21,10 +20,6 @@ namespace Fittify.DataModelRepositories
         Task<EntityDeletionResult<TId>> Delete(TId id, Guid ownerGuid);
 
         Task<TEntity> GetById(TId id, Guid ownerGuid);
-
-        //IQueryable<TEntity> GetAll(Guid ownerGuid);
-
-        //PagedList<TEntity> GetCollection(IResourceParameters resourceParameters, Guid ownerGuid);
 
         Task<bool> SaveContext();
     }

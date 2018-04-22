@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Common;
 using Fittify.DataModelRepositories.Helpers;
 using Fittify.DataModelRepositories.Services;
-using Microsoft.EntityFrameworkCore;
 
-namespace Fittify.DataModelRepositories
+namespace Fittify.DataModelRepositories.Owned
 {
-
     public abstract class AsyncCrudOwned<TEntity, TId> : IAsyncCrudOwned<TEntity, TId>
         where TEntity : class, IEntityUniqueIdentifier<TId>, IEntityOwner
         where TId : struct
@@ -19,7 +16,7 @@ namespace Fittify.DataModelRepositories
         protected IPropertyMappingService PropertyMappingService;
 
 
-        protected AsyncCrudOwned(FittifyContext fittifyContext)
+        public AsyncCrudOwned(FittifyContext fittifyContext)
         {
             FittifyContext = fittifyContext;
             PropertyMappingService = new PropertyMappingService();
@@ -30,11 +27,23 @@ namespace Fittify.DataModelRepositories
 
         }
 
-        public virtual async Task<bool> DoesEntityExist(TId id, Guid ownerGuid)
+        public bool IsEntityOwner(TId id, Guid ownerGuid)
+        {
+            // Todo: The any() method may be faster. Check if any() is faster and whether an async any() exists
+            var entity = FittifyContext.Set<TEntity>().Find(id);
+            if (entity != null && entity.OwnerGuid == ownerGuid)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public virtual async Task<bool> DoesEntityExist(TId id)
         {
             // Todo: The any() method may be faster. Check if any() is faster and whether an async any() exists
             var entity = await FittifyContext.Set<TEntity>().FindAsync(id);
-            if (entity!= null && entity.OwnerGuid == ownerGuid)
+            if (entity!= null)
             {
                 return true;
             }

@@ -9,7 +9,7 @@ namespace Fittify.DbResetter
 {
     public static class Connection
     {
-        private static string GetFittifyConnectionStringFromAppsettingsJson()
+        public static string GetFittifyConnectionStringFromAppsettingsJson()
         {
             var control = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory/*, @"..\Fittify"*/));
 

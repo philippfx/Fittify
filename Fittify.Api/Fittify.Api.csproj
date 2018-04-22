@@ -12,6 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Authorization\MustOwnEntityHandler - Copy.cs" />
+    <Compile Remove="Authorization\MustOwnEntityRequirement - Copy.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="nlog.config" />
   </ItemGroup>
 

@@ -11,4 +11,10 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Fittify.Common\Fittify.Common.csproj" />
+    <ProjectReference Include="..\Fittify.DataModelRepositories\Fittify.DataModelRepositories.csproj" />
+    <ProjectReference Include="..\Fittify.DataModels\Fittify.DataModels.csproj" />
+  </ItemGroup>
+
 </Project>

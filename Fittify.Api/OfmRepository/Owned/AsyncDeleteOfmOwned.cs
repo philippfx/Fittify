@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Fittify.Api.Helpers;
 using Fittify.Common;
 using Fittify.DataModelRepositories;
+using Fittify.DataModelRepositories.Owned;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Fittify.Api.OfmRepository.Owned
