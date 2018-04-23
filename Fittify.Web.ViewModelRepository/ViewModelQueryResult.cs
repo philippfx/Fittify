@@ -1,6 +1,4 @@
-﻿using Fittify.Web.ApiModelRepositories;
-
-namespace Fittify.Web.ViewModelRepository
+﻿namespace Fittify.Web.ViewModelRepository
 {
     public class ViewModelQueryResult<TViewModel> : ViewModelQueryResultBase where TViewModel : class
     {

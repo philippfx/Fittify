@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Fittify.Web.ApiModelRepositories;
 
 namespace Fittify.Web.ViewModelRepository
 {

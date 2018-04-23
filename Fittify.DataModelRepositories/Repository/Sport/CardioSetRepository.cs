@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class CardioSetRepository : AsyncCrudOwned<CardioSet, int> //: AsyncGetCollectionForEntityDateTimeStartEnd<CardioSet, CardioSetOfmForGet, int> // Todo implement IAsyncCrudForDateTimeStartEnd
+    public class CardioSetRepository : AsyncCrud<CardioSet, int>, IAsyncGetCollection<CardioSet, CardioSetResourceParameters>, IAsyncOwnerIntId
     {
         public CardioSetRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
             
         }
 
-        public override Task<CardioSet> GetById(int id, Guid ownerGuid)
+        public override Task<CardioSet> GetById(int id)
         {
             return FittifyContext.CardioSets
                 .Include(i => i.ExerciseHistory)

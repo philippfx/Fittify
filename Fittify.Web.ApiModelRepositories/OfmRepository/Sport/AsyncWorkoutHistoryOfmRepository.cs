@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
@@ -29,7 +28,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
                 AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
                 + "?" + "includeExerciseHistories=1"
             );
-            var httpResponse = await HttpRequestFactory.Post(uri, ofmForPost, HttpContextAccessor);
+            var httpResponse = await HttpRequestFactory.Post(uri, ofmForPost, AppConfiguration, HttpContextAccessor);
             ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 

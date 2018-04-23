@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Fittify.Common.Helpers.ResourceParameters.Sport
+﻿namespace Fittify.Common.Helpers.ResourceParameters.Sport
 {
     public class WorkoutResourceParameters : SearchQueryResourceParameters
     {

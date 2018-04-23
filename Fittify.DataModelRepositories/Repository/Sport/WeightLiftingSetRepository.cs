@@ -11,18 +11,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class WeightLiftingSetRepository : AsyncCrudOwned<WeightLiftingSet, int>
+    public class WeightLiftingSetRepository : AsyncCrud<WeightLiftingSet, int>, IAsyncGetCollection<WeightLiftingSet, WeightLiftingSetResourceParameters>, IAsyncOwnerIntId
     {
         public WeightLiftingSetRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
 
         }
 
-        public override Task<WeightLiftingSet> GetById(int id, Guid ownerGuid)
+        public override Task<WeightLiftingSet> GetById(int id)
         {
             return FittifyContext.WeightLiftingSets
                 .Include(i => i.ExerciseHistory)
-                .FirstOrDefaultAsync(wH => wH.Id == id && wH.OwnerGuid == ownerGuid);
+                .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
         public PagedList<WeightLiftingSet> GetCollection(WeightLiftingSetResourceParameters resourceParameters, Guid ownerGuid)

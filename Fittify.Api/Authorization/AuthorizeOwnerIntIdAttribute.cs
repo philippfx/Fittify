@@ -21,7 +21,7 @@ namespace Fittify.Api.Authorization
             _TCrudRepository = TCrudRepository;
         }
 
-        public void OnAuthorization(AuthorizationFilterContext context)
+        public async void OnAuthorization(AuthorizationFilterContext context)
         {
             var fittifyContext = context.HttpContext.RequestServices.GetService<FittifyContext>();
             _entityRepositoryObject = Activator.CreateInstance(_TCrudRepository, fittifyContext);
@@ -54,7 +54,7 @@ namespace Fittify.Api.Authorization
                 return;
             }
             
-            if (!_entityRepository.IsEntityOwner(entityId, ownerGuid))
+            if (_entityRepository != null && await _entityRepository?.IsEntityOwner(entityId, ownerGuid) == false)
             {
                 context.Result = new UnauthorizedResult();
             }

@@ -1,10 +1,7 @@
 ﻿using IdentityServer4.Models;
 using IdentityServer4.Test;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using IdentityServer4;
 
 namespace Marvin.IDP
@@ -67,7 +64,11 @@ namespace Marvin.IDP
         {
             return new List<ApiResource>()
             {
-                new ApiResource("fittifyapi", "Fittify API")
+                new ApiResource("fittifyapi", "Fittify API",
+                new List<string>() { "role" })
+                {
+                    ApiSecrets = { new Secret("apisecret".Sha256()) }
+                }
             };
         }
 
@@ -79,7 +80,23 @@ namespace Marvin.IDP
                 {
                     ClientName = "Fittify.Web",
                     ClientId = "fittifyclient",
-                    AllowedGrantTypes = new List<string>() { GrantType.Hybrid }, // Todo: Must be implicit!
+                    AllowedGrantTypes = new List<string>() { GrantType.Hybrid }, // Todo: Must be implicit for Fittify!
+
+                    //AccessTokenType = AccessTokenType.Jwt, // Self contained token, fittifyapi can validate this token on its own and does not need to talk to IDP
+                    AccessTokenType = AccessTokenType.Reference, // Everytime the fittifyapi receives a request, fittifyapi forwards reference token to IDP and gets real accesstoken returned
+
+                    // IdentityTokenLifetime = 300,
+                    // AuthorizationCodeLifetime = 300, 
+                    AccessTokenLifetime = 600, // remember that api adds additional 5 minutes to deal with time offsets
+
+                    //AbsoluteRefreshTokenLifetime = (default 30 days)
+
+                    //RefreshTokenExpiration = TokenExpiration.Sliding, // only refreshes the lifetime of the same token until AbsoluteRefreshTokenLifetime limit is reached
+                    //SlidingRefreshTokenLifetime = ...
+
+                    UpdateAccessTokenClaimsOnRefresh = true, // if an attribute on the IDP Level changes, for example, you update your address, accesstoken will be updated
+                    AllowOfflineAccess = true, // allows the user to continue using the app, although user is logged out of IDP
+
                     RedirectUris = new List<string>()
                     {
                         "https://localhost:44328/signin-oidc"

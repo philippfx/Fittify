@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fittify.Common.Helpers;
@@ -40,7 +39,7 @@ namespace Fittify.Web.ApiModelRepositories
                 );
             try
             {
-                var httpResponse = await HttpRequestFactory.GetSingle(uri, HttpContextAccessor);
+                var httpResponse = await HttpRequestFactory.GetSingle(uri, AppConfiguration, HttpContextAccessor);
                 var contentAsString = httpResponse.Content.ReadAsStringAsync();
                 ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
@@ -104,7 +103,7 @@ namespace Fittify.Web.ApiModelRepositories
                 AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
             );
 
-            var httpResponse = await HttpRequestFactory.GetCollection(new Uri(uri + queryParamter), HttpContextAccessor);
+            var httpResponse = await HttpRequestFactory.GetCollection(new Uri(uri + queryParamter), AppConfiguration, HttpContextAccessor);
             var contentAsString = httpResponse.Content.ReadAsStringAsync();
             ofmCollectionQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmCollectionQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
@@ -128,7 +127,7 @@ namespace Fittify.Web.ApiModelRepositories
                 AppConfiguration.GetValue<string>("FittifyApiBaseUrl") +
                 AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
             );
-            var httpResponse = await HttpRequestFactory.Post(uri, ofmForPost, HttpContextAccessor);
+            var httpResponse = await HttpRequestFactory.Post(uri, ofmForPost, AppConfiguration, HttpContextAccessor);
             ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -151,7 +150,7 @@ namespace Fittify.Web.ApiModelRepositories
                 + AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
                 + "/" + id
             );
-            var httpResponse = await HttpRequestFactory.Delete(uri, HttpContextAccessor);
+            var httpResponse = await HttpRequestFactory.Delete(uri, AppConfiguration, HttpContextAccessor);
             ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -174,7 +173,7 @@ namespace Fittify.Web.ApiModelRepositories
                 + AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
                 + "/" + id
             );
-            var httpResponse = await HttpRequestFactory.Patch(uri, jsonPatchDocument, HttpContextAccessor);
+            var httpResponse = await HttpRequestFactory.Patch(uri, jsonPatchDocument, AppConfiguration, HttpContextAccessor);
             ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 

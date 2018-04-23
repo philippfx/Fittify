@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Fittify.Web.ApiModelRepositories
 {
     public static class HttpRequestFactory
     {
-        public static async Task<HttpResponseMessage> GetSingle(Uri requestUri, IHttpContextAccessor httpContextAccessor)
+        public static async Task<HttpResponseMessage> GetSingle(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
-            string accessToken = string.Empty;
-            var currentContext = httpContextAccessor.HttpContext;
-            accessToken = await AuthenticationHttpContextExtensions.GetTokenAsync(currentContext, OpenIdConnectParameterNames.AccessToken);
+            string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
 
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Get)
@@ -25,21 +27,19 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        public static async Task<HttpResponseMessage> GetSingle(Uri requestUri, Dictionary<string, string> customRequestHeaders)
-        {
-            var builder = new HttpRequestBuilder()
-                .AddMethod(HttpMethod.Get)
-                .AddRequestUri(requestUri)
-                .AddCustomRequestHeaders(customRequestHeaders);
+        //public static async Task<HttpResponseMessage> GetSingle(Uri requestUri, Dictionary<string, string> customRequestHeaders)
+        //{
+        //    var builder = new HttpRequestBuilder()
+        //        .AddMethod(HttpMethod.Get)
+        //        .AddRequestUri(requestUri)
+        //        .AddCustomRequestHeaders(customRequestHeaders);
 
-            return await builder.SendAsync();
-        }
+        //    return await builder.SendAsync();
+        //}
 
-        public static async Task<HttpResponseMessage> GetCollection(Uri requestUri, IHttpContextAccessor httpContextAccessor)
+        public static async Task<HttpResponseMessage> GetCollection(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
-            string accessToken = string.Empty;
-            var currentContext = httpContextAccessor.HttpContext;
-            accessToken = await AuthenticationHttpContextExtensions.GetTokenAsync(currentContext, OpenIdConnectParameterNames.AccessToken);
+            string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
 
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Get)
@@ -49,22 +49,20 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        public static async Task<HttpResponseMessage> GetCollection(Uri requestUri, Dictionary<string, string> customRequestHeaders)
-        {
-            var builder = new HttpRequestBuilder()
-                .AddMethod(HttpMethod.Get)
-                .AddRequestUri(requestUri)
-                .AddCustomRequestHeaders(customRequestHeaders);
+        //public static async Task<HttpResponseMessage> GetCollection(Uri requestUri, Dictionary<string, string> customRequestHeaders)
+        //{
+        //    var builder = new HttpRequestBuilder()
+        //        .AddMethod(HttpMethod.Get)
+        //        .AddRequestUri(requestUri)
+        //        .AddCustomRequestHeaders(customRequestHeaders);
 
-            return await builder.SendAsync();
-        }
+        //    return await builder.SendAsync();
+        //}
 
         public static async Task<HttpResponseMessage> Post(
-            Uri requestUri, object value, IHttpContextAccessor httpContextAccessor)
+            Uri requestUri, object value, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
-            string accessToken = string.Empty;
-            var currentContext = httpContextAccessor.HttpContext;
-            accessToken = await AuthenticationHttpContextExtensions.GetTokenAsync(currentContext, OpenIdConnectParameterNames.AccessToken);
+            string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
 
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Post)
@@ -87,11 +85,9 @@ namespace Fittify.Web.ApiModelRepositories
         }
 
         public static async Task<HttpResponseMessage> Patch(
-            Uri requestUri, JsonPatchDocument jsonPatchDocument /*object jsonPatchDocument*/, IHttpContextAccessor httpContextAccessor)
+            Uri requestUri, JsonPatchDocument jsonPatchDocument /*object jsonPatchDocument*/, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
-            string accessToken = string.Empty;
-            var currentContext = httpContextAccessor.HttpContext;
-            accessToken = await AuthenticationHttpContextExtensions.GetTokenAsync(currentContext, OpenIdConnectParameterNames.AccessToken);
+            string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
 
             var builder = new HttpRequestBuilder()
                 .AddMethod(new HttpMethod("PATCH"))
@@ -102,11 +98,9 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        public static async Task<HttpResponseMessage> Delete(Uri requestUri, IHttpContextAccessor httpContextAccessor)
+        public static async Task<HttpResponseMessage> Delete(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
-            string accessToken = string.Empty;
-            var currentContext = httpContextAccessor.HttpContext;
-            accessToken = await AuthenticationHttpContextExtensions.GetTokenAsync(currentContext, OpenIdConnectParameterNames.AccessToken);
+            string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
 
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Delete)
@@ -114,6 +108,86 @@ namespace Fittify.Web.ApiModelRepositories
                 .AddBearerToken(accessToken);
 
             return await builder.SendAsync();
+        }
+
+        private static async Task<string> GetAccessToken(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+        {
+            string accessToken = string.Empty;
+            var currentContext = httpContextAccessor.HttpContext;
+
+            // Should we renew access & refresh tokens?
+            var expires_at = await AuthenticationHttpContextExtensions.GetTokenAsync(currentContext,
+                "expires_at");
+
+            // compare - make sure to use the exact date formats for comparison 
+            // (UTC, in this case)
+            if (string.IsNullOrWhiteSpace(expires_at)
+                || ((DateTime.Parse(expires_at).AddSeconds(-60)).ToUniversalTime()
+                    < DateTime.UtcNow))
+            {
+                accessToken = await RenewTokens(appConfiguration, httpContextAccessor);
+            }
+            else
+            {
+                // get access token
+                accessToken = await AuthenticationHttpContextExtensions.GetTokenAsync(currentContext,
+                    OpenIdConnectParameterNames.AccessToken);
+            }
+
+            return accessToken;
+        }
+
+        private static async Task<string> RenewTokens(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+        {
+            // get the current HttpContext to access the tokens
+            var currentContext = httpContextAccessor.HttpContext;
+
+            // get the metadata
+            var discoveryClient = new DiscoveryClient(appConfiguration.GetValue<string>("QuantusIdpBaseUri"));
+            var metaDataResponse = await discoveryClient.GetAsync();
+
+            // create a new token client to get new tokens
+            var tokenClient = new TokenClient(metaDataResponse.TokenEndpoint,
+                "fittifyclient", "secret");
+
+            // get the saved refresh token Asp.Net Core 1.1
+
+            var currentRefreshToken =
+                await AuthenticationHttpContextExtensions.GetTokenAsync(currentContext,
+                    OpenIdConnectParameterNames.RefreshToken);
+
+            // refresh the tokens
+            var tokenResult = await tokenClient.RequestRefreshTokenAsync(currentRefreshToken);
+
+            if (!tokenResult.IsError)
+            {
+                // Save the tokens.
+                var authenticateInfo = await httpContextAccessor.HttpContext
+                    .AuthenticateAsync();
+
+                var expiresAt = DateTime.UtcNow + TimeSpan.FromSeconds(tokenResult.ExpiresIn);
+                authenticateInfo.Properties.UpdateTokenValue("expires_at",
+                    expiresAt.ToString("o", CultureInfo.InvariantCulture));
+
+                authenticateInfo.Properties.UpdateTokenValue(
+                    OpenIdConnectParameterNames.AccessToken,
+                    tokenResult.AccessToken);
+                authenticateInfo.Properties.UpdateTokenValue(
+                    OpenIdConnectParameterNames.RefreshToken,
+                    tokenResult.RefreshToken);
+
+                // we're signing in again with the new values.
+                await httpContextAccessor.HttpContext.SignInAsync("Cookies",
+                    authenticateInfo.Principal, authenticateInfo.Properties);
+
+                // return the new access token 
+                return tokenResult.AccessToken;
+            }
+            else
+            {
+                throw new Exception("Problem encountered while refreshing tokens.",
+                    tokenResult.Exception);
+            }
         }
     }
 }

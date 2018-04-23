@@ -2,13 +2,12 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Common;
-using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Owned;
 
 namespace Fittify.Api.OfmRepository.Owned
 {
-    public class AsyncPostOfmOwned<TCrudRepository, TEntity, TOfmForGet, TOfmForPost, TId> : IAsyncPostOfmOwned<TOfmForGet, TOfmForPost>
-        where TCrudRepository : IAsyncCrudOwned<TEntity, TId>
+    public class AsyncPostOfm<TCrudRepository, TEntity, TOfmForGet, TOfmForPost, TId> : IAsyncPostOfm<TOfmForGet, TOfmForPost>
+        where TCrudRepository : IAsyncCrud<TEntity, TId>
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TOfmForGet : class, IEntityUniqueIdentifier<TId>
         where TOfmForPost : class
@@ -16,12 +15,12 @@ namespace Fittify.Api.OfmRepository.Owned
     {
         protected readonly TCrudRepository Repo;
 
-        public AsyncPostOfmOwned(TCrudRepository repository)
+        public AsyncPostOfm(TCrudRepository repository)
         {
             Repo = repository;
         }
 
-        public AsyncPostOfmOwned()
+        public AsyncPostOfm()
         {
             
         }

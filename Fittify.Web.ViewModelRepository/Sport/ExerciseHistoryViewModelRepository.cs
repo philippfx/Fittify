@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common;

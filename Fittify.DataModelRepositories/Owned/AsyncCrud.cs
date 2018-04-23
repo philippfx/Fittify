@@ -8,7 +8,7 @@ using Fittify.DataModelRepositories.Services;
 
 namespace Fittify.DataModelRepositories.Owned
 {
-    public abstract class AsyncCrudOwned<TEntity, TId> : IAsyncCrudOwned<TEntity, TId>
+    public abstract class AsyncCrud<TEntity, TId> : IAsyncCrud<TEntity, TId>
         where TEntity : class, IEntityUniqueIdentifier<TId>, IEntityOwner
         where TId : struct
     {
@@ -16,21 +16,21 @@ namespace Fittify.DataModelRepositories.Owned
         protected IPropertyMappingService PropertyMappingService;
 
 
-        public AsyncCrudOwned(FittifyContext fittifyContext)
+        public AsyncCrud(FittifyContext fittifyContext)
         {
             FittifyContext = fittifyContext;
             PropertyMappingService = new PropertyMappingService();
         }
 
-        protected AsyncCrudOwned()
+        protected AsyncCrud()
         {
 
         }
 
-        public bool IsEntityOwner(TId id, Guid ownerGuid)
+        public async Task<bool> IsEntityOwner(TId id, Guid ownerGuid)
         {
             // Todo: The any() method may be faster. Check if any() is faster and whether an async any() exists
-            var entity = FittifyContext.Set<TEntity>().Find(id);
+            var entity = await FittifyContext.Set<TEntity>().FindAsync(id);
             if (entity != null && entity.OwnerGuid == ownerGuid)
             {
                 return true;
@@ -60,9 +60,8 @@ namespace Fittify.DataModelRepositories.Owned
             return entity;
         }
 
-        public virtual async Task<TEntity> Update(TEntity entity, Guid ownerGuid)
+        public virtual async Task<TEntity> Update(TEntity entity)
         {
-            entity.OwnerGuid = ownerGuid;
             FittifyContext.Set<TEntity>().Update(entity);
             await SaveContext();
             return entity;
@@ -133,15 +132,10 @@ namespace Fittify.DataModelRepositories.Owned
         //    return await SaveContext();
         //}
 
-        public virtual async Task<TEntity> GetById(TId id, Guid ownerGuid)
+        public virtual async Task<TEntity> GetById(TId id)
         {
             var entity = await FittifyContext.Set<TEntity>().FindAsync(id);
-            if (entity.OwnerGuid == ownerGuid)
-            {
-                return entity;
-            }
-            
-            return null;
+            return entity;
         }
         
         //public virtual IQueryable<TEntity> GetAll(Guid ownerGuid) // Cannot be generalized, because entites may be public OR owned (exercises)
@@ -172,11 +166,10 @@ namespace Fittify.DataModelRepositories.Owned
             return objectsWrittenToContext >= 0;
         }
 
-        public virtual async Task<EntityDeletionResult<TId>> Delete(TId id, Guid ownerGuid)
+        public virtual async Task<EntityDeletionResult<TId>> Delete(TId id)
         {
-            var entity = await GetById(id, ownerGuid);
+            var entity = await GetById(id);
             if(entity == null) return new EntityDeletionResult<TId>() { DidEntityExist = false, IsDeleted = false };
-
             return await Delete(entity);
         }
 

@@ -1,33 +1,31 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Fittify.Api.Helpers;
 using Fittify.Common;
-using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Owned;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Fittify.Api.OfmRepository.Owned
 {
-    public class AsyncDeleteOfmOwned<TCrudRepository, TEntity, TId> :
-        IAsyncDeleteOfmOwned<TId>
+    public class AsyncDeleteOfm<TCrudRepository, TEntity, TId> :
+        IAsyncDeleteOfm<TId>
 
-        where TCrudRepository : IAsyncCrudOwned<TEntity, TId>
+        where TCrudRepository : IAsyncCrud<TEntity, TId>
         where TEntity : class, IEntityUniqueIdentifier<TId>, IEntityOwner
         where TId : struct
     {
         private readonly TCrudRepository _repo;
         private readonly IActionDescriptorCollectionProvider _adcp;
 
-        public AsyncDeleteOfmOwned(TCrudRepository repository,
+        public AsyncDeleteOfm(TCrudRepository repository,
             IActionDescriptorCollectionProvider actionDescriptorCollectionProvider)
         {
             _repo = repository;
             _adcp = actionDescriptorCollectionProvider;
         }
 
-        public virtual async Task<OfmDeletionQueryResult<TId>> Delete(TId id, Guid ownerGuid)
+        public virtual async Task<OfmDeletionQueryResult<TId>> Delete(TId id)
         {
-            var entityDeletionResult = await _repo.Delete(id, ownerGuid);
+            var entityDeletionResult = await _repo.Delete(id);
 
             var ofmDeletionQueryResult = new OfmDeletionQueryResult<TId>();
 

@@ -1,16 +1,14 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Common;
-using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Owned;
 
 namespace Fittify.Api.OfmRepository.Owned
 {
-    public class AsyncPatchOfmOwned<TCrudRepository, TEntity, TOfmForGet, TOfmForPatch, TId> :
-        IAsyncPatchOfmOwned<TOfmForGet, TOfmForPatch, TId>
+    public class AsyncPatchOfm<TCrudRepository, TEntity, TOfmForGet, TOfmForPatch, TId> :
+        IAsyncPatchOfm<TOfmForGet, TOfmForPatch, TId>
 
-        where TCrudRepository : IAsyncCrudOwned<TEntity, TId>
+        where TCrudRepository : IAsyncCrud<TEntity, TId>
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TOfmForGet : class, IEntityUniqueIdentifier<TId>
         where TOfmForPatch : class, new()
@@ -19,22 +17,22 @@ namespace Fittify.Api.OfmRepository.Owned
         private TEntity _cachedEntity;
         private readonly TCrudRepository _repo;
 
-        public AsyncPatchOfmOwned(TCrudRepository repository)
+        public AsyncPatchOfm(TCrudRepository repository)
         {
             _repo = repository;
         }
 
-        public virtual async Task<TOfmForPatch> GetByIdOfmForPatch(TId id, Guid ownerGuid)
+        public virtual async Task<TOfmForPatch> GetByIdOfmForPatch(TId id)
         {
-            _cachedEntity = await _repo.GetById(id, ownerGuid);
+            _cachedEntity = await _repo.GetById(id);
             var ofmForPatch = Mapper.Map<TEntity, TOfmForPatch>(_cachedEntity);
             return ofmForPatch;
         }
 
-        public async Task<TOfmForGet> UpdatePartially(TOfmForPatch ofmForPatch, Guid ownerGuid)
+        public async Task<TOfmForGet> UpdatePartially(TOfmForPatch ofmForPatch)
         {
             _cachedEntity = Mapper.Map(ofmForPatch, _cachedEntity);
-            var entity = await _repo.Update(_cachedEntity, ownerGuid);
+            var entity = await _repo.Update(_cachedEntity);
             return Mapper.Map<TEntity, TOfmForGet>(entity);
         }
     }

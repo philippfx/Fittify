@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNetCore.RouteAnalyzer;
-using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -62,6 +57,7 @@ namespace Fittify.Web.View
                     options.Scope.Add("fittifyapi");
                     options.Scope.Add("subscriptionlevel");
                     options.Scope.Add("country");
+                    options.Scope.Add("offline_access");
                     options.ClaimActions.MapCustomJson("role", jobj => jobj["role"].ToString());
                     options.TokenValidationParameters = new TokenValidationParameters
                     {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.DataModelRepositories;
@@ -14,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using AspNetCoreRateLimit;
-using Fittify.Api.Authorization;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Middleware;
@@ -22,7 +20,6 @@ using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories.Services;
 using Fittify.Test.Core.Seed;
 using IdentityServer4.AccessTokenValidation;
-using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -65,6 +62,7 @@ namespace Fittify.Api
                     options.Authority = "https://localhost:44364/"; // Auth Server
                     options.RequireHttpsMetadata = true; // only for development
                     options.ApiName = "fittifyapi"; // API Resource Id
+                    options.ApiSecret = "apisecret";
                 });
 
             services.AddMvc

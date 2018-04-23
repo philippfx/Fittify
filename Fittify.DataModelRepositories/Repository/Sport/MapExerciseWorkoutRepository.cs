@@ -10,19 +10,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class MapExerciseWorkoutRepository : AsyncCrudOwned<MapExerciseWorkout, int>
+    public class MapExerciseWorkoutRepository : AsyncCrud<MapExerciseWorkout, int>, IAsyncGetCollection<MapExerciseWorkout, MapExerciseWorkoutResourceParameters>, IAsyncOwnerIntId
     {
         public MapExerciseWorkoutRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
 
         }
 
-        public override Task<MapExerciseWorkout> GetById(int id, Guid ownerGuid)
+        public override Task<MapExerciseWorkout> GetById(int id)
         {
             return FittifyContext.MapExerciseWorkout
                 .Include(i => i.Exercise)
                 .Include(i => i.Workout)
-                .FirstOrDefaultAsync(wH => wH.Id == id && wH.OwnerGuid == ownerGuid);
+                .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
         public PagedList<MapExerciseWorkout> GetCollection(MapExerciseWorkoutResourceParameters resourceParameters, Guid ownerGuid)

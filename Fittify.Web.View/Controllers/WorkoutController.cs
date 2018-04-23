@@ -70,6 +70,12 @@ namespace Fittify.Web.View.Controllers
                 workoutViewModel = queryResult.ViewModel;
             }
 
+            if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                queryResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
+
             return View(workoutViewModel);
         }
 
@@ -94,6 +100,12 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when creation failed
             }
 
+            if (postResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                postResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
+
             return RedirectToAction("AssociatedExercises", "Workout", new { workoutId = workoutId });
         }
 
@@ -111,6 +123,12 @@ namespace Fittify.Web.View.Controllers
                 workoutHistoryViewModels = workoutHistoryViewModelsCollectionQueryResult.ViewModelForGetCollection;
             }
 
+            if (workoutHistoryViewModelsCollectionQueryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                workoutHistoryViewModelsCollectionQueryResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
+
             return View(workoutHistoryViewModels?.ToList());
         }
 
@@ -125,6 +143,12 @@ namespace Fittify.Web.View.Controllers
             if ((int)workoutHistoryViewModelQueryResult.HttpStatusCode == 200)
             {
                 workoutHistoryViewModel = workoutHistoryViewModelQueryResult.ViewModel;
+            }
+
+            if (workoutHistoryViewModelQueryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                workoutHistoryViewModelQueryResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
             }
 
             return View(workoutHistoryViewModel);
@@ -148,8 +172,11 @@ namespace Fittify.Web.View.Controllers
                 workoutViewModel = postResult.ViewModel;
             }
 
-            //var workoutOfmForGet = await AsyncGppd.Post<WorkoutOfmForPost, WorkoutOfmForGet>(
-            //    new Uri(_fittifyApiBaseUri, "api/workouts"), workoutOfmForPost);
+            if (postResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                postResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
 
             return RedirectToAction("AssociatedExercises", "Workout", new { workoutId = workoutViewModel?.Id });
         }
@@ -166,8 +193,11 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when deletion failed
             }
 
-            //await AsyncGppd.Delete(
-            //    new Uri(_fittifyApiBaseUri, "api/workouts/" + workoutId), this);
+            if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                queryResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
 
             return RedirectToAction("Overview", "Workout", null);
         }
@@ -188,8 +218,11 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when patching failed
             }
 
-            //var result = await AsyncGppd.Patch<WorkoutOfmForGet>(
-            //new Uri(_fittifyApiBaseUri, "api/workouts/" + workoutOfmForPatch.Id), jsonPatchDocument);
+            if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                queryResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
 
             return RedirectToAction("Overview", "Workout", null);
         }

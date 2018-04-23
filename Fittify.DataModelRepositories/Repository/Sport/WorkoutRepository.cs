@@ -11,20 +11,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class WorkoutRepository : AsyncCrudOwned<Workout, int>, IAsyncOwnerIntId
+    public class WorkoutRepository : AsyncCrud<Workout, int>, IAsyncOwnerIntId, IAsyncGetCollection<Workout, WorkoutResourceParameters>
     {
         public WorkoutRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
 
         }
 
-        public override Task<Workout> GetById(int id, Guid ownerGuid)
+        public override Task<Workout> GetById(int id)
         {
             return FittifyContext.Workouts
                 .Include(i => i.Category)
                 .Include(i => i.MapExerciseWorkout)
                 .Include(i => i.WorkoutHistories)
-                .FirstOrDefaultAsync(wH => wH.Id == id && wH.OwnerGuid == ownerGuid);
+                .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
         public PagedList<Workout> GetCollection(WorkoutResourceParameters resourceParameters, Guid ownerGuid)
@@ -54,9 +54,9 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 resourceParameters.PageSize);
         }
 
-        public override async Task<EntityDeletionResult<int>> Delete(int id, Guid ownerGuid)
+        public override async Task<EntityDeletionResult<int>> Delete(int id)
         {
-            var entity = GetById(id, ownerGuid).GetAwaiter().GetResult();
+            var entity = GetById(id).GetAwaiter().GetResult();
             if (entity == null) return new EntityDeletionResult<int>() {DidEntityExist = false, IsDeleted = false };
 
             var listExerciseHistoriesOfRelatedWorkout = FittifyContext.ExerciseHistories.Where(w => w.WorkoutHistory.Workout.Id == id);

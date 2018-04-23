@@ -8,7 +8,6 @@ using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ApiModelRepositories;
 using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Web.ViewModelRepository.Sport

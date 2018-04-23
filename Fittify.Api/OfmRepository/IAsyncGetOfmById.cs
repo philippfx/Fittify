@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Fittify.Api.Helpers;
 
-namespace Fittify.Api.OfmRepository.Unowned
+namespace Fittify.Api.OfmRepository.Owned
 {
     public interface IAsyncGetOfmById<TOfmForGet, TId>
         where TOfmForGet : class

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Helpers;
 using Fittify.Api.OfmRepository.Owned;
-using Fittify.Api.OfmRepository.Unowned;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
@@ -16,7 +15,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Fittify.Api.OfmRepository.GetCollection.Sport
 {
-    public class AsyncGetOfmCollectionForExerciseHistory : AsyncGetOfmByIdOwned<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, int>
+    public class AsyncGetOfmCollectionForExerciseHistory : AsyncGetOfmById<ExerciseHistoryRepository, ExerciseHistory, ExerciseHistoryOfmForGet, int>
     {
         public AsyncGetOfmCollectionForExerciseHistory(ExerciseHistoryRepository repository,
             IUrlHelper urlHelper,

@@ -11,21 +11,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class ExerciseHistoryRepository : AsyncCrudOwned<ExerciseHistory, int> //: AsyncGetCollectionForEntityDateTimeStartEnd<ExerciseHistory, ExerciseHistoryOfmForGet, int> // Todo implement IAsyncCrudForDateTimeStartEnd
+    public class ExerciseHistoryRepository : AsyncCrud<ExerciseHistory, int>, IAsyncGetCollection<ExerciseHistory, ExerciseHistoryResourceParameters>, IAsyncOwnerIntId
     {
         public ExerciseHistoryRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
 
         }
 
-        public override Task<ExerciseHistory> GetById(int id, Guid ownerGuid)
+        public override Task<ExerciseHistory> GetById(int id)
         {
             return FittifyContext.ExerciseHistories
                 .Include(i => i.Exercise)
                 .Include(i => i.WorkoutHistory)
                 .Include(i => i.WeightLiftingSets)
                 .Include(i => i.CardioSets)
-                .FirstOrDefaultAsync(wH => wH.Id == id && wH.OwnerGuid == ownerGuid);
+                .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
         public PagedList<ExerciseHistory> GetCollection(ExerciseHistoryResourceParameters resourceParameters, Guid ownerGuid)
@@ -69,19 +69,19 @@ namespace Fittify.DataModelRepositories.Repository.Sport
             return FittifyContext.ExerciseHistories.FirstOrDefault(f => f.PreviousExerciseHistoryId == id);
         }
         
-        public override async Task<EntityDeletionResult<int>> Delete(int id, Guid ownerGuid)
+        public override async Task<EntityDeletionResult<int>> Delete(int id)
         {
-            FixRelationOfNextExerciseHistory(id, ownerGuid);
+            FixRelationOfNextExerciseHistory(id);
             var result = SaveContext().Result;
-            return await base.Delete(id, ownerGuid);
+            return await base.Delete(id);
         }
 
-        public void FixRelationOfNextExerciseHistory(int id, Guid ownerGuid)
+        public void FixRelationOfNextExerciseHistory(int id)
         {
-            var entity = GetById(id, ownerGuid).ConfigureAwait(false).GetAwaiter().GetResult();
+            var entity = GetById(id).ConfigureAwait(false).GetAwaiter().GetResult();
             if (entity == null) return;
 
-            var previousEntity = GetById(entity.PreviousExerciseHistoryId.GetValueOrDefault(), ownerGuid).ConfigureAwait(false).GetAwaiter().GetResult();
+            var previousEntity = GetById(entity.PreviousExerciseHistoryId.GetValueOrDefault()).ConfigureAwait(false).GetAwaiter().GetResult();
             var nextEntity = GetByPreviousExerciseHistoryid(id);
 
             if (previousEntity != null && nextEntity != null)

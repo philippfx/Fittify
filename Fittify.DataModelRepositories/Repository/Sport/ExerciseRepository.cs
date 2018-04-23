@@ -11,17 +11,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class ExerciseRepository : AsyncCrudOwned<Exercise, int>
+    public class ExerciseRepository : AsyncCrud<Exercise, int>, IAsyncGetCollection<Exercise, ExerciseResourceParameters>, IAsyncOwnerIntId
     {
         public ExerciseRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
 
         }
 
-        public override Task<Exercise> GetById(int id, Guid ownerGuid)
+        public override Task<Exercise> GetById(int id)
         {
             return FittifyContext.Exercises
-                .FirstOrDefaultAsync(wH => wH.Id == id && wH.OwnerGuid == ownerGuid);
+                .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
         public PagedList<Exercise> GetCollection(ExerciseResourceParameters resourceParameters, Guid ownerGuid)

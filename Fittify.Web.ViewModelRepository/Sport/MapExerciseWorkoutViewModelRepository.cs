@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Fittify.Api.OuterFacingModels.Sport.Get;
+﻿using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ApiModelRepositories;

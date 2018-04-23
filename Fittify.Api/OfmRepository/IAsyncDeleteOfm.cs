@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Fittify.Api.Helpers;
 
-namespace Fittify.Api.OfmRepository.Unowned
+namespace Fittify.Api.OfmRepository.Owned
 {
     public interface IAsyncDeleteOfm<TId> where TId : struct
     {

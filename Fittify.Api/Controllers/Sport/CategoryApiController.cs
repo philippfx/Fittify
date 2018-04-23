@@ -1,25 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Controllers.HttpMethodInterfaces;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
-using Fittify.Api.OfmRepository;
 using Fittify.Api.OfmRepository.GetCollection.Sport;
-using Fittify.Api.OfmRepository.Unowned;
+using Fittify.Api.OfmRepository.Owned;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
-using Fittify.Common.Extensions;
-using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModelRepositories.Services;
 using Fittify.DataModels.Models.Sport;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -85,7 +80,11 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetCollection(CategoryResourceParameters resourceParameters)
         {
-            var ofmForGetCollectionQueryResult = await _asyncGetOfm.GetCollection(resourceParameters);
+            var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();
+            var ownerGuid = new Guid(stringGuid);
+
+            var ofmForGetCollectionQueryResult = await _asyncGetOfm.GetCollection(resourceParameters, ownerGuid);
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
             if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasLinksForeachExpandableOfmForGet<CategoryOfmForGet, int>(_urlHelper, nameof(CategoryApiController), resourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
@@ -104,24 +103,14 @@ namespace Fittify.Api.Controllers.Sport
             return Ok(result);
         }
 
-        [HttpGet("range/{inputString}", Name = "GetCategoriesByRangeOfIds")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetByRangeOfIds(string inputString)
-        {
-            var entityCollection = await _repo.GetByCollectionOfIds(RangeString.ToCollectionOfId(inputString));
-            var ofmCollection = Mapper.Map<List<Category>, List<CategoryOfmForGet>>(entityCollection.ToList());
-            if (ofmCollection.Count == 0) // Todo mock "not found" as query paramter 
-            {
-                ModelState.AddModelError(_shortCamelCasedControllerName, $"No {_shortCamelCasedControllerName.ToPlural()} found");
-                return new EntityNotFoundObjectResult(ModelState);
-            }
-            return Ok(ofmCollection);
-        }
-
         [HttpPost(Name = "CreateCategory")]
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> Post([FromBody] CategoryOfmForPost ofmForPost)
         {
+            var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();
+            var ownerGuid = new Guid(stringGuid);
+
             if (ofmForPost == null) return BadRequest();
 
             if (!ModelState.IsValid)
@@ -129,7 +118,7 @@ namespace Fittify.Api.Controllers.Sport
                 return new UnprocessableEntityObjectResult(ModelState);
             }
 
-            var ofmForGet = await _asyncPostForHttpMethods.Post(ofmForPost);
+            var ofmForGet = await _asyncPostForHttpMethods.Post(ofmForPost, ownerGuid);
             
             var result = CreatedAtRoute(routeName: "GetCategoryById", routeValues: new { id = ofmForGet.Id }, value: ofmForGet);
             return result;
