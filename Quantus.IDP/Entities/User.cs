@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Quantus.IDP.Entities
 {
-    [Table("Users")]
+    //[Table("Users")]
     public class User
     {
         [Key]

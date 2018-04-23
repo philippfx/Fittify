@@ -12,7 +12,7 @@ namespace Quantus.IDP
 {
     public class Startup
     {
-        private IConfiguration appConfiguration { get; }
+        private IConfiguration AppConfiguration { get; }
         private IHostingEnvironment HostingEnvironment { get; set; }
 
         public Startup(IConfiguration appConfiguration, IHostingEnvironment hostingEnvironment)
@@ -26,14 +26,14 @@ namespace Quantus.IDP
 
             //Configuration = builder.Build();
 
-            appConfiguration = appConfiguration;
+            //AppConfiguration = appConfiguration;
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true); // includes appsettings.json configuartion file
                 //.AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: false, reloadOnChange: true); // includes appsettings.json configuartion file
 
-            appConfiguration = builder.Build();
+            AppConfiguration = builder.Build();
 
             HostingEnvironment = hostingEnvironment;
         }
@@ -41,7 +41,7 @@ namespace Quantus.IDP
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            var connectionString = appConfiguration.GetValue<string>("DefaultConnection");
+            var connectionString = AppConfiguration.GetValue<string>("ConnectionStrings:DefaultConnection");
             services.AddDbContext<QuantusUserContext>(o => o.UseSqlServer(connectionString));
 
             services.AddScoped<IQuantusUserRepository, QuantusUserRepository>();
@@ -67,7 +67,6 @@ namespace Quantus.IDP
             {
                 app.UseDeveloperExceptionPage();
             }
-
             
             quantusUserContext.Database.Migrate(); // Ensure database is created and pending migrations are executed
             quantusUserContext.EnsureSeedDataForContext();
