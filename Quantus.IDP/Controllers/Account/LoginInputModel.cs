@@ -4,7 +4,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace Quantus.IDP.Quickstart.Account
+namespace Quantus.IDP.Controllers.Account
 {
     public class LoginInputModel
     {

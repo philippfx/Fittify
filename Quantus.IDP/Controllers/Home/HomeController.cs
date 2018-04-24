@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Quantus.IDP.Quickstart.Home
+namespace Quantus.IDP.Controllers.Home
 {
     [SecurityHeaders]
     public class HomeController : Controller

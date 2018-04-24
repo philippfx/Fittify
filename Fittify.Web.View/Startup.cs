@@ -58,7 +58,7 @@ namespace Fittify.Web.View
                     options.Scope.Add("subscriptionlevel");
                     options.Scope.Add("country");
                     options.Scope.Add("offline_access");
-                    options.ClaimActions.MapCustomJson("role", jobj => jobj["role"].ToString());
+                    options.ClaimActions.MapCustomJson("role", jobj => jobj["role"]?.ToString());
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         RoleClaimType = "role"

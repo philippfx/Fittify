@@ -18,8 +18,9 @@ using IdentityServer4.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Quantus.IDP.Services;
 
-namespace Quantus.IDP.Quickstart.Account
+namespace Quantus.IDP.Controllers.Account
 {
     /// <summary>
     /// This sample controller implements a typical login/logout/provision workflow for local and external accounts.
@@ -34,17 +35,22 @@ namespace Quantus.IDP.Quickstart.Account
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
         private readonly IEventService _events;
+        private IQuantusUserRepository _quantusUserRepository;
 
         public AccountController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IAuthenticationSchemeProvider schemeProvider,
             IEventService events,
-            TestUserStore users = null)
+            //TestUserStore users = null
+            IQuantusUserRepository quantusUserRepository
+            )
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-            _users = users ?? new TestUserStore(TestUsers.Users);
+            //_users = users ?? new TestUserStore(TestUsers.Users);
+
+            _quantusUserRepository = quantusUserRepository;
 
             _interaction = interaction;
             _clientStore = clientStore;
@@ -101,9 +107,11 @@ namespace Quantus.IDP.Quickstart.Account
             if (ModelState.IsValid)
             {
                 // validate username/password against in-memory store
-                if (_users.ValidateCredentials(model.Username, model.Password))
+                //if (_users.ValidateCredentials(model.Username, model.Password))
+                if(_quantusUserRepository.AreUserCredentialsValid(model.Username, model.Password))
                 {
-                    var user = _users.FindByUsername(model.Username);
+                    //var user = _users.FindByUsername(model.Username);
+                    var user = _quantusUserRepository.GetUserByUsername(model.Username);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username));
 
                     // only set explicit expiration here if user chooses "remember me". 
@@ -182,6 +190,7 @@ namespace Quantus.IDP.Quickstart.Account
             }
 
             // lookup our user and external provider info
+            //var (user, provider, providerUserId, claims) = FindUserFromExternalProvider(result);
             var (user, provider, providerUserId, claims) = FindUserFromExternalProvider(result);
             if (user == null)
             {

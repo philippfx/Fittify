@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace Quantus.IDP.Quickstart.Consent
+namespace Quantus.IDP.Controllers.Consent
 {
     /// <summary>
     /// This controller processes the consent UI

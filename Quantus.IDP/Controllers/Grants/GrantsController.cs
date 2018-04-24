@@ -10,13 +10,13 @@ using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Quantus.IDP.Quickstart.Grants
+namespace Quantus.IDP.Controllers.Grants
 {
     /// <summary>
     /// This sample controller allows a user to revoke grants given to clients
     /// </summary>
     [SecurityHeaders]
-    [Authorize]
+    [Authorize] // In kevindockx plural sight course there are IdentityServerConstants... https://app.pluralsight.com/player?course=asp-dotnet-core-oauth2-openid-connect-securing&author=kevin-dockx&name=asp-dotnet-core-oauth2-openid-connect-securing-m9&clip=4&mode=live
     public class GrantsController : Controller
     {
         private readonly IIdentityServerInteractionService _interaction;

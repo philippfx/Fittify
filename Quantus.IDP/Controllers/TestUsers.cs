@@ -7,7 +7,7 @@ using System.Security.Claims;
 using IdentityModel;
 using IdentityServer4.Test;
 
-namespace Quantus.IDP.Quickstart
+namespace Quantus.IDP.Controllers
 {
     public class TestUsers
     {

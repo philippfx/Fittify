@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Quantus.IDP.Quickstart.Grants
+namespace Quantus.IDP.Controllers.Grants
 {
     public class GrantsViewModel
     {

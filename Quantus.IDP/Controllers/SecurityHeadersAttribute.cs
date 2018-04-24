@@ -5,7 +5,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace Quantus.IDP.Quickstart
+namespace Quantus.IDP.Controllers
 {
     public class SecurityHeadersAttribute : ActionFilterAttribute
     {

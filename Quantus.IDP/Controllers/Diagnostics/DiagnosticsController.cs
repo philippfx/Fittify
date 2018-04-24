@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Quantus.IDP.Quickstart.Diagnostics
+namespace Quantus.IDP.Controllers.Diagnostics
 {
     [SecurityHeaders]
     [Authorize]

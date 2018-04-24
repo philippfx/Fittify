@@ -8,7 +8,7 @@ using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Newtonsoft.Json;
 
-namespace Quantus.IDP.Quickstart.Diagnostics
+namespace Quantus.IDP.Controllers.Diagnostics
 {
     public class DiagnosticsViewModel
     {

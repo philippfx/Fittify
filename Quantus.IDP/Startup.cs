@@ -41,6 +41,12 @@ namespace Quantus.IDP
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<IISOptions>(iis =>
+            {
+                iis.AuthenticationDisplayName = "Windows";
+                iis.AutomaticAuthentication = false;
+            });
+
             var connectionString = AppConfiguration.GetValue<string>("ConnectionStrings:DefaultConnection");
             services.AddDbContext<QuantusUserContext>(o => o.UseSqlServer(connectionString));
 
@@ -50,7 +56,8 @@ namespace Quantus.IDP
 
             services.AddIdentityServer()
                 .AddDeveloperSigningCredential()
-                .AddTestUsers(Config.GetUsers())
+                //.AddTestUsers(Config.GetUsers())
+                .AddQuantusUserStore()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients());

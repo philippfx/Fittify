@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 
-namespace Quantus.IDP.Quickstart.Consent
+namespace Quantus.IDP.Controllers.Consent
 {
     public class ConsentInputModel
     {

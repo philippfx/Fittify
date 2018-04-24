@@ -85,6 +85,8 @@ namespace Quantus.IDP
                     //AccessTokenType = AccessTokenType.Jwt, // Self contained token, fittifyapi can validate this token on its own and does not need to talk to IDP
                     AccessTokenType = AccessTokenType.Reference, // Everytime the fittifyapi receives a request, fittifyapi forwards reference token to IDP and gets real accesstoken returned
 
+                    RequireConsent = false,
+
                     // IdentityTokenLifetime = 300,
                     // AuthorizationCodeLifetime = 300, 
                     AccessTokenLifetime = 600, // remember that api adds additional 5 minutes to deal with time offsets
