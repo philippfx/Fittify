@@ -18,6 +18,7 @@ using IdentityServer4.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Quantus.IDP.Entities;
 using Quantus.IDP.Services;
 
 namespace Quantus.IDP.Controllers.Account
@@ -30,7 +31,7 @@ namespace Quantus.IDP.Controllers.Account
     [SecurityHeaders]
     public class AccountController : Controller
     {
-        private readonly TestUserStore _users;
+        private readonly TestUserStore _users; // replaced with quantus user store
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;
@@ -194,10 +195,17 @@ namespace Quantus.IDP.Controllers.Account
             var (user, provider, providerUserId, claims) = FindUserFromExternalProvider(result);
             if (user == null)
             {
-                // this might be where you might initiate a custom workflow for user registration
-                // in this sample we don't show how that would be done, as our sample implementation
-                // simply auto-provisions new external user
-                user = AutoProvisionUser(provider, providerUserId, claims);
+                //// this might be where you might initiate a custom workflow for user registration
+                //// in this sample we don't show how that would be done, as our sample implementation
+                //// simply auto-provisions new external user
+                //user = AutoProvisionUser(provider, providerUserId, claims);
+                //var returnUrlAfterRegistration =
+                //    Url.Action("ExternalLoginCallback"/*, new {returnUrl = "not need since this identity sever version!"}*/); // Not like in course!
+
+                var continueWithUrl = Url.Action("RegisterUser", "UserRegistration",
+                    new {/*returnUrl = returnUrlAfterRegistration,*/ provider = provider, providerUserId = providerUserId}); // Not like in course!
+
+                return Redirect(continueWithUrl);
             }
 
             // this allows us to collect any additonal claims or properties
@@ -451,7 +459,31 @@ namespace Quantus.IDP.Controllers.Account
             }
         }
 
-        private (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims) FindUserFromExternalProvider(AuthenticateResult result)
+        //private (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims) FindUserFromExternalProvider(AuthenticateResult result)
+        //{
+        //    var externalUser = result.Principal;
+
+        //    // try to determine the unique id of the external user (issued by the provider)
+        //    // the most common claim type for that are the sub claim and the NameIdentifier
+        //    // depending on the external provider, some other claim type might be used
+        //    var userIdClaim = externalUser.FindFirst(JwtClaimTypes.Subject) ??
+        //                      externalUser.FindFirst(ClaimTypes.NameIdentifier) ??
+        //                      throw new Exception("Unknown userid");
+
+        //    // remove the user id claim so we don't include it as an extra claim if/when we provision the user
+        //    var claims = externalUser.Claims.ToList();
+        //    claims.Remove(userIdClaim);
+
+        //    var provider = result.Properties.Items["scheme"];
+        //    var providerUserId = userIdClaim.Value;
+
+        //    // find external user
+        //    var user = _users.FindByExternalProvider(provider, providerUserId);
+
+        //    return (user, provider, providerUserId, claims);
+        //}
+
+        private (QuantusUser user, string provider, string providerUserId, IEnumerable<Claim> claims) FindUserFromExternalProvider(AuthenticateResult result)
         {
             var externalUser = result.Principal;
 
@@ -470,16 +502,16 @@ namespace Quantus.IDP.Controllers.Account
             var providerUserId = userIdClaim.Value;
 
             // find external user
-            var user = _users.FindByExternalProvider(provider, providerUserId);
+            var user = _quantusUserRepository.GetUserByProvider(provider, providerUserId);
 
             return (user, provider, providerUserId, claims);
         }
 
-        private TestUser AutoProvisionUser(string provider, string providerUserId, IEnumerable<Claim> claims)
-        {
-            var user = _users.AutoProvisionUser(provider, providerUserId, claims.ToList());
-            return user;
-        }
+        //private QuantusUser AutoProvisionUser(string provider, string providerUserId, IEnumerable<Claim> claims)
+        //{
+        //    var user = _users.AutoProvisionUser(provider, providerUserId, claims.ToList());
+        //    return user;
+        //}
 
         private void ProcessLoginCallbackForOidc(AuthenticateResult externalResult, List<Claim> localClaims, AuthenticationProperties localSignInProps)
         {

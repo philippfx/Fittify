@@ -14,9 +14,9 @@ namespace Quantus.IDP.Entities
             }
 
             // init users
-            var users = new List<User>()
+            var users = new List<QuantusUser>()
             {
-                new User()
+                new QuantusUser()
                 {
                     SubjectId = "d860efca-22d9-47fd-8249-791ba61b07c7",
                     Username = "Frank",
@@ -31,7 +31,7 @@ namespace Quantus.IDP.Entities
                          new UserClaim("country", "nl")
                     }
                 },
-                new User()
+                new QuantusUser()
                 {
                     SubjectId = "b7539694-97e7-4dfe-84da-b4256e1ff5c7",
                     Username = "Claire",

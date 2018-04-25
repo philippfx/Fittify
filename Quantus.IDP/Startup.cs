@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -61,6 +63,17 @@ namespace Quantus.IDP
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients());
+
+            services.AddIdentity<QuantusUser, IdentityRole>()
+                //.AddEntityFrameworkStores<QuantusUserContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = "1741305999290145";
+                facebookOptions.AppSecret = "b3b626a2ef941df5ad8bce152a56a5d2";
+                facebookOptions.CallbackPath = new PathString("/signin-facebook");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -27,24 +27,24 @@ namespace Quantus.IDP.Services
             return (user.Password == password && !string.IsNullOrWhiteSpace(password));
         }
 
-        public User GetUserByEmail(string email)
+        public QuantusUser GetUserByEmail(string email)
         {
             return _context.Users.FirstOrDefault(u => u.Claims.Any(c => c.ClaimType == "email" && c.ClaimValue == email));
         }
 
-        public User GetUserByProvider(string loginProvider, string providerKey)
+        public QuantusUser GetUserByProvider(string loginProvider, string providerKey)
         {
             return _context.Users
                 .FirstOrDefault(u => 
                     u.Logins.Any(l => l.LoginProvider == loginProvider && l.ProviderKey == providerKey));
         }
 
-        public User GetUserBySubjectId(string subjectId)
+        public QuantusUser GetUserBySubjectId(string subjectId)
         {
             return _context.Users.FirstOrDefault(u => u.SubjectId == subjectId);
         }
 
-        public User GetUserByUsername(string username)
+        public QuantusUser GetUserByUsername(string username)
         {
             return _context.Users.FirstOrDefault(u => u.Username == username);
         }
@@ -76,9 +76,9 @@ namespace Quantus.IDP.Services
             return user.IsActive;
          }
 
-        public void AddUser(User user)
+        public void AddUser(QuantusUser quantusUser)
         {
-            _context.Users.Add(user);
+            _context.Users.Add(quantusUser);
         }
 
         public void AddUserLogin(string subjectId, string loginProvider, string providerKey)

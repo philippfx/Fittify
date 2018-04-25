@@ -24,11 +24,13 @@ namespace Quantus.IDP.Controllers.UserRegistration
         }
 
         [HttpGet]
-        public IActionResult RegisterUser(string returnUrl)
+        public IActionResult RegisterUser(RegistrationInputModel registrationInputModel)
         {
             var vm = new RegisterUserViewModel()
             {
-                ReturnUrl = returnUrl
+                ReturnUrl = registrationInputModel.ReturnUrl,
+                Provider = registrationInputModel.Provider,
+                ProviderUserId = registrationInputModel.ProviderUserId
             };
             return View(vm);
         }
@@ -40,7 +42,7 @@ namespace Quantus.IDP.Controllers.UserRegistration
             if (ModelState.IsValid)
             {
                 // create user + claims
-                var userToCreate = new User();
+                var userToCreate = new QuantusUser();
                 userToCreate.Password = model.Password;
                 userToCreate.Username = model.Username;
                 userToCreate.IsActive = true;
@@ -51,6 +53,17 @@ namespace Quantus.IDP.Controllers.UserRegistration
                 userToCreate.Claims.Add(new UserClaim("email", model.Email));
                 userToCreate.Claims.Add(new UserClaim("subscriptionlevel", "FreeUser"));
 
+                // if we're provisioning a user via external login, we must add the provider &
+                // user id at the provider to this user's logins
+                if (model.IsProvisioningFromExternal)
+                {
+                    userToCreate.Logins.Add(new Entities.UserLogin()
+                    {
+                        LoginProvider = model.Provider,
+                        ProviderKey = model.ProviderUserId
+                    });
+                }
+
                 // add it through the repository
                 _quantusUserRepository.AddUser(userToCreate);
 
@@ -59,9 +72,12 @@ namespace Quantus.IDP.Controllers.UserRegistration
                     throw new Exception($"Creating a user failed.");
                 }
 
-                // log the user in
-                //await HttpContext.Authentication.SignInAsync(userToCreate.SubjectId, userToCreate.Username);
-                await _httpContextAccssor.HttpContext.SignInAsync(userToCreate.SubjectId, userToCreate.Username);
+                if (!model.IsProvisioningFromExternal)
+                {
+                    // log the user in
+                    //await HttpContext.Authentication.SignInAsync(userToCreate.SubjectId, userToCreate.Username);
+                    await _httpContextAccssor.HttpContext.SignInAsync(userToCreate.SubjectId, userToCreate.Username);
+                }
 
                 // continue with the flow     
                 if (_interaction.IsValidReturnUrl(model.ReturnUrl) || Url.IsLocalUrl(model.ReturnUrl))

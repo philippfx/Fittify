@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Quantus.IDP.Entities
 {
     //[Table("Users")]
-    public class User
+    public class QuantusUser
     {
         [Key]
         [MaxLength(50)]       

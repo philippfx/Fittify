@@ -43,7 +43,19 @@ namespace Quantus.IDP.Controllers.UserRegistration
                     new { Id = "NL", Value = "Netherlands" }
                 }, "Id", "Value");
 
-        public string ReturnUrl { get; set; } 
+        public string ReturnUrl { get; set; }
+
+        public string Provider { get; set; }
+
+        public string ProviderUserId { get; set; }
+
+        public bool IsProvisioningFromExternal
+        {
+            get
+            {
+                return (Provider != null);
+            }
+        }
 
     }
 }

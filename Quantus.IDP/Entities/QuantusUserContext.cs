@@ -29,7 +29,7 @@ namespace Quantus.IDP.Entities
             OnConfiguring(new DbContextOptionsBuilder());
         }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<QuantusUser> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
