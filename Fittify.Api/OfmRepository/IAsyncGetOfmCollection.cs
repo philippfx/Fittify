@@ -4,9 +4,10 @@ using Fittify.Common.Helpers.ResourceParameters;
 
 namespace Fittify.Api.OfmRepository
 {
-    public interface IAsyncGetOfmCollection<TOfmForGet>
+    public interface IAsyncGetOfmCollection<TOfmForGet, in TResourceParameters>
         where TOfmForGet : class
+        where TResourceParameters : IResourceParameters
     {
-        Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(IResourceParameters resourceParameters);
+        Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TResourceParameters resourceParameters);
     }
 }

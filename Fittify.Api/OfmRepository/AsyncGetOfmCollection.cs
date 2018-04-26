@@ -12,11 +12,12 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Fittify.Api.OfmRepository
 {
-    public class AsyncGetOfmCollection<TCrudRepository, TEntity, TOfmForGet, TId> : IAsyncGetOfmCollection<TOfmForGet>
+    public class AsyncGetOfmCollection<TCrudRepository, TEntity, TOfmForGet, TId, TResourceParamenters> : IAsyncGetOfmCollection<TOfmForGet, TResourceParamenters>
         where TOfmForGet : class, IEntityUniqueIdentifier<TId>
         where TId : struct
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TCrudRepository : class, IAsyncCrud<TEntity, TId>, IAsyncGetCollection<TEntity, TId>
+        where TResourceParamenters : IResourceParameters
     {
         protected readonly TCrudRepository Repo;
         protected readonly IActionDescriptorCollectionProvider Adcp;
@@ -46,7 +47,7 @@ namespace Fittify.Api.OfmRepository
             Controller = controller;
         }
 
-        public virtual async Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(IResourceParameters resourceParameters)
+        public virtual async Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TResourceParamenters resourceParameters)
         {
             var ofmForGetCollectionQueryResult = new OfmForGetCollectionQueryResult<TOfmForGet>();
 

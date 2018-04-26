@@ -4,7 +4,7 @@ namespace Fittify.Common.Helpers.ResourceParameters
 {
     public class DateTimeStartEndResourceParameters : Base, IDateTimeStartEndResourceParameters
     {
-        public DateTime? DateTimeStart { get; set; }
-        public DateTime? DateTimeEnd { get; set; }
+        public DateTime? FromDateTimeStart { get; set; }
+        public DateTime? UntilDateTimeEnd { get; set; }
     }
 }

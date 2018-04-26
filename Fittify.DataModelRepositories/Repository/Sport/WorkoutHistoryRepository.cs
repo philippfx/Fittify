@@ -81,20 +81,20 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                     .Where(e => enumerableIds.Contains(e.Id));
             }
 
-            if (resourceParameters.DateTimeStart != null && resourceParameters.DateTimeEnd != null)
+            if (resourceParameters.FromDateTimeStart != null && resourceParameters.UntilDateTimeEnd != null)
             {
                 allEntitiesQueryable = allEntitiesQueryable
-                    .Where(a => a.DateTimeStart >= resourceParameters.DateTimeStart && a.DateTimeEnd <= resourceParameters.DateTimeEnd);
+                    .Where(a => a.DateTimeStart >= resourceParameters.FromDateTimeStart && a.DateTimeEnd <= resourceParameters.UntilDateTimeEnd);
             }
-            else if (resourceParameters.DateTimeStart != null)
+            else if (resourceParameters.FromDateTimeStart != null)
             {
                 allEntitiesQueryable = allEntitiesQueryable
-                    .Where(a => a.DateTimeStart >= resourceParameters.DateTimeStart);
+                    .Where(a => a.DateTimeStart >= resourceParameters.FromDateTimeStart);
             }
-            else if (resourceParameters.DateTimeEnd != null)
+            else if (resourceParameters.UntilDateTimeEnd != null)
             {
                 allEntitiesQueryable = allEntitiesQueryable
-                    .Where(a => a.DateTimeEnd <= resourceParameters.DateTimeEnd);
+                    .Where(a => a.DateTimeEnd <= resourceParameters.UntilDateTimeEnd);
             }
 
             if (resourceParameters.WorkoutId != null)
