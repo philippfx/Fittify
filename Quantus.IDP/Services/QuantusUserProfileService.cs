@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityServer4.Extensions;
@@ -18,7 +19,7 @@ namespace Quantus.IDP.Services
 
         public Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            var subjectId = context.Subject.GetSubjectId();
+            Guid.TryParse(context.Subject.GetSubjectId(), out var subjectId);
             var claimsForUser = _marvinUserRepository.GetUserClaimsBySubjectId(subjectId);
 
             context.IssuedClaims = claimsForUser.Select
@@ -29,7 +30,7 @@ namespace Quantus.IDP.Services
 
         public Task IsActiveAsync(IsActiveContext context)
         {
-            var subjectId = context.Subject.GetSubjectId();
+            Guid.TryParse(context.Subject.GetSubjectId(), out var subjectId);
             context.IsActive = _marvinUserRepository.IsUserActive(subjectId);
 
             return Task.FromResult(0);

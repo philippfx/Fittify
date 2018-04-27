@@ -4,6 +4,7 @@ using IdentityServer4.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Quantus.IDP.Entities;
+using Quantus.IDP.Entities.Default;
 using Quantus.IDP.Services;
 
 namespace Quantus.IDP.Controllers.UserRegistration
@@ -44,20 +45,20 @@ namespace Quantus.IDP.Controllers.UserRegistration
                 // create user + claims
                 var userToCreate = new QuantusUser();
                 userToCreate.Password = model.Password;
-                userToCreate.Username = model.Username;
+                userToCreate.UserName = model.Username;
                 userToCreate.IsActive = true;
-                userToCreate.Claims.Add(new UserClaim("country", model.Country));
-                userToCreate.Claims.Add(new UserClaim("address", model.Address));
-                userToCreate.Claims.Add(new UserClaim("given_name", model.Firstname));
-                userToCreate.Claims.Add(new UserClaim("family_name", model.Lastname));
-                userToCreate.Claims.Add(new UserClaim("email", model.Email));
-                userToCreate.Claims.Add(new UserClaim("subscriptionlevel", "FreeUser"));
+                userToCreate.Claims.Add(new QuantusUserClaim() { ClaimType = "country", ClaimValue = model.Country });
+                userToCreate.Claims.Add(new QuantusUserClaim() { ClaimType = "address", ClaimValue = model.Address });
+                userToCreate.Claims.Add(new QuantusUserClaim() { ClaimType = "country", ClaimValue = model.Firstname });
+                userToCreate.Claims.Add(new QuantusUserClaim() { ClaimType = "family_name", ClaimValue = model.Lastname });
+                userToCreate.Claims.Add(new QuantusUserClaim() { ClaimType = "email", ClaimValue = model.Email });
+                userToCreate.Claims.Add(new QuantusUserClaim() { ClaimType = "subscriptionlevel", ClaimValue = "FreeUser" });
 
                 // if we're provisioning a user via external login, we must add the provider &
                 // user id at the provider to this user's logins
                 if (model.IsProvisioningFromExternal)
                 {
-                    userToCreate.Logins.Add(new Entities.UserLogin()
+                    userToCreate.Logins.Add(new Entities.Default.QuantusUserLogin()
                     {
                         LoginProvider = model.Provider,
                         ProviderKey = model.ProviderUserId
@@ -76,7 +77,7 @@ namespace Quantus.IDP.Controllers.UserRegistration
                 {
                     // log the user in
                     //await HttpContext.Authentication.SignInAsync(userToCreate.SubjectId, userToCreate.Username);
-                    await _httpContextAccssor.HttpContext.SignInAsync(userToCreate.SubjectId, userToCreate.Username);
+                    await _httpContextAccssor.HttpContext.SignInAsync(userToCreate.Id.ToString(), userToCreate.UserName);
                 }
 
                 // continue with the flow     

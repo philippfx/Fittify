@@ -64,6 +64,24 @@ namespace Quantus.IDP
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients());
 
+            services.AddIdentity<QuantusUser, IdentityRole>()
+                .AddEntityFrameworkStores<QuantusUserContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                //facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
+                //facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                facebookOptions.AppId = "1741305999290145";
+                facebookOptions.AppSecret = "b3b626a2ef941df5ad8bce152a56a5d2";
+            });
+
+            services.AddAuthentication().AddGoogle(googleOptions =>
+            {
+                googleOptions.ClientId = "945734666949-t5pp08tu9jodh77b5dh5bsj3q1c6h457.apps.googleusercontent.com";
+                googleOptions.ClientSecret = "rFxtQ5VKebOMt3lv7lOQgnFO";
+            });
+
             //services.AddIdentity<QuantusUser, IdentityRole>()
             //    //.AddEntityFrameworkStores<QuantusUserContext>()
             //    .AddDefaultTokenProviders();
@@ -75,13 +93,13 @@ namespace Quantus.IDP
             //    facebookOptions.CallbackPath = new PathString("/signin-facebook");
             //});
 
-            services.AddAuthentication().AddGoogle(googleOptions =>
-            {
-                //googleOptions.ClientId = AppConfiguration["Authentication:Google:ClientId"];
-                //googleOptions.ClientSecret = AppConfiguration["Authentication:Google:ClientSecret"];
-                googleOptions.ClientId = "945734666949-t5pp08tu9jodh77b5dh5bsj3q1c6h457.apps.googleusercontent.com";
-                googleOptions.ClientSecret = "rFxtQ5VKebOMt3lv7lOQgnFO";
-            });
+            //services.AddAuthentication().AddGoogle(googleOptions =>
+            //{
+            //googleOptions.ClientId = AppConfiguration["Authentication:Google:ClientId"];
+            //googleOptions.ClientSecret = AppConfiguration["Authentication:Google:ClientSecret"];
+            //    googleOptions.ClientId = "945734666949-t5pp08tu9jodh77b5dh5bsj3q1c6h457.apps.googleusercontent.com";
+            //    googleOptions.ClientSecret = "rFxtQ5VKebOMt3lv7lOQgnFO";
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

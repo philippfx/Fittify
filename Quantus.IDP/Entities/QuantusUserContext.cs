@@ -1,9 +1,11 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Quantus.IDP.Entities.Default;
 
 namespace Quantus.IDP.Entities
 {
-    public class QuantusUserContext : DbContext
+    public class QuantusUserContext : IdentityDbContext<QuantusUser, QuantusRole, Guid, QuantusUserClaim, QuantusUserRole, QuantusUserLogin, QuantusRoleClaim, QuantusUserToken>
     {
         public QuantusUserContext(DbContextOptions<QuantusUserContext> options)
            : base(options)
@@ -29,7 +31,7 @@ namespace Quantus.IDP.Entities
             OnConfiguring(new DbContextOptionsBuilder());
         }
 
-        public DbSet<QuantusUser> Users { get; set; }
+        //public DbSet<QuantusUser> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

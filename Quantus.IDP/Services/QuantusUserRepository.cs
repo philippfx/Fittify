@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Quantus.IDP.Entities;
+using Quantus.IDP.Entities.Default;
 
 namespace Quantus.IDP.Services
 {
@@ -39,38 +40,38 @@ namespace Quantus.IDP.Services
                     u.Logins.Any(l => l.LoginProvider == loginProvider && l.ProviderKey == providerKey));
         }
 
-        public QuantusUser GetUserBySubjectId(string subjectId)
+        public QuantusUser GetUserBySubjectId(Guid subjectId)
         {
-            return _context.Users.FirstOrDefault(u => u.SubjectId == subjectId);
+            return _context.Users.FirstOrDefault(u => u.Id == subjectId);
         }
 
         public QuantusUser GetUserByUsername(string username)
         {
-            return _context.Users.FirstOrDefault(u => u.Username == username);
+            return _context.Users.FirstOrDefault(u => u.UserName == username);
         }
 
-        public IEnumerable<UserClaim> GetUserClaimsBySubjectId(string subjectId)
+        public IEnumerable<QuantusUserClaim> GetUserClaimsBySubjectId(Guid subjectId)
         {
             // get user with claims
-            var user = _context.Users.Include("Claims").FirstOrDefault(u => u.SubjectId == subjectId);
+            var user = _context.Users.Include("Claims").FirstOrDefault(u => u.Id == subjectId);
             if (user == null)
             {
-                return new List<UserClaim>();
+                return new List<QuantusUserClaim>();
             }
             return user.Claims.ToList();
         }
 
-        public IEnumerable<UserLogin> GetUserLoginsBySubjectId(string subjectId)
+        public IEnumerable<QuantusUserLogin> GetUserLoginsBySubjectId(Guid subjectId)
         {
-            var user = _context.Users.Include("Logins").FirstOrDefault(u => u.SubjectId == subjectId);
+            var user = _context.Users.Include("Logins").FirstOrDefault(u => u.Id == subjectId);
             if (user == null)
             {
-                return new List<UserLogin>();
+                return new List<QuantusUserLogin>();
             }
             return user.Logins.ToList();
         }
 
-        public bool IsUserActive(string subjectId)
+        public bool IsUserActive(Guid subjectId)
         {
             var user = GetUserBySubjectId(subjectId);
             return user.IsActive;
@@ -81,31 +82,31 @@ namespace Quantus.IDP.Services
             _context.Users.Add(quantusUser);
         }
 
-        public void AddUserLogin(string subjectId, string loginProvider, string providerKey)
+        public void AddUserLogin(Guid subjectId, string loginProvider, string providerKey)
         {
             var user = GetUserBySubjectId(subjectId);
             if (user == null)
             {
-                throw new ArgumentException("User with given subjectId not found.", subjectId);
+                throw new ArgumentException("User with given subjectId not found.", subjectId.ToString());
             }
 
-            user.Logins.Add(new UserLogin()
+            user.Logins.Add(new QuantusUserLogin()
             {
-                SubjectId = subjectId,
+                UserId = subjectId,
                 LoginProvider = loginProvider,
                 ProviderKey = providerKey
             });
         }
 
-        public void AddUserClaim(string subjectId, string claimType, string claimValue)
+        public void AddUserClaim(Guid subjectId, string claimType, string claimValue)
         {          
             var user = GetUserBySubjectId(subjectId);
             if (user == null)
             {
-                throw new ArgumentException("User with given subjectId not found.", subjectId);
+                throw new ArgumentException("User with given subjectId not found.", subjectId.ToString());
             }
 
-            user.Claims.Add(new UserClaim(claimType, claimValue));         
+            user.Claims.Add(new QuantusUserClaim() { ClaimType = claimType, ClaimValue = claimValue});         
         }
 
         public bool Save()

@@ -1,21 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Quantus.IDP.Entities;
+using Quantus.IDP.Entities.Default;
 
 namespace Quantus.IDP.Services
 {
     public interface IQuantusUserRepository
     {
         QuantusUser GetUserByUsername(string username);
-        QuantusUser GetUserBySubjectId(string subjectId);
+        QuantusUser GetUserBySubjectId(Guid subjectId);
         QuantusUser GetUserByEmail(string email);
         QuantusUser GetUserByProvider(string loginProvider, string providerKey);
-        IEnumerable<UserLogin> GetUserLoginsBySubjectId(string subjectId);
-        IEnumerable<UserClaim> GetUserClaimsBySubjectId(string subjectId);
+        IEnumerable<QuantusUserLogin> GetUserLoginsBySubjectId(Guid subjectId);
+        IEnumerable<QuantusUserClaim> GetUserClaimsBySubjectId(Guid subjectId);
         bool AreUserCredentialsValid(string username, string password);
-        bool IsUserActive(string subjectId);
+        bool IsUserActive(Guid subjectId);
         void AddUser(QuantusUser quantusUser);
-        void AddUserLogin(string subjectId, string loginProvider, string providerKey);
-        void AddUserClaim(string subjectId, string claimType, string claimValue);
+        void AddUserLogin(Guid subjectId, string loginProvider, string providerKey);
+        void AddUserClaim(Guid subjectId, string claimType, string claimValue);
         bool Save();
     }
 }
