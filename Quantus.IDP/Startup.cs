@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Quantus.IDP.Entities;
+using Quantus.IDP.Entities.Default;
 using Quantus.IDP.Services;
 
 namespace Quantus.IDP
@@ -64,7 +65,7 @@ namespace Quantus.IDP
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients());
 
-            services.AddIdentity<QuantusUser, IdentityRole>()
+            services.AddIdentity<QuantusUser, QuantusRole>()
                 .AddEntityFrameworkStores<QuantusUserContext>()
                 .AddDefaultTokenProviders();
 
