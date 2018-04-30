@@ -83,8 +83,26 @@ namespace Fittify.Common.Helpers
 
             return someObject;
         }
+        
+        public static ExpandoObject ToExpandoObject(this IDictionary<string, object> source)
+        {
+            var eo = new ExpandoObject();
+            var eoColl = (ICollection<KeyValuePair<string, object>>)eo;
+            foreach (var kvp in source)
+            {
+                eoColl.Add(kvp);
+            }
 
-        public static IDictionary<string, object> AsDictionary(this object source, BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
+            return eo;
+        }
+
+        public static IDictionary<string, object> RemoveNullValues(this IDictionary<string, object> source)
+        {
+            return source.Where(kvp => kvp.Value != null).ToDictionary(k => k.Key, v => v.Value);
+        }
+
+        public static IDictionary<string, object> AsDictionary(this object source,
+            BindingFlags bindingAttr = BindingFlags.Public | BindingFlags.Instance)
         {
             return source.GetType().GetProperties(bindingAttr).ToDictionary
             (

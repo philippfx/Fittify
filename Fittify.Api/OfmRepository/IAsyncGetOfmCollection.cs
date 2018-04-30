@@ -1,13 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Fittify.Api.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
 
-namespace Fittify.Api.OfmRepository.Owned
+namespace Fittify.Api.OfmRepository
 {
-    public interface IAsyncGetOfmCollection<TOfmForGet>
+    public interface IAsyncGetOfmCollection<TOfmForGet, in TResourceParameters>
         where TOfmForGet : class
+        where TResourceParameters : IResourceParameters
     {
-        Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(IResourceParameters resourceParameters, Guid ownerGuid);
+        Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TResourceParameters resourceParameters);
     }
 }

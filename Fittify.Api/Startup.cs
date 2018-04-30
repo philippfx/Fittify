@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Newtonsoft.Json.Serialization;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Fittify.Api
 {
@@ -50,6 +51,11 @@ namespace Fittify.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Fittify API", Version = "v1" });
+            });
+
             services.AddCors();
 
             //services.AddSingleton<IConfiguration>(Configuration);
@@ -280,6 +286,12 @@ namespace Fittify.Api
             app.UseAuthentication();
 
             app.UseMvc();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fittify API V1");
+            });
 
             if (env.IsDevelopment())
             {
