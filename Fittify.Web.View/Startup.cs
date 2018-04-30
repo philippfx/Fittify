@@ -50,6 +50,7 @@ namespace Fittify.Web.View
                     options.Authority = "https://localhost:44364/";
                     options.RequireHttpsMetadata = true;
                     options.ClientId = "fittifyclient";
+                    options.ClientSecret = "secret";
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
                     options.Scope.Add("address");
@@ -67,12 +68,11 @@ namespace Fittify.Web.View
                     options.ClaimActions.MapUniqueJsonKey("subscriptionlevel", "subscriptionlevel");
 
                     options.ResponseType = "code id_token";
-                    //options.CallbackPath = new PathString("...");
+                    //options.CallbackPath = new PathString("..."); // default is "https://[fittifywebhost]/signin-oidc
                     //options.SignedOutCallbackPath = new PathString("...");
                     options.SignInScheme = "Cookies";
                     //options.SignOutScheme = "oidc";
-                    options.SaveTokens = true;
-                    options.ClientSecret = "secret";
+                    options.SaveTokens = true; // saves tokens in memory to reuse them
 
                     // In Asp.Net Core 2.0, redundant claims are deleted before returning the token. You can remove this "deletion", for example for "amr" claims, like this:
                     //options.ClaimActions.Remove("amr");

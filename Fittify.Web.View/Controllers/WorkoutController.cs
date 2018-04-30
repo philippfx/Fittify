@@ -40,8 +40,8 @@ namespace Fittify.Web.View.Controllers
 
         public async Task<IActionResult> Overview()
         {
-            await WriteOutIdentityInformation();
-            await WriteOutAccessInformation();
+            await WriteOutIdentityAndAccessInformation();
+            //await WriteOutAccessInformation();
 
             var queryResult = await _workoutViewModelRepo.GetCollection(new WorkoutResourceParameters());
             List<WorkoutViewModel> listWorkoutViewModel = null;
@@ -298,38 +298,18 @@ namespace Fittify.Web.View.Controllers
             return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
         }
 
-        private async Task WriteOutIdentityInformation()
+        private async Task WriteOutIdentityAndAccessInformation()
         {
             // get the saved identity token
             string identityToken = await HttpContext
                 .GetTokenAsync("id_token");
+            Debug.WriteLine($"Identity token: {identityToken}");
 
             //var identityToken = await HttpContext.Authentication
             //    .GetTokenAsync(OpenIdConnectParameterNames.IdToken);
-
-            // write it out
-            Debug.WriteLine($"Identity token: {identityToken}");
-
-            // write out the user claims
-            foreach (var claim in User.Claims)
-            {
-                Debug.WriteLine($"Claim type: {claim.Type} - Claim value: {claim.Value}");
-            }
-        }
-
-        private async Task WriteOutAccessInformation()
-        {
-            var discoveryClient = new DiscoveryClient("https://localhost:44364/");
-            var metaDataResponse = await discoveryClient.GetAsync();
-
-            var userInfoClient = new UserInfoClient(metaDataResponse.UserInfoEndpoint);
-
-            var accesstoken =
-                await AuthenticationHttpContextExtensions.GetTokenAsync(this.HttpContext, OpenIdConnectParameterNames.AccessToken);
-
-            // write it out
+            var accesstoken = await HttpContext.GetTokenAsync("access_token");
             Debug.WriteLine($"Access token: {accesstoken}");
-
+            
             // write out the user claims
             foreach (var claim in User.Claims)
             {
