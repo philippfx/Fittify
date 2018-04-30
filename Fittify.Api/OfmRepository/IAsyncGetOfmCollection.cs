@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Fittify.Api.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
 
@@ -8,6 +9,6 @@ namespace Fittify.Api.OfmRepository
         where TOfmForGet : class
         where TResourceParameters : IResourceParameters
     {
-        Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TResourceParameters resourceParameters);
+        Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TResourceParameters resourceParameters, Guid ownerGuid);
     }
 }

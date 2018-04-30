@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Helpers;
+using Fittify.Api.OfmRepository.Owned;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
@@ -26,7 +28,7 @@ namespace Fittify.Api.OfmRepository.GetCollection.Sport
         {
         }
 
-        public virtual async Task<OfmForGetCollectionQueryResult<CardioSetOfmForGet>> GetCollection(CardioSetResourceParameters resourceParameters)
+        public virtual async Task<OfmForGetCollectionQueryResult<CardioSetOfmForGet>> GetCollection(CardioSetResourceParameters resourceParameters, Guid ownerGuid)
         {
             var ofmForGetCollectionQueryResult = new OfmForGetCollectionQueryResult<CardioSetOfmForGet>();
 
@@ -36,7 +38,7 @@ namespace Fittify.Api.OfmRepository.GetCollection.Sport
                 return ofmForGetCollectionQueryResult;
             }
 
-            var pagedListEntityCollection = Repo.GetCollection(resourceParameters).CopyPropertyValuesTo(ofmForGetCollectionQueryResult);
+            var pagedListEntityCollection = Repo.GetCollection(resourceParameters, ownerGuid).CopyPropertyValuesTo(ofmForGetCollectionQueryResult);
 
             // Todo Maybe refactor to a type safe class instead of anonymous
             var paginationMetadata = new
