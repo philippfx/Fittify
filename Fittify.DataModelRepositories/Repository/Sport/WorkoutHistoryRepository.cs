@@ -69,7 +69,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public PagedList<WorkoutHistory> GetCollection(WorkoutHistoryResourceParameters resourceParameters, Guid ownerGuid)
+        public override PagedList<WorkoutHistory> GetCollection(WorkoutHistoryResourceParameters resourceParameters, Guid ownerGuid)
         {
             var allEntitiesQueryable =
                 FittifyContext.Set<WorkoutHistory>()
@@ -79,9 +79,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                     .Include(i => i.ExerciseHistories)
                     .ApplySort(resourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<WorkoutHistoryOfmForGet, WorkoutHistory>());
-
-            allEntitiesQueryable = allEntitiesQueryable.Where(o => o.OwnerGuid == ownerGuid);
-
+            
             if (!String.IsNullOrWhiteSpace(resourceParameters.Ids))
             {
                 var enumerableIds = RangeString.ToCollectionOfId(resourceParameters.Ids);

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ViewModelRepository.Sport;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +23,12 @@ namespace Fittify.Web.View.Controllers
         {
             var postResult = await _exerciseHistoryViewModelRepository.Create(exerciseHistoryOfmForPost);
 
+            if (postResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                postResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
+
             if ((int)postResult.HttpStatusCode != 201)
             {
                 // Todo: Do something when posting failed
@@ -34,6 +41,12 @@ namespace Fittify.Web.View.Controllers
         public async Task<RedirectToActionResult> Delete([Bind("id")] int exerciseHistoryId, [FromQuery] int workoutHistoryId)
         {
             var deleteResult = await _exerciseHistoryViewModelRepository.Delete(exerciseHistoryId);
+
+            if (deleteResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                deleteResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
 
             if ((int)deleteResult.HttpStatusCode != 204)
             {

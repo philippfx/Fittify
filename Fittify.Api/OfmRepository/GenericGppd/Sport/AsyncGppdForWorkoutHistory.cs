@@ -26,12 +26,12 @@ namespace Fittify.Api.OfmRepository.GenericGppd.Sport
         {
             _workoutHistoryRepository = repository;
         }
-        public async Task<WorkoutHistoryOfmForGet> PostIncludingExerciseHistories(WorkoutHistoryOfmForPost ofmForPost)
+        public async Task<WorkoutHistoryOfmForGet> PostIncludingExerciseHistories(WorkoutHistoryOfmForPost ofmForPost, Guid ownerGuid)
         {
             var workoutHistory = Mapper.Map<WorkoutHistoryOfmForPost, WorkoutHistory>(ofmForPost);
             try
             {
-                workoutHistory = await _workoutHistoryRepository.CreateIncludingExerciseHistories(workoutHistory);
+                workoutHistory = await _workoutHistoryRepository.CreateIncludingExerciseHistories(workoutHistory, ownerGuid);
             }
             catch (Exception e)
             {

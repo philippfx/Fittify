@@ -5,7 +5,6 @@ using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.DataModelRepositories.Helpers;
-using Fittify.DataModelRepositories.Owned;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +23,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public PagedList<Exercise> GetCollection(ExerciseResourceParameters resourceParameters, Guid ownerGuid)
+        public override PagedList<Exercise> GetCollection(ExerciseResourceParameters resourceParameters, Guid ownerGuid)
         {
             var allEntitiesQueryable =
                 FittifyContext.Set<Exercise>()
@@ -32,9 +31,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                     .AsNoTracking()
                     .ApplySort(resourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<ExerciseOfmForGet, Exercise>());
-
-            //allEntitiesQueryable = allEntitiesQueryable.Where(o => o.OwnerGuid == ownerGuid || o.OwnerGuid == null);
-
+            
             if (!String.IsNullOrWhiteSpace(resourceParameters.Ids))
             {
                 allEntitiesQueryable = allEntitiesQueryable.Where(w =>

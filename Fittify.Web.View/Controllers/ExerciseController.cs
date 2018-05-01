@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -27,6 +28,12 @@ namespace Fittify.Web.View.Controllers
         {
             var exerciseViewModelCollectionResult = await _exerciseViewModelRepository.GetCollection(new ExerciseResourceParameters());
 
+            if (exerciseViewModelCollectionResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                exerciseViewModelCollectionResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
+
             if ((int)exerciseViewModelCollectionResult.HttpStatusCode != 200)
             {
                 // Todo: Do something when posting failed
@@ -39,6 +46,12 @@ namespace Fittify.Web.View.Controllers
         public async Task<RedirectToActionResult> CreateExercise([FromForm] ExerciseOfmForPost exerciseOfmForPost, [FromQuery] int workoutId)
         {
             var postResult = await _exerciseViewModelRepository.Create(exerciseOfmForPost);
+
+            if (postResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                postResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
 
             if ((int)postResult.HttpStatusCode != 201)
             {
@@ -53,6 +66,12 @@ namespace Fittify.Web.View.Controllers
         public async Task<RedirectToActionResult> Delete(int id)
         {
             var deleteResult = await _exerciseViewModelRepository.Delete(id);
+
+            if (deleteResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                deleteResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
 
             if ((int)deleteResult.HttpStatusCode != 204)
             {
@@ -71,6 +90,12 @@ namespace Fittify.Web.View.Controllers
             jsonPatchDocument.Replace("/" + nameof(exerciseOfmForPatch.Name), exerciseOfmForPatch.Name);
 
             var patchResult = await _exerciseViewModelRepository.PartiallyUpdate(id, jsonPatchDocument);
+
+            if (patchResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                patchResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
 
             if ((int)patchResult.HttpStatusCode != 200)
             {

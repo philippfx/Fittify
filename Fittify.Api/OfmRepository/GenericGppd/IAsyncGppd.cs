@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Fittify.Api.Helpers;
 using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
@@ -14,8 +15,8 @@ namespace Fittify.Api.OfmRepository.GenericGppd
 
     {
         Task<OfmForGetQueryResult<TOfmForGet>> GetById(TId id, string fields);
-        Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TResourceParameters resourceParameters);
-        Task<TOfmForGet> Post(TOfmForPost entity);
+        Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TResourceParameters resourceParameters, Guid ownerGuid);
+        Task<TOfmForGet> Post(TOfmForPost entity, Guid ownerGuid);
         Task<TOfmForPatch> GetByIdOfmForPatch(TId id);
         Task<TOfmForGet> UpdatePartially(TOfmForPatch ofmForPatch);
         Task<OfmDeletionQueryResult<TId>> Delete(TId id);

@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Helpers;
 using Fittify.Common;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
-using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository;
 using Fittify.DataModelRepositories.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +21,7 @@ namespace Fittify.Api.OfmRepository.GenericGppd
         where TOfmForPost : class
         where TOfmForPatch : class
         where TId : struct
-        where TResourceParameters : IResourceParameters
+        where TResourceParameters : class, IResourceParameters
     {
         protected readonly IAsyncCrud<TEntity, TId, TResourceParameters> Repo;
         protected readonly IActionDescriptorCollectionProvider Adcp;
@@ -59,7 +59,7 @@ namespace Fittify.Api.OfmRepository.GenericGppd
             return ofmForGetResult;
         }
 
-        public async Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TResourceParameters resourceParameters)
+        public async Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TResourceParameters resourceParameters, Guid ownerGuid)
         {
             var ofmForGetCollectionQueryResult = new OfmForGetCollectionQueryResult<TOfmForGet>();
 
@@ -69,16 +69,16 @@ namespace Fittify.Api.OfmRepository.GenericGppd
                 return ofmForGetCollectionQueryResult;
             }
 
-            var pagedListEntityCollection = Repo.GetCollection(resourceParameters).CopyPropertyValuesTo(ofmForGetCollectionQueryResult);
+            var pagedListEntityCollection = Repo.GetCollection(resourceParameters, ownerGuid).CopyPropertyValuesTo(ofmForGetCollectionQueryResult);
             
             ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets = Mapper.Map<List<TEntity>, List<TOfmForGet>>(pagedListEntityCollection);
             return ofmForGetCollectionQueryResult;
         }
 
-        public async Task<TOfmForGet> Post(TOfmForPost ofmForPost)
+        public async Task<TOfmForGet> Post(TOfmForPost ofmForPost, Guid ownerGuid)
         {
             var entity = Mapper.Map<TOfmForPost, TEntity>(ofmForPost);
-            entity = await Repo.Create(entity);
+            entity = await Repo.Create(entity, ownerGuid);
             var ofm = Mapper.Map<TEntity, TOfmForGet>(entity);
             return ofm;
         }

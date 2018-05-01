@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.DataModelRepositories.Helpers;
-using Fittify.DataModelRepositories.Owned;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class WorkoutRepository : AsyncCrud<Workout, WorkoutOfmForGet, int, WorkoutResourceParameters>, IAsyncOwnerIntId,
+    public class WorkoutRepository : AsyncCrud<Workout, WorkoutOfmForGet, int, WorkoutResourceParameters>, IAsyncOwnerIntId
     {
         public WorkoutRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
@@ -27,7 +26,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public PagedList<Workout> GetCollection(WorkoutResourceParameters resourceParameters, Guid ownerGuid)
+        public override PagedList<Workout> GetCollection(WorkoutResourceParameters resourceParameters, Guid ownerGuid)
         {
             var allEntitiesQueryable =
                 FittifyContext.Set<Workout>()
@@ -36,9 +35,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                     .Include(i => i.Category)
                     .ApplySort(resourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<WorkoutOfmForGet, Workout>());
-
-            allEntitiesQueryable = allEntitiesQueryable.Where(w => w.OwnerGuid == ownerGuid);
-
+            
             if (!String.IsNullOrWhiteSpace(resourceParameters.SearchQuery))
             {
                 allEntitiesQueryable = allEntitiesQueryable.Where(w => w.Name.Contains(resourceParameters.SearchQuery));

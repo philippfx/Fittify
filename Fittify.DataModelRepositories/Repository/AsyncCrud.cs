@@ -1,9 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Helpers;
-using Fittify.DataModelRepositories.Repository;
 using Fittify.DataModelRepositories.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +11,7 @@ namespace Fittify.DataModelRepositories.Repository
 {
 
     public abstract class AsyncCrud<TEntity, TOfmForGet, TId, TResourceParameters> : IAsyncCrud<TEntity, TId, TResourceParameters>
-        where TEntity : class, IEntityUniqueIdentifier<TId>
+        where TEntity : class, IEntityUniqueIdentifier<TId>, IEntityOwner
         where TResourceParameters : class, IResourceParameters
         where TId : struct
     {
@@ -30,6 +30,13 @@ namespace Fittify.DataModelRepositories.Repository
 
         }
 
+        public async Task<bool> IsEntityOwner(TId id, Guid ownerGuid)
+        {
+            var entity = await FittifyContext.Set<TEntity>().FindAsync(id);
+            if (entity != null && entity.OwnerGuid == ownerGuid) return true;
+            return false;
+        }
+
         public virtual async Task<bool> DoesEntityExist(TId id)
         {
             var entity = await FittifyContext.Set<TEntity>().FindAsync(id);
@@ -37,8 +44,9 @@ namespace Fittify.DataModelRepositories.Repository
             return false;
         }
 
-        public virtual async Task<TEntity> Create(TEntity entity)
+        public virtual async Task<TEntity> Create(TEntity entity, Guid ownerGuid)
         {
+            entity.OwnerGuid = ownerGuid;
             await FittifyContext.Set<TEntity>().AddAsync(entity);
             await SaveContext();
             
@@ -57,10 +65,12 @@ namespace Fittify.DataModelRepositories.Repository
             return await FittifyContext.Set<TEntity>().FindAsync(id);
         }
 
-        public virtual PagedList<TEntity> GetCollection(TResourceParameters resourceParameters)
+        public virtual PagedList<TEntity> GetCollection(TResourceParameters resourceParameters, Guid ownerGuid)
         {
             var allEntitiesQueryableBeforePaging =
-                GetAll()
+                FittifyContext.Set<TEntity>()
+                    .Where(o => o.OwnerGuid == ownerGuid)
+                    .AsNoTracking()
                     .ApplySort(resourceParameters.OrderBy,
                         PropertyMappingService.GetPropertyMapping<TOfmForGet, TEntity>());
 
@@ -87,10 +97,15 @@ namespace Fittify.DataModelRepositories.Repository
 
         public virtual async Task<EntityDeletionResult<TId>> Delete(TId id)
         {
-            var entityDeletionResult = new EntityDeletionResult<TId>();
-
             var entity = await GetById(id);
+            
+            return await Delete(entity);
+        }
 
+        public virtual async Task<EntityDeletionResult<TId>> Delete(TEntity entity)
+        {
+            var entityDeletionResult = new EntityDeletionResult<TId>();
+            
             if (entity == null)
             {
                 entityDeletionResult.DidEntityExist = false;
@@ -103,7 +118,7 @@ namespace Fittify.DataModelRepositories.Repository
 
             FittifyContext.Set<TEntity>().Remove(entity);
             entityDeletionResult.IsDeleted = await SaveContext();
-            
+
             return entityDeletionResult;
         }
     }

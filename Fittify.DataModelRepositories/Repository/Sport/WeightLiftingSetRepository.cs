@@ -5,7 +5,6 @@ using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.DataModelRepositories.Helpers;
-using Fittify.DataModelRepositories.Owned;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +24,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public PagedList<WeightLiftingSet> GetCollection(WeightLiftingSetResourceParameters resourceParameters, Guid ownerGuid)
+        public override PagedList<WeightLiftingSet> GetCollection(WeightLiftingSetResourceParameters resourceParameters, Guid ownerGuid)
         {
             var allEntitiesQueryable =
                 FittifyContext.Set<WeightLiftingSet>()

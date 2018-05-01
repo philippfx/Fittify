@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Quantus.IDP.Controllers.UserRegistration
+﻿namespace Quantus.IDP.Controllers.UserRegistration
 {
     public class RegistrationInputModel
     {

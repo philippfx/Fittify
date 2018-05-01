@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ViewModelRepository.Sport;
@@ -30,6 +31,12 @@ namespace Fittify.Web.View.Controllers
                 WorkoutId = workoutId
             });
 
+            if (getMapExerciseWorkoutViewModelResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                getMapExerciseWorkoutViewModelResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
+
             if ((int)getMapExerciseWorkoutViewModelResult.HttpStatusCode != 200)
             {
                 // Todo: Do something when getting failed
@@ -38,6 +45,11 @@ namespace Fittify.Web.View.Controllers
             var deleteMapExerciseWorkoutViewModelResult = await _mapExerciseWorkoutViewModelRepository.Delete(
                 getMapExerciseWorkoutViewModelResult.ViewModelForGetCollection.First().Id);
 
+            if (deleteMapExerciseWorkoutViewModelResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                deleteMapExerciseWorkoutViewModelResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
             if ((int)deleteMapExerciseWorkoutViewModelResult.HttpStatusCode != 204)
             {
                 // Todo: Do something when deleting failed

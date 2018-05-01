@@ -66,22 +66,22 @@
    .\Microsoft.Extensions.Caching.Memory\2.0.1\lib\netstandard2.0\Microsoft.Extensions.Caching.Memory.dll   v2.0.1.0
    .\Microsoft.Extensions.Options\2.0.1\lib\netstandard2.0\Microsoft.Extensions.Options.dll   v2.0.1.0
    .\Microsoft.Extensions.Logging.Debug\1.1.1\lib\net451\Microsoft.Extensions.Logging.Debug.dll   v1.1.1.0
-   .\Newtonsoft.Json\10.0.3\lib\net45\Newtonsoft.Json.dll   v10.0.0.0
+   .\Newtonsoft.Json\11.0.1\lib\net45\Newtonsoft.Json.dll   v11.0.0.0
    .\Swashbuckle.AspNetCore.Swagger\2.4.0\lib\net451\Swashbuckle.AspNetCore.Swagger.dll   v2.4.0.0
    .\Microsoft.AspNetCore.Routing.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Routing.Abstractions.dll   v2.0.0.0
    .\Microsoft.AspNetCore.Mvc.Formatters.Xml\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Formatters.Xml.dll   v2.0.0.0</Info>
-  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Spielwiese\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Info>.NET Assemblies loaded from {C:\VS_2017_Projects\Fittify\Fittify.Spielwiese\bin\debug\netcoreapp2.0} 
+   Fittify.DataModels.dll   v1.0.0.0
+   Fittify.DataModelRepositories.dll   v1.0.0.0
+   Fittify.Api.OuterFacingModels.dll   v1.0.0.0
+   Fittify.Common.dll   v1.0.0.0</Info>
   <Info>.NET Assemblies loaded from {C:\VS_2017_Projects\Fittify\Fittify.Web.View\bin\debug\netcoreapp2.0} 
    Fittify.Web.View.dll   v1.0.0.0
    Fittify.Web.ViewModels.dll   v1.0.0.0
-   Fittify.Api.OuterFacingModels.dll   v1.0.0.0
-   Fittify.Common.dll   v1.0.0.0
    Fittify.Web.ApiModelRepositories.dll   v1.0.0.0
    Fittify.Web.ViewModelRepository.dll   v1.0.0.0</Info>
-  <Info>.NET Assembly loaded from {C:\VS_2017_Projects\Fittify\Fittify.DataModels\bin\debug\netcoreapp2.0} 
-   Fittify.DataModels.dll   v1.0.0.0</Info>
-  <Info>.NET Assembly loaded from {C:\VS_2017_Projects\Fittify\Fittify.DbResetter\bin\debug\netcoreapp2.0} 
-   Fittify.DataModelRepositories.dll   v1.0.0.0</Info>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.DataModels\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.DbResetter\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
   <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.DataModelRepositories\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
   <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Web.ViewModels\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
   <Info>.NET Assembly loaded from {C:\VS_2017_Projects\Fittify\Fittify.Api\bin\debug\netcoreapp2.0} 
@@ -95,11 +95,24 @@
   <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Common.Test\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
   <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Api.OuterFacingModels.Test\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
   <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Web.ViewModelRepository\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>Assembly {Microsoft.AspNetCore.Authentication.Abstractions} is referenced by {Fittify.Web.View} and {Fittify.Web.ApiModelRepositories} but is not found.</Warning>
+  <Warning>Assembly {Microsoft.AspNetCore.Authentication.Cookies} is referenced by {Fittify.Web.View} but is not found.</Warning>
+  <Warning>Assembly {Microsoft.AspNetCore.Authentication.OpenIdConnect} is referenced by {Fittify.Web.View} but is not found.</Warning>
+  <Warning>Assembly {Microsoft.AspNetCore.Authorization} is referenced by {Fittify.Web.View} and {Fittify.Api} but is not found.</Warning>
+  <Warning>Assembly {System.Security.Claims} is referenced by {Fittify.Web.View}, {Fittify.Api} and {Fittify.Web.ApiModelRepositories} but is not found.</Warning>
+  <Warning>Assembly {IdentityModel} is referenced by {Fittify.Web.View} and {Fittify.Web.ApiModelRepositories} but is not found.</Warning>
+  <Warning>Assembly {System.IdentityModel.Tokens.Jwt} is referenced by {Fittify.Web.View} but is not found.</Warning>
+  <Warning>Assembly {Microsoft.AspNetCore.Authentication} is referenced by {Fittify.Web.View} and {Fittify.Api} but is not found.</Warning>
+  <Warning>Assembly {Microsoft.AspNetCore.Http} is referenced by {Fittify.Web.View} but is not found.</Warning>
+  <Warning>Assembly {Microsoft.AspNetCore.Authentication.OAuth} is referenced by {Fittify.Web.View} but is not found.</Warning>
+  <Warning>Assembly {Microsoft.IdentityModel.Tokens} is referenced by {Fittify.Web.View} but is not found.</Warning>
+  <Warning>Assembly {System.Security.Principal} is referenced by {Fittify.Web.View} and {Fittify.Api} but is not found.</Warning>
+  <Warning>Assembly {IdentityServer4.AccessTokenValidation} is referenced by {Fittify.Api} but is not found.</Warning>
   <Warning>Assembly {Fittify.Test.Core} is referenced by {Fittify.Api} but is not found.</Warning>
   <Warning>Assembly {Microsoft.EntityFrameworkCore.Sqlite} is referenced by {Fittify.Api} but is not found.</Warning>
-  <Info>176 source files parsed ; all source files found ; all source files in-sync with PDB</Info>
+  <Info>180 source files parsed ; all source files found ; all source files in-sync with PDB</Info>
   <Info>0 code rule has been extracted from code.</Info>
   <Info>No dependency cycle detected in assemblies referencement graph.</Info>
   <Info>Do merge code generated by compiler into application code.</Info>
-  <Info>NDepend analysis done. Duration: 00:01</Info>
+  <Info>NDepend analysis done. Duration: 00:21</Info>
 </InfoWarnings>

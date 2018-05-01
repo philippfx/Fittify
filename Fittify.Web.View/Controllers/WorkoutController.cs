@@ -10,7 +10,6 @@ using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ViewModelRepository.Sport;
 using Fittify.Web.ViewModels.Sport;
-using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +17,6 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Fittify.Web.View.Controllers
 {
@@ -44,17 +42,19 @@ namespace Fittify.Web.View.Controllers
             //await WriteOutAccessInformation();
 
             var queryResult = await _workoutViewModelRepo.GetCollection(new WorkoutResourceParameters());
-            List<WorkoutViewModel> listWorkoutViewModel = null;
-            if (queryResult.HttpStatusCode == HttpStatusCode.OK)
-            {
-                listWorkoutViewModel = queryResult.ViewModelForGetCollection.ToList();
-            }
 
             if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 queryResult.HttpStatusCode == HttpStatusCode.Forbidden)
             {
                 return RedirectToAction("AccessDenied", "Authorization");
             }
+
+            List<WorkoutViewModel> listWorkoutViewModel = null;
+            if (queryResult.HttpStatusCode == HttpStatusCode.OK)
+            {
+                listWorkoutViewModel = queryResult.ViewModelForGetCollection.ToList();
+            }
+
 
             return View("Overview", listWorkoutViewModel);
         }
@@ -64,18 +64,18 @@ namespace Fittify.Web.View.Controllers
         {
             var queryResult = await _workoutViewModelRepo.GetById(workoutId);
 
-            WorkoutViewModel workoutViewModel = null;
-            if ((int)queryResult.HttpStatusCode == 200)
-            {
-                workoutViewModel = queryResult.ViewModel;
-            }
-
             if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 queryResult.HttpStatusCode == HttpStatusCode.Forbidden)
             {
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
+            WorkoutViewModel workoutViewModel = null;
+            if ((int)queryResult.HttpStatusCode == 200)
+            {
+                workoutViewModel = queryResult.ViewModel;
+            }
+            
             return View(workoutViewModel);
         }
 
@@ -88,22 +88,19 @@ namespace Fittify.Web.View.Controllers
                 WorkoutId = workoutId,
                 ExerciseId = exerciseViewModel.Id
             };
-
-            //await view.Post<MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForGet>(
-            //    new Uri(_fittifyApiBaseUri, "api/mapexerciseworkouts"), mapExerciseWorkout);
-
+            
             var mapExerciseWorkoutViewModelRepo = new MapExerciseWorkoutViewModelRepository(_appConfiguration, _httpContextAccessor);
             var postResult = await mapExerciseWorkoutViewModelRepo.Create(mapExerciseWorkout);
-
-            if ((int)postResult.HttpStatusCode != 201)
-            {
-                // Todo: Do something when creation failed
-            }
 
             if (postResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 postResult.HttpStatusCode == HttpStatusCode.Forbidden)
             {
                 return RedirectToAction("AccessDenied", "Authorization");
+            }
+
+            if ((int)postResult.HttpStatusCode != 201)
+            {
+                // Todo: Do something when creation failed
             }
 
             return RedirectToAction("AssociatedExercises", "Workout", new { workoutId = workoutId });
@@ -117,16 +114,16 @@ namespace Fittify.Web.View.Controllers
             var workoutHistoryViewModelsCollectionQueryResult =
                 await repo.GetCollection(new WorkoutHistoryResourceParameters() {WorkoutId = workoutId});
 
-            IEnumerable<WorkoutHistoryViewModel> workoutHistoryViewModels = null;
-            if ((int)workoutHistoryViewModelsCollectionQueryResult.HttpStatusCode == 200)
-            {
-                workoutHistoryViewModels = workoutHistoryViewModelsCollectionQueryResult.ViewModelForGetCollection;
-            }
-
             if (workoutHistoryViewModelsCollectionQueryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 workoutHistoryViewModelsCollectionQueryResult.HttpStatusCode == HttpStatusCode.Forbidden)
             {
                 return RedirectToAction("AccessDenied", "Authorization");
+            }
+
+            IEnumerable<WorkoutHistoryViewModel> workoutHistoryViewModels = null;
+            if ((int)workoutHistoryViewModelsCollectionQueryResult.HttpStatusCode == 200)
+            {
+                workoutHistoryViewModels = workoutHistoryViewModelsCollectionQueryResult.ViewModelForGetCollection;
             }
 
             return View(workoutHistoryViewModels?.ToList());
@@ -139,25 +136,19 @@ namespace Fittify.Web.View.Controllers
             var workoutHistoryViewModelQueryResult =
                 await workoutHistoryViewModelRepository.GetById(workoutHistoryId);
 
-            WorkoutHistoryViewModel workoutHistoryViewModel = null;
-            if ((int)workoutHistoryViewModelQueryResult.HttpStatusCode == 200)
-            {
-                workoutHistoryViewModel = workoutHistoryViewModelQueryResult.ViewModel;
-            }
-
             if (workoutHistoryViewModelQueryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 workoutHistoryViewModelQueryResult.HttpStatusCode == HttpStatusCode.Forbidden)
             {
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
+            WorkoutHistoryViewModel workoutHistoryViewModel = null;
+            if ((int)workoutHistoryViewModelQueryResult.HttpStatusCode == 200)
+            {
+                workoutHistoryViewModel = workoutHistoryViewModelQueryResult.ViewModel;
+            }
+
             return View(workoutHistoryViewModel);
-
-            //var workoutHistoryViewModelRepository = new WorkoutHistoryViewModelRepository(_appConfiguration);
-            //var workoutHistoryViewModel =
-            //    await workoutHistoryViewModelRepository.GetDetailsById(workoutHistoryId);
-
-            //return View(workoutHistoryViewModel);
         }
 
         [HttpPost]
@@ -166,16 +157,16 @@ namespace Fittify.Web.View.Controllers
             var workoutViewModelRepo = new WorkoutViewModelRepository(_appConfiguration, _httpContextAccessor);
             var postResult = await workoutViewModelRepo.Create(workoutOfmForPost);
 
-            WorkoutViewModel workoutViewModel = null;
-            if ((int)postResult.HttpStatusCode == 201)
-            {
-                workoutViewModel = postResult.ViewModel;
-            }
-
             if (postResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 postResult.HttpStatusCode == HttpStatusCode.Forbidden)
             {
                 return RedirectToAction("AccessDenied", "Authorization");
+            }
+
+            WorkoutViewModel workoutViewModel = null;
+            if ((int)postResult.HttpStatusCode == 201)
+            {
+                workoutViewModel = postResult.ViewModel;
             }
 
             return RedirectToAction("AssociatedExercises", "Workout", new { workoutId = workoutViewModel?.Id });
@@ -187,11 +178,6 @@ namespace Fittify.Web.View.Controllers
         {
             var workoutViewModelRepo = new WorkoutViewModelRepository(_appConfiguration, _httpContextAccessor);
             var queryResult = await workoutViewModelRepo.Delete(workoutId);
-            
-            if ((int)queryResult.HttpStatusCode == 204)
-            {
-                // Todo: Do something when deletion failed
-            }
 
             if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 queryResult.HttpStatusCode == HttpStatusCode.Forbidden)
@@ -199,6 +185,11 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
+            if ((int)queryResult.HttpStatusCode == 204)
+            {
+                // Todo: Do something when deletion failed
+            }
+            
             return RedirectToAction("Overview", "Workout", null);
         }
 
@@ -213,15 +204,15 @@ namespace Fittify.Web.View.Controllers
             var workoutViewModelRepo = new WorkoutViewModelRepository(_appConfiguration, _httpContextAccessor);
             var queryResult = await workoutViewModelRepo.PartiallyUpdate(id, jsonPatchDocument);
 
-            if ((int)queryResult.HttpStatusCode == 200)
-            {
-                // Todo: Do something when patching failed
-            }
-
             if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 queryResult.HttpStatusCode == HttpStatusCode.Forbidden)
             {
                 return RedirectToAction("AccessDenied", "Authorization");
+            }
+
+            if ((int)queryResult.HttpStatusCode == 200)
+            {
+                // Todo: Do something when patching failed
             }
 
             return RedirectToAction("Overview", "Workout", null);
@@ -289,6 +280,12 @@ namespace Fittify.Web.View.Controllers
 
                 var wlsViewModelRepository = new WeightLiftingSetViewModelRepository(_appConfiguration, _httpContextAccessor);
                 var patchResult = await wlsViewModelRepository.PartiallyUpdate(wls.Id, jsonPatchDocument);
+
+                if (patchResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                    patchResult.HttpStatusCode == HttpStatusCode.Forbidden)
+                {
+                    return RedirectToAction("AccessDenied", "Authorization");
+                }
 
                 if ((int)patchResult.HttpStatusCode == 200)
                 {

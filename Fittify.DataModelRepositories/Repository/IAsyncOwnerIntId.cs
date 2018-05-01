@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Fittify.DataModelRepositories.Owned
+namespace Fittify.DataModelRepositories.Repository
 {
     public interface IAsyncOwnerIntId
     {

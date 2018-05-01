@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ViewModelRepository.Sport;
@@ -24,6 +25,12 @@ namespace Fittify.Web.View.Controllers
         {
             var postResult = await _cardioSetViewModelRepository.Create(cardioSetOfmForPost);
 
+            if (postResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                postResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
+
             if ((int)postResult.HttpStatusCode != 201)
             {
                 // Todo: Do something when posting failed
@@ -40,6 +47,12 @@ namespace Fittify.Web.View.Controllers
             jsonPatch.Replace("/datetimestart", DateTime.Now);
 
             var patchResult = await _cardioSetViewModelRepository.PartiallyUpdate(cardioSetId, jsonPatch);
+
+            if (patchResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                patchResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
 
             if ((int)patchResult.HttpStatusCode != 200)
             {
@@ -58,6 +71,12 @@ namespace Fittify.Web.View.Controllers
 
             var patchResult = await _cardioSetViewModelRepository.PartiallyUpdate(cardioSetId, jsonPatch);
 
+            if (patchResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                patchResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
+
             if ((int)patchResult.HttpStatusCode != 200)
             {
                 // Todo: Do something when posting failed
@@ -71,6 +90,12 @@ namespace Fittify.Web.View.Controllers
         public async Task<RedirectToActionResult> Delete(/*[Bind("id")] int cardioSetId,*/ [FromQuery] int workoutHistoryId, [FromQuery] int cardioSetId)
         {
             var deleteResult = await _cardioSetViewModelRepository.Delete(cardioSetId);
+
+            if (deleteResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                deleteResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
 
             if ((int)deleteResult.HttpStatusCode != 204)
             {

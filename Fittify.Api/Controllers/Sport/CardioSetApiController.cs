@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Authorization;
-using Fittify.Api.Controllers.HttpMethodInterfaces;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.OfmRepository.GenericGppd;
@@ -12,15 +11,11 @@ using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
-using Fittify.DataModelRepositories;
 using Fittify.DataModelRepositories.Repository.Sport;
-using Fittify.DataModelRepositories.Services;
-using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Fittify.Api.Controllers.Sport
 {
