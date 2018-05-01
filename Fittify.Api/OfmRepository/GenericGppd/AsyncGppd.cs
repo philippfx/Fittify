@@ -6,6 +6,7 @@ using Fittify.Common;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories;
+using Fittify.DataModelRepositories.Repository;
 using Fittify.DataModelRepositories.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;

@@ -1,4 +1,5 @@
 ﻿using Fittify.DataModelRepositories;
+using Fittify.DataModelRepositories.Repository;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Microsoft.Extensions.DependencyInjection;
 

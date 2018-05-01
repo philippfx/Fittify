@@ -4,7 +4,7 @@ using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Helpers;
 
-namespace Fittify.DataModelRepositories
+namespace Fittify.DataModelRepositories.Repository
 {
     public interface IAsyncCrud<TEntity, TId, TResourceParameters> 
         where TEntity : class, IEntityUniqueIdentifier<TId>

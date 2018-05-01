@@ -3,10 +3,11 @@ using System.Threading.Tasks;
 using Fittify.Common;
 using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Helpers;
+using Fittify.DataModelRepositories.Repository;
 using Fittify.DataModelRepositories.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fittify.DataModelRepositories
+namespace Fittify.DataModelRepositories.Repository
 {
 
     public abstract class AsyncCrud<TEntity, TOfmForGet, TId, TResourceParameters> : IAsyncCrud<TEntity, TId, TResourceParameters>
