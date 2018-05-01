@@ -5,13 +5,13 @@ using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
-using Fittify.DataModelRepositories.Repository.Sport;
+using Fittify.DataModelRepositories.Repository.Sport.ExtendedInterfaces;
 using Fittify.DataModelRepositories.Services;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Fittify.Api.OfmRepository
+namespace Fittify.Api.OfmRepository.GenericGppd.Sport
 {
     public class AsyncGppdForWorkoutHistory : AsyncGppd<WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int, WorkoutHistoryResourceParameters>,
         IAsyncGppdForWorkoutHistory

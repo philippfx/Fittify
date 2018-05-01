@@ -81,14 +81,7 @@ namespace Fittify.DataModelRepositories
         public async Task<bool> SaveContext()
         {
             int objectsWrittenToContext = -1;
-            try
-            {
-                objectsWrittenToContext = await FittifyContext.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                var msg = e.Message;
-            }
+            objectsWrittenToContext = await FittifyContext.SaveChangesAsync();
             return objectsWrittenToContext >= 0;
         }
 

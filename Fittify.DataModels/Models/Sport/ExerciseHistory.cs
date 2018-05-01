@@ -23,11 +23,7 @@ namespace Fittify.DataModels.Models.Sport
         public int? PreviousExerciseHistoryId { get; set; }
         public virtual ExerciseHistory PreviousExerciseHistory { get; set; }
         public virtual List<ExerciseHistory> ParentPreviousExerciseHistory { get; set; }
-
-        //public int? NextExerciseHistoryId { get; set; }
-        //public virtual ExerciseHistory NextExerciseHistory { get; set; }
-        //public virtual List<ExerciseHistory> ParentNextExerciseHistory { get; set; }
-
+        
         public virtual IEnumerable<WeightLiftingSet> WeightLiftingSets { get; set; }
         public virtual IEnumerable<CardioSet> CardioSets { get; set; }
     }

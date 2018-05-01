@@ -1,8 +1,8 @@
-﻿using Fittify.Api.OfmRepository;
+﻿using Fittify.Api.OfmRepository.GenericGppd;
 using Fittify.Api.OfmRepository.Sport;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Fittify.Api.Extensions.ConfigureServices
+namespace Fittify.Api.Middleware.Extensions.ConfigureServices
 {
     public static class GppdRepositoryServices
     {

@@ -10,7 +10,6 @@ namespace Fittify.Web.View.Controllers
     [Route("exercisehistories")]
     public class ExerciseHistoryController : Controller
     {
-        private readonly Uri _fittifyApiBaseUri;
         private ExerciseHistoryViewModelRepository _exerciseHistoryViewModelRepository;
 
         public ExerciseHistoryController(IConfiguration appConfiguration)

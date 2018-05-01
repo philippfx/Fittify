@@ -24,13 +24,5 @@ namespace Fittify.Common.Helpers
 
             return true;
         }
-
-        //// Validates an object for the data annotations for each class Property
-        //public static bool Validate<T>(T obj, ref List<ValidationResult> results)
-        //{
-        //    results = new List<ValidationResult>();
-
-        //    return Validator.TryValidateObject(obj, new ValidationContext(obj), results, true);
-        //}
     }
 }

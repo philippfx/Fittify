@@ -5,6 +5,7 @@ using AutoMapper;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.OfmRepository;
+using Fittify.Api.OfmRepository.GenericGppd;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -32,11 +33,7 @@ namespace Fittify.Api.Controllers.Sport
 
         public ExerciseApiController(
             IAsyncGppd<ExerciseOfmForGet, ExerciseOfmForPost, ExerciseOfmForPatch, int, ExerciseResourceParameters> asyncGppd,
-            IActionDescriptorCollectionProvider adcProvider,
             IUrlHelper urlHelper,
-            IPropertyMappingService propertyMappingService,
-            ITypeHelperService typeHelperService,
-            IConfiguration appConfiguration,
             IHttpContextAccessor httpContextAccesor)
         {
             _asyncGppd = asyncGppd;

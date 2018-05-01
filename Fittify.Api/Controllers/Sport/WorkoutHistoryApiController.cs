@@ -5,6 +5,7 @@ using AutoMapper;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.OfmRepository;
+using Fittify.Api.OfmRepository.GenericGppd.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -32,11 +33,7 @@ namespace Fittify.Api.Controllers.Sport
 
         public WorkoutHistoryApiController(
             IAsyncGppdForWorkoutHistory asyncGppd,
-            IActionDescriptorCollectionProvider adcProvider,
             IUrlHelper urlHelper,
-            IPropertyMappingService propertyMappingService,
-            ITypeHelperService typeHelperService,
-            IConfiguration appConfiguration,
             IHttpContextAccessor httpContextAccesor)
         {
             _asyncGppd = asyncGppd;
@@ -79,8 +76,6 @@ namespace Fittify.Api.Controllers.Sport
             dynamic result = new
             {
                 value = expandableOfmForGetCollection,
-                //links = _hateoasLinkFactory.CreateLinksForOfmGetForWorkoutHistory(resourceParameters,
-                //    ofmForGetCollectionQueryResult.HasPrevious, ofmForGetCollectionQueryResult.HasNext).ToList()
                 links = _hateoasLinkFactory.CreateLinksForOfmGetGeneric(resourceParameters.AsDictionary().RemoveNullValues(),
                     ofmForGetCollectionQueryResult.HasPrevious, ofmForGetCollectionQueryResult.HasNext).ToList()
             };

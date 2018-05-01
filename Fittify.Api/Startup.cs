@@ -13,11 +13,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using AspNetCoreRateLimit;
-using Fittify.Api.Extensions.ConfigureServices;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Middleware;
+using Fittify.Api.Middleware.Extensions.ConfigureServices;
 using Fittify.Api.OfmRepository;
+using Fittify.Api.OfmRepository.GenericGppd.Sport;
 using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories.Services;
 using Fittify.Test.Core.Seed;
@@ -147,14 +148,10 @@ namespace Fittify.Api
 
             services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
             services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
-
-            //services.AddSingleton(typeof(IAsyncCrud<,,>), typeof(AsyncCrud<,,,>));
+            
             services.AddFittifyDataRepositoryServices();
-            //services.AddScoped<IAsyncCrud<CardioSet, int, CardioSetResourceParameters>, CardioSetRepository>();
             services.AddFittifyGppdRepositoryServices();
             services.AddScoped<IAsyncGppdForWorkoutHistory, AsyncGppdForWorkoutHistory>();
-            //services.AddScoped<IAsyncGppd<CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int, CardioSetResourceParameters>, CardioSetOfmRepository> ();
-            //services.AddScoped<IExperimentalCardioSetApiController, ExperimentalCardioSetApiController>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -183,8 +180,7 @@ namespace Fittify.Api
                     });
                 });
             }
-
-            //app.UseMiddleware<HeaderValidation>();
+            
             app.UseFittifyHeaderValidation(Configuration);
             app.EnsureFittifyHeaderDefaultValues(Configuration);
 
@@ -219,12 +215,7 @@ namespace Fittify.Api
                 cfg.CreateMap<IncomingRawHeaders, IncomingHeaders>()
                     .ForMember(dest => dest.IncludeHateoas, opt => opt.MapFrom(src => src.IncludeHateoas.ToBool()))
                     .ForMember(dest => dest.IncludeHateoas, opt => opt.MapFrom(src => int.Parse(src.IncludeHateoas)));
-
-                //cfg.CreateMap<CategoryOfmForPatch, Category>()
-                //    .ForMember(dest => dest.Workouts, opt => opt.);
-
-                // OfmPpp to Entity
-                //cfg.CreateMap<WorkoutHistoryOfmForPatch, WorkoutHistory>();
+                
                 //cfg.IgnoreUnmapped<WorkoutHistoryOfmForPpp, WorkoutHistory>(); // does not work as expected
 
                 // Must be last statement

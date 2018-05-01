@@ -9,11 +9,11 @@ namespace Fittify.Web.ViewModelRepository.Sport
 {
     public class CategoryViewModelRepository : GenericViewModelRepository<int, CategoryViewModel, CategoryOfmForGet, CategoryOfmForPost, CategoryResourceParameters>
     {
-        private GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryResourceParameters> asyncGppdOfmCategory;
+        private readonly GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryResourceParameters> _asyncGppdOfmCategory;
         public CategoryViewModelRepository(IConfiguration appConfiguration)
             : base(appConfiguration, "Category")
         {
-            asyncGppdOfmCategory = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryResourceParameters>(appConfiguration, "Category");
+            _asyncGppdOfmCategory = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryResourceParameters>(appConfiguration, "Category");
         }
     }
 }

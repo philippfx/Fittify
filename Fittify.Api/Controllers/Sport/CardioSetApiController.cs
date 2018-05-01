@@ -5,6 +5,7 @@ using AutoMapper;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.OfmRepository;
+using Fittify.Api.OfmRepository.GenericGppd;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -31,11 +32,7 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IncomingHeaders _incomingHeaders;
 
         public CardioSetApiController(
-            //IActionDescriptorCollectionProvider adcProvider,
             IUrlHelper urlHelper,
-            //IPropertyMappingService propertyMappingService,
-            //ITypeHelperService typeHelperService,
-            //IConfiguration appConfiguration,
             IHttpContextAccessor httpContextAccesor,
             IAsyncGppd<CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int, CardioSetResourceParameters> asyncGppd)
         {

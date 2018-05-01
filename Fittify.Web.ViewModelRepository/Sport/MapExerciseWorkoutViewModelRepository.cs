@@ -9,19 +9,11 @@ namespace Fittify.Web.ViewModelRepository.Sport
 {
     public class MapExerciseWorkoutViewModelRepository : GenericViewModelRepository<int, MapExerciseWorkoutViewModel, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutResourceParameters>
     {
-        private GenericAsyncGppdOfm<int, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutResourceParameters> asyncGppdOfmMapExerciseWorkout;
+        private readonly GenericAsyncGppdOfm<int, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutResourceParameters> _asyncGppdOfmMapExerciseWorkout;
         public MapExerciseWorkoutViewModelRepository(IConfiguration appConfiguration)
             : base(appConfiguration, "MapExerciseWorkout")
         {
-            asyncGppdOfmMapExerciseWorkout = new GenericAsyncGppdOfm<int, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutResourceParameters>(appConfiguration, "MapExerciseWorkout");
+            _asyncGppdOfmMapExerciseWorkout = new GenericAsyncGppdOfm<int, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutResourceParameters>(appConfiguration, "MapExerciseWorkout");
         }
-        //public async Task<IEnumerable<MapExerciseWorkoutViewModel>> GetCollectionByExerciseHistoryId(int exerciseHistoryId)
-        //{
-        //    var exerciseHistoryOfmCollectionQueryResult =
-        //        await AsyncGppd.GetCollection<MapExerciseWorkoutOfmForGet>(
-        //            new Uri(_fittifyApiBaseUri, "api/cardiosets?exerciseHistoryId=" + exerciseHistoryId));
-
-        //    return Mapper.Map<IEnumerable<MapExerciseWorkoutViewModel>>(exerciseHistoryOfmCollectionQueryResult.OfmForGetCollection);
-        //}
     }
 }

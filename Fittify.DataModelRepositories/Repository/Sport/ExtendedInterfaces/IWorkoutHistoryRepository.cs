@@ -2,7 +2,7 @@
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.DataModels.Models.Sport;
 
-namespace Fittify.DataModelRepositories.Repository.Sport
+namespace Fittify.DataModelRepositories.Repository.Sport.ExtendedInterfaces
 {
     public interface IWorkoutHistoryRepository : IAsyncCrud<WorkoutHistory, int, WorkoutHistoryResourceParameters>
     {

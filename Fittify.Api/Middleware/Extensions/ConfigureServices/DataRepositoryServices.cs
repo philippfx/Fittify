@@ -2,7 +2,7 @@
 using Fittify.DataModelRepositories.Repository.Sport;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Fittify.Api.Extensions.ConfigureServices
+namespace Fittify.Api.Middleware.Extensions.ConfigureServices
 {
     public static class DataRepositoryServices
     {

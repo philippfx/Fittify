@@ -9,20 +9,12 @@ namespace Fittify.Web.ViewModelRepository.Sport
 {
     public class WeightLiftingSetViewModelRepository : GenericViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetResourceParameters>
     {
-        private GenericAsyncGppdOfm<int, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetResourceParameters> asyncGppdOfmWeightLiftingSet;
+        private readonly GenericAsyncGppdOfm<int, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetResourceParameters> _asyncGppdOfmWeightLiftingSet;
         public WeightLiftingSetViewModelRepository(IConfiguration appConfiguration)
             : base(appConfiguration, "WeightLiftingSet")
         {
-            asyncGppdOfmWeightLiftingSet = new GenericAsyncGppdOfm<int, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetResourceParameters>(appConfiguration, "WeightLiftingSet");
+            _asyncGppdOfmWeightLiftingSet = new GenericAsyncGppdOfm<int, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetResourceParameters>(appConfiguration, "WeightLiftingSet");
         }
-        //public async Task<IEnumerable<WeightLiftingSetViewModel>> GetCollectionByExerciseHistoryId(int exerciseHistoryId)
-        //{
-        //    var exerciseHistoryOfmCollectionQueryResult =
-        //        await AsyncGppd.GetCollection<WeightLiftingSetOfmForGet>(
-        //            new Uri(_fittifyApiBaseUri, "api/weightliftingsets?exerciseHistoryId=" + exerciseHistoryId));
-
-        //    return Mapper.Map<IEnumerable<WeightLiftingSetViewModel>>(exerciseHistoryOfmCollectionQueryResult.OfmForGetCollection);
-        //}
     }
 }
 

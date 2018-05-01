@@ -10,7 +10,7 @@ using Fittify.DataModelRepositories.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Fittify.Api.OfmRepository
+namespace Fittify.Api.OfmRepository.GenericGppd
 {
     public class AsyncGppd<TEntity, TOfmForGet, TOfmForPost, TOfmForPatch, TId, TResourceParameters> 
         : IAsyncGppd<TOfmForGet, TOfmForPost, TOfmForPatch, TId, TResourceParameters>
