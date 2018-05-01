@@ -15,7 +15,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
 {
     public class AsyncOfmWorkoutRepository
     {
-        private IConfiguration _appConfiguration;
+        private readonly IConfiguration _appConfiguration;
 
         public AsyncOfmWorkoutRepository(IConfiguration appConfiguration)
         {

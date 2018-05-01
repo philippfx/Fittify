@@ -10,7 +10,7 @@ namespace Fittify.Web.View.Controllers
     [Route("mapexerciseworkout")]
     public class MapExerciseWorkoutController : Controller
     {
-        private MapExerciseWorkoutViewModelRepository _mapExerciseWorkoutViewModelRepository;
+        private readonly MapExerciseWorkoutViewModelRepository _mapExerciseWorkoutViewModelRepository;
 
         public MapExerciseWorkoutController(IConfiguration appConfiguration)
         {

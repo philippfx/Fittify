@@ -13,8 +13,8 @@ namespace Fittify.Web.ViewModelRepository.Sport
 {
     public class WorkoutViewModelRepository : GenericViewModelRepository<int, WorkoutViewModel, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutResourceParameters>
     {
-        private GenericAsyncGppdOfm<int, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutResourceParameters> asyncGppdOfmWorkout;
-        private IConfiguration _appConfiguration;
+        private readonly GenericAsyncGppdOfm<int, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutResourceParameters> asyncGppdOfmWorkout;
+        private readonly IConfiguration _appConfiguration;
 
         public WorkoutViewModelRepository(IConfiguration appConfiguration) 
             : base(appConfiguration, "Workout")

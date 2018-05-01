@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Fittify.Api.OuterFacingModels.Sport.Get;
+using Fittify.Common.CustomExceptions;
 using Fittify.DataModels.Models.Sport;
 
 namespace Fittify.DataModelRepositories.Services
@@ -46,7 +47,7 @@ namespace Fittify.DataModelRepositories.Services
                 return matchingMapping.First()._mappingDictionary;
             }
 
-            throw new Exception($"Cannot find exact property mapping instance for <{typeof(TSource)},{typeof(TDestination)}");
+            throw new PropertyMappingNotFoundException($"Cannot find exact property mapping instance for <{typeof(TSource)},{typeof(TDestination)}");
         }
 
         public bool ValidMappingExistsFor<TSource, TDestination>(string fields, ref List<string> errorMessages)

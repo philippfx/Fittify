@@ -17,7 +17,6 @@ using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Middleware;
 using Fittify.Api.Middleware.Extensions.ConfigureServices;
-using Fittify.Api.OfmRepository;
 using Fittify.Api.OfmRepository.GenericGppd.Sport;
 using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories.Services;

@@ -4,19 +4,15 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
-using Fittify.Api.OfmRepository;
 using Fittify.Api.OfmRepository.GenericGppd;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
-using Fittify.DataModelRepositories.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace Fittify.Api.Controllers.Sport
 {

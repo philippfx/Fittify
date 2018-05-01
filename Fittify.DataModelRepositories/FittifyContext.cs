@@ -29,7 +29,7 @@ namespace Fittify.DataModelRepositories
             {
                 throw new ArgumentNullException("dbConnectionString");
             }
-            OnConfiguring(new DbContextOptionsBuilder());
+            //OnConfiguring(new DbContextOptionsBuilder());
         }
 
         public DbSet<CardioSet> CardioSets { get; set; }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ViewModelRepository.Sport;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +9,7 @@ namespace Fittify.Web.View.Controllers
     [Route("exercisehistories")]
     public class ExerciseHistoryController : Controller
     {
-        private ExerciseHistoryViewModelRepository _exerciseHistoryViewModelRepository;
+        private readonly ExerciseHistoryViewModelRepository _exerciseHistoryViewModelRepository;
 
         public ExerciseHistoryController(IConfiguration appConfiguration)
         {
