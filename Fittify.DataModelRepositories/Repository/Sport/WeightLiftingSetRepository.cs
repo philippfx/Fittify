@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class WeightLiftingSetRepository : AsyncCrud<WeightLiftingSet, int>
+    public class WeightLiftingSetRepository : AsyncCrud<WeightLiftingSet, WeightLiftingSetOfmForGet, int, WeightLiftingSetResourceParameters>
     {
         public WeightLiftingSetRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
@@ -24,7 +24,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public PagedList<WeightLiftingSet> GetCollection(WeightLiftingSetResourceParameters resourceParameters)
+        public override PagedList<WeightLiftingSet> GetCollection(WeightLiftingSetResourceParameters resourceParameters)
         {
             var allEntitiesQueryable = GetAll()
                 .Include(i => i.ExerciseHistory)

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class CategoryRepository : AsyncCrud<Category, int> //: AsyncGetCollectionForEntityDateTimeStartEnd<Category, CategoryOfmForGet, int> // Todo implement IAsyncCrudForDateTimeStartEnd
+    public class CategoryRepository : AsyncCrud<Category, CategoryOfmForGet, int, CategoryResourceParameters>
     {
         public CategoryRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
@@ -22,7 +22,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public PagedList<Category> GetCollection(CategoryResourceParameters resourceParameters)
+        public override PagedList<Category> GetCollection(CategoryResourceParameters resourceParameters)
         {
             var allEntitiesQueryable = GetAll()
                 .ApplySort(resourceParameters.OrderBy,

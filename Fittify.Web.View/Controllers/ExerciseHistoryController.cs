@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ViewModelRepository.Sport;
 using Microsoft.AspNetCore.Mvc;

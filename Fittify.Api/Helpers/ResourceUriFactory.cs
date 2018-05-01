@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
+﻿using System.Collections.Generic;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters;
-using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.Helpers

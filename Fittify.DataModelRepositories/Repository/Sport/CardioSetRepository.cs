@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class CardioSetRepository : AsyncCrud<CardioSet, int> //: AsyncGetCollectionForEntityDateTimeStartEnd<CardioSet, CardioSetOfmForGet, int> // Todo implement IAsyncCrudForDateTimeStartEnd
+    public class CardioSetRepository : AsyncCrud<CardioSet, CardioSetOfmForGet, int, CardioSetResourceParameters>
     {
         public CardioSetRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
@@ -22,7 +22,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public PagedList<CardioSet> GetCollection(CardioSetResourceParameters resourceParameters)
+        public override PagedList<CardioSet> GetCollection(CardioSetResourceParameters resourceParameters)
         {
             var allEntitiesQueryable = GetAll()
                 .Include(i => i.ExerciseHistory)

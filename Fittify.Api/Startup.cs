@@ -13,9 +13,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using AspNetCoreRateLimit;
+using Fittify.Api.Extensions.ConfigureServices;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Middleware;
+using Fittify.Api.OfmRepository;
 using Fittify.Common.Helpers;
 using Fittify.DataModelRepositories.Services;
 using Fittify.Test.Core.Seed;
@@ -145,6 +147,14 @@ namespace Fittify.Api
 
             services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
             services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+
+            //services.AddSingleton(typeof(IAsyncCrud<,,>), typeof(AsyncCrud<,,,>));
+            services.AddFittifyDataRepositoryServices();
+            //services.AddScoped<IAsyncCrud<CardioSet, int, CardioSetResourceParameters>, CardioSetRepository>();
+            services.AddFittifyGppdRepositoryServices();
+            services.AddScoped<IAsyncGppdForWorkoutHistory, AsyncGppdForWorkoutHistory>();
+            //services.AddScoped<IAsyncGppd<CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int, CardioSetResourceParameters>, CardioSetOfmRepository> ();
+            //services.AddScoped<IExperimentalCardioSetApiController, ExperimentalCardioSetApiController>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

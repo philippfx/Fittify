@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Fittify.Api.OuterFacingModels.Sport.Get;
-using Fittify.Api.OuterFacingModels.Sport.Post;
-using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ApiModelRepositories;
-using Fittify.Web.ViewModelRepository.Sport;
-using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Configuration;
 
