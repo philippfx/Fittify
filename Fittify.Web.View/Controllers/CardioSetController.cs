@@ -12,7 +12,6 @@ namespace Fittify.Web.View.Controllers
     [Route("cardiosets")]
     public class CardioSetController : Controller
     {
-        private readonly Uri _fittifyApiBaseUri;
         private readonly CardioSetViewModelRepository _cardioSetViewModelRepository;
         public CardioSetController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {

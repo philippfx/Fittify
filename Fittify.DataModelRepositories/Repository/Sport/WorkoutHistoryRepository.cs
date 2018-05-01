@@ -6,13 +6,13 @@ using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common.Helpers;
 using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.DataModelRepositories.Helpers;
-using Fittify.DataModelRepositories.Owned;
+using Fittify.DataModelRepositories.Repository.Sport.ExtendedInterfaces;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class WorkoutHistoryRepository : AsyncCrud<WorkoutHistory, int>, IAsyncGetCollection<WorkoutHistory, WorkoutHistoryResourceParameters>, IAsyncOwnerIntId
+    public class WorkoutHistoryRepository : AsyncCrud<WorkoutHistory, WorkoutHistoryOfmForGet, int, WorkoutHistoryResourceParameters>, IWorkoutHistoryRepository, IAsyncOwnerIntId
     {
         public WorkoutHistoryRepository()
         {

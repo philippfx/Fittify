@@ -16,22 +16,5 @@ namespace Fittify.Web.ViewModelRepository.Sport
         {
             asyncGppdOfmExercise = new GenericAsyncGppdOfm<int, ExerciseOfmForGet, ExerciseOfmForPost, ExerciseResourceParameters>(appConfiguration, httpContextAccessor, "Exercise");
         }
-        //public async Task<IEnumerable<ExerciseViewModel>> GetCollectionByRangeOfIds(string rangeOfIds)
-        //{
-        //    var exerciseOfmCollectionQueryResult =
-        //        await AsyncGppd.GetCollection<ExerciseOfmForGet>(
-        //            new Uri(_fittifyApiBaseUri, "api/exercises?ids=" + rangeOfIds));
-
-        //    return Mapper.Map<IEnumerable<ExerciseViewModel>>(exerciseOfmCollectionQueryResult.OfmForGetCollection);
-        //}
-
-        //public async Task<IEnumerable<ExerciseViewModel>> GetAll()
-        //{
-        //    var exerciseOfmCollectionQueryResult =
-        //        await AsyncGppd.GetCollection<ExerciseOfmForGet>(
-        //            new Uri(_fittifyApiBaseUri, "api/exercises"));
-
-        //    return Mapper.Map<IEnumerable<ExerciseViewModel>>(exerciseOfmCollectionQueryResult.OfmForGetCollection);
-        //}
     }
 }

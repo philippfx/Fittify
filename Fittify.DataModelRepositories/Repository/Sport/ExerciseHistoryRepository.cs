@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class ExerciseHistoryRepository : AsyncCrud<ExerciseHistory, int>, IAsyncGetCollection<ExerciseHistory, ExerciseHistoryResourceParameters>, IAsyncOwnerIntId
+    public class ExerciseHistoryRepository : AsyncCrud<ExerciseHistory, ExerciseHistoryOfmForGet, int, ExerciseHistoryResourceParameters>, IAsyncOwnerIntId
     {
         public ExerciseHistoryRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {

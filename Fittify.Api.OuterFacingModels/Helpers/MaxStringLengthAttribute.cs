@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Fittify.Common.Extensions;
 
 namespace Fittify.Api.OuterFacingModels.Helpers
 {
+    [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = true)]
     public sealed class MaxStringLengthAttribute : StringLengthAttribute
     {
         private readonly int _maximumLength;

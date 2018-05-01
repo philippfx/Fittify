@@ -16,13 +16,5 @@ namespace Fittify.Web.ViewModelRepository.Sport
         {
             asyncGppdOfmMapExerciseWorkout = new GenericAsyncGppdOfm<int, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutResourceParameters>(appConfiguration, httpContextAccessor, "MapExerciseWorkout");
         }
-        //public async Task<IEnumerable<MapExerciseWorkoutViewModel>> GetCollectionByExerciseHistoryId(int exerciseHistoryId)
-        //{
-        //    var exerciseHistoryOfmCollectionQueryResult =
-        //        await AsyncGppd.GetCollection<MapExerciseWorkoutOfmForGet>(
-        //            new Uri(_fittifyApiBaseUri, "api/cardiosets?exerciseHistoryId=" + exerciseHistoryId));
-
-        //    return Mapper.Map<IEnumerable<MapExerciseWorkoutViewModel>>(exerciseHistoryOfmCollectionQueryResult.OfmForGetCollection);
-        //}
     }
 }

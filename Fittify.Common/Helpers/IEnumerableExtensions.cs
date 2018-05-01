@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Reflection;
+using Fittify.Common.CustomExceptions;
 
 namespace Fittify.Common.Helpers
 {
@@ -56,7 +57,7 @@ namespace Fittify.Common.Helpers
 
                     if (propertyInfo == null)
                     {
-                        throw new Exception($"Property {propertyName} wasn't found on {typeof(TSource)}");
+                        throw new PropertyNotFoundException($"Property {propertyName} wasn't found on {typeof(TSource)}");
                     }
 
                     // add propertyInfo to list 

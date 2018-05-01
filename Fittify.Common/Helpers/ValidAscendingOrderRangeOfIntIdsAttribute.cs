@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Fittify.Common.Helpers
 {
+    [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = true)]
     public sealed class ValidAscendingOrderRangeOfIntIdsAttribute : ValidationAttribute
     {
         public override bool IsValid(object value)

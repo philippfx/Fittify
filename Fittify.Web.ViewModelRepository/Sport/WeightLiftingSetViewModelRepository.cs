@@ -16,14 +16,6 @@ namespace Fittify.Web.ViewModelRepository.Sport
         {
             asyncGppdOfmWeightLiftingSet = new GenericAsyncGppdOfm<int, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetResourceParameters>(appConfiguration, httpContextAccessor, "WeightLiftingSet");
         }
-        //public async Task<IEnumerable<WeightLiftingSetViewModel>> GetCollectionByExerciseHistoryId(int exerciseHistoryId)
-        //{
-        //    var exerciseHistoryOfmCollectionQueryResult =
-        //        await AsyncGppd.GetCollection<WeightLiftingSetOfmForGet>(
-        //            new Uri(_fittifyApiBaseUri, "api/weightliftingsets?exerciseHistoryId=" + exerciseHistoryId));
-
-        //    return Mapper.Map<IEnumerable<WeightLiftingSetViewModel>>(exerciseHistoryOfmCollectionQueryResult.OfmForGetCollection);
-        //}
     }
 }
 

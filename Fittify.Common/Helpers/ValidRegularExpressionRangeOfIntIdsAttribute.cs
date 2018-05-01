@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
 namespace Fittify.Common.Helpers
 {
+    [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = true)]
     public sealed class ValidRegularExpressionRangeOfIntIdsAttribute : ValidationAttribute
     {
         private readonly string _pattern;

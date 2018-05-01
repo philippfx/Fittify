@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Nutrition\" />
+    <Compile Remove="Nutrition\**" />
+    <EmbeddedResource Remove="Nutrition\**" />
+    <None Remove="Nutrition\**" />
   </ItemGroup>
 
   <ItemGroup>

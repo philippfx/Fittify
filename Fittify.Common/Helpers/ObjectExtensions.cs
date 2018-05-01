@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
+using Fittify.Common.CustomExceptions;
 
 namespace Fittify.Common.Helpers
 {
@@ -54,7 +55,7 @@ namespace Fittify.Common.Helpers
 
                 if (propertyInfo == null)
                 {
-                    throw new Exception($"Property {propertyName} wasn't found on {typeof(TSource)}");
+                    throw new PropertyNotFoundException($"Property {propertyName} wasn't found on {typeof(TSource)}");
                 }
 
                 // get the value of the property on the source object
