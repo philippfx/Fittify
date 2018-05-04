@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Fittify.Common.CustomExceptions;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -48,7 +49,7 @@ namespace Fittify.Web.View.Controllers
 
                 if (revokeAccessTokenResponse.IsError)
                 {
-                    throw new Exception("Problem encountered while revoking the access token."
+                    throw new OpenIdConnectException("Problem encountered while revoking the access token."
                         , revokeAccessTokenResponse.Exception);
                 }
             }

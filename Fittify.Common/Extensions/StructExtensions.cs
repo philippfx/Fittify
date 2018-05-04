@@ -1,4 +1,4 @@
-﻿namespace Fittify.Api.Helpers.Extensions
+﻿namespace Fittify.Common.Extensions
 {
 
     public static class StructExtensions

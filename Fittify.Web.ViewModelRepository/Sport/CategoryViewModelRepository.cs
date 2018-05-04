@@ -1,4 +1,4 @@
-﻿using Fittify.Api.OuterFacingModels.ResourceParameters.Sport;
+﻿using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ApiModelRepositories;
@@ -10,11 +10,11 @@ namespace Fittify.Web.ViewModelRepository.Sport
 {
     public class CategoryViewModelRepository : GenericViewModelRepository<int, CategoryViewModel, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmResourceParameters>
     {
-        private GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmResourceParameters> asyncGppdOfmCategory;
+        private GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmResourceParameters> _asyncGppdOfmCategory;
         public CategoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
             : base(appConfiguration, httpContextAccessor, "Category")
         {
-            asyncGppdOfmCategory = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmResourceParameters>(appConfiguration, httpContextAccessor, "Category");
+            _asyncGppdOfmCategory = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmResourceParameters>(appConfiguration, httpContextAccessor, "Category");
         }
     }
 }

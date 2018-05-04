@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Fittify.Api.OuterFacingModels;
-using Fittify.DataModelRepositories.Helpers;
+using Fittify.DataModelRepository.Helpers;
 
 namespace Fittify.Api.OfmRepository.Helpers
 {

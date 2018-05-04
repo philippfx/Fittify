@@ -12,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Fittify.DataModelRepositories\Fittify.DataModelRepositories.csproj" />
+    <ProjectReference Include="..\Fittify.Common\Fittify.Common.csproj" />
+    <ProjectReference Include="..\Fittify.DataModelRepository\Fittify.DataModelRepository.csproj" />
     <ProjectReference Include="..\Fittify.DataModels\Fittify.DataModels.csproj" />
   </ItemGroup>
 

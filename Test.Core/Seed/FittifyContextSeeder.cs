@@ -1,5 +1,5 @@
 ﻿using System.Data.SqlClient;
-using Fittify.DataModelRepositories;
+using Fittify.DataModelRepository;
 using Fittify.Test.Core.Seed.Sport;
 
 namespace Fittify.Test.Core.Seed

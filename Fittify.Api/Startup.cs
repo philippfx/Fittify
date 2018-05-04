@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
 using Fittify.Api.OuterFacingModels.Sport.Get;
-using Fittify.DataModelRepositories;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +18,8 @@ using Fittify.Api.Middleware;
 using Fittify.Api.Middleware.Extensions.ConfigureServices;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport;
 using Fittify.Common.Helpers;
-using Fittify.DataModelRepositories.Services;
+using Fittify.DataModelRepository;
+using Fittify.DataModelRepository.Services;
 using Fittify.Test.Core.Seed;
 using IdentityServer4.AccessTokenValidation;
 using Newtonsoft.Json;

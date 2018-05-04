@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Fittify.DataModelRepositories;
+using Fittify.DataModelRepository;
 using Fittify.Test.Core.Seed;
 using Microsoft.Extensions.Configuration;
 

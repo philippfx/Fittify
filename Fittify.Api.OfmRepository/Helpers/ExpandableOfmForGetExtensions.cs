@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Fittify.Api.Helpers.Extensions;
+using Fittify.Common.Extensions;
 
 namespace Fittify.Api.OfmRepository.Helpers
 {

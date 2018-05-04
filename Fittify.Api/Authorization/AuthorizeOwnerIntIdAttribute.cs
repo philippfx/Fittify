@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Fittify.DataModelRepositories;
-using Fittify.DataModelRepositories.Repository;
+using Fittify.DataModelRepository;
+using Fittify.DataModelRepository.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;

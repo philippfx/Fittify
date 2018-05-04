@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.DataModels", "Fitti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.DbResetter", "Fittify.DbResetter\Fittify.DbResetter.csproj", "{3838415D-A5FB-4F2F-803B-6EE156FD253D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.DataModelRepositories", "Fittify.DataModelRepositories\Fittify.DataModelRepositories.csproj", "{94892E90-F210-49C5-87C1-A33A8270A47C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.DataModelRepository", "Fittify.DataModelRepository\Fittify.DataModelRepository.csproj", "{94892E90-F210-49C5-87C1-A33A8270A47C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Web.ViewModels", "Fittify.Web.ViewModels\Fittify.Web.ViewModels.csproj", "{47A6D11C-256C-4263-8EC4-1FC756C1052E}"
 EndProject
@@ -49,7 +49,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Web.ViewModelReposi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quantus.DbResetter", "Quantus.IDP.DatabaseResetter\Quantus.DbResetter.csproj", "{79CF8411-3D40-4747-90E5-FF10C5713539}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.DataModelRepositories.Test", "Fittify.DataModelRepositories.Test\Fittify.DataModelRepositories.Test.csproj", "{FBCB8E46-120D-4892-9AE8-0C93DAC71F24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.DataModelRepository.Test", "Fittify.DataModelRepository.Test\Fittify.DataModelRepository.Test.csproj", "{FBCB8E46-120D-4892-9AE8-0C93DAC71F24}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.OfmRepository", "Fittify.Api.OfmRepository\Fittify.Api.OfmRepository.csproj", "{0C0F95CF-A86A-494C-9998-EE9FCE5F010C}"
 EndProject

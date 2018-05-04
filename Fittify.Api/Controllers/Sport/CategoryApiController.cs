@@ -6,7 +6,7 @@ using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
-using Fittify.Api.OuterFacingModels.ResourceParameters.Sport;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -60,11 +60,11 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetCollection(CategoryOfmResourceParameters resourceParameters)
         {
-            var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();
-            var ownerGuid = new Guid(stringGuid);
+            //var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            //if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();
+            //var ownerGuid = new Guid(stringGuid);
 
-            var ofmForGetCollectionQueryResult = await _asyncGppd.GetCollection(resourceParameters, ownerGuid);
+            var ofmForGetCollectionQueryResult = await _asyncGppd.GetCollection(resourceParameters, Guid.NewGuid());
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
             if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasLinksForeachExpandableOfmForGet<CategoryOfmForGet, int>(_urlHelper, nameof(CategoryApiController), resourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database

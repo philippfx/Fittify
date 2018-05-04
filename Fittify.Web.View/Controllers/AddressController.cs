@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Fittify.Common.CustomExceptions;
 using Fittify.Web.ViewModels;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
@@ -29,7 +30,7 @@ namespace Fittify.Web.View.Controllers
 
             if (response.IsError)
             {
-                throw new Exception("Problem accessing the UserInfo endpoint.", response.Exception);
+                throw new OpenIdConnectException("Problem accessing the UserInfo endpoint.", response.Exception);
             }
 
             var address = response.Claims.FirstOrDefault(c => c.Type == "address")?.Value;

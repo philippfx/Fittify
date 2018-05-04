@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Fittify.Common.CustomExceptions;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -183,7 +184,7 @@ namespace Fittify.Web.ApiModelRepositories
             }
             else
             {
-                throw new Exception("Problem encountered while refreshing tokens.",
+                throw new OpenIdConnectException("Problem encountered while refreshing tokens.",
                     tokenResult.Exception);
             }
         }

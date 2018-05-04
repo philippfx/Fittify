@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using Fittify.Api.OuterFacingModels.ResourceParameters;
+using Fittify.Api.OfmRepository.OfmResourceParameters;
 using Fittify.Common.Helpers;
+using Fittify.Common.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.Helpers

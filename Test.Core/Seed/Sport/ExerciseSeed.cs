@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Fittify.Common;
-using Fittify.DataModelRepositories;
+using Fittify.DataModelRepository;
 using Fittify.DataModels.Models.Sport;
 
 namespace Fittify.Test.Core.Seed.Sport

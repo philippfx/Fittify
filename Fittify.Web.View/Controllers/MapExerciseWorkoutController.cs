@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Fittify.Api.OuterFacingModels.ResourceParameters.Sport;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Web.ViewModelRepository.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
