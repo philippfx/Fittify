@@ -12,12 +12,10 @@ namespace Fittify.Api.OfmRepository.OfmRepository.Sport
     public class CardioSetOfmRepository : AsyncGppd<CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int, CardioSetOfmResourceParameters>
     {
         public CardioSetOfmRepository(IAsyncCrud<CardioSet, int, CardioSetOfmResourceParameters> repo,
-            IActionDescriptorCollectionProvider adcProvider,
-            IUrlHelper urlHelper,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService
             ) 
-            :base(repo, urlHelper, adcProvider, propertyMappingService, typeHelperService)
+            :base(repo, propertyMappingService, typeHelperService)
         {
         }
     }

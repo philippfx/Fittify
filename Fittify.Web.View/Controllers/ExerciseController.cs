@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Fittify.Api.OuterFacingModels.ResourceParameters.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
-using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ViewModelRepository.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -26,7 +26,7 @@ namespace Fittify.Web.View.Controllers
 
         public async Task<IActionResult> Overview()
         {
-            var exerciseViewModelCollectionResult = await _exerciseViewModelRepository.GetCollection(new ExerciseResourceParameters());
+            var exerciseViewModelCollectionResult = await _exerciseViewModelRepository.GetCollection(new ExerciseOfmResourceParameters());
 
             if (exerciseViewModelCollectionResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 exerciseViewModelCollectionResult.HttpStatusCode == HttpStatusCode.Forbidden)

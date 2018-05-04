@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Fittify.DataModelRepositories.Test.TestHelper.EntityFrameworkCore
+﻿namespace Fittify.DataModelRepositories.Test.TestHelper.EntityFrameworkCore
 {
     public class FileTestDto
     {

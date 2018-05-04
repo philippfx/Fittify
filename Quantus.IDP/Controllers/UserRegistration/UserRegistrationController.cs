@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Quantus.IDP.Entities;
 using Quantus.IDP.Entities.Default;
 using Quantus.IDP.Services;
 

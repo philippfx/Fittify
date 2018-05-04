@@ -12,12 +12,10 @@ namespace Fittify.Api.OfmRepository.OfmRepository.Sport
     public class ExerciseOfmRepository : AsyncGppd<Exercise, ExerciseOfmForGet, ExerciseOfmForPost, ExerciseOfmForPatch, int, ExerciseOfmResourceParameters>
     {
         public ExerciseOfmRepository(IAsyncCrud<Exercise, int, ExerciseOfmResourceParameters> repo,
-            IActionDescriptorCollectionProvider adcProvider,
-            IUrlHelper urlHelper,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService
         )
-            : base(repo, urlHelper, adcProvider, propertyMappingService, typeHelperService)
+            : base(repo, propertyMappingService, typeHelperService)
         {
         }
     }

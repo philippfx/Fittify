@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.DataModelRepositories.Services;
 using Fittify.DataModels.Models.Sport;

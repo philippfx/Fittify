@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Fittify.Api.OuterFacingModels.ResourceParameters.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
-using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ViewModelRepository.Sport;
 using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.Authentication;
@@ -41,7 +41,7 @@ namespace Fittify.Web.View.Controllers
             await WriteOutIdentityAndAccessInformation();
             //await WriteOutAccessInformation();
 
-            var queryResult = await _workoutViewModelRepo.GetCollection(new WorkoutResourceParameters());
+            var queryResult = await _workoutViewModelRepo.GetCollection(new WorkoutOfmResourceParameters());
 
             if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 queryResult.HttpStatusCode == HttpStatusCode.Forbidden)
@@ -112,7 +112,7 @@ namespace Fittify.Web.View.Controllers
             var repo = new WorkoutHistoryViewModelRepository(_appConfiguration, _httpContextAccessor);
             //var workoutHistoryViewModels = await repo.GetCollectionByWorkoutId(workoutId);
             var workoutHistoryViewModelsCollectionQueryResult =
-                await repo.GetCollection(new WorkoutHistoryResourceParameters() {WorkoutId = workoutId});
+                await repo.GetCollection(new WorkoutHistoryOfmResourceParameters() { WorkoutId = workoutId });
 
             if (workoutHistoryViewModelsCollectionQueryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 workoutHistoryViewModelsCollectionQueryResult.HttpStatusCode == HttpStatusCode.Forbidden)

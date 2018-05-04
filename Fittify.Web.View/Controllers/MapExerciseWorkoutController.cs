@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Fittify.Common.Helpers.ResourceParameters.Sport;
+using Fittify.Api.OuterFacingModels.ResourceParameters.Sport;
 using Fittify.Web.ViewModelRepository.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +25,7 @@ namespace Fittify.Web.View.Controllers
         [Route("deletion")]
         public async Task<RedirectToActionResult> Delete([FromQuery] int workoutId, [FromQuery] int exerciseId)
         {
-            var getMapExerciseWorkoutViewModelResult = await _mapExerciseWorkoutViewModelRepository.GetCollection(new MapExerciseWorkoutResourceParameters()
+            var getMapExerciseWorkoutViewModelResult = await _mapExerciseWorkoutViewModelRepository.GetCollection(new MapExerciseWorkoutOfmResourceParameters()
             {
                 ExerciseId = exerciseId,
                 WorkoutId = workoutId

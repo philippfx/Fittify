@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using AutoMapper;
 using Fittify.Api.OuterFacingModels.ResourceParameters.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
@@ -16,10 +17,8 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport
     {
         private readonly IWorkoutHistoryRepository _workoutHistoryRepository;
         public AsyncGppdForWorkoutHistory(IWorkoutHistoryRepository repository,
-            IUrlHelper urlHelper,
-            IActionDescriptorCollectionProvider actionDescriptorCollectionProvider,
             IPropertyMappingService propertyMappingService,
-            ITypeHelperService typeHelperService) : base(repository, urlHelper, actionDescriptorCollectionProvider, propertyMappingService, typeHelperService)
+            ITypeHelperService typeHelperService) : base(repository, propertyMappingService, typeHelperService)
         {
             _workoutHistoryRepository = repository;
         }

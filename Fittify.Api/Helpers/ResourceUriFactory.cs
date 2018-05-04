@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using Fittify.Api.OuterFacingModels.ResourceParameters;
 using Fittify.Common.Helpers;
-using Fittify.Common.Helpers.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.Helpers

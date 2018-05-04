@@ -20,7 +20,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Quantus.IDP.Controllers.UserRegistration;
-using Quantus.IDP.Entities;
+using Quantus.IDP.Entities.Default;
 using Quantus.IDP.Services;
 
 namespace Quantus.IDP.Controllers.Account

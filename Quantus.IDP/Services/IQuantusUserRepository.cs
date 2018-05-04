@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Quantus.IDP.Entities;
 using Quantus.IDP.Entities.Default;
 
 namespace Quantus.IDP.Services

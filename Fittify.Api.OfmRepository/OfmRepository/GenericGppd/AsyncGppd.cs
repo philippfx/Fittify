@@ -22,21 +22,15 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
         where TResourceParameters : class, IResourceParameters
     {
         protected readonly IAsyncCrud<TEntity, TId, TResourceParameters> Repo;
-        protected readonly IActionDescriptorCollectionProvider Adcp;
-        protected readonly IUrlHelper UrlHelper;
         protected readonly IPropertyMappingService PropertyMappingService;
         protected readonly ITypeHelperService TypeHelperService;
         protected readonly AsyncGetOfmGuardClauses<TOfmForGet, TId> AsyncGetOfmGuardClause;
 
         public AsyncGppd(IAsyncCrud<TEntity, TId, TResourceParameters> repository,
-            IUrlHelper urlHelper,
-            IActionDescriptorCollectionProvider actionDescriptorCollectionProvider,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService)
         {
             Repo = repository;
-            Adcp = actionDescriptorCollectionProvider;
-            UrlHelper = urlHelper;
             PropertyMappingService = propertyMappingService;
             TypeHelperService = typeHelperService;
             AsyncGetOfmGuardClause = new AsyncGetOfmGuardClauses<TOfmForGet, TId>(TypeHelperService);

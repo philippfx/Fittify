@@ -1,5 +1,5 @@
-﻿using Fittify.Api.OfmRepository.GenericGppd;
-using Fittify.Api.OfmRepository.Sport;
+﻿using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
+using Fittify.Api.OfmRepository.OfmRepository.Sport;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Fittify.Api.Middleware.Extensions.ConfigureServices

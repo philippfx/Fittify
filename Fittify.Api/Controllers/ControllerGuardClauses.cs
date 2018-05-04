@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
+using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Common.Extensions;
 using Microsoft.AspNetCore.Mvc;
 

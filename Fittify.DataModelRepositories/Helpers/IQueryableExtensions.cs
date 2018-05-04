@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Reflection;
@@ -8,11 +7,6 @@ using System.Text;
 using Fittify.Common.CustomExceptions;
 using Fittify.DataModelRepositories.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-using Microsoft.EntityFrameworkCore.Storage;
-using Remotion.Linq.Parsing.Structure;
 
 namespace Fittify.DataModelRepositories.Helpers
 {

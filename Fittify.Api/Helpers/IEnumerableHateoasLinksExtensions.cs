@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Fittify.Api.OfmRepository.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.Helpers
