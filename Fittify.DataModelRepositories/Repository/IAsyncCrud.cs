@@ -15,7 +15,7 @@ namespace Fittify.DataModelRepositories.Repository
 
         Task<bool> DoesEntityExist(TId id);
 
-        Task<TEntity> Create(TEntity entity, Guid ownerGuid);
+        Task<TEntity> Create(TEntity entity, Guid? ownerGuid);
 
         Task<TEntity> Update(TEntity entity);
 

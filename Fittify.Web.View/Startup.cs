@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
@@ -112,9 +113,10 @@ namespace Fittify.Web.View
                             var children = user.Children();
                             var claims = userInformationReceivedContext.User.Children().Values().ToList();
                             //claimsIdentity.AddClaims(claims.Select(r => new Claim(JwtClaimTypes., r.Value<String>())));
-                            var countryClaim = new Claim("country", claims.FirstOrDefault(j => j.Path == "country")?.Value<string>());
+                            var country = claims.FirstOrDefault(j => j.Path == "country")?.Value<string>();
+                            //var countryClaim = new Claim("country", claims.FirstOrDefault(j => j.Path == "country")?.Value<string>());
                             var subscriptionlevelClaim = new Claim("subscriptionlevel", claims.FirstOrDefault(j => j.Path == "subscriptionlevel")?.Value<string>());
-                            claimsIdentity.AddClaim(countryClaim);
+                            if (!String.IsNullOrWhiteSpace(country)) claimsIdentity.AddClaim(new Claim("country", country));
                             claimsIdentity.AddClaim(subscriptionlevelClaim);
 
                             return Task.FromResult(0);

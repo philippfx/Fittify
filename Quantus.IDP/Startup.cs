@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -72,12 +73,14 @@ namespace Quantus.IDP
             {
                 //facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
                 //facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-                facebookOptions.AppId = "1741305999290145";
-                facebookOptions.AppSecret = "b3b626a2ef941df5ad8bce152a56a5d2";
+                facebookOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                facebookOptions.AppId = "587753821609898";
+                facebookOptions.AppSecret = "b929897c7e523d4293ce599ef1739190";
             });
 
             services.AddAuthentication().AddGoogle(googleOptions =>
             {
+                googleOptions.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                 googleOptions.ClientId = "945734666949-t5pp08tu9jodh77b5dh5bsj3q1c6h457.apps.googleusercontent.com";
                 googleOptions.ClientSecret = "rFxtQ5VKebOMt3lv7lOQgnFO";
             });

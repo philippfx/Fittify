@@ -21,7 +21,9 @@ namespace Quantus.IDP.Entities
         public string Password { get; set; }
 
         [Required]
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = false;
+
+        public bool IsProvisioningFromExternal { get; set; } = true;
 
         //public ICollection<UserClaim> Claims { get; set; } = new List<UserClaim>();
 

@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
@@ -18,6 +19,7 @@ using IdentityServer4.Test;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Quantus.IDP.Controllers.UserRegistration;
 using Quantus.IDP.Entities;
 using Quantus.IDP.Services;
 
@@ -173,7 +175,8 @@ namespace Quantus.IDP.Controllers.Account
                         { "scheme", provider },
                     }
                 };
-                return Challenge(props, provider);
+                var challengeResult = Challenge(props, provider);
+                return challengeResult;
             }
         }
 
@@ -184,28 +187,86 @@ namespace Quantus.IDP.Controllers.Account
         public async Task<IActionResult> ExternalLoginCallback()
         {
             // read external identity from the temporary cookie
-            var result = await HttpContext.AuthenticateAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme);
+            var result = await HttpContext.AuthenticateAsync(
+                IdentityServerConstants.ExternalCookieAuthenticationScheme);
+            
             if (result?.Succeeded != true)
             {
                 throw new Exception("External authentication error");
             }
-
+            
             // lookup our user and external provider info
             //var (user, provider, providerUserId, claims) = FindUserFromExternalProvider(result);
             var (user, provider, providerUserId, claims) = FindUserFromExternalProvider(result);
             if (user == null)
             {
-                //// this might be where you might initiate a custom workflow for user registration
-                //// in this sample we don't show how that would be done, as our sample implementation
-                //// simply auto-provisions new external user
-                //user = AutoProvisionUser(provider, providerUserId, claims);
-                //var returnUrlAfterRegistration =
-                //    Url.Action("ExternalLoginCallback"/*, new {returnUrl = "not need since this identity sever version!"}*/); // Not like in course!
+                // user wasn't found by provider, but maybe one exists with the same email address?  
+                if (provider == "Facebook")
+                {
+                    // email claim from Facebook
+                    var email = claims.FirstOrDefault(c =>
+                        c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress");
+                    if (email != null)
+                    {
+                        var userByEmail = _quantusUserRepository.GetUserByEmail(email.Value);
+                        if (userByEmail != null)
+                        {
+                            // add Facebook as a provider for this user
+                            _quantusUserRepository.AddUserLogin(userByEmail.Id, provider, providerUserId);
 
-                var continueWithUrl = Url.Action("RegisterUser", "UserRegistration",
-                    new {/*returnUrl = returnUrlAfterRegistration,*/ provider = provider, providerUserId = providerUserId}); // Not like in course!
+                            if (!_quantusUserRepository.Save())
+                            {
+                                throw new Exception($"Adding a login for a user failed.");
+                            }
 
-                return Redirect(continueWithUrl);
+                            // redirect to ExternalLoginCallback
+                            var continueWithUrlAfterAddingUserLogin =
+                                Url.Action("ExternalLoginCallback");
+
+                            return Redirect(continueWithUrlAfterAddingUserLogin);
+                        }
+                        else
+                        {
+                            var registerModel = new RegisterUserViewModel()
+                            {
+                                Username = email.Value,
+                                Password = Guid.NewGuid().ToString(),
+                                Firstname = claims.FirstOrDefault(f => f.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname").Value,
+                                Lastname = claims.FirstOrDefault(f => f.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname").Value,
+                                Email = email.Value,
+                                Provider = provider,
+                                ProviderUserId = providerUserId,
+                                ReturnUrl = Url.Action("ExternalLoginCallback")
+                            };
+
+                            // TODO: THIS MUST BE TRANSFERRED COVERTLY
+                            // redirect to ExternalLoginCallback
+                            var continueWithUrlAfterAddingUserLogin =
+                                Url.Action("RegisterUserProvisioningFromExternal", "UserRegistration", registerModel);
+
+                            return Redirect(continueWithUrlAfterAddingUserLogin);
+
+                        }
+                    }
+                    else
+                    {
+                        throw new ArgumentNullException($"Email from identity provider is null or could not be parsed");
+                    }
+                }
+                else
+                {
+                    //// this might be where you might initiate a custom workflow for user registration
+                    //// in this sample we don't show how that would be done, as our sample implementation
+                    //// simply auto-provisions new external user
+                    //user = AutoProvisionUser(provider, providerUserId, claims);
+                    //var returnUrlAfterRegistration =
+                    //    Url.Action("ExternalLoginCallback"/*, new {returnUrl = "not need since this identity sever version!"}*/); // Not like in course!
+
+                    var continueWithUrl = Url.Action("RegisterUser", "UserRegistration",
+                        new {/*returnUrl = returnUrlAfterRegistration,*/ provider = provider, providerUserId = providerUserId }); // Not like in course!
+
+                    return Redirect(continueWithUrl);
+                }
             }
 
             // this allows us to collect any additonal claims or properties
@@ -226,7 +287,7 @@ namespace Quantus.IDP.Controllers.Account
 
             // validate return URL and redirect back to authorization endpoint or a local page
             var returnUrl = result.Properties.Items["returnUrl"];
-            if (_interaction.IsValidReturnUrl(returnUrl) || Url.IsLocalUrl(returnUrl))
+            if(_interaction.IsValidReturnUrl(returnUrl) || Url.IsLocalUrl(returnUrl))
             {
                 return Redirect(returnUrl);
             }

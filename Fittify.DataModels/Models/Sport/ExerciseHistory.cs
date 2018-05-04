@@ -7,12 +7,10 @@ namespace Fittify.DataModels.Models.Sport
     public class ExerciseHistory : IEntityUniqueIdentifier<int>, IEntityOwner
     {
         public int Id { get; set; }
-
-        //[ForeignKey("ExerciseId")]
+        
         public Exercise Exercise { get; set; }
         public int? ExerciseId { get; set; }
-
-        //[ForeignKey("WorkoutHistoryId")]
+        
         public virtual WorkoutHistory WorkoutHistory { get; set; }
         public int? WorkoutHistoryId { get; set; }
 

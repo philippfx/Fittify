@@ -44,7 +44,7 @@ namespace Fittify.DataModelRepositories.Repository
             return false;
         }
 
-        public virtual async Task<TEntity> Create(TEntity entity, Guid ownerGuid)
+        public virtual async Task<TEntity> Create(TEntity entity, Guid? ownerGuid)
         {
             entity.OwnerGuid = ownerGuid;
             await FittifyContext.Set<TEntity>().AddAsync(entity);

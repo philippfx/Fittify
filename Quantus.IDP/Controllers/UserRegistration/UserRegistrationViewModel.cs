@@ -24,12 +24,10 @@ namespace Quantus.IDP.Controllers.UserRegistration
         [Required]
         [MaxLength(150)]
         public string Email { get; set; }
-
-        [Required]
+        
         [MaxLength(200)]
         public string Address { get; set; }
-
-        [Required]
+        
         [MaxLength(2)]
         public string Country { get; set; }
 
@@ -48,7 +46,7 @@ namespace Quantus.IDP.Controllers.UserRegistration
         public string Provider { get; set; }
 
         public string ProviderUserId { get; set; }
-
+        
         public bool IsProvisioningFromExternal
         {
             get
