@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Fittify.Api.OuterFacingModels.ResourceParameters;
 using Fittify.Common;
-using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Helpers;
 
 namespace Fittify.DataModelRepositories.Repository

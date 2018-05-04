@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
-using Fittify.Api.Helpers.Extensions;
 
-namespace Fittify.Api.Helpers
+namespace Fittify.Api.OfmRepository.Helpers
 {
     public static class ExpandableOfmForGetExtensions
     {

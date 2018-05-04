@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Fittify.Common.Helpers.ResourceParameters
+namespace Fittify.Api.OuterFacingModels.ResourceParameters
 {
     public interface IDateTimeStartEndResourceParameters : IResourceParameters
     {

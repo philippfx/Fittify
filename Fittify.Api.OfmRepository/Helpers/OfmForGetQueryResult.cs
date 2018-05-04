@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Fittify.Api.Helpers
+namespace Fittify.Api.OfmRepository.Helpers
 {
     /// <summary>
     /// This class allows a better error message handling when doing erroneous GET queries. (ref and out are not allowed as parameters for async methods)

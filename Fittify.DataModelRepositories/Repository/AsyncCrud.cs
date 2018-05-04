@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Fittify.Api.OuterFacingModels.ResourceParameters;
 using Fittify.Common;
-using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Helpers;
 using Fittify.DataModelRepositories.Services;
 using Microsoft.EntityFrameworkCore;

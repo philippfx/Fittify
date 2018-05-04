@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Fittify.Common.Helpers.ResourceParameters.Sport;
+using Fittify.Api.OuterFacingModels.ResourceParameters.Sport;
 using Fittify.DataModelRepositories.Repository.Sport;
 using Fittify.DataModels.Models.Sport;
 using Fittify.Test.Core.Seed;

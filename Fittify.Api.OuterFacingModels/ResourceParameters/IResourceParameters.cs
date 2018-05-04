@@ -1,4 +1,4 @@
-﻿namespace Fittify.Common.Helpers.ResourceParameters
+﻿namespace Fittify.Api.OuterFacingModels.ResourceParameters
 {
     public interface IResourceParameters
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Fittify.Api.Helpers;
+using Fittify.Api.OfmRepository.Helpers;
+using Fittify.Api.OuterFacingModels.ResourceParameters;
 using Fittify.Common;
-using Fittify.Common.Helpers.ResourceParameters;
 
-namespace Fittify.Api.OfmRepository.GenericGppd
+namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
 {
     public interface IAsyncGppd<TOfmForGet, in TOfmForPost, TOfmForPatch, TId, in TResourceParameters>
         where TOfmForGet : class, IEntityUniqueIdentifier<TId>

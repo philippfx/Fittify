@@ -1,4 +1,4 @@
-﻿namespace Fittify.Common.Helpers.ResourceParameters.Sport
+﻿namespace Fittify.Api.OuterFacingModels.ResourceParameters.Sport
 {
     public class CategoryOfmResourceParameters : SearchQueryResourceParameters
     {

@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
-using Quantus.IDP.Entities.Default;
 
-namespace Quantus.IDP.Entities
+namespace Quantus.IDP.Entities.Default
 {
     //[Table("Users")]
     public class QuantusUser : IdentityUser<Guid>

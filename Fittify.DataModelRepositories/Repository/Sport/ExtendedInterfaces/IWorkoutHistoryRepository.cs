@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Fittify.Common.Helpers.ResourceParameters.Sport;
+using Fittify.Api.OuterFacingModels.ResourceParameters.Sport;
 using Fittify.DataModels.Models.Sport;
 
 namespace Fittify.DataModelRepositories.Repository.Sport.ExtendedInterfaces

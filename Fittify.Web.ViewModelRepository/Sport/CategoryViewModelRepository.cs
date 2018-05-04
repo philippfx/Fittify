@@ -1,6 +1,6 @@
-﻿using Fittify.Api.OuterFacingModels.Sport.Get;
+﻿using Fittify.Api.OuterFacingModels.ResourceParameters.Sport;
+using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
-using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.Web.ApiModelRepositories;
 using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;

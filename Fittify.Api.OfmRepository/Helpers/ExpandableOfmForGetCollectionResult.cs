@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Fittify.Api.Helpers
+namespace Fittify.Api.OfmRepository.Helpers
 {
     public class ExpandableOfmForGetCollectionResult
     {

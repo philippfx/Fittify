@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Fittify.Api.OuterFacingModels.Sport.Abstract;
 
-namespace Fittify.Api.Helpers
+namespace Fittify.Api.OfmRepository.Helpers
 {
     public static class IEnumerableConvertOfmExtensions
     {

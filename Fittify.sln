@@ -49,7 +49,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Web.ViewModelReposi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quantus.DbResetter", "Quantus.IDP.DatabaseResetter\Quantus.DbResetter.csproj", "{79CF8411-3D40-4747-90E5-FF10C5713539}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fittify.DataModelRepositories.Test", "Fittify.DataModelRepositories.Test\Fittify.DataModelRepositories.Test.csproj", "{FBCB8E46-120D-4892-9AE8-0C93DAC71F24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.DataModelRepositories.Test", "Fittify.DataModelRepositories.Test\Fittify.DataModelRepositories.Test.csproj", "{FBCB8E46-120D-4892-9AE8-0C93DAC71F24}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.OfmRepository", "Fittify.Api.OfmRepository\Fittify.Api.OfmRepository.csproj", "{0C0F95CF-A86A-494C-9998-EE9FCE5F010C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,6 +135,10 @@ Global
 		{FBCB8E46-120D-4892-9AE8-0C93DAC71F24}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBCB8E46-120D-4892-9AE8-0C93DAC71F24}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBCB8E46-120D-4892-9AE8-0C93DAC71F24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C0F95CF-A86A-494C-9998-EE9FCE5F010C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C0F95CF-A86A-494C-9998-EE9FCE5F010C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C0F95CF-A86A-494C-9998-EE9FCE5F010C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C0F95CF-A86A-494C-9998-EE9FCE5F010C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -153,6 +159,7 @@ Global
 		{2B87E92D-DFB9-48CD-9097-076A62F69BD7} = {E4C2E774-6288-4D70-93DA-D9BE069E3258}
 		{44841D86-B9C1-48A8-9454-82ED29084C80} = {06847FC7-F55D-4BB2-896A-F3BFFA3DAB6B}
 		{FBCB8E46-120D-4892-9AE8-0C93DAC71F24} = {E4C2E774-6288-4D70-93DA-D9BE069E3258}
+		{0C0F95CF-A86A-494C-9998-EE9FCE5F010C} = {416CE764-41B2-4A2E-84DA-13F47C6F5DC9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B305ABF-A3CE-4E97-BE76-377367E1E5B8}

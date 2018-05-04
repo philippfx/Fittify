@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fittify.Api.OuterFacingModels.ResourceParameters.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Get;
-using Fittify.Common.Helpers.ResourceParameters.Sport;
 using Fittify.DataModelRepositories.Helpers;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;

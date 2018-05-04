@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Fittify.Api.Helpers;
+using Fittify.Api.OfmRepository.Helpers;
+using Fittify.Api.OuterFacingModels.ResourceParameters;
 using Fittify.Common;
 using Fittify.Common.Helpers;
-using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Services;
 
-namespace Fittify.Api.OfmRepository
+namespace Fittify.Api.OfmRepository.OfmRepository
 {
     /// <summary>
     /// Sealed because this guard clause can be used for any incoming request.

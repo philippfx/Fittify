@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Fittify.Api.Helpers;
+using Fittify.Api.OfmRepository.Helpers;
+using Fittify.Api.OuterFacingModels.ResourceParameters;
 using Fittify.Common;
 using Fittify.Common.Helpers;
-using Fittify.Common.Helpers.ResourceParameters;
 using Fittify.DataModelRepositories.Repository;
 using Fittify.DataModelRepositories.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
-namespace Fittify.Api.OfmRepository.GenericGppd
+namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
 {
     public class AsyncGppd<TEntity, TOfmForGet, TOfmForPost, TOfmForPatch, TId, TResourceParameters> 
         : IAsyncGppd<TOfmForGet, TOfmForPost, TOfmForPatch, TId, TResourceParameters>
