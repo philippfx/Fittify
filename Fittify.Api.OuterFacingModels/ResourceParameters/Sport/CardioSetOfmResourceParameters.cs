@@ -1,6 +1,6 @@
 ﻿namespace Fittify.Common.Helpers.ResourceParameters.Sport
 {
-    public class WeightLiftingSetResourceParameters : Base
+    public class CardioSetOfmResourceParameters : DateTimeStartEndResourceParameters
     {
         public int? ExerciseHistoryId { get; set; }
     }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class MapExerciseWorkoutRepository : AsyncCrud<MapExerciseWorkout, MapExerciseWorkoutOfmForGet, int, MapExerciseWorkoutResourceParameters>, IAsyncOwnerIntId
+    public class MapExerciseWorkoutRepository : AsyncCrud<MapExerciseWorkout, MapExerciseWorkoutOfmForGet, int, MapExerciseWorkoutOfmResourceParameters>, IAsyncOwnerIntId
     {
         public MapExerciseWorkoutRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
@@ -24,7 +24,7 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public override PagedList<MapExerciseWorkout> GetCollection(MapExerciseWorkoutResourceParameters resourceParameters, Guid ownerGuid)
+        public override PagedList<MapExerciseWorkout> GetCollection(MapExerciseWorkoutOfmResourceParameters ofmResourceParameters, Guid ownerGuid)
         {
             var allEntitiesQueryable =
                 FittifyContext.Set<MapExerciseWorkout>()
@@ -32,22 +32,22 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                     .AsNoTracking()
                     .Include(i => i.Exercise)
                     .Include(i => i.Workout)
-                    .ApplySort(resourceParameters.OrderBy,
+                    .ApplySort(ofmResourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<MapExerciseWorkoutOfmForGet, MapExerciseWorkout>());
             
-            if (resourceParameters.ExerciseId != null)
+            if (ofmResourceParameters.ExerciseId != null)
             {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.ExerciseId == resourceParameters.ExerciseId);
+                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.ExerciseId == ofmResourceParameters.ExerciseId);
             }
 
-            if (resourceParameters.WorkoutId != null)
+            if (ofmResourceParameters.WorkoutId != null)
             {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.WorkoutId == resourceParameters.WorkoutId);
+                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.WorkoutId == ofmResourceParameters.WorkoutId);
             }
 
             return PagedList<MapExerciseWorkout>.Create(allEntitiesQueryable,
-                resourceParameters.PageNumber,
-                resourceParameters.PageSize);
+                ofmResourceParameters.PageNumber,
+                ofmResourceParameters.PageSize);
         }
     }
 }

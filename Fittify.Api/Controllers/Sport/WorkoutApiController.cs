@@ -24,7 +24,7 @@ namespace Fittify.Api.Controllers.Sport
     public class WorkoutApiController :
         Controller
     {
-        private readonly IAsyncGppd<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutResourceParameters> _asyncGppd;
+        private readonly IAsyncGppd<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutOfmResourceParameters> _asyncGppd;
         private readonly string _shortCamelCasedControllerName;
         private readonly IUrlHelper _urlHelper;
         private readonly ControllerGuardClauses<WorkoutOfmForGet> _controllerGuardClause;
@@ -32,7 +32,7 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IncomingHeaders _incomingHeaders;
 
         public WorkoutApiController(
-            IAsyncGppd<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutResourceParameters> asyncGppd,
+            IAsyncGppd<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutOfmResourceParameters> asyncGppd,
             IUrlHelper urlHelper,
             IHttpContextAccessor httpContextAccesor)
         {
@@ -63,7 +63,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet(Name = "GetWorkoutCollection")]
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetCollection(WorkoutResourceParameters resourceParameters)
+        public async Task<IActionResult> GetCollection(WorkoutOfmResourceParameters resourceParameters)
         {
             var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();

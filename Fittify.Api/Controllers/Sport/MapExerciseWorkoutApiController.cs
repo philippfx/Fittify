@@ -24,7 +24,7 @@ namespace Fittify.Api.Controllers.Sport
     public class MapExerciseWorkoutApiController :
         Controller
     {
-        private readonly IAsyncGppd<MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForPatch, int, MapExerciseWorkoutResourceParameters> _asyncGppd;
+        private readonly IAsyncGppd<MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForPatch, int, MapExerciseWorkoutOfmResourceParameters> _asyncGppd;
         private readonly string _shortCamelCasedControllerName;
         private readonly IUrlHelper _urlHelper;
         private readonly ControllerGuardClauses<MapExerciseWorkoutOfmForGet> _controllerGuardClause;
@@ -32,7 +32,7 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IncomingHeaders _incomingHeaders;
 
         public MapExerciseWorkoutApiController(
-            IAsyncGppd<MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForPatch, int, MapExerciseWorkoutResourceParameters> asyncGppd,
+            IAsyncGppd<MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmForPatch, int, MapExerciseWorkoutOfmResourceParameters> asyncGppd,
             IUrlHelper urlHelper,
             IHttpContextAccessor httpContextAccesor)
         {
@@ -66,7 +66,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet(Name = "GetMapExerciseWorkoutCollection")]
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetCollection(MapExerciseWorkoutResourceParameters resourceParameters)
+        public async Task<IActionResult> GetCollection(MapExerciseWorkoutOfmResourceParameters resourceParameters)
         {
             var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();

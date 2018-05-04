@@ -20,7 +20,7 @@ namespace Fittify.Api.Controllers.Sport
     public class CategoryApiController :
         Controller
     {
-        private readonly IAsyncGppd<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryResourceParameters> _asyncGppd;
+        private readonly IAsyncGppd<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmResourceParameters> _asyncGppd;
         private readonly string _shortCamelCasedControllerName;
         private readonly IUrlHelper _urlHelper;
         private readonly ControllerGuardClauses<CategoryOfmForGet> _controllerGuardClause;
@@ -28,7 +28,7 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IncomingHeaders _incomingHeaders;
 
         public CategoryApiController(
-            IAsyncGppd<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryResourceParameters> asyncGppd,
+            IAsyncGppd<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmResourceParameters> asyncGppd,
             IUrlHelper urlHelper,
             IHttpContextAccessor httpContextAccesor)
         {
@@ -57,7 +57,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet(Name = "GetCategoryCollection")]
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetCollection(CategoryResourceParameters resourceParameters)
+        public async Task<IActionResult> GetCollection(CategoryOfmResourceParameters resourceParameters)
         {
             var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();

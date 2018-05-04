@@ -24,7 +24,7 @@ namespace Fittify.Api.Controllers.Sport
     public class CardioSetApiController :
         Controller
     {
-        private readonly IAsyncGppd<CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int, CardioSetResourceParameters> _asyncGppd;
+        private readonly IAsyncGppd<CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int, CardioSetOfmResourceParameters> _asyncGppd;
         private readonly string _shortCamelCasedControllerName;
         private readonly IUrlHelper _urlHelper;
         private readonly ControllerGuardClauses<CardioSetOfmForGet> _controllerGuardClause;
@@ -34,7 +34,7 @@ namespace Fittify.Api.Controllers.Sport
         public CardioSetApiController(
             IUrlHelper urlHelper,
             IHttpContextAccessor httpContextAccesor,
-            IAsyncGppd<CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int, CardioSetResourceParameters> asyncGppd)
+            IAsyncGppd<CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int, CardioSetOfmResourceParameters> asyncGppd)
         {
             _asyncGppd = asyncGppd;
             _shortCamelCasedControllerName = nameof(CardioSetApiController).ToShortCamelCasedControllerNameOrDefault();
@@ -62,7 +62,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet(Name = "GetCardioSetCollection")]
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetCollection(CardioSetResourceParameters resourceParameters)
+        public async Task<IActionResult> GetCollection(CardioSetOfmResourceParameters resourceParameters)
         {
             var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();

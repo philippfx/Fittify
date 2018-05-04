@@ -24,7 +24,7 @@ namespace Fittify.Api.Controllers.Sport
     public class ExerciseHistoryApiController :
         Controller
     {
-        private readonly IAsyncGppd<ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int, ExerciseHistoryResourceParameters> _asyncGppd;
+        private readonly IAsyncGppd<ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int, ExerciseHistoryOfmResourceParameters> _asyncGppd;
         private readonly string _shortCamelCasedControllerName;
         private readonly IUrlHelper _urlHelper;
         private readonly ControllerGuardClauses<ExerciseHistoryOfmForGet> _controllerGuardClause;
@@ -32,7 +32,7 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IncomingHeaders _incomingHeaders;
 
         public ExerciseHistoryApiController(
-            IAsyncGppd<ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int, ExerciseHistoryResourceParameters> asyncGppd,
+            IAsyncGppd<ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int, ExerciseHistoryOfmResourceParameters> asyncGppd,
             IUrlHelper urlHelper,
             IHttpContextAccessor httpContextAccesor)
         {
@@ -62,7 +62,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet(Name = "GetExerciseHistoryCollection")]
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetCollection(ExerciseHistoryResourceParameters resourceParameters)
+        public async Task<IActionResult> GetCollection(ExerciseHistoryOfmResourceParameters resourceParameters)
         {
             var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();

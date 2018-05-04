@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class CardioSetRepository : AsyncCrud<CardioSet, CardioSetOfmForGet, int, CardioSetResourceParameters>, IAsyncOwnerIntId
+    public class CardioSetRepository : AsyncCrud<CardioSet, CardioSetOfmForGet, int, CardioSetOfmResourceParameters>, IAsyncOwnerIntId
     {
         public CardioSetRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
@@ -23,40 +23,40 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public override PagedList<CardioSet> GetCollection(CardioSetResourceParameters resourceParameters, Guid ownerGuid)
+        public override PagedList<CardioSet> GetCollection(CardioSetOfmResourceParameters ofmResourceParameters, Guid ownerGuid)
         {
             var allEntitiesQueryable =
                 FittifyContext.Set<CardioSet>()
                     .Where(o => o.OwnerGuid == ownerGuid)
                     .AsNoTracking()
                     .Include(i => i.ExerciseHistory)
-                    .ApplySort(resourceParameters.OrderBy,
+                    .ApplySort(ofmResourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<CardioSetOfmForGet, CardioSet>());
             
-            if (resourceParameters.FromDateTimeStart != null && resourceParameters.UntilDateTimeEnd != null)
+            if (ofmResourceParameters.FromDateTimeStart != null && ofmResourceParameters.UntilDateTimeEnd != null)
             {
                 allEntitiesQueryable = allEntitiesQueryable
-                    .Where(a => a.DateTimeStart >= resourceParameters.FromDateTimeStart && a.DateTimeEnd <= resourceParameters.UntilDateTimeEnd);
+                    .Where(a => a.DateTimeStart >= ofmResourceParameters.FromDateTimeStart && a.DateTimeEnd <= ofmResourceParameters.UntilDateTimeEnd);
             }
-            else if (resourceParameters.FromDateTimeStart != null)
+            else if (ofmResourceParameters.FromDateTimeStart != null)
             {
                 allEntitiesQueryable = allEntitiesQueryable
-                    .Where(a => a.DateTimeStart >= resourceParameters.FromDateTimeStart);
+                    .Where(a => a.DateTimeStart >= ofmResourceParameters.FromDateTimeStart);
             }
-            else if (resourceParameters.UntilDateTimeEnd != null)
+            else if (ofmResourceParameters.UntilDateTimeEnd != null)
             {
                 allEntitiesQueryable = allEntitiesQueryable
-                    .Where(a => a.DateTimeEnd <= resourceParameters.UntilDateTimeEnd);
+                    .Where(a => a.DateTimeEnd <= ofmResourceParameters.UntilDateTimeEnd);
             }
 
-            if (resourceParameters.ExerciseHistoryId != null)
+            if (ofmResourceParameters.ExerciseHistoryId != null)
             {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.ExerciseHistoryId == resourceParameters.ExerciseHistoryId);
+                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.ExerciseHistoryId == ofmResourceParameters.ExerciseHistoryId);
             }
 
             return PagedList<CardioSet>.Create(allEntitiesQueryable,
-                resourceParameters.PageNumber,
-                resourceParameters.PageSize);
+                ofmResourceParameters.PageNumber,
+                ofmResourceParameters.PageSize);
         }
     }
 }

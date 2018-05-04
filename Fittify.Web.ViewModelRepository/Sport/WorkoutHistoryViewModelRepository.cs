@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Web.ViewModelRepository.Sport
 {
-    public class WorkoutHistoryViewModelRepository : GenericViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryResourceParameters>
+    public class WorkoutHistoryViewModelRepository : GenericViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmResourceParameters>
     {
         private readonly AsyncWorkoutHistoryOfmRepository asyncGppdOfmWorkoutHistory;
         private readonly IConfiguration _appConfiguration;
@@ -52,7 +52,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
 
             var exerciseHistoryViewModelCollectionQueryResult 
                 = await exerciseHistoryViewModelRepository.GetCollection(
-                new ExerciseHistoryResourceParameters() { WorkoutHistoryId = workoutHistoryOfmForGetQueryResult.ViewModel.Id });
+                new ExerciseHistoryOfmResourceParameters() { WorkoutHistoryId = workoutHistoryOfmForGetQueryResult.ViewModel.Id });
 
             workoutHistoryOfmForGetQueryResult.ViewModel.ExerciseHistories
                 = exerciseHistoryViewModelCollectionQueryResult.ViewModelForGetCollection;
@@ -62,7 +62,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
 
             var exerciseViewModelCollectionQueryResult
                 = await exerciseViewModelRepository.GetCollection(
-                    new ExerciseResourceParameters());
+                    new ExerciseOfmResourceParameters());
 
             workoutHistoryOfmForGetQueryResult.ViewModel.AllExercises
                 = exerciseViewModelCollectionQueryResult.ViewModelForGetCollection;

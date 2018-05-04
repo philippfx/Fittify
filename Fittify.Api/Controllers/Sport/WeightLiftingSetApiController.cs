@@ -24,7 +24,7 @@ namespace Fittify.Api.Controllers.Sport
     public class WeightLiftingSetApiController :
         Controller
     {
-        private readonly IAsyncGppd<WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int, WeightLiftingSetResourceParameters> _asyncGppd;
+        private readonly IAsyncGppd<WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int, WeightLiftingSetOfmResourceParameters> _asyncGppd;
         private readonly string _shortCamelCasedControllerName;
         private readonly IUrlHelper _urlHelper;
         private readonly ControllerGuardClauses<WeightLiftingSetOfmForGet> _controllerGuardClause;
@@ -32,7 +32,7 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IncomingHeaders _incomingHeaders;
 
         public WeightLiftingSetApiController(
-            IAsyncGppd<WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int, WeightLiftingSetResourceParameters> asyncGppd,
+            IAsyncGppd<WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int, WeightLiftingSetOfmResourceParameters> asyncGppd,
             IUrlHelper urlHelper,
             IHttpContextAccessor httpContextAccesor)
         {
@@ -62,7 +62,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet(Name = "GetWeightLiftingSetCollection")]
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetCollection(WeightLiftingSetResourceParameters resourceParameters)
+        public async Task<IActionResult> GetCollection(WeightLiftingSetOfmResourceParameters resourceParameters)
         {
             var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();

@@ -366,7 +366,7 @@ namespace Fittify.DataModelRepositories.Test.Repository.Sport
             {
                 using (var context = new FittifyContext(options))
                 {
-                    var resourceParameters = new CategoryResourceParameters() { SearchQuery = "thcategory" };
+                    var resourceParameters = new CategoryOfmResourceParameters() { SearchQuery = "thcategory" };
                     var categoryRepository = new CategoryRepository(context);
                     var categoryCollection = categoryRepository.GetCollection(resourceParameters, _ownerGuid);
                     Assert.AreEqual(6, categoryCollection.Count);
@@ -386,7 +386,7 @@ namespace Fittify.DataModelRepositories.Test.Repository.Sport
             {
                 using (var context = new FittifyContext(options))
                 {
-                    var resourceParameters = new CategoryResourceParameters() { Ids = "4-6" };
+                    var resourceParameters = new CategoryOfmResourceParameters() { Ids = "4-6" };
                     var categoryRepository = new CategoryRepository(context);
                     var categoryCollection = categoryRepository.GetCollection(resourceParameters, _ownerGuid);
                     Assert.AreEqual(3, categoryCollection.Count);
@@ -408,7 +408,7 @@ namespace Fittify.DataModelRepositories.Test.Repository.Sport
                 {
                     var orderedCollectionFromContext = context.Categories.OrderByDescending(o => o.Name).ToList();
 
-                    var resourceParameters = new CategoryResourceParameters() { OrderBy = "name desc" };
+                    var resourceParameters = new CategoryOfmResourceParameters() { OrderBy = "name desc" };
                     var categoryRepository = new CategoryRepository(context);
                     var categoryCollection = categoryRepository.GetCollection(resourceParameters, _ownerGuid);
 
@@ -431,7 +431,7 @@ namespace Fittify.DataModelRepositories.Test.Repository.Sport
                 {
                     var orderedCollectionFromContext = context.Categories.OrderByDescending(o => o.Name).ToList();
 
-                    var resourceParameters = new CategoryResourceParameters() { OrderBy = "name desc, id desc" };
+                    var resourceParameters = new CategoryOfmResourceParameters() { OrderBy = "name desc, id desc" };
                     var categoryRepository = new CategoryRepository(context);
                     var categoryCollection = categoryRepository.GetCollection(resourceParameters, _ownerGuid);
 
@@ -455,7 +455,7 @@ namespace Fittify.DataModelRepositories.Test.Repository.Sport
                     var pagedCategoriesFromContext = context.Categories.Take(3).ToList();
                     var serializedCategoriesFromContext = JsonConvert.SerializeObject(pagedCategoriesFromContext);
 
-                    var resourceParameters = new CategoryResourceParameters() { PageNumber = 1, PageSize = 3 };
+                    var resourceParameters = new CategoryOfmResourceParameters() { PageNumber = 1, PageSize = 3 };
                     var categoryRepository = new CategoryRepository(context);
                     var categoryCollection = categoryRepository.GetCollection(resourceParameters, _ownerGuid);
                     var serializedCategoriesFromRepo = JsonConvert.SerializeObject(categoryCollection);
@@ -479,7 +479,7 @@ namespace Fittify.DataModelRepositories.Test.Repository.Sport
                     var pagedCategoriesFromContext = context.Categories.Skip(3).Take(3).ToList();
                     var serializedCategoriesFromContext = JsonConvert.SerializeObject(pagedCategoriesFromContext);
 
-                    var resourceParameters = new CategoryResourceParameters() { PageNumber = 2, PageSize = 3 };
+                    var resourceParameters = new CategoryOfmResourceParameters() { PageNumber = 2, PageSize = 3 };
                     var categoryRepository = new CategoryRepository(context);
                     var categoryCollection = categoryRepository.GetCollection(resourceParameters, _ownerGuid);
                     var serializedCategoriesFromRepo = JsonConvert.SerializeObject(categoryCollection);
@@ -500,7 +500,7 @@ namespace Fittify.DataModelRepositories.Test.Repository.Sport
             {
                 using (var context = new FittifyContext(options))
                 {
-                    var resourceParameters = new CategoryResourceParameters() { Fields = "Name" };
+                    var resourceParameters = new CategoryOfmResourceParameters() { Fields = "Name" };
                     var categoryRepository = new CategoryRepository(context);
                     var categoryCollection =
                         categoryRepository.GetShapedCollection(resourceParameters, _ownerGuid).ToList();

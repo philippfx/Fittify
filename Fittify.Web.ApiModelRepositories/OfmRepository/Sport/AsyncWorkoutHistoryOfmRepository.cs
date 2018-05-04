@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
 {
-    public class AsyncWorkoutHistoryOfmRepository : GenericAsyncGppdOfm<int, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryResourceParameters>
+    public class AsyncWorkoutHistoryOfmRepository : GenericAsyncGppdOfm<int, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmResourceParameters>
     {
         public AsyncWorkoutHistoryOfmRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey)
             : base(appConfiguration, httpContextAccessor, mappedControllerActionKey)

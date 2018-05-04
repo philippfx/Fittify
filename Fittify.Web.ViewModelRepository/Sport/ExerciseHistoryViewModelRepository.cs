@@ -12,19 +12,19 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Web.ViewModelRepository.Sport
 {
-    public class ExerciseHistoryViewModelRepository : GenericViewModelRepository<int, ExerciseHistoryViewModel, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryResourceParameters>
+    public class ExerciseHistoryViewModelRepository : GenericViewModelRepository<int, ExerciseHistoryViewModel, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmResourceParameters>
     {
-        private readonly GenericAsyncGppdOfm<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryResourceParameters> _asyncGppdOfmExerciseHistory;
+        private readonly GenericAsyncGppdOfm<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmResourceParameters> _asyncGppdOfmExerciseHistory;
         private readonly IConfiguration _appConfiguration;
 
         public ExerciseHistoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
             : base(appConfiguration, httpContextAccessor, "ExerciseHistory")
         {
-            _asyncGppdOfmExerciseHistory = new GenericAsyncGppdOfm<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryResourceParameters>(appConfiguration, httpContextAccessor, "ExerciseHistory");
+            _asyncGppdOfmExerciseHistory = new GenericAsyncGppdOfm<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmResourceParameters>(appConfiguration, httpContextAccessor, "ExerciseHistory");
             _appConfiguration = appConfiguration;
         }
         
-        public override async Task<ViewModelCollectionQueryResult<ExerciseHistoryViewModel>> GetCollection(ExerciseHistoryResourceParameters exerciseHistoryResourceParameters)
+        public override async Task<ViewModelCollectionQueryResult<ExerciseHistoryViewModel>> GetCollection(ExerciseHistoryOfmResourceParameters exerciseHistoryResourceParameters)
         {
             // Current ExerciseHistories
             var exerciseHistoryViewModelCollectionQueryResult =
@@ -40,7 +40,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
                 if (exerciseHistoryOfmForGet.PreviousExerciseHistoryId != null)
                 {
                     var previousWeightLiftingSetViewModelCollectionQueryResult =
-                        await weightLiftingSetViewModelRepository.GetCollection(new WeightLiftingSetResourceParameters()
+                        await weightLiftingSetViewModelRepository.GetCollection(new WeightLiftingSetOfmResourceParameters()
                         {
                             ExerciseHistoryId = exerciseHistoryOfmForGet.PreviousExerciseHistoryId.GetValueOrDefault()
                         });
@@ -49,7 +49,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
                 }
 
                 var currentWeightLiftingSetViewModelCollectionQueryResult =
-                    await weightLiftingSetViewModelRepository.GetCollection(new WeightLiftingSetResourceParameters()
+                    await weightLiftingSetViewModelRepository.GetCollection(new WeightLiftingSetOfmResourceParameters()
                     {
                         ExerciseHistoryId = exerciseHistoryOfmForGet.Id
                     });
@@ -95,7 +95,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
                 if (exerciseHistoryOfmForGet.PreviousExerciseHistoryId != null)
                 {
                     var previousCardioSetViewModelCollecitonResult =
-                        await cardioSetViewModelRepository.GetCollection(new CardioSetResourceParameters()
+                        await cardioSetViewModelRepository.GetCollection(new CardioSetOfmResourceParameters()
                         {
                             ExerciseHistoryId = exerciseHistoryOfmForGet.PreviousExerciseHistoryId
                         });
@@ -103,7 +103,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
                 }
 
                 var currentCardioSetViewModelCollectionQueryResult =
-                    await cardioSetViewModelRepository.GetCollection(new CardioSetResourceParameters()
+                    await cardioSetViewModelRepository.GetCollection(new CardioSetOfmResourceParameters()
                     {
                         ExerciseHistoryId = exerciseHistoryOfmForGet.Id
                     });

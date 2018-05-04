@@ -60,7 +60,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet(Name = "GetWorkoutHistoryCollection")]
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetCollection(WorkoutHistoryResourceParameters resourceParameters)
+        public async Task<IActionResult> GetCollection(WorkoutHistoryOfmResourceParameters resourceParameters)
         {
             var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();

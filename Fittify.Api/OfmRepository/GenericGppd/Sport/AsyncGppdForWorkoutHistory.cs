@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Fittify.Api.OfmRepository.GenericGppd.Sport
 {
-    public class AsyncGppdForWorkoutHistory : AsyncGppd<WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int, WorkoutHistoryResourceParameters>,
+    public class AsyncGppdForWorkoutHistory : AsyncGppd<WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int, WorkoutHistoryOfmResourceParameters>,
         IAsyncGppdForWorkoutHistory
 
     {

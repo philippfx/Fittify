@@ -8,13 +8,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Web.ViewModelRepository.Sport
 {
-    public class CategoryViewModelRepository : GenericViewModelRepository<int, CategoryViewModel, CategoryOfmForGet, CategoryOfmForPost, CategoryResourceParameters>
+    public class CategoryViewModelRepository : GenericViewModelRepository<int, CategoryViewModel, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmResourceParameters>
     {
-        private GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryResourceParameters> asyncGppdOfmCategory;
+        private GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmResourceParameters> asyncGppdOfmCategory;
         public CategoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
             : base(appConfiguration, httpContextAccessor, "Category")
         {
-            asyncGppdOfmCategory = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryResourceParameters>(appConfiguration, httpContextAccessor, "Category");
+            asyncGppdOfmCategory = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmResourceParameters>(appConfiguration, httpContextAccessor, "Category");
         }
     }
 }

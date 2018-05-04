@@ -55,7 +55,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
             return ofmQueryResult;
         }
 
-        public virtual async Task<OfmCollectionQueryResult<WorkoutOfmForGet>> GetCollection(WorkoutResourceParameters resourceParameters)
+        public virtual async Task<OfmCollectionQueryResult<WorkoutOfmForGet>> GetCollection(WorkoutOfmResourceParameters resourceParameters)
         {
             var ofmCollectionQueryResult = new OfmCollectionQueryResult<WorkoutOfmForGet>();
 

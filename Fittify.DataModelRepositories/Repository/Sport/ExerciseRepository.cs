@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepositories.Repository.Sport
 {
-    public class ExerciseRepository : AsyncCrud<Exercise, ExerciseOfmForGet, int, ExerciseResourceParameters>, IAsyncOwnerIntId
+    public class ExerciseRepository : AsyncCrud<Exercise, ExerciseOfmForGet, int, ExerciseOfmResourceParameters>, IAsyncOwnerIntId
     {
         public ExerciseRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
@@ -23,28 +23,28 @@ namespace Fittify.DataModelRepositories.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public override PagedList<Exercise> GetCollection(ExerciseResourceParameters resourceParameters, Guid ownerGuid)
+        public override PagedList<Exercise> GetCollection(ExerciseOfmResourceParameters ofmResourceParameters, Guid ownerGuid)
         {
             var allEntitiesQueryable =
                 FittifyContext.Set<Exercise>()
                     .Where(o => o.OwnerGuid == ownerGuid || o.OwnerGuid == null) // Exercises may be public
                     .AsNoTracking()
-                    .ApplySort(resourceParameters.OrderBy,
+                    .ApplySort(ofmResourceParameters.OrderBy,
                     PropertyMappingService.GetPropertyMapping<ExerciseOfmForGet, Exercise>());
             
-            if (!String.IsNullOrWhiteSpace(resourceParameters.Ids))
+            if (!String.IsNullOrWhiteSpace(ofmResourceParameters.Ids))
             {
                 allEntitiesQueryable = allEntitiesQueryable.Where(w =>
-                    RangeString.ToCollectionOfId(resourceParameters.Ids).Contains(w.Id));
+                    RangeString.ToCollectionOfId(ofmResourceParameters.Ids).Contains(w.Id));
             }
-            if (!String.IsNullOrWhiteSpace(resourceParameters.SearchQuery))
+            if (!String.IsNullOrWhiteSpace(ofmResourceParameters.SearchQuery))
             {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.Name.Contains(resourceParameters.SearchQuery));
+                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.Name.Contains(ofmResourceParameters.SearchQuery));
             }
 
             return PagedList<Exercise>.Create(allEntitiesQueryable,
-                resourceParameters.PageNumber,
-                resourceParameters.PageSize);
+                ofmResourceParameters.PageNumber,
+                ofmResourceParameters.PageSize);
         }
     }
 }

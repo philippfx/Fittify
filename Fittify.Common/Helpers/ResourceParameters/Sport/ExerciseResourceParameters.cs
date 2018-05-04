@@ -1,6 +1,0 @@
-﻿namespace Fittify.Common.Helpers.ResourceParameters.Sport
-{
-    public class ExerciseResourceParameters : SearchQueryResourceParameters
-    {
-    }
-}

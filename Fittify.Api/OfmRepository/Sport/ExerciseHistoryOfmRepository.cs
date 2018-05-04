@@ -11,9 +11,9 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Fittify.Api.OfmRepository.Sport
 {
-    public class ExerciseHistoryOfmRepository : AsyncGppd<ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int, ExerciseHistoryResourceParameters>
+    public class ExerciseHistoryOfmRepository : AsyncGppd<ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int, ExerciseHistoryOfmResourceParameters>
     {
-        public ExerciseHistoryOfmRepository(IAsyncCrud<ExerciseHistory, int, ExerciseHistoryResourceParameters> repo,
+        public ExerciseHistoryOfmRepository(IAsyncCrud<ExerciseHistory, int, ExerciseHistoryOfmResourceParameters> repo,
             IActionDescriptorCollectionProvider adcProvider,
             IUrlHelper urlHelper,
             IPropertyMappingService propertyMappingService,
