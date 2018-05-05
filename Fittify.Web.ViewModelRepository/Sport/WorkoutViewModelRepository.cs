@@ -14,21 +14,14 @@ namespace Fittify.Web.ViewModelRepository.Sport
 {
     public class WorkoutViewModelRepository : GenericViewModelRepository<int, WorkoutViewModel, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmResourceParameters>
     {
-        private GenericAsyncGppdOfm<int, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmResourceParameters> asyncGppdOfmWorkout;
-        private IConfiguration _appConfiguration;
-        private IHttpContextAccessor _httpContextAccessor;
-
         public WorkoutViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor) 
             : base(appConfiguration, httpContextAccessor, "Workout")
         {
-            asyncGppdOfmWorkout = new GenericAsyncGppdOfm<int, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmResourceParameters>(appConfiguration, httpContextAccessor, "Workout");
-            _appConfiguration = appConfiguration;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public override async Task<ViewModelQueryResult<WorkoutViewModel>> GetById(int id)
         {
-            var ofmQueryResult = await asyncGppdOfmWorkout.GetSingle(id);
+            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.GetSingle(id);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
@@ -43,7 +36,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
                 workoutViewModelQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
             }
 
-            var exerciseViewModelRepository = new ExerciseViewModelRepository(_appConfiguration, HttpContextAccessor);
+            var exerciseViewModelRepository = new ExerciseViewModelRepository(AppConfiguration, HttpContextAccessor);
             if (!String.IsNullOrWhiteSpace(ofmQueryResult.OfmForGet.RangeOfExerciseIds))
             {
                 var exerciseViewModelCollectionQuery = await exerciseViewModelRepository.GetCollection(
@@ -56,85 +49,5 @@ namespace Fittify.Web.ViewModelRepository.Sport
 
             return workoutViewModelQueryResult;
         }
-
-        //public async Task<ViewModelCollectionQueryResult<WorkoutViewModel>> GetCollection(WorkoutResourceParameters workoutResourceParameters)
-        //{
-        //    var ofmCollectionQueryResult = await asyncGppdOfmWorkout.GetCollection(workoutResourceParameters);
-
-        //    var workoutViewModelCollectionQueryResult = new ViewModelCollectionQueryResult<WorkoutViewModel>();
-        //    workoutViewModelCollectionQueryResult.HttpStatusCode = ofmCollectionQueryResult.HttpStatusCode;
-
-        //    if ((int) ofmCollectionQueryResult.HttpStatusCode == 200)
-        //    {
-        //        workoutViewModelCollectionQueryResult.ViewModelForGetCollection =
-        //            Mapper.Map<IEnumerable<WorkoutViewModel>>(ofmCollectionQueryResult.OfmForGetCollection);
-        //    }
-        //    else
-        //    {
-        //        workoutViewModelCollectionQueryResult.ErrorMessagesPresented = ofmCollectionQueryResult.ErrorMessagesPresented;
-        //    }
-
-        //    return workoutViewModelCollectionQueryResult;
-        //}
-
-        //public async Task<ViewModelQueryResult<WorkoutViewModel>> Post(WorkoutOfmForPost workoutOfmForPost)
-        //{
-        //    var ofmQueryResult = await asyncGppdOfmWorkout.Post(workoutOfmForPost);
-
-        //    var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutViewModel>();
-        //    workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
-
-        //    if ((int)ofmQueryResult.HttpStatusCode == 201)
-        //    {
-        //        workoutViewModelQueryResult.ViewModel =
-        //            Mapper.Map<WorkoutViewModel>(ofmQueryResult.OfmForGet);
-        //    }
-        //    else
-        //    {
-        //        ofmQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
-        //    }
-
-        //    return workoutViewModelQueryResult;
-        //}
-
-        //public async Task<ViewModelQueryResult<WorkoutViewModel>> Delete(int id)
-        //{
-        //    var ofmQueryResult = await asyncGppdOfmWorkout.Delete(id);
-
-        //    var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutViewModel>();
-        //    workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
-
-        //    if ((int)ofmQueryResult.HttpStatusCode == 204)
-        //    {
-        //        workoutViewModelQueryResult.ViewModel =
-        //            Mapper.Map<WorkoutViewModel>(ofmQueryResult.OfmForGet);
-        //    }
-        //    else
-        //    {
-        //        ofmQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
-        //    }
-
-        //    return workoutViewModelQueryResult;
-        //}
-
-        //public async Task<ViewModelQueryResult<WorkoutViewModel>> Patch(int id, JsonPatchDocument jsonPatchDocument)
-        //{
-        //    var ofmQueryResult = await asyncGppdOfmWorkout.Patch(id, jsonPatchDocument);
-
-        //    var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutViewModel>();
-        //    workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
-
-        //    if ((int)ofmQueryResult.HttpStatusCode == 201)
-        //    {
-        //        workoutViewModelQueryResult.ViewModel =
-        //            Mapper.Map<WorkoutViewModel>(ofmQueryResult.OfmForGet);
-        //    }
-        //    else
-        //    {
-        //        ofmQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
-        //    }
-
-        //    return workoutViewModelQueryResult;
-        //}
     }
 }

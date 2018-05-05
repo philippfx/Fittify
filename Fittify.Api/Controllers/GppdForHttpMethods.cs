@@ -17,7 +17,7 @@
 //        Controller,
 //        IAsyncGppdForHttp<TId, TOfmForPost, TOfmForPatch>
         
-//        where TCrudRepository : AsyncCrud<TEntity,TId> 
+//        where TCrudRepository : AsyncCrudBase<TEntity,TId> 
 //        where TEntity : class, IEntityUniqueIdentifier<TId>
 //        where TOfmForGet : class
 //        where TOfmForPost : class

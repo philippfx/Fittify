@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Fittify.DataModelRepository.Repository
 {
 
-    public abstract class AsyncCrud<TEntity, TOfmForGet, TId, TResourceParameters> : IAsyncCrud<TEntity, TId, TResourceParameters>
+    public abstract class AsyncCrudBase<TEntity, TOfmForGet, TId, TResourceParameters> : IAsyncCrud<TEntity, TId, TResourceParameters>
         where TEntity : class, IEntityUniqueIdentifier<TId>, IEntityOwner
         where TResourceParameters : class, IResourceParameters, IEntityOwner
         where TId : struct
@@ -19,13 +19,13 @@ namespace Fittify.DataModelRepository.Repository
         protected IPropertyMappingService PropertyMappingService;
 
 
-        protected AsyncCrud(FittifyContext fittifyContext)
+        protected AsyncCrudBase(FittifyContext fittifyContext)
         {
             FittifyContext = fittifyContext;
             PropertyMappingService = new PropertyMappingService();
         }
 
-        protected AsyncCrud()
+        protected AsyncCrudBase()
         {
 
         }

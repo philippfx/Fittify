@@ -14,8 +14,8 @@ namespace Fittify.Api.Helpers
         public HateoasLinkFactory(IUrlHelper urlHelper, string controllerName)
         {
             UrlHelper = urlHelper;
-            ShortPascalCasedControllerName = controllerName.ToShortPascalCasedControllerNameOrDefault();
-            ShortCamelCasedControllerName = controllerName.ToShortCamelCasedControllerNameOrDefault();
+            ShortPascalCasedControllerName = controllerName.ToShortPascalCasedControllerName();
+            ShortCamelCasedControllerName = controllerName.ToShortCamelCasedControllerName();
         }
         
         public IEnumerable<HateoasLink> CreateLinksForOfmForGet(TId id, string fields)

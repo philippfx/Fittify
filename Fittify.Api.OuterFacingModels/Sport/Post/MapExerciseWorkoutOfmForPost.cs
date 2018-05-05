@@ -5,9 +5,7 @@ namespace Fittify.Api.OuterFacingModels.Sport.Post
     public class MapExerciseWorkoutOfmForPost
     {
         public MapExerciseWorkoutOfmForPost()
-        {
-
-        }
+        { }
 
         [ForeignKey("WorkoutId")]
         public virtual WorkoutOfmForPost Workout { get; set; }

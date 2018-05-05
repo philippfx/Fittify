@@ -67,7 +67,7 @@ namespace Fittify.Web.View.Controllers
 
                 if (revokeRefreshTokenResponse.IsError)
                 {
-                    throw new Exception("Problem encountered while revoking the refresh token."
+                    throw new OpenIdConnectException("Problem encountered while revoking the refresh token."
                         , revokeRefreshTokenResponse.Exception);
                 }
             }

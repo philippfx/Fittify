@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Fittify.Api.Authorization
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-    public class AuthorizeOwnerIntIdAttribute : AuthorizeAttribute, IAuthorizationFilter
+    public sealed class AuthorizeOwnerIntIdAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
         private object _entityRepositoryObject;
         private IAsyncOwnerIntId _entityRepository;

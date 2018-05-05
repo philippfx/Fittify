@@ -5,10 +5,10 @@ using System.Text.RegularExpressions;
 namespace Fittify.Common.Helpers
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = true)]
-    public sealed class ValidRegularExpressionRangeOfIntIdsAttribute : ValidationAttribute
+    public sealed class ValidRegExRangeOfIntIdsAttribute : ValidationAttribute
     {
         private readonly string _pattern;
-        public ValidRegularExpressionRangeOfIntIdsAttribute(string pattern)
+        public ValidRegExRangeOfIntIdsAttribute(string pattern)
         {
             _pattern = pattern;
         }

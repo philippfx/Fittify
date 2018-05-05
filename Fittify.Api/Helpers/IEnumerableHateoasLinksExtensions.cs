@@ -7,7 +7,7 @@ namespace Fittify.Api.Helpers
 {
     public static class IEnumerableHateoasLinksExtensions
     {
-        public static IEnumerable<ExpandableOfmForGet> CreateHateoasLinksForeachExpandableOfmForGet<TOfmForGet, TId>(
+        public static IEnumerable<ExpandableOfmForGet> CreateHateoasForExpandableOfmForGets<TOfmForGet, TId>(
             this IEnumerable<ExpandableOfmForGet> expandableOfmForGetCollection,
             IUrlHelper urlhelper,
             string controllerName,

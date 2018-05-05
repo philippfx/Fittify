@@ -9,7 +9,7 @@ namespace Fittify.Api.Helpers.Extensions
         /// </summary>
         /// <param name="str">Full name of the controller, for example "WorkoutApiController"</param>
         /// <returns>Short camel cased controller name, for example "workout", or the unmodified input string</returns>
-        public static string ToShortCamelCasedControllerNameOrDefault(this String str)
+        public static string ToShortCamelCasedControllerName(this String str)
         {
             if (str == null) return null;
             string apiControllerString = "ApiController";
@@ -26,7 +26,7 @@ namespace Fittify.Api.Helpers.Extensions
         /// </summary>
         /// <param name="str">Full name of the controller, for example "WorkoutApiController"</param>
         /// <returns>Short pascal cased controller name, for example "Workout", or the unmodified input string</returns>
-        public static string ToShortPascalCasedControllerNameOrDefault(this String str)
+        public static string ToShortPascalCasedControllerName(this String str)
         {
             if (str == null) return null;
             string apiControllerString = "ApiController";

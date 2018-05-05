@@ -14,7 +14,7 @@ namespace Fittify.Api.Controllers
         public ControllerGuardClauses(Controller controller)
         {
             _controller = controller;
-            _shortCamelCasedControllerName = controller.GetType().Name.ToShortCamelCasedControllerNameOrDefault();
+            _shortCamelCasedControllerName = controller.GetType().Name.ToShortCamelCasedControllerName();
         }
         public bool ValidateGetCollection(
             OfmForGetCollectionQueryResult<TOfmForGet> ofmForGetCollectionQueryResult,

@@ -8,7 +8,7 @@ namespace Fittify.Api.OuterFacingModels.Sport.Get
     {
         public int Id { get; set; }
 
-        [ValidRegularExpressionRangeOfIntIds(FittifyRegularExpressions.RangeOfIntIds)]
+        [ValidRegExRangeOfIntIds(FittifyRegularExpressions.RangeOfIntIds)]
         [ValidAscendingOrderRangeOfIntIds]
         public virtual string RangeOfWorkoutIds { get; set; }
     }

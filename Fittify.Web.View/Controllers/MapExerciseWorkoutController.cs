@@ -13,12 +13,12 @@ namespace Fittify.Web.View.Controllers
     public class MapExerciseWorkoutController : Controller
     {
         private MapExerciseWorkoutViewModelRepository _mapExerciseWorkoutViewModelRepository;
-        private IHttpContextAccessor _httpContextAccessor;
+        //// private IHttpContextAccessor _httpContextAccessor;
 
         public MapExerciseWorkoutController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             _mapExerciseWorkoutViewModelRepository = new MapExerciseWorkoutViewModelRepository(appConfiguration, httpContextAccessor);
-            _httpContextAccessor = httpContextAccessor;
+            //// _httpContextAccessor = httpContextAccessor;
         }
         
         [HttpPost]

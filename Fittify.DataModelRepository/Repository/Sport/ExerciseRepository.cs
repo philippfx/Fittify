@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository.Repository.Sport
 {
-    public class ExerciseRepository : AsyncCrud<Exercise, ExerciseOfmForGet, int, ExerciseResourceParameters>, IAsyncOwnerIntId
+    public class ExerciseRepository : AsyncCrudBase<Exercise, ExerciseOfmForGet, int, ExerciseResourceParameters>, IAsyncOwnerIntId
     {
         public ExerciseRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {

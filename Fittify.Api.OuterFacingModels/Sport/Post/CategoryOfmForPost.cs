@@ -3,7 +3,5 @@
 namespace Fittify.Api.OuterFacingModels.Sport.Post
 {
     public class CategoryOfmForPost : CategoryOfmBase
-    {
-
-    }
+    { }
 }

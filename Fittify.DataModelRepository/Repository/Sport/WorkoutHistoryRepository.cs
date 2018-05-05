@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository.Repository.Sport
 {
-    public class WorkoutHistoryRepository : AsyncCrud<WorkoutHistory, WorkoutHistoryOfmForGet, int, WorkoutHistoryResourceParameters>, IWorkoutHistoryRepository, IAsyncOwnerIntId
+    public class WorkoutHistoryRepository : AsyncCrudBase<WorkoutHistory, WorkoutHistoryOfmForGet, int, WorkoutHistoryResourceParameters>, IWorkoutHistoryRepository, IAsyncOwnerIntId
     {
         public WorkoutHistoryRepository()
         {
