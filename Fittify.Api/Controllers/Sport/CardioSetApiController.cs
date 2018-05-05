@@ -63,20 +63,20 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet(Name = "GetCardioSetCollection")]
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
-        public async Task<IActionResult> GetCollection(CardioSetOfmResourceParameters resourceParameters)
+        public async Task<IActionResult> GetCollection(CardioSetOfmResourceParameters ofmResourceParameters)
         {
             var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();
             var ownerGuid = new Guid(stringOwnerGuid);
 
-            var ofmForGetCollectionQueryResult = await _asyncGppd.GetCollection(resourceParameters, ownerGuid);
+            var ofmForGetCollectionQueryResult = await _asyncGppd.GetCollection(ofmResourceParameters, ownerGuid);
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
-            if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasForExpandableOfmForGets<CardioSetOfmForGet, int>(_urlHelper, nameof(CardioSetApiController), resourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
-            expandableOfmForGetCollection = expandableOfmForGetCollection.Shape(resourceParameters.Fields, _incomingHeaders.IncludeHateoas).ToList();
+            if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasForExpandableOfmForGets<CardioSetOfmForGet, int>(_urlHelper, nameof(CardioSetApiController), ofmResourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
+            expandableOfmForGetCollection = expandableOfmForGetCollection.Shape(ofmResourceParameters.Fields, _incomingHeaders.IncludeHateoas).ToList();
 
             this.AddPaginationMetadata<int, CardioSetOfmForGet>(ofmForGetCollectionQueryResult,
-                _incomingHeaders, resourceParameters.AsDictionary().RemoveNullValues(), _urlHelper, nameof(CardioSetApiController));
+                _incomingHeaders, ofmResourceParameters.AsDictionary().RemoveNullValues(), _urlHelper, nameof(CardioSetApiController));
 
             if (!_incomingHeaders.IncludeHateoas)
             {
@@ -86,7 +86,7 @@ namespace Fittify.Api.Controllers.Sport
             dynamic result = new
             {
                 value = expandableOfmForGetCollection,
-                links = _hateoasLinkFactory.CreateLinksForOfmGetGeneric(resourceParameters.AsDictionary().RemoveNullValues(),
+                links = _hateoasLinkFactory.CreateLinksForOfmGetGeneric(ofmResourceParameters.AsDictionary().RemoveNullValues(),
                     ofmForGetCollectionQueryResult.HasPrevious, ofmForGetCollectionQueryResult.HasNext).ToList()
             };
             return Ok(result);

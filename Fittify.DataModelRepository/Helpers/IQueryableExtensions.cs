@@ -5,82 +5,81 @@ using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Text;
 using Fittify.Common.CustomExceptions;
-using Fittify.DataModelRepository.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository.Helpers
 {
     public static class IQueryableExtensions
     {
-        public static IQueryable<T> ApplySort<T>(this IQueryable<T> source, string orderBy,
-            Dictionary<string, PropertyMappingValue> mappingDictionary)
-        {
-            if (source == null)
-            {
-                throw new ArgumentNullException("source");
-            }
+        ////public static IQueryable<T> ApplySort<T>(this IQueryable<T> source, string orderBy,
+        ////    Dictionary<string, PropertyMappingValue> mappingDictionary)
+        ////{
+        ////    if (source == null)
+        ////    {
+        ////        throw new ArgumentNullException("source");
+        ////    }
 
-            if (mappingDictionary == null)
-            {
-                throw new ArgumentNullException("mappingDictionary");
-            }
+        ////    if (mappingDictionary == null)
+        ////    {
+        ////        throw new ArgumentNullException("mappingDictionary");
+        ////    }
 
-            if (string.IsNullOrWhiteSpace(orderBy))
-            {
-                return source;
-            }
-            // the orderBy string is separated by ",", so we split it.
-            var orderByAfterSplit = orderBy.Split(',');
+        ////    if (string.IsNullOrWhiteSpace(orderBy))
+        ////    {
+        ////        return source;
+        ////    }
+        ////    // the orderBy string is separated by ",", so we split it.
+        ////    var orderByAfterSplit = orderBy.Split(',');
 
-            // apply each orderby clause in reverse order - otherwise, the 
-            // IQueryable will be ordered in the wrong order
-            foreach (var orderByClause in orderByAfterSplit.Reverse())
-            {
-                // trim the orderByClause, as it might contain leading 
-                // or trailing spaces. Can't trim the var in foreach,
-                // so use another var.
-                var trimmedOrderByClause = orderByClause.Trim();
+        ////    // apply each orderby clause in reverse order - otherwise, the 
+        ////    // IQueryable will be ordered in the wrong order
+        ////    foreach (var orderByClause in orderByAfterSplit.Reverse())
+        ////    {
+        ////        // trim the orderByClause, as it might contain leading 
+        ////        // or trailing spaces. Can't trim the var in foreach,
+        ////        // so use another var.
+        ////        var trimmedOrderByClause = orderByClause.Trim();
 
-                // if the sort option ends with with " desc", we order
-                // descending, otherwise ascending
-                var orderDescending = trimmedOrderByClause.EndsWith(" desc");
+        ////        // if the sort option ends with with " desc", we order
+        ////        // descending, otherwise ascending
+        ////        var orderDescending = trimmedOrderByClause.EndsWith(" desc");
 
-                // remove " asc" or " desc" from the orderByClause, so we 
-                // get the property name to look for in the mapping dictionary
-                var indexOfFirstSpace = trimmedOrderByClause.IndexOf(" ");
-                var propertyName = indexOfFirstSpace == -1 ?
-                    trimmedOrderByClause : trimmedOrderByClause.Remove(indexOfFirstSpace);
+        ////        // remove " asc" or " desc" from the orderByClause, so we 
+        ////        // get the property name to look for in the mapping dictionary
+        ////        var indexOfFirstSpace = trimmedOrderByClause.IndexOf(" ");
+        ////        var propertyName = indexOfFirstSpace == -1 ?
+        ////            trimmedOrderByClause : trimmedOrderByClause.Remove(indexOfFirstSpace);
 
-                // find the matching property
-                if (!mappingDictionary.ContainsKey(propertyName))
-                {
-                    throw new ArgumentException($"Key mapping for {propertyName} is missing");
-                }
+        ////        // find the matching property
+        ////        if (!mappingDictionary.ContainsKey(propertyName))
+        ////        {
+        ////            throw new ArgumentException($"Key mapping for {propertyName} is missing");
+        ////        }
 
-                // get the PropertyMappingValue
-                var propertyMappingValue = mappingDictionary[propertyName];
+        ////        // get the PropertyMappingValue
+        ////        var propertyMappingValue = mappingDictionary[propertyName];
 
-                if (propertyMappingValue == null)
-                {
-                    throw new ArgumentNullException("propertyMappingValue");
-                }
+        ////        if (propertyMappingValue == null)
+        ////        {
+        ////            throw new ArgumentNullException("propertyMappingValue");
+        ////        }
 
-                // Run through the property names in reverse
-                // so the orderby clauses are applied in the correct order
-                foreach (var destinationProperty in propertyMappingValue.DestinationProperties.Reverse())
-                {
-                    // revert sort order if necessary
-                    if (propertyMappingValue.Revert)
-                    {
-                        orderDescending = !orderDescending;
-                    }
+        ////        // Run through the property names in reverse
+        ////        // so the orderby clauses are applied in the correct order
+        ////        foreach (var destinationProperty in propertyMappingValue.DestinationProperties.Reverse())
+        ////        {
+        ////            // revert sort order if necessary
+        ////            if (propertyMappingValue.Revert)
+        ////            {
+        ////                orderDescending = !orderDescending;
+        ////            }
 
-                    // This is a dynamic linq query which allows to inject sql queries as string into ef context 
-                    source = source.OrderBy(destinationProperty + (orderDescending ? " descending" : " ascending"));
-                }
-            }
-            return source;
-        }
+        ////            // This is a dynamic linq query which allows to inject sql queries as string into ef context 
+        ////            source = source.OrderBy(destinationProperty + (orderDescending ? " descending" : " ascending"));
+        ////        }
+        ////    }
+        ////    return source;
+        ////}
 
         /// <summary>
         /// Sorts the order of queried entities by the select fields
@@ -125,33 +124,9 @@ namespace Fittify.DataModelRepository.Helpers
             }
             return source;
         }
-
+        
         /// <summary>
-        /// Sorts the order of queried entities by the select fields
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source">IQueryable of T where T is an Entiy of EntityFramework DbContext</param>
-        /// <param name="orderByFields">Valid string to orderBy query. Fields must be separated by comma and descending must be signalized by 'space and desc', for example "Id desc, Name, Date desc" orders by (1) Id descending, (2) then by Name ascending and (3) then by Date descending.</param>
-        /// <returns></returns>
-        public static IQueryable<T> ApplySort<T>(this IQueryable<T> source, string orderByFields)
-        {
-            if (source == null)
-            {
-                throw new ArgumentNullException("source");
-            }
-
-            if (string.IsNullOrWhiteSpace(orderByFields))
-            {
-                return source;
-            }
-            // the orderBy string is separated by ",", so we split it.
-            var orderByAfterSplit = orderByFields.Split(',');
-            
-            return source.ApplySort(orderByAfterSplit);
-        }
-
-        /// <summary>
-        /// Creates a dynamic linq to entity to query only request columns.
+        /// Creates a dynamic linq to entity to return only desired columns.
         /// </summary>
         /// <typeparam name="TSource">Is the type of the queried Entity. All fields that are excluded from the query are set to their default values.</typeparam>
         /// <param name="source">Is the IQueryable of TSource</param>

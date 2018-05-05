@@ -4,9 +4,11 @@ using Fittify.Common.ResourceParameters;
 
 namespace Fittify.DataModelRepository.ResourceParameters.Sport
 {
-    public class WorkoutResourceParameters : SearchQueryResourceParameters, IEntityOwner
+    public class WorkoutResourceParameters : EntityResourceParametersBase, ISearchQueryResourceParameters, IEntityOwner
     {
-        public int? CategoryId { get; set; }
+        public string SearchQuery { get; set; }
         public Guid? OwnerGuid { get; set; }
+
+        public int? CategoryId { get; set; }
     }
 }

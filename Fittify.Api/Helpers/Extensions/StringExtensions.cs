@@ -25,7 +25,7 @@ namespace Fittify.Api.Helpers.Extensions
         /// Cuts ApiController name down to entity name. Useful, for example, for the creation of dynamic controller action names. 
         /// </summary>
         /// <param name="str">Full name of the controller, for example "WorkoutApiController"</param>
-        /// <returns>Short pascal cased controller name, for example "Workout", or the unmodified input string</returns>
+        /// <returns>Short pascal cased controller name, for example "WorkoutOfmResourceParameters", or the unmodified input string</returns>
         public static string ToShortPascalCasedControllerName(this String str)
         {
             if (str == null) return null;

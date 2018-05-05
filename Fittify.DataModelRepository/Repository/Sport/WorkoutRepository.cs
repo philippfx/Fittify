@@ -33,8 +33,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
                     .Where(o => o.OwnerGuid == resourceParameters.OwnerGuid)
                     .AsNoTracking()
                     .Include(i => i.Category)
-                    .ApplySort(resourceParameters.OrderBy,
-                    PropertyMappingService.GetPropertyMapping<WorkoutOfmForGet, Workout>());
+                    .ApplySort(resourceParameters.OrderBy);
             
             if (!String.IsNullOrWhiteSpace(resourceParameters.SearchQuery))
             {

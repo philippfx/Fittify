@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.Services;
-using Fittify.Api.OfmRepository.Test.TestHelper;
 using NUnit.Framework;
 
 namespace Fittify.Api.OfmRepository.Test.Helpers
@@ -42,10 +40,6 @@ namespace Fittify.Api.OfmRepository.Test.Helpers
             };
 
             Assert.AreEqual(entityOrderByFields, expectedOrder);
-
-            // Extra
-
-
         }
     }
 }

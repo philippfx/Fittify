@@ -30,7 +30,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
             var ofmQueryResult = new OfmQueryResult<WorkoutOfmForGet>();
             var uri = new Uri(
                 _appConfiguration.GetValue<string>("FittifyApiBaseUrl") 
-                + _appConfiguration.GetValue<string>("MappedFittifyApiActions:Workout")
+                + _appConfiguration.GetValue<string>("MappedFittifyApiActions:WorkoutOfmResourceParameters")
                 + "/" + id
                 );
             try
@@ -95,7 +95,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
 
             var uri = new Uri(
                 _appConfiguration.GetValue<string>("FittifyApiBaseUrl") +
-                _appConfiguration.GetValue<string>("MappedFittifyApiActions:Workout")
+                _appConfiguration.GetValue<string>("MappedFittifyApiActions:WorkoutOfmResourceParameters")
             );
 
             //var httpResponse = await HttpRequestFactory.GetCollection(new Uri(_fittifyApiBaseUri + "api/workouts" + queryParamter));
@@ -120,7 +120,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
             var ofmQueryResult = new OfmQueryResult<WorkoutOfmForGet>();
             var uri = new Uri(
                 _appConfiguration.GetValue<string>("FittifyApiBaseUrl") +
-                _appConfiguration.GetValue<string>("MappedFittifyApiActions:Workout")
+                _appConfiguration.GetValue<string>("MappedFittifyApiActions:WorkoutOfmResourceParameters")
             );
             try
             {
@@ -149,7 +149,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
             var ofmQueryResult = new OfmQueryResult<WorkoutOfmForGet>();
             var uri = new Uri(
                 _appConfiguration.GetValue<string>("FittifyApiBaseUrl")
-                + _appConfiguration.GetValue<string>("MappedFittifyApiActions:Workout")
+                + _appConfiguration.GetValue<string>("MappedFittifyApiActions:WorkoutOfmResourceParameters")
                 + "/" + id
             );
             try
@@ -179,7 +179,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
             var ofmQueryResult = new OfmQueryResult<WorkoutOfmForGet>();
             var uri = new Uri(
                 _appConfiguration.GetValue<string>("FittifyApiBaseUrl") +
-                _appConfiguration.GetValue<string>("MappedFittifyApiActions:Workout")
+                _appConfiguration.GetValue<string>("MappedFittifyApiActions:WorkoutOfmResourceParameters")
             );
             try
             {

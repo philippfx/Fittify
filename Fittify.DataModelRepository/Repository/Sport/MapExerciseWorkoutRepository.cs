@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.DataModelRepository.Helpers;
@@ -32,8 +31,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
                     .AsNoTracking()
                     .Include(i => i.Exercise)
                     .Include(i => i.Workout)
-                    .ApplySort(resourceParameters.OrderBy,
-                    PropertyMappingService.GetPropertyMapping<MapExerciseWorkoutOfmForGet, MapExerciseWorkout>());
+                    .ApplySort(resourceParameters.OrderBy);
             
             if (resourceParameters.ExerciseId != null)
             {

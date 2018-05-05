@@ -6,9 +6,8 @@ using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.OfmResourceParameters;
 using Fittify.Common;
 using Fittify.Common.Helpers;
-using Fittify.Common.ResourceParameters;
 using Fittify.DataModelRepository.Repository;
-using Fittify.DataModelRepository.Services;
+using Fittify.DataModelRepository.ResourceParameters;
 using IPropertyMappingService = Fittify.Api.OfmRepository.Services.IPropertyMappingService;
 using ITypeHelperService = Fittify.Api.OfmRepository.Services.ITypeHelperService;
 
@@ -21,8 +20,8 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
         where TOfmForPost : class
         where TOfmForPatch : class
         where TId : struct
-        where TOfmResourceParameters : class, IResourceParameters
-        where TEntityResourceParameters : class, IResourceParameters, IEntityOwner
+        where TOfmResourceParameters : OfmResourceParametersBase
+        where TEntityResourceParameters : EntityResourceParametersBase, IEntityOwner
     {
         protected readonly IAsyncCrud<TEntity, TId,  TEntityResourceParameters> Repo;
         protected readonly IPropertyMappingService PropertyMappingService;
@@ -54,14 +53,15 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
             return ofmForGetResult;
         }
 
-        public async Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TOfmResourceParameters resourceParameters, Guid ownerGuid)
+        public async Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TOfmResourceParameters ofmResourceParameters, Guid ownerGuid)
         {
             var ofmForGetCollectionQueryResult = new OfmForGetCollectionQueryResult<TOfmForGet>();
 
-            var entityResourceParameters = Mapper.Map<TEntityResourceParameters>(resourceParameters);
+            var entityResourceParameters = Mapper.Map<TEntityResourceParameters>(ofmResourceParameters);
             entityResourceParameters.OwnerGuid = ownerGuid;
+            entityResourceParameters.OrderBy = ofmResourceParameters.OrderBy.ToEntitySortFields(PropertyMappingService.GetPropertyMapping<TOfmForGet, TEntity>());
 
-            ofmForGetCollectionQueryResult = await AsyncGetOfmGuardClause.ValidateResourceParameters(ofmForGetCollectionQueryResult, resourceParameters);
+            ofmForGetCollectionQueryResult = await AsyncGetOfmGuardClause.ValidateResourceParameters(ofmForGetCollectionQueryResult, ofmResourceParameters);
             if (ofmForGetCollectionQueryResult.ErrorMessages.Count > 0)
             {
                 return ofmForGetCollectionQueryResult;

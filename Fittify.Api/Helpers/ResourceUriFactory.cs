@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Fittify.Api.OfmRepository.OfmResourceParameters;
 using Fittify.Common.Helpers;
-using Fittify.Common.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fittify.Api.Helpers
@@ -9,7 +8,7 @@ namespace Fittify.Api.Helpers
     public static class ResourceUriFactory
     {
         public static string CreateResourceUriForIResourceParameters(
-            IResourceParameters resourceParameters,
+            OfmResourceParametersBase resourceParameters,
             IUrlHelper urlHelper,
             ResourceUriType type,
             string shortPascalCasedControllerName)

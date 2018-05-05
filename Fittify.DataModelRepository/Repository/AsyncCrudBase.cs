@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Common;
-using Fittify.Common.ResourceParameters;
 using Fittify.DataModelRepository.Helpers;
-using Fittify.DataModelRepository.Services;
+using Fittify.DataModelRepository.ResourceParameters;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository.Repository
@@ -12,17 +11,15 @@ namespace Fittify.DataModelRepository.Repository
 
     public abstract class AsyncCrudBase<TEntity, TOfmForGet, TId, TResourceParameters> : IAsyncCrud<TEntity, TId, TResourceParameters>
         where TEntity : class, IEntityUniqueIdentifier<TId>, IEntityOwner
-        where TResourceParameters : class, IResourceParameters, IEntityOwner
+        where TResourceParameters : EntityResourceParametersBase, IEntityOwner
         where TId : struct
     {
         protected FittifyContext FittifyContext;
-        protected IPropertyMappingService PropertyMappingService;
 
 
         protected AsyncCrudBase(FittifyContext fittifyContext)
         {
             FittifyContext = fittifyContext;
-            PropertyMappingService = new PropertyMappingService();
         }
 
         protected AsyncCrudBase()
@@ -71,8 +68,7 @@ namespace Fittify.DataModelRepository.Repository
                 FittifyContext.Set<TEntity>()
                     .Where(o => o.OwnerGuid == resourceParameters.OwnerGuid)
                     .AsNoTracking()
-                    .ApplySort(resourceParameters.OrderBy,
-                        PropertyMappingService.GetPropertyMapping<TOfmForGet, TEntity>());
+                    .ApplySort(resourceParameters.OrderBy);
 
             return PagedList<TEntity>.Create(allEntitiesQueryableBeforePaging,
                 resourceParameters.PageNumber,

@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Fittify.Api.OfmRepository\Fittify.Api.OfmRepository.csproj" />
     <ProjectReference Include="..\Fittify.DataModelRepository\Fittify.DataModelRepository.csproj" />
     <ProjectReference Include="..\Test.Core\Fittify.Test.Core.csproj" />
   </ItemGroup>

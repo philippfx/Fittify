@@ -190,7 +190,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when deletion failed
             }
             
-            return RedirectToAction("Overview", "Workout", null);
+            return RedirectToAction("Overview", "WorkoutOfmResourceParameters", null);
         }
 
         [HttpPost]
@@ -215,7 +215,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when patching failed
             }
 
-            return RedirectToAction("Overview", "Workout", null);
+            return RedirectToAction("Overview", "WorkoutOfmResourceParameters", null);
         }
 
         [HttpPost]

@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<InfoWarnings>
+  <Info>Begin full analysis with NDepend v2018.1.0</Info>
+  <Info>Concurrent mode</Info>
+  <Info>.NET Assemblies loaded from {C:\Windows\Microsoft.NET\Framework\v4.0.30319} 
+   System.Runtime.dll   v4.0.0.0
+   System.Diagnostics.Debug.dll   v4.0.0.0
+   System.Collections.dll   v4.0.0.0
+   System.Threading.Tasks.dll   v4.0.0.0
+   System.Text.RegularExpressions.dll   v4.0.0.0
+   System.Security.Principal.dll   v4.0.0.0
+   System.Linq.dll   v4.0.0.0
+   System.Net.Http.dll   v4.0.0.0
+   System.Net.Primitives.dll   v4.0.0.0
+   System.Runtime.Extensions.dll   v4.0.0.0
+   System.Linq.Expressions.dll   v4.0.0.0
+   System.Linq.Queryable.dll   v4.0.0.0
+   System.ComponentModel.Annotations.dll   v4.0.0.0
+   System.ComponentModel.dll   v4.0.0.0
+   System.Xml.XmlSerializer.dll   v4.0.0.0
+   System.Xml.ReaderWriter.dll   v4.0.0.0
+   Microsoft.CSharp.dll   v4.0.0.0
+   mscorlib.dll   v4.0.0.0</Info>
+  <Info>.NET Assemblies loaded from {C:\Users\seifert-1\.nuget\packages}  [ 0 , 19 ]
+   .\AutoMapper\6.2.2\lib\net45\AutoMapper.dll   v6.2.2.0
+   .\Microsoft.AspNetCore.Hosting.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.Abstractions.dll   v2.0.0.0
+   .\Microsoft.Extensions.Configuration.Abstractions\2.0.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll   v2.0.1.0
+   .\Microsoft.Extensions.DependencyInjection.Abstractions\1.1.1\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll   v1.1.1.0
+   .\Microsoft.AspNetCore.Http.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Abstractions.dll   v2.0.0.0
+   .\Microsoft.Extensions.Logging.Abstractions\2.0.1\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll   v2.0.1.0
+   .\Microsoft.AspNetCore.Authentication.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Authentication.Abstractions.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Authentication.Cookies\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Authentication.Cookies.dll   v2.0.0.0
+   .\Newtonsoft.Json\11.0.1\lib\net45\Newtonsoft.Json.dll   v11.0.0.0
+   .\Microsoft.AspNetCore.Authentication.OpenIdConnect\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Authentication.OpenIdConnect.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Authorization\2.0.3\lib\netstandard2.0\Microsoft.AspNetCore.Authorization.dll   v2.0.3.0
+   .\Microsoft.AspNetCore.Routing\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Routing.dll   v2.0.0.0
+   .\System.Security.Claims\4.3.0\lib\net46\System.Security.Claims.dll   v4.0.2.0
+   .\Microsoft.AspNetCore.Mvc.Core\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Core.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Mvc.ViewFeatures\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.ViewFeatures.dll   v2.0.0.0
+   .\IdentityModel\3.6.1\lib\net461\IdentityModel.dll   v3.6.1.0
+   .\Microsoft.AspNetCore.Mvc.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Abstractions.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.JsonPatch\1.1.1\lib\net451\Microsoft.AspNetCore.JsonPatch.dll   v1.1.1.0
+   .\Microsoft.AspNetCore.Http.Features\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.Features.dll   v2.0.0.0
+   .\Microsoft.Extensions.Primitives\1.1.1\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll   v1.1.1.0</Info>
+  <Info>.NET Assemblies loaded from {C:\Users\seifert-1\.nuget\packages}  [ 20 , 39 ]
+   .\Microsoft.AspNetCore.Hosting\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.dll   v2.0.0.0
+   .\Microsoft.AspNetCore\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.dll   v2.0.0.0
+   .\Microsoft.Extensions.Configuration\2.0.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll   v2.0.1.0
+   .\System.IO.FileSystem\4.3.0\lib\net46\System.IO.FileSystem.dll   v4.0.2.0
+   .\Microsoft.Extensions.Configuration.FileExtensions\1.1.1\lib\net451\Microsoft.Extensions.Configuration.FileExtensions.dll   v1.1.1.0
+   .\Microsoft.Extensions.Configuration.Json\1.1.1\lib\net451\Microsoft.Extensions.Configuration.Json.dll   v1.1.1.0
+   .\System.IdentityModel.Tokens.Jwt\5.2.2\lib\net451\System.IdentityModel.Tokens.Jwt.dll   v5.2.2.0
+   .\Microsoft.AspNetCore.Authentication\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Authentication.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Http\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Http.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Mvc\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.dll   v2.0.0.0
+   .\AspNetCore.RouteAnalyzer\0.5.1\lib\netcoreapp2.0\AspNetCore.RouteAnalyzer.dll   v0.5.0.0
+   .\Microsoft.Extensions.Logging.Console\1.1.1\lib\net451\Microsoft.Extensions.Logging.Console.dll   v1.1.1.0
+   .\Microsoft.AspNetCore.Diagnostics\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Diagnostics.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.StaticFiles\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.StaticFiles.dll   v2.0.0.0
+   .\Microsoft.AspNetCore.Authentication.OAuth\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Authentication.OAuth.dll   v2.0.0.0
+   .\Microsoft.IdentityModel.Tokens\5.2.2\lib\net451\Microsoft.IdentityModel.Tokens.dll   v5.2.2.0
+   .\Microsoft.Extensions.Configuration.Binder\2.0.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll   v2.0.1.0
+   .\Microsoft.EntityFrameworkCore\2.0.0\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll   v2.0.0.0
+   .\System.Console\4.3.0\lib\net46\System.Console.dll   v4.0.1.0
+   .\Remotion.Linq\2.1.1\lib\net45\Remotion.Linq.dll   v2.1.0.0</Info>
+  <Info>.NET Assemblies loaded from {C:\Users\seifert-1\.nuget\packages}  [ 40 , 59 ]
+   .\Microsoft.EntityFrameworkCore.Relational\2.0.0\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Relational.dll   v2.0.0.0
+   .\Microsoft.EntityFrameworkCore.SqlServer\2.0.0\lib\netstandard2.0\Microsoft.EntityFrameworkCore.SqlServer.dll   v2.0.0.0
+   .\System.Linq.Dynamic.Core\1.0.8.2\lib\net46\System.Linq.Dynamic.Core.dll   v0.0.0.0
+   .\Microsoft.Extensions.DependencyInjection\2.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.dll   v2.0.0.0
+   .\Swashbuckle.AspNetCore.SwaggerGen\2.4.0\lib\net451\Swashbuckle.AspNetCore.SwaggerGen.dll   v2.4.0.0
+   .\IdentityServer4.AccessTokenValidation\2.6.0\lib\net461\IdentityServer4.AccessTokenValidation.dll   v2.6.0.0
+   .\Microsoft.AspNetCore.Mvc.Formatters.Json\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Formatters.Json.dll   v2.0.0.0
+   .\Marvin.Cache.Headers\1.1.0\lib\netstandard1.6\Marvin.Cache.Headers.dll   v1.1.0.0
+   .\AspNetCoreRateLimit\2.1.0\lib\net46\AspNetCoreRateLimit.dll   v1.0.6.0
+   .\Microsoft.AspNetCore.Cors\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Cors.dll   v2.0.0.0
+   .\Swashbuckle.AspNetCore.SwaggerUI\2.4.0\lib\net451\Swashbuckle.AspNetCore.SwaggerUI.dll   v2.4.0.0
+   .\Microsoft.AspNetCore.Diagnostics.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Diagnostics.Abstractions.dll   v2.0.0.0
+   .\Scrutor\2.2.2\lib\net451\Scrutor.dll   v2.2.2.0
+   .\System.ComponentModel.TypeConverter\4.3.0\lib\net462\System.ComponentModel.TypeConverter.dll   v4.1.1.0
+   .\NLog.Web.AspNetCore\4.5.0-rc2\lib\net461\NLog.Web.AspNetCore.dll   v4.0.0.0
+   .\Microsoft.Extensions.Caching.Memory\2.0.1\lib\netstandard2.0\Microsoft.Extensions.Caching.Memory.dll   v2.0.1.0
+   .\Microsoft.Extensions.Options\2.0.1\lib\netstandard2.0\Microsoft.Extensions.Options.dll   v2.0.1.0
+   .\Microsoft.Extensions.Logging.Debug\1.1.1\lib\net451\Microsoft.Extensions.Logging.Debug.dll   v1.1.1.0
+   .\Swashbuckle.AspNetCore.Swagger\2.4.0\lib\net451\Swashbuckle.AspNetCore.Swagger.dll   v2.4.0.0
+   .\Microsoft.AspNetCore.Routing.Abstractions\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Routing.Abstractions.dll   v2.0.0.0</Info>
+  <Info>.NET Assemblies loaded from {C:\Users\seifert-1\.nuget\packages}  [ 60 , 60 ]
+   .\Microsoft.AspNetCore.Mvc.Formatters.Xml\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Formatters.Xml.dll   v2.0.0.0</Info>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Spielwiese\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Info>.NET Assemblies loaded from {C:\VS_2017_Projects\Fittify\Fittify.Web.View\bin\debug\netcoreapp2.0} 
+   Fittify.Web.View.dll   v1.0.0.0
+   Fittify.DataModels.dll   v1.0.0.0
+   Fittify.DataModelRepository.dll   v1.0.0.0
+   Fittify.Web.ViewModels.dll   v1.0.0.0
+   Fittify.Api.OuterFacingModels.dll   v1.0.0.0
+   Fittify.Common.dll   v1.0.0.0
+   Fittify.Web.ApiModelRepositories.dll   v1.0.0.0
+   Fittify.Web.ViewModelRepository.dll   v1.0.0.0</Info>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.DataModels\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Info>.NET Assembly loaded from {C:\VS_2017_Projects\Fittify\Fittify.DbResetter\bin\debug\netcoreapp2.0} 
+   Fittify.Test.Core.dll   v1.0.0.0</Info>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.DataModelRepository\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Web.ViewModels\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Info>.NET Assemblies loaded from {C:\VS_2017_Projects\Fittify\Fittify.Api\bin\debug\netcoreapp2.0} 
+   Fittify.Api.dll   v1.0.0.0
+   Fittify.Api.OfmRepository.dll   v1.0.0.0</Info>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Api.OuterFacingModels\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Test.Core\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Common\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Web.ApiModelRepositories\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Analyzer.Library\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Angular\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Common.Test\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Api.OuterFacingModels.Test\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Quantus.IDP\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Web.ViewModelRepository\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Quantus.IDP.DatabaseResetter\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.DataModelRepository.Test\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Api.OfmRepository\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>No application or third party assembly found in directory {C:\VS_2017_Projects\Fittify\Fittify.Api.OfmRepository.Test\bin\debug\netcoreapp2.0}. This directory doesn't need to be referenced by the NDepend project.</Warning>
+  <Warning>Assembly {Microsoft.EntityFrameworkCore.Sqlite} is referenced by {Fittify.Api} but is not found.</Warning>
+  <Info>193 source files parsed ; all source files found ; all source files in-sync with PDB</Info>
+  <Info>0 code rule has been extracted from code.</Info>
+  <Info>No dependency cycle detected in assemblies referencement graph.</Info>
+  <Info>Do merge code generated by compiler into application code.</Info>
+  <Info>Log trend metrics values.</Info>
+  <Info>NDepend analysis done. Duration: 00:17</Info>
+</InfoWarnings>

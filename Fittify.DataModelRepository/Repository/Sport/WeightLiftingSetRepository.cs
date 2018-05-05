@@ -31,8 +31,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
                     .Where(o => o.OwnerGuid == resourceParameters.OwnerGuid)
                     .AsNoTracking()
                     .Include(i => i.ExerciseHistory)
-                    .ApplySort(resourceParameters.OrderBy,
-                    PropertyMappingService.GetPropertyMapping<WeightLiftingSetOfmForGet, WeightLiftingSet>());
+                    .ApplySort(resourceParameters.OrderBy);
 
             if (!String.IsNullOrWhiteSpace(resourceParameters.Ids))
             {

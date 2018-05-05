@@ -16,9 +16,9 @@ namespace Fittify.Web.ViewModelRepository.Sport
         private readonly IConfiguration _appConfiguration;
 
         public WorkoutHistoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
-            : base(appConfiguration, httpContextAccessor, "WorkoutHistory")
+            : base(appConfiguration, httpContextAccessor, "WorkoutHistoryOfmResourceParameters")
         {
-            asyncGppdOfmWorkoutHistory = new AsyncWorkoutHistoryOfmRepository(appConfiguration, httpContextAccessor, "WorkoutHistory");
+            asyncGppdOfmWorkoutHistory = new AsyncWorkoutHistoryOfmRepository(appConfiguration, httpContextAccessor, "WorkoutHistoryOfmResourceParameters");
             _appConfiguration = appConfiguration;
         }
 
@@ -44,7 +44,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
 
         public override async Task<ViewModelQueryResult<WorkoutHistoryViewModel>> GetById(int id)
         {
-            // WorkoutHistory
+            // WorkoutHistoryOfmResourceParameters
             var workoutHistoryOfmForGetQueryResult = await base.GetById(id);
 
             // ExerciseHistories

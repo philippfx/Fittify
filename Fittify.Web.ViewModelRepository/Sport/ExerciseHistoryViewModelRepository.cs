@@ -18,17 +18,17 @@ namespace Fittify.Web.ViewModelRepository.Sport
         private readonly IConfiguration _appConfiguration;
 
         public ExerciseHistoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
-            : base(appConfiguration, httpContextAccessor, "ExerciseHistory")
+            : base(appConfiguration, httpContextAccessor, "ExerciseHistoryOfmResourceParameters")
         {
-            _asyncGppdOfmExerciseHistory = new GenericAsyncGppdOfm<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmResourceParameters>(appConfiguration, httpContextAccessor, "ExerciseHistory");
+            _asyncGppdOfmExerciseHistory = new GenericAsyncGppdOfm<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmResourceParameters>(appConfiguration, httpContextAccessor, "ExerciseHistoryOfmResourceParameters");
             _appConfiguration = appConfiguration;
         }
         
-        public override async Task<ViewModelCollectionQueryResult<ExerciseHistoryViewModel>> GetCollection(ExerciseHistoryOfmResourceParameters exerciseHistoryResourceParameters)
+        public override async Task<ViewModelCollectionQueryResult<ExerciseHistoryViewModel>> GetCollection(ExerciseHistoryOfmResourceParameters exerciseHistoryOfmResourceParametersResourceParameters)
         {
             // Current ExerciseHistories
             var exerciseHistoryViewModelCollectionQueryResult =
-                await base.GetCollection(exerciseHistoryResourceParameters);
+                await base.GetCollection(exerciseHistoryOfmResourceParametersResourceParameters);
             
             var exerciseHistoryViewModels =
                 exerciseHistoryViewModelCollectionQueryResult.ViewModelForGetCollection;

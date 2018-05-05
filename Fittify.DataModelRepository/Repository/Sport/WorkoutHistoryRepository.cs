@@ -77,8 +77,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
                     .AsNoTracking()
                     .Include(i => i.Workout)
                     .Include(i => i.ExerciseHistories)
-                    .ApplySort(resourceParameters.OrderBy,
-                    PropertyMappingService.GetPropertyMapping<WorkoutHistoryOfmForGet, WorkoutHistory>());
+                    .ApplySort(resourceParameters.OrderBy);
             
             if (!String.IsNullOrWhiteSpace(resourceParameters.Ids))
             {

@@ -402,7 +402,7 @@ namespace Fittify.DataModelRepository.Test.Repository.Sport
                 {
                     var orderedCollectionFromContext = context.Categories.OrderByDescending(o => o.Name).ToList();
 
-                    var resourceParameters = new CategoryResourceParameters() { OrderBy = "name desc", OwnerGuid = _ownerGuid};
+                    var resourceParameters = new CategoryResourceParameters() { OrderBy = new List<string>() { "name desc" }, OwnerGuid = _ownerGuid};
                     var categoryRepository = new CategoryRepository(context);
                     var categoryCollection = categoryRepository.GetCollection(resourceParameters);
 
@@ -425,7 +425,7 @@ namespace Fittify.DataModelRepository.Test.Repository.Sport
                 {
                     var orderedCollectionFromContext = context.Categories.OrderByDescending(o => o.Name).ToList();
 
-                    var resourceParameters = new CategoryResourceParameters() { OrderBy = "name desc, id desc", OwnerGuid = _ownerGuid};
+                    var resourceParameters = new CategoryResourceParameters() { OrderBy = new List<string>() { "name desc", " id desc" }, OwnerGuid = _ownerGuid};
                     var categoryRepository = new CategoryRepository(context);
                     var categoryCollection = categoryRepository.GetCollection(resourceParameters);
 

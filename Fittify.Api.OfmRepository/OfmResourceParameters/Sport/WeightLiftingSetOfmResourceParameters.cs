@@ -1,8 +1,6 @@
-﻿using Fittify.Common.ResourceParameters;
-
-namespace Fittify.Api.OfmRepository.OfmResourceParameters.Sport
+﻿namespace Fittify.Api.OfmRepository.OfmResourceParameters.Sport
 {
-    public class WeightLiftingSetOfmResourceParameters : BaseResourceParameters
+    public class WeightLiftingSetOfmResourceParameters : OfmResourceParametersBase
     {
         public int? ExerciseHistoryId { get; set; }
     }

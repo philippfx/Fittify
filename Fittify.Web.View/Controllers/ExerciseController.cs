@@ -78,7 +78,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when deleting failed
             }
 
-            return RedirectToAction("Overview", "Exercise", null);
+            return RedirectToAction("Overview", "ExerciseOfmResourceParameters", null);
         }
 
         [HttpPost]
@@ -102,7 +102,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when posting failed
             }
 
-            return RedirectToAction("Overview", "Exercise", null);
+            return RedirectToAction("Overview", "ExerciseOfmResourceParameters", null);
         }
     }
 }

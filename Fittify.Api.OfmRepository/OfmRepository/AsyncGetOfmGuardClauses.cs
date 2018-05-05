@@ -5,7 +5,6 @@ using Fittify.Api.OfmRepository.OfmResourceParameters;
 using Fittify.Common;
 using Fittify.Common.Helpers;
 using Fittify.Common.ResourceParameters;
-using Fittify.DataModelRepository.Services;
 using ITypeHelperService = Fittify.Api.OfmRepository.Services.ITypeHelperService;
 
 namespace Fittify.Api.OfmRepository.OfmRepository
@@ -38,7 +37,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository
             return ofmForGetResult;
         }
 
-        public async Task<OfmForGetCollectionQueryResult<TOfmForGet>> ValidateResourceParameters(OfmForGetCollectionQueryResult<TOfmForGet> ofmForGetCollectionQueryResult, IResourceParameters resourceParameters)
+        public async Task<OfmForGetCollectionQueryResult<TOfmForGet>> ValidateResourceParameters(OfmForGetCollectionQueryResult<TOfmForGet> ofmForGetCollectionQueryResult, OfmResourceParametersBase resourceParameters)
         {
             await Task.Run(() =>
             {

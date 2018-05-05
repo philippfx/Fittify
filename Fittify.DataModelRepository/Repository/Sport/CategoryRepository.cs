@@ -32,8 +32,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
             var allEntitiesQueryable =
                 FittifyContext.Set<Category>()
                     .Where(o => o.OwnerGuid == resourceParameters.OwnerGuid || o.OwnerGuid == null) // semi public categories
-                    .ApplySort(resourceParameters.OrderBy,
-                        PropertyMappingService.GetPropertyMapping<CategoryOfmForGet, Category>())
+                    .ApplySort(resourceParameters.OrderBy)
                     .AsNoTracking();
 
             if (!String.IsNullOrWhiteSpace(resourceParameters.SearchQuery))
@@ -61,8 +60,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
             var allEntitiesQueryable =
                 FittifyContext.Set<Category>()
                     .Where(o => o.OwnerGuid == ownerGuid || o.OwnerGuid == null) // semi public categories
-                    .ApplySort(ofmResourceParameters.OrderBy,
-                        PropertyMappingService.GetPropertyMapping<CategoryOfmForGet, Category>())
+                    .ApplySort(ofmResourceParameters.OrderBy)
                     .AsNoTracking();
 
             if (!String.IsNullOrWhiteSpace(ofmResourceParameters.SearchQuery))

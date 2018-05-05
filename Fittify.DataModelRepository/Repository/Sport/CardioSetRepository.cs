@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.DataModelRepository.Helpers;
@@ -30,8 +29,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
                     .Where(o => o.OwnerGuid == resourceParameters.OwnerGuid)
                     .AsNoTracking()
                     .Include(i => i.ExerciseHistory)
-                    .ApplySort(resourceParameters.OrderBy,
-                    PropertyMappingService.GetPropertyMapping<CardioSetOfmForGet, CardioSet>());
+                    .ApplySort(resourceParameters.OrderBy);
             
             if (resourceParameters.FromDateTimeStart != null && resourceParameters.UntilDateTimeEnd != null)
             {

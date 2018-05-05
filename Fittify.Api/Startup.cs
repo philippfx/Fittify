@@ -17,9 +17,9 @@ using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Middleware;
 using Fittify.Api.Middleware.Extensions.ConfigureServices;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport;
+using Fittify.Api.OfmRepository.Services;
 using Fittify.Common.Helpers;
 using Fittify.DataModelRepository;
-using Fittify.DataModelRepository.Services;
 using Fittify.Test.Core.Seed;
 using IdentityServer4.AccessTokenValidation;
 using Newtonsoft.Json;
@@ -270,7 +270,7 @@ namespace Fittify.Api
                     .ForMember(dest => dest.IncludeHateoas, opt => opt.MapFrom(src => src.IncludeHateoas.ToBool()))
                     .ForMember(dest => dest.IncludeHateoas, opt => opt.MapFrom(src => int.Parse(src.IncludeHateoas)));
                 
-                //cfg.IgnoreUnmapped<WorkoutHistoryOfmForPpp, WorkoutHistory>(); // does not work as expected
+                //cfg.IgnoreUnmapped<WorkoutHistoryOfmForPpp, WorkoutHistoryOfmResourceParameters>(); // does not work as expected
 
                 // Must be last statement
                 cfg.IgnoreUnmapped();

@@ -1,4 +1,4 @@
-﻿namespace Fittify.Api.OuterFacingModels
+﻿namespace Fittify.Api.Helpers
 {
     public class HateoasLink
     {

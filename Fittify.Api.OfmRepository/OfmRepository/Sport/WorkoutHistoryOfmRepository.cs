@@ -5,7 +5,6 @@ using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.DataModelRepository.Repository;
 using Fittify.DataModelRepository.ResourceParameters.Sport;
-using Fittify.DataModelRepository.Services;
 using Fittify.DataModels.Models.Sport;
 using IPropertyMappingService = Fittify.Api.OfmRepository.Services.IPropertyMappingService;
 using ITypeHelperService = Fittify.Api.OfmRepository.Services.ITypeHelperService;

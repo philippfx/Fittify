@@ -1,12 +1,12 @@
 ﻿using System;
 using Fittify.Common;
-using Fittify.Common.ResourceParameters;
 
 namespace Fittify.DataModelRepository.ResourceParameters.Sport
 {
-    public class WeightLiftingSetResourceParameters : BaseResourceParameters, IEntityOwner
+    public class WeightLiftingSetResourceParameters : EntityResourceParametersBase, IEntityOwner
     {
-        public int? ExerciseHistoryId { get; set; }
         public Guid? OwnerGuid { get; set; }
+
+        public int? ExerciseHistoryId { get; set; }
     }
 }

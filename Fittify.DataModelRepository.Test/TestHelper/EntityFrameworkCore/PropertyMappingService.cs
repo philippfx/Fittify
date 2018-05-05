@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Fittify.Api.OfmRepository.Services;
 using Fittify.Api.OuterFacingModels.Sport.Get;
-using Fittify.DataModelRepository.Services;
 using Fittify.DataModels.Models.Sport;
 
 namespace Fittify.DataModelRepository.Test.TestHelper.EntityFrameworkCore
