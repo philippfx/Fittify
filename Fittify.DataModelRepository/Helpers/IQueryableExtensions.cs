@@ -89,28 +89,26 @@ namespace Fittify.DataModelRepository.Helpers
         /// <param name="source">IQueryable of T where T is an Entiy of EntityFramework DbContext</param>
         /// <param name="orderByFields">Valid string to orderBy query. Fields must be separated by comma and descending must be signalized by 'space and desc', for example "Id desc, Name, Date desc" orders by (1) Id descending, (2) then by Name ascending and (3) then by Date descending.</param>
         /// <returns></returns>
-        public static IQueryable<T> ApplySort<T>(this IQueryable<T> source, string orderByFields)
+        public static IQueryable<T> ApplySort<T>(this IQueryable<T> source, IEnumerable<string> fields)
         {
             if (source == null)
             {
                 throw new ArgumentNullException("source");
             }
             
-            if (string.IsNullOrWhiteSpace(orderByFields))
+            if (fields == null)
             {
                 return source;
             }
-            // the orderBy string is separated by ",", so we split it.
-            var orderByAfterSplit = orderByFields.Split(',');
 
             // apply each orderby clause in reverse order - otherwise, the 
             // IQueryable will be ordered in the wrong order
-            foreach (var orderByClause in orderByAfterSplit.Reverse()) // Todo: Test order in reverse ... why should I reverse???
+            foreach (var field in fields.Reverse()) // SQL requires reverse order, because it doesn't know "thenBy".
             {
                 // trim the orderByClause, as it might contain leading 
                 // or trailing spaces. Can't trim the var in foreach,
                 // so use another var.
-                var trimmedOrderByClause = orderByClause.Trim();
+                var trimmedOrderByClause = field.Trim();
 
                 // if the sort option ends with with " desc", we order
                 // descending, otherwise ascending
@@ -126,6 +124,30 @@ namespace Fittify.DataModelRepository.Helpers
                 source = source.OrderBy(propertyName + (orderDescending ? " descending" : " ascending"));
             }
             return source;
+        }
+
+        /// <summary>
+        /// Sorts the order of queried entities by the select fields
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source">IQueryable of T where T is an Entiy of EntityFramework DbContext</param>
+        /// <param name="orderByFields">Valid string to orderBy query. Fields must be separated by comma and descending must be signalized by 'space and desc', for example "Id desc, Name, Date desc" orders by (1) Id descending, (2) then by Name ascending and (3) then by Date descending.</param>
+        /// <returns></returns>
+        public static IQueryable<T> ApplySort<T>(this IQueryable<T> source, string orderByFields)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+
+            if (string.IsNullOrWhiteSpace(orderByFields))
+            {
+                return source;
+            }
+            // the orderBy string is separated by ",", so we split it.
+            var orderByAfterSplit = orderByFields.Split(',');
+            
+            return source.ApplySort(orderByAfterSplit);
         }
 
         /// <summary>

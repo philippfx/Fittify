@@ -53,6 +53,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.DataModelRepository
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.OfmRepository", "Fittify.Api.OfmRepository\Fittify.Api.OfmRepository.csproj", "{0C0F95CF-A86A-494C-9998-EE9FCE5F010C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fittify.Api.OfmRepository.Test", "Fittify.Api.OfmRepository.Test\Fittify.Api.OfmRepository.Test.csproj", "{A8749129-EFEB-4A80-B544-198BCC3B7A50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,10 @@ Global
 		{0C0F95CF-A86A-494C-9998-EE9FCE5F010C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C0F95CF-A86A-494C-9998-EE9FCE5F010C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C0F95CF-A86A-494C-9998-EE9FCE5F010C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8749129-EFEB-4A80-B544-198BCC3B7A50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8749129-EFEB-4A80-B544-198BCC3B7A50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8749129-EFEB-4A80-B544-198BCC3B7A50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8749129-EFEB-4A80-B544-198BCC3B7A50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -160,6 +166,7 @@ Global
 		{44841D86-B9C1-48A8-9454-82ED29084C80} = {06847FC7-F55D-4BB2-896A-F3BFFA3DAB6B}
 		{FBCB8E46-120D-4892-9AE8-0C93DAC71F24} = {E4C2E774-6288-4D70-93DA-D9BE069E3258}
 		{0C0F95CF-A86A-494C-9998-EE9FCE5F010C} = {416CE764-41B2-4A2E-84DA-13F47C6F5DC9}
+		{A8749129-EFEB-4A80-B544-198BCC3B7A50} = {E4C2E774-6288-4D70-93DA-D9BE069E3258}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B305ABF-A3CE-4E97-BE76-377367E1E5B8}

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Fittify.DataModelRepository.Services
+namespace Fittify.Api.OfmRepository.Services
 {
     public class PropertyMappingValue
     {

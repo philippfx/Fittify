@@ -6,6 +6,7 @@ using Fittify.Common;
 using Fittify.Common.Helpers;
 using Fittify.Common.ResourceParameters;
 using Fittify.DataModelRepository.Services;
+using ITypeHelperService = Fittify.Api.OfmRepository.Services.ITypeHelperService;
 
 namespace Fittify.Api.OfmRepository.OfmRepository
 {

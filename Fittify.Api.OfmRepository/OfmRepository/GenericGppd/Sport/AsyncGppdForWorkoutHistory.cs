@@ -10,6 +10,8 @@ using Fittify.DataModelRepository.Repository.Sport.ExtendedInterfaces;
 using Fittify.DataModelRepository.ResourceParameters.Sport;
 using Fittify.DataModelRepository.Services;
 using Fittify.DataModels.Models.Sport;
+using IPropertyMappingService = Fittify.Api.OfmRepository.Services.IPropertyMappingService;
+using ITypeHelperService = Fittify.Api.OfmRepository.Services.ITypeHelperService;
 
 namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport
 {

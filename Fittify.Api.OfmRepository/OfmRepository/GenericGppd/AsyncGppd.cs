@@ -9,6 +9,8 @@ using Fittify.Common.Helpers;
 using Fittify.Common.ResourceParameters;
 using Fittify.DataModelRepository.Repository;
 using Fittify.DataModelRepository.Services;
+using IPropertyMappingService = Fittify.Api.OfmRepository.Services.IPropertyMappingService;
+using ITypeHelperService = Fittify.Api.OfmRepository.Services.ITypeHelperService;
 
 namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
 {
