@@ -22,7 +22,7 @@ namespace Fittify.DataModelRepository.Repository
         Task<EntityDeletionResult<TId>> Delete(TId id);
 
         Task<TEntity> GetById(TId id);
-        PagedList<TEntity> GetCollection(TResourceParameters resourceParameters);
+        PagedList<TEntity> GetCollection(TResourceParameters ofmResourceParameters);
 
         Task<bool> SaveContext();
     }

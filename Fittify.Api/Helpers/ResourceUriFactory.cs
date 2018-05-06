@@ -7,51 +7,6 @@ namespace Fittify.Api.Helpers
 {
     public static class ResourceUriFactory
     {
-        public static string CreateResourceUriForIResourceParameters(
-            OfmResourceParametersBase resourceParameters,
-            IUrlHelper urlHelper,
-            ResourceUriType type,
-            string shortPascalCasedControllerName)
-        {
-            switch (type)
-            {
-                case ResourceUriType.PreviousPage:
-                    return urlHelper.Link("Get" + shortPascalCasedControllerName + "Collection",
-                        new
-                        {
-                            fields = resourceParameters.Fields,
-                            orderBy = resourceParameters.OrderBy,
-                            //searchQuery = resourceParameters.SearchQuery,
-                            //genre = resourceParameters.Genre,
-                            pageNumber = resourceParameters.PageNumber - 1,
-                            pageSize = resourceParameters.PageSize
-                        });
-                case ResourceUriType.NextPage:
-                    return urlHelper.Link("Get" + shortPascalCasedControllerName + "Collection",
-                        new
-                        {
-                            fields = resourceParameters.Fields,
-                            orderBy = resourceParameters.OrderBy,
-                            //searchQuery = resourceParameters.SearchQuery,
-                            //genre = resourceParameters.Genre,
-                            pageNumber = resourceParameters.PageNumber + 1,
-                            pageSize = resourceParameters.PageSize
-                        });
-                case ResourceUriType.Current:
-                default:
-                    return urlHelper.Link("Get" + shortPascalCasedControllerName + "Collection",
-                        new
-                        {
-                            fields = resourceParameters.Fields,
-                            orderBy = resourceParameters.OrderBy,
-                            //searchQuery = resourceParameters.SearchQuery,
-                            //genre = resourceParameters.Genre,
-                            pageNumber = resourceParameters.PageNumber,
-                            pageSize = resourceParameters.PageSize
-                        });
-            }
-        }
-        
         public static string CreateResourceUriForGeneric(
            IDictionary<string, object> resourceParametersAsDictionary,
            IUrlHelper urlHelper,

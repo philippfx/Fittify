@@ -6,7 +6,7 @@ namespace Fittify.Api.OfmRepository.Helpers
 {
     public static class OfmToEntitySortFields
     {
-        public static IEnumerable<string> ToEntitySortFields(this string ofmOrderByFields, Dictionary<string, PropertyMappingValue> mappingDictionary)
+        public static IEnumerable<string> ToEntityOrderBy(this string ofmOrderByFields, Dictionary<string, PropertyMappingValue> mappingDictionary)
         {
             if (mappingDictionary == null)
             {

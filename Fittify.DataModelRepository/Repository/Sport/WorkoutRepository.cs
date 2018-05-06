@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository.Repository.Sport
 {
-    public class WorkoutRepository : AsyncCrudBase<Workout, WorkoutOfmForGet, int, WorkoutResourceParameters>, IAsyncOwnerIntId
+    public class WorkoutRepository : AsyncCrudBase<Workout, int, WorkoutResourceParameters>, IAsyncOwnerIntId
     {
         public WorkoutRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
@@ -26,28 +26,28 @@ namespace Fittify.DataModelRepository.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public override PagedList<Workout> GetCollection(WorkoutResourceParameters resourceParameters)
+        public override PagedList<Workout> GetCollection(WorkoutResourceParameters ofmResourceParameters)
         {
             var allEntitiesQueryable =
                 FittifyContext.Set<Workout>()
-                    .Where(o => o.OwnerGuid == resourceParameters.OwnerGuid)
+                    .Where(o => o.OwnerGuid == ofmResourceParameters.OwnerGuid)
                     .AsNoTracking()
                     .Include(i => i.Category)
-                    .ApplySort(resourceParameters.OrderBy);
+                    .ApplySort(ofmResourceParameters.OrderBy);
             
-            if (!String.IsNullOrWhiteSpace(resourceParameters.SearchQuery))
+            if (!String.IsNullOrWhiteSpace(ofmResourceParameters.SearchQuery))
             {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.Name.Contains(resourceParameters.SearchQuery));
+                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.Name.Contains(ofmResourceParameters.SearchQuery));
             }
 
-            if (resourceParameters.CategoryId != null)
+            if (ofmResourceParameters.CategoryId != null)
             {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.CategoryId == resourceParameters.CategoryId);
+                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.CategoryId == ofmResourceParameters.CategoryId);
             }
 
             return PagedList<Workout>.Create(allEntitiesQueryable,
-                resourceParameters.PageNumber,
-                resourceParameters.PageSize);
+                ofmResourceParameters.PageNumber,
+                ofmResourceParameters.PageSize);
         }
 
         public override async Task<EntityDeletionResult<int>> Delete(int id)

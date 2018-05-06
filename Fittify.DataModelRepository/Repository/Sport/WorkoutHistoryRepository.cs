@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository.Repository.Sport
 {
-    public class WorkoutHistoryRepository : AsyncCrudBase<WorkoutHistory, WorkoutHistoryOfmForGet, int, WorkoutHistoryResourceParameters>, IWorkoutHistoryRepository, IAsyncOwnerIntId
+    public class WorkoutHistoryRepository : AsyncCrudBase<WorkoutHistory, int, WorkoutHistoryResourceParameters>, IWorkoutHistoryRepository, IAsyncOwnerIntId
     {
-        public WorkoutHistoryRepository()
-        {
-            
-        }
-
         public WorkoutHistoryRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
             
@@ -69,47 +64,47 @@ namespace Fittify.DataModelRepository.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public override PagedList<WorkoutHistory> GetCollection(WorkoutHistoryResourceParameters resourceParameters)
+        public override PagedList<WorkoutHistory> GetCollection(WorkoutHistoryResourceParameters ofmResourceParameters)
         {
             var allEntitiesQueryable =
                 FittifyContext.Set<WorkoutHistory>()
-                    .Where(o => o.OwnerGuid == resourceParameters.OwnerGuid)
+                    .Where(o => o.OwnerGuid == ofmResourceParameters.OwnerGuid)
                     .AsNoTracking()
                     .Include(i => i.Workout)
                     .Include(i => i.ExerciseHistories)
-                    .ApplySort(resourceParameters.OrderBy);
+                    .ApplySort(ofmResourceParameters.OrderBy);
             
-            if (!String.IsNullOrWhiteSpace(resourceParameters.Ids))
+            if (!String.IsNullOrWhiteSpace(ofmResourceParameters.Ids))
             {
-                var enumerableIds = RangeString.ToCollectionOfId(resourceParameters.Ids);
+                var enumerableIds = RangeString.ToCollectionOfId(ofmResourceParameters.Ids);
                 allEntitiesQueryable = allEntitiesQueryable
                     .Where(e => enumerableIds.Contains(e.Id));
             }
 
-            if (resourceParameters.FromDateTimeStart != null && resourceParameters.UntilDateTimeEnd != null)
+            if (ofmResourceParameters.FromDateTimeStart != null && ofmResourceParameters.UntilDateTimeEnd != null)
             {
                 allEntitiesQueryable = allEntitiesQueryable
-                    .Where(a => a.DateTimeStart >= resourceParameters.FromDateTimeStart && a.DateTimeEnd <= resourceParameters.UntilDateTimeEnd);
+                    .Where(a => a.DateTimeStart >= ofmResourceParameters.FromDateTimeStart && a.DateTimeEnd <= ofmResourceParameters.UntilDateTimeEnd);
             }
-            else if (resourceParameters.FromDateTimeStart != null)
+            else if (ofmResourceParameters.FromDateTimeStart != null)
             {
                 allEntitiesQueryable = allEntitiesQueryable
-                    .Where(a => a.DateTimeStart >= resourceParameters.FromDateTimeStart);
+                    .Where(a => a.DateTimeStart >= ofmResourceParameters.FromDateTimeStart);
             }
-            else if (resourceParameters.UntilDateTimeEnd != null)
+            else if (ofmResourceParameters.UntilDateTimeEnd != null)
             {
                 allEntitiesQueryable = allEntitiesQueryable
-                    .Where(a => a.DateTimeEnd <= resourceParameters.UntilDateTimeEnd);
+                    .Where(a => a.DateTimeEnd <= ofmResourceParameters.UntilDateTimeEnd);
             }
 
-            if (resourceParameters.WorkoutId != null)
+            if (ofmResourceParameters.WorkoutId != null)
             {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.WorkoutId == resourceParameters.WorkoutId);
+                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.WorkoutId == ofmResourceParameters.WorkoutId);
             }
 
             return PagedList<WorkoutHistory>.Create(allEntitiesQueryable,
-                resourceParameters.PageNumber,
-                resourceParameters.PageSize);
+                ofmResourceParameters.PageNumber,
+                ofmResourceParameters.PageSize);
         }
 
         public override async Task<EntityDeletionResult<int>> Delete(int id)

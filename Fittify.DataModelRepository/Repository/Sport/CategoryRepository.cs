@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository.Repository.Sport
 {
-    public class CategoryRepository : AsyncCrudBase<Category, CategoryOfmForGet, int, CategoryResourceParameters>, IAsyncOwnerIntId
+    public class CategoryRepository : AsyncCrudBase<Category, int, CategoryResourceParameters>, IAsyncOwnerIntId
     {
         public CategoryRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
@@ -23,35 +23,47 @@ namespace Fittify.DataModelRepository.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public override PagedList<Category> GetCollection(CategoryResourceParameters resourceParameters)
+        public override PagedList<Category> GetCollection(CategoryResourceParameters ofmResourceParameters)
         {
-            if (resourceParameters == null)
+            if (ofmResourceParameters == null)
             {
-                throw new ArgumentNullException(nameof(CategoryResourceParameters) + " cannot be null. At least new() up a new instance of it.");
+                throw new ArgumentNullException(nameof(CategoryResourceParameters) + " cannot be null. At least new() up a new instance of it and mind the default values.");
             }
             var allEntitiesQueryable =
                 FittifyContext.Set<Category>()
-                    .Where(o => o.OwnerGuid == resourceParameters.OwnerGuid || o.OwnerGuid == null) // semi public categories
-                    .ApplySort(resourceParameters.OrderBy)
+                    .Where(o => o.OwnerGuid == ofmResourceParameters.OwnerGuid || o.OwnerGuid == null) // semi public categories
+                    .ApplySort(ofmResourceParameters.OrderBy)
                     .AsNoTracking();
 
-            if (!String.IsNullOrWhiteSpace(resourceParameters.SearchQuery))
+            if (!String.IsNullOrWhiteSpace(ofmResourceParameters.SearchQuery))
             {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.Name.ToLower().Contains(resourceParameters.SearchQuery.ToLower()));
+                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.Name.ToLower().Contains(ofmResourceParameters.SearchQuery.ToLower()));
             }
 
-            if (!String.IsNullOrWhiteSpace(resourceParameters.Ids))
+            if (!String.IsNullOrWhiteSpace(ofmResourceParameters.Ids))
             {
-                var listIds = RangeString.ToCollectionOfId(resourceParameters.Ids);
+                var listIds = RangeString.ToCollectionOfId(ofmResourceParameters.Ids);
                 allEntitiesQueryable = allEntitiesQueryable.Where(w => listIds.Contains(w.Id));
             }
             
+            if (!String.IsNullOrWhiteSpace(ofmResourceParameters.Fields))
+            {
+                if (ofmResourceParameters.DoIncludeIdsWhenQueryingSelectedFields)
+                {
+                    allEntitiesQueryable = allEntitiesQueryable.ShapeLinqToEntityQuery(ofmResourceParameters.Fields, true, FittifyContext);
+                }
+                else
+                {
+                    allEntitiesQueryable = allEntitiesQueryable.ShapeLinqToEntityQuery(ofmResourceParameters.Fields);
+                }
+            }
+
             return PagedList<Category>.Create(allEntitiesQueryable,
-                resourceParameters.PageNumber,
-                resourceParameters.PageSize);
+                ofmResourceParameters.PageNumber,
+                ofmResourceParameters.PageSize);
         }
 
-        public PagedList<Category> GetShapedCollection(CategoryResourceParameters ofmResourceParameters, Guid ownerGuid)
+        public PagedList<Category> GetShapedCollection(CategoryResourceParameters ofmResourceParameters)
         {
             if (ofmResourceParameters == null)
             {
@@ -59,7 +71,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
             }
             var allEntitiesQueryable =
                 FittifyContext.Set<Category>()
-                    .Where(o => o.OwnerGuid == ownerGuid || o.OwnerGuid == null) // semi public categories
+                    .Where(o => o.OwnerGuid == ofmResourceParameters.OwnerGuid || o.OwnerGuid == null) // semi public categories
                     .ApplySort(ofmResourceParameters.OrderBy)
                     .AsNoTracking();
 
@@ -76,7 +88,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
 
             if (!String.IsNullOrWhiteSpace(ofmResourceParameters.Fields))
             {
-                allEntitiesQueryable = allEntitiesQueryable.ShapeLinqToEntityQuery(ofmResourceParameters.Fields);
+                allEntitiesQueryable = allEntitiesQueryable.ShapeLinqToEntityQuery(ofmResourceParameters.Fields, true, FittifyContext);
             }
             
             return PagedList<Category>.Create(allEntitiesQueryable,

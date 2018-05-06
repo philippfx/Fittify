@@ -13,7 +13,7 @@ using ITypeHelperService = Fittify.Api.OfmRepository.Services.ITypeHelperService
 
 namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
 {
-    public class AsyncGppd<TEntity, TOfmForGet, TOfmForPost, TOfmForPatch, TId, TOfmResourceParameters, TEntityResourceParameters> 
+    public abstract class AsyncGppdBase<TEntity, TOfmForGet, TOfmForPost, TOfmForPatch, TId, TOfmResourceParameters, TEntityResourceParameters> 
         : IAsyncGppd<TOfmForGet, TOfmForPost, TOfmForPatch, TId, TOfmResourceParameters>
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TOfmForGet : class, IEntityUniqueIdentifier<TId>
@@ -28,7 +28,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
         protected readonly ITypeHelperService TypeHelperService;
         protected readonly AsyncGetOfmGuardClauses<TOfmForGet, TId> AsyncGetOfmGuardClause;
 
-        public AsyncGppd(IAsyncCrud<TEntity, TId, TEntityResourceParameters> repository,
+        public AsyncGppdBase(IAsyncCrud<TEntity, TId, TEntityResourceParameters> repository,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService)
         {
@@ -59,7 +59,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
 
             var entityResourceParameters = Mapper.Map<TEntityResourceParameters>(ofmResourceParameters);
             entityResourceParameters.OwnerGuid = ownerGuid;
-            entityResourceParameters.OrderBy = ofmResourceParameters.OrderBy.ToEntitySortFields(PropertyMappingService.GetPropertyMapping<TOfmForGet, TEntity>());
+            entityResourceParameters.OrderBy = ofmResourceParameters.OrderBy.ToEntityOrderBy(PropertyMappingService.GetPropertyMapping<TOfmForGet, TEntity>());
 
             ofmForGetCollectionQueryResult = await AsyncGetOfmGuardClause.ValidateResourceParameters(ofmForGetCollectionQueryResult, ofmResourceParameters);
             if (ofmForGetCollectionQueryResult.ErrorMessages.Count > 0)

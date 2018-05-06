@@ -111,6 +111,7 @@ namespace Fittify.Api
                 services.AddDbContext<FittifyContext>(options => options.UseSqlServer(dbConnectionString));
             }
 
+            services.AddScoped<IDbContext>(provider => provider.GetService(typeof(MyContext)));
 
             //try
             //{

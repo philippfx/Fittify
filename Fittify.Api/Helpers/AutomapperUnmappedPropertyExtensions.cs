@@ -1,7 +1,7 @@
 ﻿using System;
 using AutoMapper;
 
-namespace Fittify.Api
+namespace Fittify.Api.Helpers
 {
     public static class AutomapperUnmappedPropertyExtensions
     {
@@ -21,7 +21,7 @@ namespace Fittify.Api
         }
 
         /// <summary>
-        /// Ignores all unmapped members of all maps. Put this method at the end of the config
+        /// Ignores all unmapped members of all maps. Put this method at the end of the automapper configuration, which is configured inside the middleware
         /// </summary>
         /// <param name="profile"></param>
         public static void IgnoreUnmapped(this IProfileExpression profile)
@@ -45,7 +45,7 @@ namespace Fittify.Api
             profile.IgnoreUnmapped((TypeMap map) => map.SourceType == src && map.DestinationType == dest);
         }
 
-        [ObsoleteAttribute("Does not work. Use method that ignores all unmapped members instead.")]
+        [Obsolete("Does not work. Use method that ignores all unmapped members instead.")]
         public static void IgnoreUnmapped<TSrc, TDest>(this IProfileExpression profile)
         {
             profile.IgnoreUnmapped(typeof(TSrc), typeof(TDest));

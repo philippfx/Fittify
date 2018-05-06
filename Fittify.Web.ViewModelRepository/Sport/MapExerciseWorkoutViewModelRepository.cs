@@ -10,7 +10,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
     public class MapExerciseWorkoutViewModelRepository : GenericViewModelRepository<int, MapExerciseWorkoutViewModel, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmResourceParameters>
     {
         public MapExerciseWorkoutViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
-            : base(appConfiguration, httpContextAccessor, "MapExerciseWorkoutOfmResourceParameters")
+            : base(appConfiguration, httpContextAccessor, "MapExerciseWorkout")
         {
         }
     }

@@ -13,7 +13,7 @@ using ITypeHelperService = Fittify.Api.OfmRepository.Services.ITypeHelperService
 
 namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport
 {
-    public class AsyncGppdForWorkoutHistory : AsyncGppd<DataModels.Models.Sport.WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int, WorkoutHistoryOfmResourceParameters, WorkoutHistoryResourceParameters>,
+    public class AsyncGppdForWorkoutHistory : AsyncGppdBase<WorkoutHistory, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int, WorkoutHistoryOfmResourceParameters, WorkoutHistoryResourceParameters>,
         IAsyncGppdForWorkoutHistory
 
     {
@@ -27,17 +27,10 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport
         }
         public async Task<WorkoutHistoryOfmForGet> PostIncludingExerciseHistories(WorkoutHistoryOfmForPost ofmForPost, Guid ownerGuid)
         {
-            var workoutHistory = Mapper.Map<WorkoutHistoryOfmForPost, DataModels.Models.Sport.WorkoutHistory>(ofmForPost);
-            try
-            {
-                workoutHistory = await _workoutHistoryRepository.CreateIncludingExerciseHistories(workoutHistory, ownerGuid);
-            }
-            catch (Exception e)
-            {
-                var msg = e.Message;
-            }
+            var workoutHistory = Mapper.Map<WorkoutHistoryOfmForPost, WorkoutHistory>(ofmForPost);
+            workoutHistory = await _workoutHistoryRepository.CreateIncludingExerciseHistories(workoutHistory, ownerGuid);
 
-            var ofm = Mapper.Map<DataModels.Models.Sport.WorkoutHistory, WorkoutHistoryOfmForGet>(workoutHistory);
+            var ofm = Mapper.Map<WorkoutHistory, WorkoutHistoryOfmForGet>(workoutHistory);
             return ofm;
         }
     }

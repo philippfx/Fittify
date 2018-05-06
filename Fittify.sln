@@ -53,7 +53,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.DataModelRepository
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.OfmRepository", "Fittify.Api.OfmRepository\Fittify.Api.OfmRepository.csproj", "{0C0F95CF-A86A-494C-9998-EE9FCE5F010C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fittify.Api.OfmRepository.Test", "Fittify.Api.OfmRepository.Test\Fittify.Api.OfmRepository.Test.csproj", "{A8749129-EFEB-4A80-B544-198BCC3B7A50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.OfmRepository.Test", "Fittify.Api.OfmRepository.Test\Fittify.Api.OfmRepository.Test.csproj", "{A8749129-EFEB-4A80-B544-198BCC3B7A50}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

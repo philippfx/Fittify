@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository.Repository.Sport
 {
-    public class ExerciseHistoryRepository : AsyncCrudBase<ExerciseHistory, ExerciseHistoryOfmForGet, int, ExerciseHistoryResourceParameters>, IAsyncOwnerIntId
+    public class ExerciseHistoryRepository : AsyncCrudBase<ExerciseHistory, int, ExerciseHistoryResourceParameters>, IAsyncOwnerIntId
     {
         public ExerciseHistoryRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
@@ -27,37 +27,37 @@ namespace Fittify.DataModelRepository.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public override PagedList<ExerciseHistory> GetCollection(ExerciseHistoryResourceParameters resourceParameters)
+        public override PagedList<ExerciseHistory> GetCollection(ExerciseHistoryResourceParameters ofmResourceParameters)
         {
             var allEntitiesQueryable =
                 FittifyContext.Set<ExerciseHistory>()
-                    .Where(o => o.OwnerGuid == resourceParameters.OwnerGuid)
+                    .Where(o => o.OwnerGuid == ofmResourceParameters.OwnerGuid)
                     .AsNoTracking()
                     .Include(i => i.Exercise)
                     .Include(i => i.WorkoutHistory)
                     .Include(i => i.WeightLiftingSets)
                     .Include(i => i.CardioSets)
-                    .ApplySort(resourceParameters.OrderBy);
+                    .ApplySort(ofmResourceParameters.OrderBy);
 
-            if (!String.IsNullOrWhiteSpace(resourceParameters.Ids))
+            if (!String.IsNullOrWhiteSpace(ofmResourceParameters.Ids))
             {
-                var ids = RangeString.ToCollectionOfId(resourceParameters.Ids);
+                var ids = RangeString.ToCollectionOfId(ofmResourceParameters.Ids);
                 allEntitiesQueryable = allEntitiesQueryable.Where(w => ids.Contains(w.Id));
             }
 
-            if (resourceParameters.ExerciseId != null)
+            if (ofmResourceParameters.ExerciseId != null)
             {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.ExerciseId == resourceParameters.ExerciseId);
+                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.ExerciseId == ofmResourceParameters.ExerciseId);
             }
 
-            if (resourceParameters.WorkoutHistoryId != null)
+            if (ofmResourceParameters.WorkoutHistoryId != null)
             {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.WorkoutHistoryId == resourceParameters.WorkoutHistoryId);
+                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.WorkoutHistoryId == ofmResourceParameters.WorkoutHistoryId);
             }
 
             return PagedList<ExerciseHistory>.Create(allEntitiesQueryable,
-                resourceParameters.PageNumber,
-                resourceParameters.PageSize);
+                ofmResourceParameters.PageNumber,
+                ofmResourceParameters.PageSize);
         }
 
         public ExerciseHistory GetByPreviousExerciseHistoryid(int id)

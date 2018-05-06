@@ -18,7 +18,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
         private readonly IConfiguration _appConfiguration;
 
         public ExerciseHistoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
-            : base(appConfiguration, httpContextAccessor, "ExerciseHistoryOfmResourceParameters")
+            : base(appConfiguration, httpContextAccessor, "ExerciseHistory")
         {
             _asyncGppdOfmExerciseHistory = new GenericAsyncGppdOfm<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmResourceParameters>(appConfiguration, httpContextAccessor, "ExerciseHistoryOfmResourceParameters");
             _appConfiguration = appConfiguration;

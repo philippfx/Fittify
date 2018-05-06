@@ -10,7 +10,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
     public class CardioSetViewModelRepository : GenericViewModelRepository<int, CardioSetViewModel, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmResourceParameters>
     {
         public CardioSetViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
-            : base(appConfiguration, httpContextAccessor, "CardioSetOfmResourceParameters")
+            : base(appConfiguration, httpContextAccessor, "CardioSet")
         {
         }
     }

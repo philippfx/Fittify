@@ -26,16 +26,6 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        //public static async Task<HttpResponseMessage> GetSingle(Uri requestUri, Dictionary<string, string> customRequestHeaders)
-        //{
-        //    var builder = new HttpRequestBuilder()
-        //        .AddMethod(HttpMethod.Get)
-        //        .AddRequestUri(requestUri)
-        //        .AddCustomRequestHeaders(customRequestHeaders);
-
-        //    return await builder.SendAsync();
-        //}
-
         public static async Task<HttpResponseMessage> GetCollection(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
@@ -47,16 +37,6 @@ namespace Fittify.Web.ApiModelRepositories
 
             return await builder.SendAsync();
         }
-
-        //public static async Task<HttpResponseMessage> GetCollection(Uri requestUri, Dictionary<string, string> customRequestHeaders)
-        //{
-        //    var builder = new HttpRequestBuilder()
-        //        .AddMethod(HttpMethod.Get)
-        //        .AddRequestUri(requestUri)
-        //        .AddCustomRequestHeaders(customRequestHeaders);
-
-        //    return await builder.SendAsync();
-        //}
 
         public static async Task<HttpResponseMessage> Post(
             Uri requestUri, object value, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)

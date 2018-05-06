@@ -10,7 +10,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
     public class CategoryViewModelRepository : GenericViewModelRepository<int, CategoryViewModel, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmResourceParameters>
     {
         public CategoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
-            : base(appConfiguration, httpContextAccessor, "CategoryResourceParameters")
+            : base(appConfiguration, httpContextAccessor, "Category")
         {
         }
     }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Fittify.DataModelRepository.Repository
 {
 
-    public abstract class AsyncCrudBase<TEntity, TOfmForGet, TId, TResourceParameters> : IAsyncCrud<TEntity, TId, TResourceParameters>
+    public abstract class AsyncCrudBase<TEntity, TId, TResourceParameters> : IAsyncCrud<TEntity, TId, TResourceParameters>
         where TEntity : class, IEntityUniqueIdentifier<TId>, IEntityOwner
         where TResourceParameters : EntityResourceParametersBase, IEntityOwner
         where TId : struct
@@ -21,12 +21,7 @@ namespace Fittify.DataModelRepository.Repository
         {
             FittifyContext = fittifyContext;
         }
-
-        protected AsyncCrudBase()
-        {
-
-        }
-
+        
         public async Task<bool> IsEntityOwner(TId id, Guid ownerGuid)
         {
             var entity = await FittifyContext.Set<TEntity>().FindAsync(id);
@@ -62,17 +57,17 @@ namespace Fittify.DataModelRepository.Repository
             return await FittifyContext.Set<TEntity>().FindAsync(id);
         }
 
-        public virtual PagedList<TEntity> GetCollection(TResourceParameters resourceParameters)
+        public virtual PagedList<TEntity> GetCollection(TResourceParameters ofmResourceParameters)
         {
             var allEntitiesQueryableBeforePaging =
                 FittifyContext.Set<TEntity>()
-                    .Where(o => o.OwnerGuid == resourceParameters.OwnerGuid)
+                    .Where(o => o.OwnerGuid == ofmResourceParameters.OwnerGuid)
                     .AsNoTracking()
-                    .ApplySort(resourceParameters.OrderBy);
+                    .ApplySort(ofmResourceParameters.OrderBy);
 
             return PagedList<TEntity>.Create(allEntitiesQueryableBeforePaging,
-                resourceParameters.PageNumber,
-                resourceParameters.PageSize);
+                ofmResourceParameters.PageNumber,
+                ofmResourceParameters.PageSize);
         }
 
         public virtual IQueryable<TEntity> GetAll()
@@ -107,10 +102,8 @@ namespace Fittify.DataModelRepository.Repository
                 entityDeletionResult.DidEntityExist = false;
                 return entityDeletionResult;
             }
-            else
-            {
-                entityDeletionResult.DidEntityExist = true;
-            }
+            
+            entityDeletionResult.DidEntityExist = true;
 
             FittifyContext.Set<TEntity>().Remove(entity);
             entityDeletionResult.IsDeleted = await SaveContext();

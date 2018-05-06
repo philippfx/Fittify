@@ -14,7 +14,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
     public class WorkoutViewModelRepository : GenericViewModelRepository<int, WorkoutViewModel, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmResourceParameters>
     {
         public WorkoutViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor) 
-            : base(appConfiguration, httpContextAccessor, "WorkoutOfmResourceParameters")
+            : base(appConfiguration, httpContextAccessor, "Workout")
         {
         }
 

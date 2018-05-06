@@ -1,517 +1,564 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Fittify.DataModelRepository.Repository.Sport;
-using Fittify.DataModelRepository.ResourceParameters.Sport;
-using Fittify.DataModels.Models.Sport;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using NUnit.Framework;
-using Assert = NUnit.Framework.Assert;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Threading.Tasks;
+//using Fittify.DataModelRepository.Repository.Sport;
+//using Fittify.DataModelRepository.ResourceParameters.Sport;
+//using Fittify.DataModelRepository.Test.TestHelper.EntityFrameworkCore;
+//using Fittify.DataModels.Models.Sport;
+//using Microsoft.Data.Sqlite;
+//using Microsoft.EntityFrameworkCore;
+//using Newtonsoft.Json;
+//using NUnit.Framework;
+//using Assert = NUnit.Framework.Assert;
 
-namespace Fittify.DataModelRepository.Test.Repository.Sport
-{
-    [TestFixture]
-    class CategoryRepositoryShould
-    {
-        private readonly Guid _ownerGuid = new Guid("00000000-0000-0000-0000-000000000000");
-        
-        public async Task<(SqliteConnection, DbContextOptions<FittifyContext>)> CreateUniqueMockDbConnectionForThisTest()
-        {
-            SqliteConnection connection = null;
-            DbContextOptions<FittifyContext> options = null;
+//namespace Fittify.DataModelRepository.Test.Repository.Sport
+//{
+//    [TestFixture]
+//    class CategoryRepositoryShould
+//    {
+//        private readonly Guid _ownerGuid = new Guid("00000000-0000-0000-0000-000000000000");
 
-            await Task.Run(() =>
-            {
-                connection = new SqliteConnection("DataSource=:memory:");
-                connection.Open();
+//        public async Task<(SqliteConnection, DbContextOptions<FittifyContext>)> CreateUniqueMockDbConnectionForThisTest()
+//        {
+//            SqliteConnection connection = null;
+//            DbContextOptions<FittifyContext> options = null;
 
-                options = new DbContextOptionsBuilder<FittifyContext>()
-                    .UseSqlite(connection)
-                    .Options;
+//            await Task.Run(() =>
+//            {
+//                connection = new SqliteConnection("DataSource=:memory:");
+//                connection.Open();
 
-                var listCategories = new List<Category>()
-                {
-                    new Category() { Name = "aFirstCategory" },
-                    new Category() { Name = "aFirstCategory" },
-                    new Category() { Name = "aFirstCategory" },
-                    new Category() { Name = "cFourthCategory", OwnerGuid = _ownerGuid},
-                    new Category() { Name = "cFifthCategory", OwnerGuid = _ownerGuid},
-                    new Category() { Name = "cSixthCategory", OwnerGuid = _ownerGuid},
-                    new Category() { Name = "bSeventhCategory", OwnerGuid = _ownerGuid},
-                    new Category() { Name = "bEighthCategory", OwnerGuid = _ownerGuid},
-                    new Category() { Name = "bNinthCategory", OwnerGuid = _ownerGuid}
-                };
+//                options = new DbContextOptionsBuilder<FittifyContext>()
+//                    .UseSqlite(connection)
+//                    .Options;
 
-                // Create the schema in the database
-                using (var context = new FittifyContext(options))
-                {
-                    context.Database.EnsureCreated();
-                    context.AddRange(listCategories);
-                    context.SaveChanges();
-                }
+//                var listCategories = new List<Category>()
+//                {
+//                    new Category() { Name = "aFirstCategory" },
+//                    new Category() { Name = "aFirstCategory" },
+//                    new Category() { Name = "aFirstCategory" },
+//                    new Category() { Name = "cFourthCategory", OwnerGuid = _ownerGuid},
+//                    new Category() { Name = "cFifthCategory", OwnerGuid = _ownerGuid},
+//                    new Category() { Name = "cSixthCategory", OwnerGuid = _ownerGuid},
+//                    new Category() { Name = "bSeventhCategory", OwnerGuid = _ownerGuid},
+//                    new Category() { Name = "bEighthCategory", OwnerGuid = _ownerGuid},
+//                    new Category() { Name = "bNinthCategory", OwnerGuid = _ownerGuid}
+//                };
 
-            });
+//                // Create the schema in the database
+//                using (var context = new FittifyContext(options))
+//                {
+//                    context.Database.EnsureCreated();
+//                    context.AddRange(listCategories);
+//                    context.SaveChanges();
+//                }
 
-            return (connection, options);
-        }
+//            });
 
-        [Test]
-        public async Task AssertMockData()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var queryResult = context.Categories.ToList();
+//            return (connection, options);
+//        }
 
-                    Assert.GreaterOrEqual(queryResult.Count, 9);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//        [Test]
+//        public async Task AssertMockData()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var queryResult = context.Categories.ToList();
 
-        [Test]
-        public async Task ReturnAllCategories_Using_GetAll()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var allCategoriesFromContext = context.Categories.ToList();
+//                    Assert.GreaterOrEqual(queryResult.Count, 9);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-                    var categoryRepository = new CategoryRepository(context);
-                    var allCategoriesFromRepo = categoryRepository.GetAll().ToList();
-                    
-                    Assert.AreEqual(allCategoriesFromRepo.Count, allCategoriesFromContext.Count);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-            
-        }
+//        [Test]
+//        public async Task ReturnAllCategoriesUsingGetAll()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var allCategoriesFromContext = context.Categories.ToList();
 
-        [Test]
-        public async Task ReturnSingleCategory_Using_GetById()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var categoryRepository = new CategoryRepository(context);
-                    var singleCategory = await categoryRepository.GetById(1);
-                    Assert.AreEqual(true, singleCategory != null);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var allCategoriesFromRepo = categoryRepository.GetAll().ToList();
 
-        [Test]
-        public async Task ReturnTrue_Using_IsEntityOwner()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var categoryRepository = new CategoryRepository(context);
-                    var isEntityOwner = await categoryRepository.IsEntityOwner(4, _ownerGuid);
-                    Assert.AreEqual(true, isEntityOwner);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//                    Assert.AreEqual(allCategoriesFromRepo.Count, allCategoriesFromContext.Count);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
 
-        [Test]
-        public async Task ReturnFalse_Using_IsEntityOwner()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var categoryRepository = new CategoryRepository(context);
-                    var isEntityOwner = await categoryRepository.IsEntityOwner(1, _ownerGuid);
-                    Assert.AreEqual(false, isEntityOwner);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//        }
 
-        [Test]
-        public async Task ReturnTrue_Using_DoesEntityExist()
-        {
-            var(connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var categoryRepository = new CategoryRepository(context);
-                    var doesEntityExist = await categoryRepository.DoesEntityExist(1);
-                    Assert.AreEqual(true, doesEntityExist);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//        [Test]
+//        public async Task ReturnSingleCategoryById()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var singleCategory = await categoryRepository.GetById(1);
+//                    Assert.AreEqual(true, singleCategory != null);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-        [Test]
-        public async Task ReturnFalse_Using_DoesEntityExist()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using(var context = new FittifyContext(options))
-                {
-                    var categoryRepository = new CategoryRepository(context);
-                    var doesEntityExist = await categoryRepository.DoesEntityExist(42);
-                    Assert.AreEqual(false, doesEntityExist);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//        [Test]
+//        public async Task ReturnTrueUsingIsEntityOwner()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var isEntityOwner = await categoryRepository.IsEntityOwner(4, _ownerGuid);
+//                    Assert.AreEqual(true, isEntityOwner);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-        [Test]
-        public async Task CreateUnownedEntity_Using_Create()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var newCategory = new Category() { Name = "NewUnownedCategory" };
+//        [Test]
+//        public async Task ReturnFalseUsingIsEntityOwner()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var isEntityOwner = await categoryRepository.IsEntityOwner(1, _ownerGuid);
+//                    Assert.AreEqual(false, isEntityOwner);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-                    var categoryRepository = new CategoryRepository(context);
-                    var createdCategory = await categoryRepository.Create(newCategory, null);
+//        [Test]
+//        public async Task ReturnTrueUsingDoesEntityExist()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var doesEntityExist = await categoryRepository.DoesEntityExist(1);
+//                    Assert.AreEqual(true, doesEntityExist);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-                    var serializedCategory = JsonConvert.SerializeObject(newCategory);
-                    var serializedCreatedCategory = JsonConvert.SerializeObject(createdCategory);
-                    Assert.AreEqual(serializedCategory, serializedCreatedCategory);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//        [Test]
+//        public async Task ReturnFalseUsingDoesEntityExist()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var doesEntityExist = await categoryRepository.DoesEntityExist(42);
+//                    Assert.AreEqual(false, doesEntityExist);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-        [Test]
-        public async Task CreateOwnedEntity_Using_Create()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var newCategory = new Category() { Name = "NewOwnedCategory", OwnerGuid = _ownerGuid };
+//        [Test]
+//        public async Task CreateUnownedEntity()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var newCategory = new Category() { Name = "NewUnownedCategory" };
 
-                    var categoryRepository = new CategoryRepository(context);
-                    var createdCategory = await categoryRepository.Create(newCategory, _ownerGuid);
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var createdCategory = await categoryRepository.Create(newCategory, null);
 
-                    var serializedCategory = JsonConvert.SerializeObject(newCategory);
-                    var serializedCreatedCategory = JsonConvert.SerializeObject(createdCategory);
+//                    var serializedCategory = JsonConvert.SerializeObject(newCategory);
+//                    var serializedCreatedCategory = JsonConvert.SerializeObject(createdCategory);
+//                    Assert.AreEqual(serializedCategory, serializedCreatedCategory);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-                    Assert.AreEqual(serializedCategory, serializedCreatedCategory);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//        [Test]
+//        public async Task CreateOwnedEntity()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var newCategory = new Category() { Name = "NewOwnedCategory", OwnerGuid = _ownerGuid };
 
-        [Test]
-        public async Task UpdateEntity_Using_Update()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                string serializedCategoryBeforeUpdate = null;
-                int categoryId;
-                using (var context = new FittifyContext(options))
-                {
-                    var category = context.Categories.FirstOrDefault();
-                    categoryId = category.Id;
-                    serializedCategoryBeforeUpdate
-                        = JsonConvert.SerializeObject(category);
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var createdCategory = await categoryRepository.Create(newCategory, _ownerGuid);
 
-                    category.Name = "NewlyUpdatedName";
+//                    var serializedCategory = JsonConvert.SerializeObject(newCategory);
+//                    var serializedCreatedCategory = JsonConvert.SerializeObject(createdCategory);
 
-                    var categoryRepository = new CategoryRepository(context);
-                    var createdCategory = await categoryRepository.Update(category);
+//                    Assert.AreEqual(serializedCategory, serializedCreatedCategory);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-                    var serializedCategoryReturnedFromUpdate = JsonConvert.SerializeObject(createdCategory);
+//        [Test]
+//        public async Task UpdateEntity()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                string serializedCategoryBeforeUpdate = null;
+//                int categoryId;
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var category = context.Categories.FirstOrDefault();
+//                    categoryId = category.Id;
+//                    serializedCategoryBeforeUpdate
+//                        = JsonConvert.SerializeObject(category);
 
-                    Assert.AreNotEqual(serializedCategoryBeforeUpdate, serializedCategoryReturnedFromUpdate);
-                }
+//                    category.Name = "NewlyUpdatedName";
 
-                using (var context = new FittifyContext(options))
-                {
-                    var serializedCategoryAfterUpdate
-                        = JsonConvert.SerializeObject(context.Categories.FirstOrDefault(f => f.Id == categoryId));
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var createdCategory = await categoryRepository.Update(category);
 
-                    Assert.AreNotEqual(serializedCategoryBeforeUpdate, serializedCategoryAfterUpdate);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//                    var serializedCategoryReturnedFromUpdate = JsonConvert.SerializeObject(createdCategory);
 
-        [Test]
-        public async Task DeleteEntity_Using_DeleteByEntity()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                int categoryId;
-                using (var context = new FittifyContext(options))
-                {
-                    var category = new Category();
-                    context.Categories.Add(category);
-                    context.SaveChanges();
-                    categoryId = category.Id;
+//                    Assert.AreNotEqual(serializedCategoryBeforeUpdate, serializedCategoryReturnedFromUpdate);
+//                }
 
-                    var categoryRepository = new CategoryRepository(context);
-                    var entityDeletionResult = await categoryRepository.Delete(category);
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var serializedCategoryAfterUpdate
+//                        = JsonConvert.SerializeObject(context.Categories.FirstOrDefault(f => f.Id == categoryId));
 
-                    Assert.AreEqual(entityDeletionResult.DidEntityExist, true);
-                    Assert.AreEqual(entityDeletionResult.IsDeleted, true);
-                }
+//                    Assert.AreNotEqual(serializedCategoryBeforeUpdate, serializedCategoryAfterUpdate);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-                using (var context = new FittifyContext(options))
-                {
-                    var category = context.Categories.FirstOrDefault(f => f.Id == categoryId);
+//        [Test]
+//        public async Task DeleteSuccessfullyEntityByEntity()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                int categoryId;
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var category = new Category();
+//                    context.Categories.Add(category);
+//                    context.SaveChanges();
+//                    categoryId = category.Id;
 
-                    Assert.AreEqual(null, category);
-                }
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var entityDeletionResult = await categoryRepository.Delete(category);
 
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//                    Assert.AreEqual(entityDeletionResult.DidEntityExist, true);
+//                    Assert.AreEqual(entityDeletionResult.IsDeleted, true);
+//                }
 
-        [Test]
-        public async Task DeleteEntity_Using_DeleteById()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                int categoryId;
-                using (var context = new FittifyContext(options))
-                {
-                    var category = new Category();
-                    context.Categories.Add(category);
-                    context.SaveChanges();
-                    categoryId = category.Id;
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var category = context.Categories.FirstOrDefault(f => f.Id == categoryId);
 
-                    var categoryRepository = new CategoryRepository(context);
-                    var entityDeletionResult = await categoryRepository.Delete(categoryId);
+//                    Assert.AreEqual(null, category);
+//                }
 
-                    Assert.AreEqual(entityDeletionResult.DidEntityExist, true);
-                    Assert.AreEqual(entityDeletionResult.IsDeleted, true);
-                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-                using (var context = new FittifyContext(options))
-                {
-                    var category = context.Categories.FirstOrDefault(f => f.Id == categoryId);
+//        [Test]
+//        public async Task FailDeletingEntityByNullEntity()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var entityDeletionResult = await categoryRepository.Delete(null);
 
-                    Assert.AreEqual(null, category);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//                    Assert.AreEqual(entityDeletionResult.DidEntityExist, false);
+//                    Assert.AreEqual(entityDeletionResult.IsDeleted, false);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-        [Test]
-        public async Task ReturnSearchQueriedCollection_Using_GetCollection()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var resourceParameters = new CategoryResourceParameters() { SearchQuery = "thcategory", OwnerGuid = _ownerGuid};
-                    var categoryRepository = new CategoryRepository(context);
-                    var categoryCollection = categoryRepository.GetCollection(resourceParameters);
-                    Assert.AreEqual(6, categoryCollection.Count);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//        [Test]
+//        public async Task DeleteEntityById()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                int categoryId;
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var category = new Category();
+//                    context.Categories.Add(category);
+//                    context.SaveChanges();
+//                    categoryId = category.Id;
 
-        [Test]
-        public async Task ReturnQueriedIdCollection_Using_GetCollection()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var resourceParameters = new CategoryResourceParameters() { Ids = "4-6", OwnerGuid = _ownerGuid};
-                    var categoryRepository = new CategoryRepository(context);
-                    var categoryCollection = categoryRepository.GetCollection(resourceParameters);
-                    Assert.AreEqual(3, categoryCollection.Count);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var entityDeletionResult = await categoryRepository.Delete(categoryId);
 
-        [Test]
-        public async Task ReturnOrderByNameDescendingCollection_Using_GetCollection()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var orderedCollectionFromContext = context.Categories.OrderByDescending(o => o.Name).ToList();
+//                    Assert.AreEqual(entityDeletionResult.DidEntityExist, true);
+//                    Assert.AreEqual(entityDeletionResult.IsDeleted, true);
+//                }
 
-                    var resourceParameters = new CategoryResourceParameters() { OrderBy = new List<string>() { "name desc" }, OwnerGuid = _ownerGuid};
-                    var categoryRepository = new CategoryRepository(context);
-                    var categoryCollection = categoryRepository.GetCollection(resourceParameters);
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var category = context.Categories.FirstOrDefault(f => f.Id == categoryId);
 
-                    Assert.That(categoryCollection, Is.Ordered.By(nameof(Category.Name)).Descending);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//                    Assert.AreEqual(null, category);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-        [Test]
-        public async Task ReturnOrderByNameDescendingThenByIdDescendingCollection_Using_GetCollection()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var orderedCollectionFromContext = context.Categories.OrderByDescending(o => o.Name).ToList();
+//        [Test]
+//        public async Task ReturnSearchQueriedCollection()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var resourceParameters = new CategoryResourceParameters() { SearchQuery = "thcategory", OwnerGuid = _ownerGuid };
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var categoryCollection = categoryRepository.GetCollection(resourceParameters);
+//                    Assert.AreEqual(6, categoryCollection.Count);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-                    var resourceParameters = new CategoryResourceParameters() { OrderBy = new List<string>() { "name desc", " id desc" }, OwnerGuid = _ownerGuid};
-                    var categoryRepository = new CategoryRepository(context);
-                    var categoryCollection = categoryRepository.GetCollection(resourceParameters);
+//        [Test]
+//        public async Task ReturnQueriedIdCollection()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var resourceParameters = new CategoryResourceParameters() { Ids = "4-6", OwnerGuid = _ownerGuid };
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var categoryCollection = categoryRepository.GetCollection(resourceParameters);
+//                    Assert.AreEqual(3, categoryCollection.Count);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-                    Assert.That(categoryCollection, Is.Ordered.By(nameof(Category.Name)).Descending.Then.By(nameof(Category.Id)).Descending);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//        [Test]
+//        public async Task ReturnOrderByNameDescendingCollection()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var orderedCollectionFromContext = context.Categories.OrderByDescending(o => o.Name).ToList();
 
-        [Test]
-        public async Task ReturnFirstSequenceOfPagedCategoryListCollection_Using_GetCollection()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var pagedCategoriesFromContext = context.Categories.Take(3).ToList();
-                    var serializedCategoriesFromContext = JsonConvert.SerializeObject(pagedCategoriesFromContext);
+//                    var resourceParameters = new CategoryResourceParameters() { OrderBy = new List<string>() { "name desc" }, OwnerGuid = _ownerGuid };
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var categoryCollection = categoryRepository.GetCollection(resourceParameters);
 
-                    var resourceParameters = new CategoryResourceParameters() { PageNumber = 1, PageSize = 3, OwnerGuid = _ownerGuid};
-                    var categoryRepository = new CategoryRepository(context);
-                    var categoryCollection = categoryRepository.GetCollection(resourceParameters);
-                    var serializedCategoriesFromRepo = JsonConvert.SerializeObject(categoryCollection);
-                    Assert.AreEqual(serializedCategoriesFromContext, serializedCategoriesFromRepo);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//                    Assert.That(categoryCollection, Is.Ordered.By(nameof(Category.Name)).Descending);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-        [Test]
-        public async Task ReturnSecondSequenceOfPagedCategoryListCollection_Using_GetCollection()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var pagedCategoriesFromContext = context.Categories.Skip(3).Take(3).ToList();
-                    var serializedCategoriesFromContext = JsonConvert.SerializeObject(pagedCategoriesFromContext);
+//        [Test]
+//        public async Task ReturnOrderByNameDescendingThenByIdDescendingCollection()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var resourceParameters = new CategoryResourceParameters() { OrderBy = new List<string>() { "name desc", " id desc" }, OwnerGuid = _ownerGuid };
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var categoryCollection = categoryRepository.GetCollection(resourceParameters);
 
-                    var resourceParameters = new CategoryResourceParameters() { PageNumber = 2, PageSize = 3, OwnerGuid = _ownerGuid};
-                    var categoryRepository = new CategoryRepository(context);
-                    var categoryCollection = categoryRepository.GetCollection(resourceParameters);
-                    var serializedCategoriesFromRepo = JsonConvert.SerializeObject(categoryCollection);
-                    Assert.AreEqual(serializedCategoriesFromContext, serializedCategoriesFromRepo);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+//                    Assert.That(categoryCollection, Is.Ordered.By(nameof(Category.Name)).Descending.Then.By(nameof(Category.Id)).Descending);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
 
-        [Test]
-        public async Task ReturnCategoryCollectionForQueriedFields_Using_GetCollection()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FittifyContext(options))
-                {
-                    var resourceParameters = new CategoryResourceParameters() { Fields = "Name" };
-                    var categoryRepository = new CategoryRepository(context);
-                    var categoryCollection =
-                        categoryRepository.GetShapedCollection(resourceParameters, _ownerGuid).ToList();
+//        [Test]
+//        public async Task ReturnFirstSequenceOfPagedCategoryListCollection()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var pagedCategoriesFromContext = context.Categories.Take(3).ToList();
+//                    var serializedCategoriesFromContext = JsonConvert.SerializeObject(pagedCategoriesFromContext);
 
-                    Assert.That(categoryCollection.Select(s => s.Id), Is.All.EqualTo(0));
-                    Assert.That(categoryCollection.Select(s => s.OwnerGuid), Is.All.EqualTo(null));
-                }
-            }
-            catch (Exception e)
-            {
-                var msg = e.Message;
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
-    }
-    
-}
+//                    var resourceParameters = new CategoryResourceParameters() { PageNumber = 1, PageSize = 3, OwnerGuid = _ownerGuid };
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var categoryCollection = categoryRepository.GetCollection(resourceParameters);
+//                    var serializedCategoriesFromRepo = JsonConvert.SerializeObject(categoryCollection);
+//                    Assert.AreEqual(serializedCategoriesFromContext, serializedCategoriesFromRepo);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
+
+//        [Test]
+//        public async Task ReturnSecondSequenceOfPagedCategoryListCollection()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var pagedCategoriesFromContext = context.Categories.Skip(3).Take(3).ToList();
+//                    var serializedCategoriesFromContext = JsonConvert.SerializeObject(pagedCategoriesFromContext);
+
+//                    var resourceParameters = new CategoryResourceParameters() { PageNumber = 2, PageSize = 3, OwnerGuid = _ownerGuid };
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var categoryCollection = categoryRepository.GetCollection(resourceParameters);
+//                    var serializedCategoriesFromRepo = JsonConvert.SerializeObject(categoryCollection);
+//                    Assert.AreEqual(serializedCategoriesFromContext, serializedCategoriesFromRepo);
+//                }
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
+
+//        [Test]
+//        public async Task ReturnCategoryCollection_ForQueriedFields()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var resourceParameters = new CategoryResourceParameters() { Fields = "Name", DoIncludeIdsWhenQueryingSelectedFields = false };
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var categoryCollection =
+//                        categoryRepository.GetCollection(resourceParameters).ToList();
+
+//                    Assert.That(categoryCollection.Select(s => s.Id), Is.All.EqualTo(0));
+//                    Assert.That(categoryCollection.Select(s => s.OwnerGuid), Is.All.EqualTo(null));
+//                }
+//            }
+//            catch (Exception e)
+//            {
+//                var msg = e.Message;
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
+
+//        [Test]
+//        public async Task ReturnCategoryCollection_ForQueriedFieldsIgnoringUnwantedIds()
+//        {
+//            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+//            try
+//            {
+//                using (var context = new FittifyContext(options))
+//                {
+//                    var resourceParameters = new CategoryResourceParameters() { Fields = "Name", OwnerGuid = _ownerGuid };
+//                    var categoryRepository = new CategoryRepository(context);
+//                    var categoryCollection =
+//                        categoryRepository.GetShapedCollection(resourceParameters).ToList();
+
+//                    Assert.That(categoryCollection.Select(s => s.Id), !Is.All.EqualTo(0));
+//                    Assert.That(categoryCollection.Select(s => s.OwnerGuid), Is.All.EqualTo(null));
+//                }
+//            }
+//            catch (Exception e)
+//            {
+//                var msg = e.Message;
+//            }
+//            finally
+//            {
+//                connection.Close();
+//            }
+//        }
+//    }
+
+//}

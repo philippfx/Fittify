@@ -10,7 +10,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
     public class WeightLiftingSetViewModelRepository : GenericViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmResourceParameters>
     {
         public WeightLiftingSetViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
-            : base(appConfiguration, httpContextAccessor, "WeightLiftingSetOfmResourceParameters")
+            : base(appConfiguration, httpContextAccessor, "WeightLiftingSet")
         {
         }
     }

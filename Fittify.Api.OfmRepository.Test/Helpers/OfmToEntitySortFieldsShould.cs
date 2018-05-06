@@ -27,7 +27,7 @@ namespace Fittify.Api.OfmRepository.Test.Helpers
 
             //Act
             var entityOrderByFields =
-                ofmOrderByClause.ToEntitySortFields(filePropertyMapping);
+                ofmOrderByClause.ToEntityOrderBy(filePropertyMapping);
 
             // Assert
             var expectedOrder = new List<string>()
