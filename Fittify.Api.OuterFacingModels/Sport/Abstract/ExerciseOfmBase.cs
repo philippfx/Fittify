@@ -3,7 +3,7 @@ using Fittify.Common;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Abstract
 {
-    public class ExerciseOfmBase
+    public abstract class ExerciseOfmBase
     {
         public string Name { get; set; }
         private ExerciseTypeEnum ExerciseTypeEnum { get; set; }

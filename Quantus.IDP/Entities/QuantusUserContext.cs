@@ -28,7 +28,7 @@ namespace Quantus.IDP.Entities
             {
                 throw new ArgumentNullException("dbConnectionString");
             }
-            OnConfiguring(new DbContextOptionsBuilder());
+            ////OnConfiguring(new DbContextOptionsBuilder()); // Probably obsolete, test Quantus db resetter
         }
 
         //public DbSet<QuantusUser> Users { get; set; }

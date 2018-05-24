@@ -12,51 +12,45 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 
-namespace Fittify.DataModelRepository.Test.Repository
+namespace Fittify.DataModelRepository.Test.Repository.Sport
 {
     [TestFixture]
-    public class AsyncCrudBaseShould
+    class AsyncCrudBaseShould
     {
         private readonly Guid _ownerGuid = new Guid("00000000-0000-0000-0000-000000000000");
 
-        public async Task<(SqliteConnection, DbContextOptions<FileSystemDbContext>)> CreateUniqueMockDbConnectionForThisTest()
+        public async Task<(SqliteConnection, DbContextOptions<FittifyContext>)> CreateUniqueMockDbConnectionForThisTest()
         {
             SqliteConnection connection = null;
-            DbContextOptions<FileSystemDbContext> options = null;
+            DbContextOptions<FittifyContext> options = null;
 
             await Task.Run(() =>
             {
                 connection = new SqliteConnection("DataSource=:memory:");
                 connection.Open();
 
-                options = new DbContextOptionsBuilder<FileSystemDbContext>()
+                options = new DbContextOptionsBuilder<FittifyContext>()
                     .UseSqlite(connection)
                     .Options;
 
-                var listFileTestClasses = new List<FileTestClass>()
+                var listCategories = new List<Category>()
                 {
-                    new FileTestClass() { FileName = "FileNameAscendingA", FileType = ".xml", FileSizeInKb = 1000.00, FileCreatedOnDate = new DateTime(1989, 1, 11, 13, 59, 59) },
-                    new FileTestClass() { FileName = "FileNameAscendingB", FileType = ".xml", FileSizeInKb = 1000.00, FileCreatedOnDate = new DateTime(1989, 1, 11, 13, 59, 59) },
-                    new FileTestClass() { FileName = "FileNameAscendingC", FileType = ".xml", FileSizeInKb = 1000.00, FileCreatedOnDate = new DateTime(1989, 1, 11, 13, 59, 59) },
-                    new FileTestClass() { FileName = "FileTypeAscending", FileType = ".abc", FileSizeInKb = 1000.00, FileCreatedOnDate = new DateTime(1989, 1, 11, 13, 59, 59) },
-                    new FileTestClass() { FileName = "FileTypeAscending", FileType = ".def", FileSizeInKb = 1000.00, FileCreatedOnDate = new DateTime(1989, 1, 11, 13, 59, 59) },
-                    new FileTestClass() { FileName = "FileTypeAscending", FileType = ".ghi", FileSizeInKb = 1000.00, FileCreatedOnDate = new DateTime(1989, 1, 11, 13, 59, 59) },
-                    new FileTestClass() { FileName = "FileSizeInKbAscending", FileType = ".doc", FileSizeInKb = 1000.00, FileCreatedOnDate = new DateTime(1989, 1, 11, 13, 59, 59) },
-                    new FileTestClass() { FileName = "FileSizeInKbAscending", FileType = ".doc", FileSizeInKb = 2000.00, FileCreatedOnDate = new DateTime(1989, 1, 11, 13, 59, 59) },
-                    new FileTestClass() { FileName = "FileSizeInKbAscending", FileType = ".doc", FileSizeInKb = 3000.00, FileCreatedOnDate = new DateTime(1989, 1, 11, 13, 59, 59) },
-                    new FileTestClass() { FileName = "FileCreatedOnDateAscending", FileType = ".png", FileSizeInKb = 1000.00, FileCreatedOnDate = new DateTime(1989, 1, 11, 13, 59, 59) },
-                    new FileTestClass() { FileName = "FileCreatedOnDateAscending", FileType = ".png", FileSizeInKb = 1000.00, FileCreatedOnDate = new DateTime(1990, 1, 11, 13, 59, 59) },
-                    new FileTestClass() { FileName = "FileCreatedOnDateAscending", FileType = ".png", FileSizeInKb = 1000.00, FileCreatedOnDate = new DateTime(1991, 1, 11, 13, 59, 59) },
-                    new FileTestClass() { FileName = "AllValuesEqualForId", FileType = ".doc", FileSizeInKb = 1000.00, FileCreatedOnDate = new DateTime(1989, 1, 11, 13, 59, 59) },
-                    new FileTestClass() { FileName = "AllValuesEqualForId", FileType = ".doc", FileSizeInKb = 1000.00, FileCreatedOnDate = new DateTime(1989, 1, 11, 13, 59, 59) },
-                    new FileTestClass() { FileName = "AllValuesEqualForId", FileType = ".doc", FileSizeInKb = 1000.00, FileCreatedOnDate = new DateTime(1989, 1, 11, 13, 59, 59) }
+                    new Category() { Name = "aFirstCategory" },
+                    new Category() { Name = "aFirstCategory" },
+                    new Category() { Name = "aFirstCategory" },
+                    new Category() { Name = "cFourthCategory", OwnerGuid = _ownerGuid},
+                    new Category() { Name = "cFifthCategory", OwnerGuid = _ownerGuid},
+                    new Category() { Name = "cSixthCategory", OwnerGuid = _ownerGuid},
+                    new Category() { Name = "bSeventhCategory", OwnerGuid = _ownerGuid},
+                    new Category() { Name = "bEighthCategory", OwnerGuid = _ownerGuid},
+                    new Category() { Name = "bNinthCategory", OwnerGuid = _ownerGuid}
                 };
 
-                // Create the schema in the database
-                using (var context = new FileSystemDbContext(options))
+                // CreateAsync the schema in the database
+                using (var context = new FittifyContext(options))
                 {
                     context.Database.EnsureCreated();
-                    context.AddRange(listFileTestClasses);
+                    context.AddRange(listCategories);
                     context.SaveChanges();
                 }
 
@@ -71,9 +65,9 @@ namespace Fittify.DataModelRepository.Test.Repository
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var queryResult = context.File.ToList();
+                    var queryResult = context.Categories.ToList();
 
                     Assert.GreaterOrEqual(queryResult.Count, 9);
                 }
@@ -85,19 +79,19 @@ namespace Fittify.DataModelRepository.Test.Repository
         }
 
         [Test]
-        public async Task ReturnAllFileTestClassesUsingGetAll()
+        public async Task ReturnAllCategoriesUsingGetAll()
         {
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var allFileTestClassesFromContext = context.File.ToList();
+                    var allCategoriesFromContext = context.Categories.ToList();
 
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var allFileTestClassesFromRepo = fileTestClassRepository.GetAll().ToList();
+                    var categoryRepository = new CategoryRepository(context);
+                    var allCategoriesFromRepo = categoryRepository.GetAll().ToList();
 
-                    Assert.AreEqual(allFileTestClassesFromRepo.Count, allFileTestClassesFromContext.Count);
+                    Assert.AreEqual(allCategoriesFromRepo.Count, allCategoriesFromContext.Count);
                 }
             }
             finally
@@ -108,16 +102,16 @@ namespace Fittify.DataModelRepository.Test.Repository
         }
 
         [Test]
-        public async Task ReturnSingleFileTestClassById()
+        public async Task ReturnSingleCategoryById()
         {
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var singleFileTestClass = await fileTestClassRepository.GetById(1);
-                    Assert.AreEqual(true, singleFileTestClass != null);
+                    var categoryRepository = new CategoryRepository(context);
+                    var singleCategory = await categoryRepository.GetById(1);
+                    Assert.AreEqual(true, singleCategory != null);
                 }
             }
             finally
@@ -132,10 +126,10 @@ namespace Fittify.DataModelRepository.Test.Repository
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var isEntityOwner = await fileTestClassRepository.IsEntityOwner(4, _ownerGuid);
+                    var categoryRepository = new CategoryRepository(context);
+                    var isEntityOwner = await categoryRepository.IsEntityOwner(4, _ownerGuid);
                     Assert.AreEqual(true, isEntityOwner);
                 }
             }
@@ -151,10 +145,10 @@ namespace Fittify.DataModelRepository.Test.Repository
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var isEntityOwner = await fileTestClassRepository.IsEntityOwner(1, _ownerGuid);
+                    var categoryRepository = new CategoryRepository(context);
+                    var isEntityOwner = await categoryRepository.IsEntityOwner(1, _ownerGuid);
                     Assert.AreEqual(false, isEntityOwner);
                 }
             }
@@ -170,10 +164,10 @@ namespace Fittify.DataModelRepository.Test.Repository
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var doesEntityExist = await fileTestClassRepository.DoesEntityExist(1);
+                    var categoryRepository = new CategoryRepository(context);
+                    var doesEntityExist = await categoryRepository.DoesEntityExist(1);
                     Assert.AreEqual(true, doesEntityExist);
                 }
             }
@@ -189,10 +183,10 @@ namespace Fittify.DataModelRepository.Test.Repository
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var doesEntityExist = await fileTestClassRepository.DoesEntityExist(42);
+                    var categoryRepository = new CategoryRepository(context);
+                    var doesEntityExist = await categoryRepository.DoesEntityExist(42);
                     Assert.AreEqual(false, doesEntityExist);
                 }
             }
@@ -208,16 +202,16 @@ namespace Fittify.DataModelRepository.Test.Repository
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var newFileTestClass = new FileTestClass() { Name = "NewUnownedFileTestClass" };
+                    var newCategory = new Category() { Name = "NewUnownedCategory" };
 
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var createdFileTestClass = await fileTestClassRepository.Create(newFileTestClass, null);
+                    var categoryRepository = new CategoryRepository(context);
+                    var createdCategory = await categoryRepository.Create(newCategory, null);
 
-                    var serializedFileTestClass = JsonConvert.SerializeObject(newFileTestClass);
-                    var serializedCreatedFileTestClass = JsonConvert.SerializeObject(createdFileTestClass);
-                    Assert.AreEqual(serializedFileTestClass, serializedCreatedFileTestClass);
+                    var serializedCategory = JsonConvert.SerializeObject(newCategory);
+                    var serializedCreatedCategory = JsonConvert.SerializeObject(createdCategory);
+                    Assert.AreEqual(serializedCategory, serializedCreatedCategory);
                 }
             }
             finally
@@ -232,17 +226,17 @@ namespace Fittify.DataModelRepository.Test.Repository
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var newFileTestClass = new FileTestClass() { Name = "NewOwnedFileTestClass", OwnerGuid = _ownerGuid };
+                    var newCategory = new Category() { Name = "NewOwnedCategory", OwnerGuid = _ownerGuid };
 
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var createdFileTestClass = await fileTestClassRepository.Create(newFileTestClass, _ownerGuid);
+                    var categoryRepository = new CategoryRepository(context);
+                    var createdCategory = await categoryRepository.Create(newCategory, _ownerGuid);
 
-                    var serializedFileTestClass = JsonConvert.SerializeObject(newFileTestClass);
-                    var serializedCreatedFileTestClass = JsonConvert.SerializeObject(createdFileTestClass);
+                    var serializedCategory = JsonConvert.SerializeObject(newCategory);
+                    var serializedCreatedCategory = JsonConvert.SerializeObject(createdCategory);
 
-                    Assert.AreEqual(serializedFileTestClass, serializedCreatedFileTestClass);
+                    Assert.AreEqual(serializedCategory, serializedCreatedCategory);
                 }
             }
             finally
@@ -257,31 +251,31 @@ namespace Fittify.DataModelRepository.Test.Repository
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                string serializedFileTestClassBeforeUpdate = null;
-                int fileTestClassId;
-                using (var context = new FileSystemDbContext(options))
+                string serializedCategoryBeforeUpdate = null;
+                int categoryId;
+                using (var context = new FittifyContext(options))
                 {
-                    var fileTestClass = context.File.FirstOrDefault();
-                    fileTestClassId = fileTestClass.Id;
-                    serializedFileTestClassBeforeUpdate
-                        = JsonConvert.SerializeObject(fileTestClass);
+                    var category = context.Categories.FirstOrDefault();
+                    categoryId = category.Id;
+                    serializedCategoryBeforeUpdate
+                        = JsonConvert.SerializeObject(category);
 
-                    fileTestClass.Name = "NewlyUpdatedName";
+                    category.Name = "NewlyUpdatedName";
 
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var createdFileTestClass = await fileTestClassRepository.Update(fileTestClass);
+                    var categoryRepository = new CategoryRepository(context);
+                    var createdCategory = await categoryRepository.Update(category);
 
-                    var serializedFileTestClassReturnedFromUpdate = JsonConvert.SerializeObject(createdFileTestClass);
+                    var serializedCategoryReturnedFromUpdate = JsonConvert.SerializeObject(createdCategory);
 
-                    Assert.AreNotEqual(serializedFileTestClassBeforeUpdate, serializedFileTestClassReturnedFromUpdate);
+                    Assert.AreNotEqual(serializedCategoryBeforeUpdate, serializedCategoryReturnedFromUpdate);
                 }
 
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var serializedFileTestClassAfterUpdate
-                        = JsonConvert.SerializeObject(context.File.FirstOrDefault(f => f.Id == fileTestClassId));
+                    var serializedCategoryAfterUpdate
+                        = JsonConvert.SerializeObject(context.Categories.FirstOrDefault(f => f.Id == categoryId));
 
-                    Assert.AreNotEqual(serializedFileTestClassBeforeUpdate, serializedFileTestClassAfterUpdate);
+                    Assert.AreNotEqual(serializedCategoryBeforeUpdate, serializedCategoryAfterUpdate);
                 }
             }
             finally
@@ -296,26 +290,26 @@ namespace Fittify.DataModelRepository.Test.Repository
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                int fileTestClassId;
-                using (var context = new FileSystemDbContext(options))
+                int categoryId;
+                using (var context = new FittifyContext(options))
                 {
-                    var fileTestClass = new FileTestClass();
-                    context.File.Add(fileTestClass);
+                    var category = new Category();
+                    context.Categories.Add(category);
                     context.SaveChanges();
-                    fileTestClassId = fileTestClass.Id;
+                    categoryId = category.Id;
 
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var entityDeletionResult = await fileTestClassRepository.Delete(fileTestClass);
+                    var categoryRepository = new CategoryRepository(context);
+                    var entityDeletionResult = await categoryRepository.Delete(category);
 
                     Assert.AreEqual(entityDeletionResult.DidEntityExist, true);
                     Assert.AreEqual(entityDeletionResult.IsDeleted, true);
                 }
 
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var fileTestClass = context.File.FirstOrDefault(f => f.Id == fileTestClassId);
+                    var category = context.Categories.FirstOrDefault(f => f.Id == categoryId);
 
-                    Assert.AreEqual(null, fileTestClass);
+                    Assert.AreEqual(null, category);
                 }
 
             }
@@ -331,10 +325,10 @@ namespace Fittify.DataModelRepository.Test.Repository
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var entityDeletionResult = await fileTestClassRepository.Delete(null);
+                    var categoryRepository = new CategoryRepository(context);
+                    var entityDeletionResult = await categoryRepository.Delete(null);
 
                     Assert.AreEqual(entityDeletionResult.DidEntityExist, false);
                     Assert.AreEqual(entityDeletionResult.IsDeleted, false);
@@ -352,26 +346,26 @@ namespace Fittify.DataModelRepository.Test.Repository
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                int fileTestClassId;
-                using (var context = new FileSystemDbContext(options))
+                int categoryId;
+                using (var context = new FittifyContext(options))
                 {
-                    var fileTestClass = new FileTestClass();
-                    context.File.Add(fileTestClass);
+                    var category = new Category();
+                    context.Categories.Add(category);
                     context.SaveChanges();
-                    fileTestClassId = fileTestClass.Id;
+                    categoryId = category.Id;
 
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var entityDeletionResult = await fileTestClassRepository.Delete(fileTestClassId);
+                    var categoryRepository = new CategoryRepository(context);
+                    var entityDeletionResult = await categoryRepository.Delete(categoryId);
 
                     Assert.AreEqual(entityDeletionResult.DidEntityExist, true);
                     Assert.AreEqual(entityDeletionResult.IsDeleted, true);
                 }
 
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var fileTestClass = context.File.FirstOrDefault(f => f.Id == fileTestClassId);
+                    var category = context.Categories.FirstOrDefault(f => f.Id == categoryId);
 
-                    Assert.AreEqual(null, fileTestClass);
+                    Assert.AreEqual(null, category);
                 }
             }
             finally
@@ -380,25 +374,25 @@ namespace Fittify.DataModelRepository.Test.Repository
             }
         }
 
-        [Test]
-        public async Task ReturnSearchQueriedCollection()
-        {
-            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-            try
-            {
-                using (var context = new FileSystemDbContext(options))
-                {
-                    var resourceParameters = new FileTestClassResourceParameters() { SearchQuery = "thfileTestClass", OwnerGuid = _ownerGuid };
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var fileTestClassCollection = fileTestClassRepository.GetCollection(resourceParameters);
-                    Assert.AreEqual(6, fileTestClassCollection.Count);
-                }
-            }
-            finally
-            {
-                connection.Close();
-            }
-        }
+        ////[Test]
+        ////public async Task ReturnSearchQueriedCollection()
+        ////{
+        ////    var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+        ////    try
+        ////    {
+        ////        using (var context = new FittifyContext(options))
+        ////        {
+        ////            var resourceParameters = new CategoryResourceParameters() { SearchQuery = "thcategory", OwnerGuid = _ownerGuid };
+        ////            var categoryRepository = new CategoryRepository(context);
+        ////            var categoryCollection = categoryRepository.GetPagedCollection(resourceParameters);
+        ////            Assert.AreEqual(6, categoryCollection.Count);
+        ////        }
+        ////    }
+        ////    finally
+        ////    {
+        ////        connection.Close();
+        ////    }
+        ////}
 
         [Test]
         public async Task ReturnQueriedIdCollection()
@@ -406,12 +400,12 @@ namespace Fittify.DataModelRepository.Test.Repository
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var resourceParameters = new FileTestClassResourceParameters() { Ids = "4-6", OwnerGuid = _ownerGuid };
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var fileTestClassCollection = fileTestClassRepository.GetCollection(resourceParameters);
-                    Assert.AreEqual(3, fileTestClassCollection.Count);
+                    var resourceParameters = new CategoryResourceParameters() { Ids = "4-6", OwnerGuid = _ownerGuid };
+                    var categoryRepository = new CategoryRepository(context);
+                    var categoryCollection = await categoryRepository.GetPagedCollection(resourceParameters);
+                    Assert.AreEqual(3, categoryCollection.Count);
                 }
             }
             finally
@@ -426,15 +420,15 @@ namespace Fittify.DataModelRepository.Test.Repository
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var orderedCollectionFromContext = context.File.OrderByDescending(o => o.Name).ToList();
+                    var orderedCollectionFromContext = context.Categories.OrderByDescending(o => o.Name).ToList();
 
-                    var resourceParameters = new FileTestClassResourceParameters() { OrderBy = new List<string>() { "name desc" }, OwnerGuid = _ownerGuid };
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var fileTestClassCollection = fileTestClassRepository.GetCollection(resourceParameters);
+                    var resourceParameters = new CategoryResourceParameters() { OrderBy = new List<string>() { "name desc" }, OwnerGuid = _ownerGuid };
+                    var categoryRepository = new CategoryRepository(context);
+                    var categoryCollection = await categoryRepository.GetPagedCollection(resourceParameters);
 
-                    Assert.That(fileTestClassCollection, Is.Ordered.By(nameof(FileTestClass.Name)).Descending);
+                    Assert.That(categoryCollection, Is.Ordered.By(nameof(Category.Name)).Descending);
                 }
             }
             finally
@@ -449,13 +443,13 @@ namespace Fittify.DataModelRepository.Test.Repository
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var resourceParameters = new FileTestClassResourceParameters() { OrderBy = new List<string>() { "name desc", " id desc" }, OwnerGuid = _ownerGuid };
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var fileTestClassCollection = fileTestClassRepository.GetCollection(resourceParameters);
+                    var resourceParameters = new CategoryResourceParameters() { OrderBy = new List<string>() { "name desc", " id desc" }, OwnerGuid = _ownerGuid };
+                    var categoryRepository = new CategoryRepository(context);
+                    var categoryCollection = await categoryRepository.GetPagedCollection(resourceParameters);
 
-                    Assert.That(fileTestClassCollection, Is.Ordered.By(nameof(FileTestClass.Name)).Descending.Then.By(nameof(FileTestClass.Id)).Descending);
+                    Assert.That(categoryCollection, Is.Ordered.By(nameof(Category.Name)).Descending.Then.By(nameof(Category.Id)).Descending);
                 }
             }
             finally
@@ -465,21 +459,21 @@ namespace Fittify.DataModelRepository.Test.Repository
         }
 
         [Test]
-        public async Task ReturnFirstSequenceOfPagedFileTestClassListCollection()
+        public async Task ReturnFirstSequenceOfPagedCategoryListCollection()
         {
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var pagedFileTestClassesFromContext = context.File.Take(3).ToList();
-                    var serializedFileTestClassesFromContext = JsonConvert.SerializeObject(pagedFileTestClassesFromContext);
+                    var pagedCategoriesFromContext = context.Categories.Take(3).ToList();
+                    var serializedCategoriesFromContext = JsonConvert.SerializeObject(pagedCategoriesFromContext);
 
-                    var resourceParameters = new FileTestClassResourceParameters() { PageNumber = 1, PageSize = 3, OwnerGuid = _ownerGuid };
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var fileTestClassCollection = fileTestClassRepository.GetCollection(resourceParameters);
-                    var serializedFileTestClassesFromRepo = JsonConvert.SerializeObject(fileTestClassCollection);
-                    Assert.AreEqual(serializedFileTestClassesFromContext, serializedFileTestClassesFromRepo);
+                    var resourceParameters = new CategoryResourceParameters() { PageNumber = 1, PageSize = 3, OwnerGuid = _ownerGuid };
+                    var categoryRepository = new CategoryRepository(context);
+                    var categoryCollection = await categoryRepository.GetPagedCollection(resourceParameters);
+                    var serializedCategoriesFromRepo = JsonConvert.SerializeObject(categoryCollection);
+                    Assert.AreEqual(serializedCategoriesFromContext, serializedCategoriesFromRepo);
                 }
             }
             finally
@@ -489,21 +483,21 @@ namespace Fittify.DataModelRepository.Test.Repository
         }
 
         [Test]
-        public async Task ReturnSecondSequenceOfPagedFileTestClassListCollection()
+        public async Task ReturnSecondSequenceOfPagedCategoryListCollection()
         {
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var pagedFileTestClassesFromContext = context.File.Skip(3).Take(3).ToList();
-                    var serializedFileTestClassesFromContext = JsonConvert.SerializeObject(pagedFileTestClassesFromContext);
+                    var pagedCategoriesFromContext = context.Categories.Skip(3).Take(3).ToList();
+                    var serializedCategoriesFromContext = JsonConvert.SerializeObject(pagedCategoriesFromContext);
 
-                    var resourceParameters = new FileTestClassResourceParameters() { PageNumber = 2, PageSize = 3, OwnerGuid = _ownerGuid };
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var fileTestClassCollection = fileTestClassRepository.GetCollection(resourceParameters);
-                    var serializedFileTestClassesFromRepo = JsonConvert.SerializeObject(fileTestClassCollection);
-                    Assert.AreEqual(serializedFileTestClassesFromContext, serializedFileTestClassesFromRepo);
+                    var resourceParameters = new CategoryResourceParameters() { PageNumber = 2, PageSize = 3, OwnerGuid = _ownerGuid };
+                    var categoryRepository = new CategoryRepository(context);
+                    var categoryCollection = await categoryRepository.GetPagedCollection(resourceParameters);
+                    var serializedCategoriesFromRepo = JsonConvert.SerializeObject(categoryCollection);
+                    Assert.AreEqual(serializedCategoriesFromContext, serializedCategoriesFromRepo);
                 }
             }
             finally
@@ -513,30 +507,86 @@ namespace Fittify.DataModelRepository.Test.Repository
         }
 
         [Test]
-        public async Task ReturnFileTestClassCollection_ForQueriedFields()
+        public async Task ReturnCollection_ForNullResourceParameters()
         {
             var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
             try
             {
-                using (var context = new FileSystemDbContext(options))
+                using (var context = new FittifyContext(options))
                 {
-                    var resourceParameters = new FileTestClassResourceParameters() { Fields = "Name", DoIncludeIdsWhenQueryingSelectedFields = false };
-                    var fileTestClassRepository = new FileTestClassRepository(context);
-                    var fileTestClassCollection =
-                        fileTestClassRepository.GetCollection(resourceParameters).ToList();
+                    var defaultCategoryResourceParameters = new CategoryResourceParameters();
+                    var pagedCategoriesFromContext = await context
+                        .Categories
+                        .Take(defaultCategoryResourceParameters.PageSize)
+                        .ToListAsync();
+                    var serializedCategoriesFromContext = JsonConvert.SerializeObject(pagedCategoriesFromContext);
 
-                    Assert.That(fileTestClassCollection.Select(s => s.Id), Is.All.EqualTo(0));
-                    Assert.That(fileTestClassCollection.Select(s => s.OwnerGuid), Is.All.EqualTo(null));
+                    var categoryRepository = new CategoryRepository(context);
+                    var categoryCollection = await categoryRepository.GetPagedCollection(null);
+                    var serializedCategoriesFromRepo = JsonConvert.SerializeObject(categoryCollection);
+
+                    Assert.AreEqual(serializedCategoriesFromContext, serializedCategoriesFromRepo);
                 }
-            }
-            catch (Exception e)
-            {
-                var msg = e.Message;
             }
             finally
             {
                 connection.Close();
             }
         }
+
+        ////[Test]
+        ////public async Task ReturnCategoryCollection_ForQueriedFields()
+        ////{
+        ////    var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+        ////    try
+        ////    {
+        ////        using (var context = new FittifyContext(options))
+        ////        {
+        ////            var resourceParameters = new CategoryResourceParameters() { Fields = "Name", DoIncludeIdsWhenQueryingSelectedFields = false };
+        ////            var categoryRepository = new CategoryRepository(context);
+        ////            var categoryCollection =
+        ////                categoryRepository.GetPagedCollection(resourceParameters).ToList();
+
+        ////            Assert.That(categoryCollection.Select(s => s.Id), Is.All.EqualTo(0));
+        ////            Assert.That(categoryCollection.Select(s => s.OwnerGuid), Is.All.EqualTo(null));
+        ////        }
+        ////    }
+        ////    catch (Exception e)
+        ////    {
+        ////        var msg = e.Message;
+        ////    }
+        ////    finally
+        ////    {
+        ////        connection.Close();
+        ////    }
+        ////}
+
+        ////[Test]
+        ////public async Task ReturnCategoryCollection_ForQueriedFieldsIgnoringUnwantedIds()
+        ////{
+        ////    var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+        ////    try
+        ////    {
+        ////        using (var context = new FittifyContext(options))
+        ////        {
+        ////            var resourceParameters = new CategoryResourceParameters() { Fields = "Name", OwnerGuid = _ownerGuid };
+        ////            var categoryRepository = new CategoryRepository(context);
+        ////            var categoryCollection =
+        ////                categoryRepository.GetShapedCollection<Category, int, FittifyContext>(resourceParameters).ToList();
+
+        ////            Assert.That(categoryCollection.Select(s => s.Id), !Is.All.EqualTo(0));
+        ////            Assert.That(categoryCollection.Select(s => s.OwnerGuid), Is.All.EqualTo(null));
+        ////        }
+        ////    }
+        ////    catch (Exception e)
+        ////    {
+        ////        var msg = e.Message;
+        ////    }
+        ////    finally
+        ////    {
+        ////        connection.Close();
+        ////    }
+        ////}
     }
+
 }

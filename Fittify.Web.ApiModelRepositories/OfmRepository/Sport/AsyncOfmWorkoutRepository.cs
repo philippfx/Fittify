@@ -98,7 +98,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
                 _appConfiguration.GetValue<string>("MappedFittifyApiActions:WorkoutOfmResourceParameters")
             );
 
-            //var httpResponse = await HttpRequestFactory.GetCollection(new Uri(_fittifyApiBaseUri + "api/workouts" + queryParamter));
+            //var httpResponse = await HttpRequestFactory.GetPagedCollection(new Uri(_fittifyApiBaseUri + "api/workouts" + queryParamter));
             var httpResponse = await HttpRequestFactory.GetCollection(new Uri(uri + queryParamter), _appConfiguration, _httpContextAccessor);
             ofmCollectionQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmCollectionQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();

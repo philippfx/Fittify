@@ -13,14 +13,14 @@ namespace Fittify.Api.Helpers
             AppConfiguration = appConfiguration;
 
             var mostRecentApiVersion = AppConfiguration.GetValue<string>("LatestApiVersion");
-            if (!int.TryParse(mostRecentApiVersion, out var version))
+            if (!int.TryParse(mostRecentApiVersion, out var version) || version <= 0)
             {
                 throw new ArgumentException("The latest " + ConstantHttpHeaderNames.ApiVersion.ToLower() + " is incorrectly set in the appsettings. It must be an integer value greather than '0'.");
             }
-            if (version <= 0)
-            {
-                throw new ArgumentException("The latest " + ConstantHttpHeaderNames.ApiVersion.ToLower() + " is incorrectly set in the appsettings. It must be an integer value greather than '0'.");
-            }
+            ////if (version <= 0)
+            ////{
+            ////    throw new ArgumentException("The latest " + ConstantHttpHeaderNames.ApiVersion.ToLower() + " is incorrectly set in the appsettings. It must be an integer value greather than '0'.");
+            ////}
 
             ApiVersion = version.ToString();
         }

@@ -20,36 +20,32 @@ namespace Fittify.DataModelRepository.Repository.Sport
         public override Task<Workout> GetById(int id)
         {
             return FittifyContext.Workouts
-                .Include(i => i.Category)
                 .Include(i => i.MapExerciseWorkout)
                 .Include(i => i.WorkoutHistories)
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public override PagedList<Workout> GetCollection(WorkoutResourceParameters ofmResourceParameters)
+        public override async Task<PagedList<Workout>> GetPagedCollection(WorkoutResourceParameters ofmResourceParameters)
         {
-            var allEntitiesQueryable =
-                FittifyContext.Set<Workout>()
-                    .Where(o => o.OwnerGuid == ofmResourceParameters.OwnerGuid)
-                    .AsNoTracking()
-                    .Include(i => i.Category)
-                    .ApplySort(ofmResourceParameters.OrderBy);
-            
+            var linqToEntityQuery = await base.CreateCollectionQueryable(ofmResourceParameters);
+
+            linqToEntityQuery = linqToEntityQuery.Where(w => w.OwnerGuid == ofmResourceParameters.OwnerGuid || w.OwnerGuid == null);
+
             if (!String.IsNullOrWhiteSpace(ofmResourceParameters.SearchQuery))
             {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.Name.Contains(ofmResourceParameters.SearchQuery));
+                linqToEntityQuery = linqToEntityQuery.Where(w => w.Name.ToLower().Contains(ofmResourceParameters.SearchQuery.ToLower()));
             }
 
-            if (ofmResourceParameters.CategoryId != null)
-            {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.CategoryId == ofmResourceParameters.CategoryId);
-            }
-
-            return PagedList<Workout>.Create(allEntitiesQueryable,
+            return await PagedList<Workout>.CreateAsync(linqToEntityQuery,
                 ofmResourceParameters.PageNumber,
                 ofmResourceParameters.PageSize);
         }
 
+        /// <summary>
+        /// Deleting workout cascade-deletes all workoutHistories
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public override async Task<EntityDeletionResult<int>> Delete(int id)
         {
             var entity = GetById(id).GetAwaiter().GetResult();

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository
 {
-    public class FittifyContext : DbContext
+    public partial class FittifyContext : DbContext
     {
         // For Asp.Net Core 2.X we need to ensure that DbContext type accepts a DbContextOptions<TContext> object in its constructor and passes it to the base constructor
         // Otherwise cannot migrate
@@ -29,7 +29,7 @@ namespace Fittify.DataModelRepository
             {
                 throw new ArgumentNullException("dbConnectionString");
             }
-            //OnConfiguring(new DbContextOptionsBuilder());
+            ////OnConfiguring(new DbContextOptionsBuilder()); Probably Obsolete, because it is called anyway
         }
 
         public DbSet<CardioSet> CardioSets { get; set; }
@@ -61,6 +61,7 @@ namespace Fittify.DataModelRepository
             //modelBuilder.Conventions.Add<CascadeDeleteAttributeConvention>();
         }
 
+        //// May be obsolete. Please write unit test! dotCover says that the .ForEach is never executed!
         protected void DisableCascadeDeletion(ModelBuilder modelBuilder)
         {
             // Taken from https://stackoverflow.com/questions/46837617/where-are-entity-framework-core-conventions
@@ -72,8 +73,8 @@ namespace Fittify.DataModelRepository
                 // for EF6
                 entityType.GetForeignKeys()
                     .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade)
-                    .ToList()
-                    .ForEach(fk => fk.DeleteBehavior = DeleteBehavior.Restrict);
+                    .ToList();
+                    ////.ForEach(fk => fk.DeleteBehavior = DeleteBehavior.Restrict); // Commented, because I don't know the effects yet
             }
         }
 
@@ -84,10 +85,10 @@ namespace Fittify.DataModelRepository
                 .WithMany(w => w.CardioSets)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Category>()
-                .HasMany(h => h.Workouts)
-                .WithOne(w => w.Category)
-                .OnDelete(DeleteBehavior.SetNull);
+            ////modelBuilder.Entity<Category>()
+            ////    .HasMany(h => h.Workouts)
+            ////    .WithOne(w => w.Category)
+            ////    .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Exercise>()
                 .HasMany(h => h.MapExerciseWorkout)
@@ -144,10 +145,10 @@ namespace Fittify.DataModelRepository
                 .WithMany(w => w.WeightLiftingSets)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<Workout>()
-                .HasOne(h => h.Category)
-                .WithMany(w => w.Workouts)
-                .OnDelete(DeleteBehavior.SetNull);
+            ////modelBuilder.Entity<Workout>()
+            ////    .HasOne(h => h.Category)
+            ////    .WithMany(w => w.Workouts)
+            ////    .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Workout>()
                 .HasMany(h => h.MapExerciseWorkout)

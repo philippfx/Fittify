@@ -38,7 +38,7 @@ namespace Fittify.Common.Helpers
                 string tmpDigit = cNumberArray[k];
                 if (tmpDigit.Contains("-"))
                 {
-                    int start = int.Parse(tmpDigit.Split('-')[0].ToString());
+                    int start = int.Parse(tmpDigit.Split('-')[0]);
                     int end = int.Parse(tmpDigit.Split('-')[1]);
 
                     for (int j = start; j <= end; j++)
@@ -54,6 +54,16 @@ namespace Fittify.Common.Helpers
             }
 
             return lstNumber;
+        }
+
+        /// <summary>
+        /// Converts a valid concatenated string of ints to Array of ints
+        /// </summary>
+        /// <param name="str">Correctly syntaxed concatenated string of ints, for example 1-10,11,12-20</param>
+        /// <returns>List of ints</returns>
+        public static int[] ToArrayOfId(string str)
+        {
+            return ToCollectionOfId(str).ToArray();
         }
 
         /// <summary>

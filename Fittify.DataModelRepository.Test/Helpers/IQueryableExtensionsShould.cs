@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Fittify.Common.CustomExceptions;
 using Fittify.DataModelRepository.Helpers;
 using Fittify.DataModelRepository.Test.TestHelper.EntityFrameworkCore;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Fittify.DataModelRepository.Test.Helpers
@@ -66,7 +68,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
                     .UseSqlite(connection)
                     .Options;
                 
-                // Create the schema in the database
+                // CreateAsync the schema in the database
                 using (var context = new FileSystemDbContext(options))
                 {
                     context.Database.EnsureCreated();
@@ -86,7 +88,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
             {
                 using (var context = new FileSystemDbContext(options))
                 {
-                    var queryResult = context.File.ToList();
+                    var queryResult = context.Files.ToList();
 
                     Assert.GreaterOrEqual(queryResult.Count, 5);
                 }
@@ -105,7 +107,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
             {
                 using (var context = new FileSystemDbContext(options))
                 {
-                    var queryResult = context.File.ToList();
+                    var queryResult = context.Files.ToList();
 
                     Assert.GreaterOrEqual(queryResult.Count, 5);
                 }
@@ -124,7 +126,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
             {
                 using (var context = new FileSystemDbContext(options))
                 {
-                    var queryResult = context.File.AsNoTracking();
+                    var queryResult = context.Files.AsNoTracking();
 
                     queryResult = queryResult.ApplySort(
                         new List<string>()
@@ -160,7 +162,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
             {
                 using (var context = new FileSystemDbContext(options))
                 {
-                    var queryResult = context.File.AsNoTracking();
+                    var queryResult = context.Files.AsNoTracking();
 
                     queryResult = queryResult.ApplySort(
                         new List<string>()
@@ -196,7 +198,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
             {
                 using (var context = new FileSystemDbContext(options))
                 {
-                    var queryResult = context.File.AsNoTracking();
+                    var queryResult = context.Files.AsNoTracking();
 
                     queryResult = queryResult.ApplySort(
                         new List<string>()
@@ -232,7 +234,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
             {
                 using (var context = new FileSystemDbContext(options))
                 {
-                    var queryResult = context.File.AsNoTracking();
+                    var queryResult = context.Files.AsNoTracking();
 
                     queryResult = queryResult.ApplySort(
                         new List<string>()
@@ -268,7 +270,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
             {
                 using (var context = new FileSystemDbContext(options))
                 {
-                    var queryResult = context.File.AsNoTracking();
+                    var queryResult = context.Files.AsNoTracking();
 
                     queryResult = queryResult.ApplySort(
                         new List<string>()
@@ -304,7 +306,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
             {
                 using (var context = new FileSystemDbContext(options))
                 {
-                    var queryResult = context.File.AsNoTracking();
+                    var queryResult = context.Files.AsNoTracking();
 
                     queryResult = queryResult.ApplySort(
                         new List<string>()
@@ -339,7 +341,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
             {
                 using (var context = new FileSystemDbContext(options))
                 {
-                    var queryResult = context.File.AsNoTracking();
+                    var queryResult = context.Files.AsNoTracking();
 
                     queryResult = queryResult.ApplySort(
                         new List<string>()
@@ -395,7 +397,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
             {
                 using (var context = new FileSystemDbContext(options))
                 {
-                    var queryResult = context.File.AsNoTracking();
+                    var queryResult = context.Files.AsNoTracking();
 
                     queryResult = queryResult.ApplySort(
                         new List<string>()
@@ -431,7 +433,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
             {
                 using (var context = new FileSystemDbContext(options))
                 {
-                    var queryResult = context.File.AsNoTracking();
+                    var queryResult = context.Files.AsNoTracking();
 
                     queryResult = queryResult.ApplySort(
                         new List<string>()
@@ -467,7 +469,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
             {
                 using (var context = new FileSystemDbContext(options))
                 {
-                    var queryResult = context.File.AsNoTracking();
+                    var queryResult = context.Files.AsNoTracking();
 
                     queryResult = queryResult.ApplySort(
                         new List<string>()
@@ -503,7 +505,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
             {
                 using (var context = new FileSystemDbContext(options))
                 {
-                    var queryResult = context.File.AsNoTracking();
+                    var queryResult = context.Files.AsNoTracking();
 
                     queryResult = queryResult.ApplySort(
                         new List<string>()
@@ -539,7 +541,7 @@ namespace Fittify.DataModelRepository.Test.Helpers
             {
                 using (var context = new FileSystemDbContext(options))
                 {
-                    var queryResult = context.File.AsNoTracking();
+                    var queryResult = context.Files.AsNoTracking();
 
                     queryResult = queryResult.ApplySort(
                         new List<string>()
@@ -559,6 +561,140 @@ namespace Fittify.DataModelRepository.Test.Helpers
                             .Then.By(nameof(FileTestClass.FileSizeInKb)).Ascending
                             .Then.By(nameof(FileTestClass.FileCreatedOnDate)).Ascending
                             .Then.By(nameof(FileTestClass.Id)).Ascending);
+                }
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        [Test]
+        public async Task ThrowArgumentNullException_WhenSourceQueryableIsNull_UsingApplySort()
+        {
+            await Task.Run(() =>
+            {
+                IQueryable<FileTestClass> query = null;
+                //query.ApplySort(new List<string>() { "FileName" } );
+                Assert.Throws<ArgumentNullException>(() => query.ApplySort(new List<string>() {"FileName"}), "source");
+            });
+        }
+
+        [Test]
+        public async Task ReturnQueryable_WhenFieldsAreNull_UsingApplySort()
+        {
+            await Task.Run(() =>
+            {
+                IQueryable<FileTestClass> query 
+                    = Enumerable.Empty<FileTestClass>()
+                        .AsQueryable()
+                        .Where(w => w.FileName == null);
+
+                var querySerialized = JsonConvert.SerializeObject(query);
+
+                var unalteredQuery = query.ApplySort(null);
+                var unalteredQuerySerialized = JsonConvert.SerializeObject(unalteredQuery);
+
+                Assert.AreEqual(querySerialized, unalteredQuerySerialized);
+            });
+        }
+
+        [Test]
+        public async Task ThrowArgumentNullException_WhenSourceQueryableIsNull_UsingShapeLinqToEntityQueryOfTSource()
+        {
+            await Task.Run(() =>
+            {
+                IQueryable<FileTestClass> query = null;
+                Assert.Throws<ArgumentNullException>(() => query.ShapeLinqToEntityQuery<FileTestClass>(""), typeof(FileTestClass).Name);
+            });
+        }
+
+        [Test]
+        public async Task ReturnQueryable_WhenFieldsAreNull_UsingShapeLinqToEntityQueryOfTSource()
+        {
+            await Task.Run(() =>
+            {
+                IQueryable<FileTestClass> query
+                    = Enumerable.Empty<FileTestClass>()
+                        .AsQueryable()
+                        .Where(w => w.FileName == null);
+
+                var querySerialized = JsonConvert.SerializeObject(query);
+
+                var unalteredQuery = query.ShapeLinqToEntityQuery<FileTestClass>(null);
+                var unalteredQuerySerialized = JsonConvert.SerializeObject(unalteredQuery);
+
+                Assert.AreEqual(querySerialized, unalteredQuerySerialized);
+            });
+        }
+
+        [Test]
+        public async Task ThrowPropertyNotFoundException_WhenPropertyNotFound_UsingShapeLinqToEntityQueryOfTSource()
+        {
+            await Task.Run(() =>
+            {
+                IQueryable<FileTestClass> query
+                    = Enumerable.Empty<FileTestClass>()
+                        .AsQueryable()
+                        .Where(w => w.FileName == null);
+                
+                Assert.Throws<PropertyNotFoundException>(() => query.ShapeLinqToEntityQuery<FileTestClass>("ThisPropCausesException"));
+            });
+        }
+
+        [Test]
+        public async Task ThrowArgumentNullException_WhenDbContextIsNull()
+        {
+            await Task.Run(() =>
+            {
+                IQueryable<FileTestClass> query
+                    = Enumerable.Empty<FileTestClass>()
+                        .AsQueryable()
+                        .Where(w => w.FileName == null);
+
+                Assert.Throws<ArgumentNullException>(() => query.ShapeLinqToEntityQuery<FileTestClass, int, FileSystemDbContext>(nameof(FileTestClass.FileName), true, null));
+            });
+        }
+
+        [Test]
+        public async Task ReturnCorrectCollection_WhenEntityContainsDoubleKeyAndKeyFieldsAreNeverIgnored()
+        {
+            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest(
+                new List<FileTestClass>()
+                {
+                    new FileTestClass()
+                    {
+                        FileName = "TestFileName",
+                        FileType = ".docx",
+                        FileCreatedOnDate = new DateTime(1989, 1, 11, 14, 00, 00),
+                        FileSizeInKb = 1000,
+                    }
+                });
+
+            try
+            {
+                using (var context = new FileSystemDbContext(options))
+                {
+                    await Task.Run(() =>
+                    {
+                        var query = context.Files.AsNoTracking();
+
+                        var shapedResult = query.ShapeLinqToEntityQuery<FileTestClass, int, FileSystemDbContext>(
+                            "FileName, FileType", true, context);
+
+
+                        var expectedResult = JsonConvert.SerializeObject(new List<FileTestClass>() { new FileTestClass()
+                            {
+                                Id = 1,
+                                FileName = "TestFileName",
+                                FileType = ".docx"
+                            }
+                        });
+
+                        var actualResult = JsonConvert.SerializeObject(shapedResult);
+
+                        Assert.AreEqual(expectedResult, actualResult);
+                    });
                 }
             }
             finally

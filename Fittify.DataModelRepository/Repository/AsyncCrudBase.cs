@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Common;
+using Fittify.Common.Helpers;
 using Fittify.DataModelRepository.Helpers;
 using Fittify.DataModelRepository.ResourceParameters;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +12,8 @@ namespace Fittify.DataModelRepository.Repository
 {
 
     public abstract class AsyncCrudBase<TEntity, TId, TResourceParameters> : IAsyncCrud<TEntity, TId, TResourceParameters>
-        where TEntity : class, IEntityUniqueIdentifier<TId>, IEntityOwner
-        where TResourceParameters : EntityResourceParametersBase, IEntityOwner
+        where TEntity : class, IEntityUniqueIdentifier<TId>, IEntityOwner, new()
+        where TResourceParameters : EntityResourceParametersBase, IEntityOwner, new()
         where TId : struct
     {
         protected FittifyContext FittifyContext;
@@ -57,17 +59,59 @@ namespace Fittify.DataModelRepository.Repository
             return await FittifyContext.Set<TEntity>().FindAsync(id);
         }
 
-        public virtual PagedList<TEntity> GetCollection(TResourceParameters ofmResourceParameters)
+        public virtual async Task<PagedList<TEntity>> GetPagedCollection(TResourceParameters ofmResourceParameters)
         {
-            var allEntitiesQueryableBeforePaging =
-                FittifyContext.Set<TEntity>()
-                    .Where(o => o.OwnerGuid == ofmResourceParameters.OwnerGuid)
-                    .AsNoTracking()
-                    .ApplySort(ofmResourceParameters.OrderBy);
+            if (ofmResourceParameters == null)
+            {
+                ofmResourceParameters = new TResourceParameters();
+            }
+            var linqToEntityQuery = await CreateCollectionQueryable(ofmResourceParameters);
 
-            return PagedList<TEntity>.Create(allEntitiesQueryableBeforePaging,
-                ofmResourceParameters.PageNumber,
-                ofmResourceParameters.PageSize);
+            return await PagedList<TEntity>.CreateAsync(linqToEntityQuery, ofmResourceParameters.PageNumber, ofmResourceParameters.PageSize);
+        }
+
+        public async Task<IQueryable<TEntity>> CreateCollectionQueryable(TResourceParameters ofmResourceParameters)
+        {
+            IQueryable<TEntity> collectionQueryable = null;
+
+            await Task.Run(() =>
+            {
+
+                if (ofmResourceParameters == null)
+                {
+                    ofmResourceParameters = new TResourceParameters();
+                }
+
+                collectionQueryable =
+                    FittifyContext.Set<TEntity>()
+                        .ApplySort(ofmResourceParameters.OrderBy)
+                        .AsNoTracking();
+
+                if (!String.IsNullOrWhiteSpace(ofmResourceParameters.Ids))
+                {
+                    TId[] listTIds;
+                    if (typeof(TId) == typeof(int))
+                    {
+                        listTIds = RangeString.ToArrayOfId(ofmResourceParameters.Ids) as TId[];
+                    }
+                    else
+                    {
+                        listTIds = ofmResourceParameters.Ids.Split(",") as TId[];
+                    }
+
+                    collectionQueryable = collectionQueryable.Where(w => listTIds.Contains(w.Id));
+                }
+
+                if (!String.IsNullOrWhiteSpace(ofmResourceParameters.Fields))
+                {
+                    collectionQueryable = collectionQueryable
+                        .ShapeLinqToEntityQuery<TEntity, TId, FittifyContext>
+                        (ofmResourceParameters.Fields,
+                            ofmResourceParameters.DoIncludeIdsWhenQueryingSelectedFields,
+                            FittifyContext);
+                }
+            });
+            return collectionQueryable;
         }
 
         public virtual IQueryable<TEntity> GetAll()

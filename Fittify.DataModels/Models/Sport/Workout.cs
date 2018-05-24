@@ -10,11 +10,11 @@ namespace Fittify.DataModels.Models.Sport
 
         public string Name { get; set; }
         
-        public virtual Category Category { get; set; }
-        public int? CategoryId { get; set; }
+        ////public virtual Category Category { get; set; }
+        ////public int? CategoryId { get; set; }
 
-        public virtual IEnumerable<MapExerciseWorkout> MapExerciseWorkout { get; set; }
-        public virtual IEnumerable<WorkoutHistory> WorkoutHistories { get; set; }
+        public IEnumerable<MapExerciseWorkout> MapExerciseWorkout { get; set; }
+        public IEnumerable<WorkoutHistory> WorkoutHistories { get; set; }
 
         public Guid? OwnerGuid { get; set; }
     }

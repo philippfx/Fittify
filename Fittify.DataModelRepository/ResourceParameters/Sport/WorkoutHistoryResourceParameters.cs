@@ -6,9 +6,10 @@ namespace Fittify.DataModelRepository.ResourceParameters.Sport
 {
     public class WorkoutHistoryResourceParameters : EntityResourceParametersBase, IDateTimeStartEndResourceParameters, IEntityOwner
     {
+        public Guid? OwnerGuid { get; set; }
+
         public DateTime? FromDateTimeStart { get; set; }
         public DateTime? UntilDateTimeEnd { get; set; }
-        public Guid? OwnerGuid { get; set; }
 
         public int? WorkoutId { get; set; }
     }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.Services;
+using Fittify.Api.OuterFacingModels.Sport.Get;
+using Fittify.DataModels.Models.Sport;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Fittify.Api.OfmRepository.Test.Helpers
@@ -41,5 +44,56 @@ namespace Fittify.Api.OfmRepository.Test.Helpers
 
             Assert.AreEqual(entityOrderByFields, expectedOrder);
         }
+
+        [TestCase("")]
+        [TestCase(null)]
+        public void ReturnNull_WhenOrderByFieldsAreNullOrWhiteSpace(string fields)
+        {
+            var entityOrderByFields = fields.ToEntityOrderBy(new Dictionary<string, PropertyMappingValue>());
+            Assert.IsNull(entityOrderByFields);
+        }
+
+        [Test]
+        public void ThrowArgumentNullException_WhenMappingDictionaryIsNull()
+        {
+            Assert.Throws<ArgumentNullException>(()
+                => string.Empty.ToEntityOrderBy(null));
+        }
+
+        [Test]
+        public void ThrowArgumentNullException_WhenSourcePropertyNameDoesntExist()
+        {
+            var mappingDictionary = new Dictionary<string, PropertyMappingValue>()
+            {
+                {"SomeCodedSourcePropertyOfTheOfmNotToBeFound", new PropertyMappingValue(new List<string>())}
+            };
+            Assert.Throws<ArgumentNullException>(()
+                => "SomeUserInputSourcePropertyOfTheOfmNotToBeFound".ToEntityOrderBy(mappingDictionary), "Key mapping for 'SomeUserInputSourcePropertyOfTheOfmNotToBeFound' is missing");
+        }
+
+        [Test]
+        public void ThrowArgumentNullException_WhenTargetPropertyMappingValuesAreEmpty()
+        {
+            var mappingDictionary = new Dictionary<string, PropertyMappingValue>()
+            {
+                {"SomeSourcePropertyOfTheOfm", new PropertyMappingValue(new List<string>())}
+            };
+            Assert.Throws<ArgumentNullException>(()
+                => "SomeSourcePropertyOfTheOfm".ToEntityOrderBy(mappingDictionary),
+                $"PropertyMappingValue is null. The KEY property named 'SomeSourcePropertyOfTheOfm' for the ofm was found in the mappingDictionary, but no matching VALUE propert(ies) were found for the target data entity. Add a valid VALUE (PropertyMappingValue) to the key 'SomeSourcePropertyOfTheOfm'");
+        }
+
+        [Test]
+        public void ThrowArgumentNullException_WhenTargetPropertyMappingValueIsNull()
+        {
+            var mappingDictionary = new Dictionary<string, PropertyMappingValue>()
+            {
+                {"SomeSourcePropertyOfTheOfm", new PropertyMappingValue(null)}
+            };
+            Assert.Throws<ArgumentNullException>(()
+                    => "SomeSourcePropertyOfTheOfm".ToEntityOrderBy(mappingDictionary),
+                $"PropertyMappingValue is null. The KEY property named 'SomeSourcePropertyOfTheOfm' for the ofm was found in the mappingDictionary, but no matching VALUE propert(ies) were found for the target data entity. Add a valid VALUE (PropertyMappingValue) to the key 'SomeSourcePropertyOfTheOfm'");
+        }
+
     }
 }

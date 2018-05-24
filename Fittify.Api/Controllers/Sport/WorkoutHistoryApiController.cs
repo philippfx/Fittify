@@ -26,7 +26,7 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IAsyncGppdForWorkoutHistory _asyncGppd;
         private readonly string _shortCamelCasedControllerName;
         private readonly IUrlHelper _urlHelper;
-        private readonly ControllerGuardClauses<WorkoutHistoryOfmForGet> _controllerGuardClause;
+        private readonly ControllerGuardClauses<WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int> _controllerGuardClause;
         private readonly HateoasLinkFactory<int> _hateoasLinkFactory;
         private readonly IncomingHeaders _incomingHeaders;
 
@@ -38,7 +38,7 @@ namespace Fittify.Api.Controllers.Sport
             _asyncGppd = asyncGppd;
             _shortCamelCasedControllerName = nameof(WorkoutHistoryApiController).ToShortCamelCasedControllerName();
             _urlHelper = urlHelper;
-            _controllerGuardClause = new ControllerGuardClauses<WorkoutHistoryOfmForGet>(this);
+            _controllerGuardClause = new ControllerGuardClauses<WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int>(this);
             _hateoasLinkFactory = new HateoasLinkFactory<int>(urlHelper, nameof(WorkoutHistoryApiController));
             _incomingHeaders = Mapper.Map<IncomingHeaders>(httpContextAccesor.HttpContext.Items[nameof(IncomingRawHeaders)] as IncomingRawHeaders);
         }

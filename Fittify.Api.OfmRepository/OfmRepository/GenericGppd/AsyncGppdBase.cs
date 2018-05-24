@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.OfmRepository.Helpers;
@@ -38,7 +39,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
             AsyncGetOfmGuardClause = new AsyncGetOfmGuardClauses<TOfmForGet, TId>(TypeHelperService);
         }
 
-        public async Task<OfmForGetQueryResult<TOfmForGet>> GetById(TId id, string fields)
+        public virtual async Task<OfmForGetQueryResult<TOfmForGet>> GetById(TId id, string fields)
         {
             var ofmForGetResult = new OfmForGetQueryResult<TOfmForGet>();
             ofmForGetResult = await AsyncGetOfmGuardClause.ValidateGetById(ofmForGetResult, fields);
@@ -53,27 +54,28 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
             return ofmForGetResult;
         }
 
-        public async Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TOfmResourceParameters ofmResourceParameters, Guid ownerGuid)
+        public virtual async Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TOfmResourceParameters ofmResourceParameters, Guid ownerGuid)
         {
             var ofmForGetCollectionQueryResult = new OfmForGetCollectionQueryResult<TOfmForGet>();
-
-            var entityResourceParameters = Mapper.Map<TEntityResourceParameters>(ofmResourceParameters);
-            entityResourceParameters.OwnerGuid = ownerGuid;
-            entityResourceParameters.OrderBy = ofmResourceParameters.OrderBy.ToEntityOrderBy(PropertyMappingService.GetPropertyMapping<TOfmForGet, TEntity>());
-
+            
             ofmForGetCollectionQueryResult = await AsyncGetOfmGuardClause.ValidateResourceParameters(ofmForGetCollectionQueryResult, ofmResourceParameters);
             if (ofmForGetCollectionQueryResult.ErrorMessages.Count > 0)
             {
                 return ofmForGetCollectionQueryResult;
             }
 
-            var pagedListEntityCollection = Repo.GetCollection(entityResourceParameters).CopyPropertyValuesTo(ofmForGetCollectionQueryResult);
+            var entityResourceParameters = Mapper.Map<TEntityResourceParameters>(ofmResourceParameters);
+            entityResourceParameters.OwnerGuid = ownerGuid;
+            entityResourceParameters.OrderBy = ofmResourceParameters.OrderBy.ToEntityOrderBy(PropertyMappingService.GetPropertyMapping<TOfmForGet, TEntity>());
+
+            var result = await Repo.GetPagedCollection(entityResourceParameters);
+            var pagedListEntityCollection = result.CopyPropertyValuesTo(ofmForGetCollectionQueryResult);
             
             ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets = Mapper.Map<List<TEntity>, List<TOfmForGet>>(pagedListEntityCollection);
             return ofmForGetCollectionQueryResult;
         }
 
-        public async Task<TOfmForGet> Post(TOfmForPost ofmForPost, Guid ownerGuid)
+        public virtual async Task<TOfmForGet> Post(TOfmForPost ofmForPost, Guid ownerGuid)
         {
             var entity = Mapper.Map<TOfmForPost, TEntity>(ofmForPost);
             entity = await Repo.Create(entity, ownerGuid);
@@ -81,22 +83,26 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
             return ofm;
         }
 
-        private TEntity _cachedEntity;
+        public TEntity CachedEntityForPatch;
         public virtual async Task<TOfmForPatch> GetByIdOfmForPatch(TId id)
         {
-            _cachedEntity = await Repo.GetById(id);
-            var ofmForPatch = Mapper.Map<TEntity, TOfmForPatch>(_cachedEntity);
+            CachedEntityForPatch = await Repo.GetById(id);
+            var ofmForPatch = Mapper.Map<TEntity, TOfmForPatch>(CachedEntityForPatch);
             return ofmForPatch;
         }
 
-        public async Task<TOfmForGet> UpdatePartially(TOfmForPatch ofmForPatch)
+        public virtual async Task<TOfmForGet> UpdatePartially(TOfmForPatch ofmForPatch)
         {
-            _cachedEntity = Mapper.Map(ofmForPatch, _cachedEntity);
-            var entity = await Repo.Update(_cachedEntity);
+            if (CachedEntityForPatch == null)
+            {
+                throw new ArgumentNullException("An entity for patching has not been queried previously to updating it. Please use the method " + nameof(GetByIdOfmForPatch) + " to load the to-be-updated entity into the cache and then call " + nameof(UpdatePartially));
+            }
+            CachedEntityForPatch = Mapper.Map(ofmForPatch, CachedEntityForPatch);
+            var entity = await Repo.Update(CachedEntityForPatch);
             return Mapper.Map<TEntity, TOfmForGet>(entity);
         }
 
-        public async Task<OfmDeletionQueryResult<TId>> Delete(TId id)
+        public virtual async Task<OfmDeletionQueryResult<TId>> Delete(TId id)
         {
             var entityDeletionResult = await Repo.Delete(id);
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Fittify.DataModelRepository;
-using Fittify.Test.Core.Seed;
+using Fittify.DbResetter.Seed;
 using Microsoft.Extensions.Configuration;
 
 namespace Fittify.DbResetter

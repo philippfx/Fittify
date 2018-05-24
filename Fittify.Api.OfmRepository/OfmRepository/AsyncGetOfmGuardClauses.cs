@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.OfmResourceParameters;
 using Fittify.Common;
 using Fittify.Common.Helpers;
 using Fittify.Common.ResourceParameters;
+using Microsoft.EntityFrameworkCore.Internal;
 using ITypeHelperService = Fittify.Api.OfmRepository.Services.ITypeHelperService;
 
 namespace Fittify.Api.OfmRepository.OfmRepository
@@ -66,6 +68,9 @@ namespace Fittify.Api.OfmRepository.OfmRepository
                 {
                     ofmForGetCollectionQueryResult.ErrorMessages.AddRange(errorMessages);
                 }
+
+                ofmForGetCollectionQueryResult.ErrorMessages =
+                    ofmForGetCollectionQueryResult.ErrorMessages.Distinct().ToList();
             });
 
             return ofmForGetCollectionQueryResult;

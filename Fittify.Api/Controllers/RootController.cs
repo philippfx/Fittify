@@ -46,7 +46,7 @@ namespace Fittify.Api.Controllers
                 })
                 .ToList();
             var getCollectionActions = _provider.ActionDescriptors.Items
-                .Where(w => w.RouteValues.Values.FirstOrDefault(f => f.Contains("GetCollection")) != null).ToList();
+                .Where(w => w.RouteValues.Values.FirstOrDefault(f => f.Contains("GetPagedCollection")) != null).ToList();
             
             var links = new List<HateoasLink>();
             links.Add(new HateoasLink(_urlHelper.Link("GetRoot", null), "self", "GET"));
@@ -57,7 +57,7 @@ namespace Fittify.Api.Controllers
                 links.Add(new HateoasLink(_urlHelper.Link("Get" + abbreviatedControllerName + "Collection", null),
                     abbreviatedControllerName.ToLower().ToPlural(),
                     "GET"));
-                links.Add(new HateoasLink(_urlHelper.Link("Create" + abbreviatedControllerName, null),
+                links.Add(new HateoasLink(_urlHelper.Link("CreateAsync" + abbreviatedControllerName, null),
                     "create_" + abbreviatedControllerName.ToLower(),
                     "POST"));
             }

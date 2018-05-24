@@ -28,7 +28,7 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IAsyncGppd<WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int, WeightLiftingSetOfmResourceParameters> _asyncGppd;
         private readonly string _shortCamelCasedControllerName;
         private readonly IUrlHelper _urlHelper;
-        private readonly ControllerGuardClauses<WeightLiftingSetOfmForGet> _controllerGuardClause;
+        private readonly ControllerGuardClauses<WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int> _controllerGuardClause;
         private readonly HateoasLinkFactory<int> _hateoasLinkFactory;
         private readonly IncomingHeaders _incomingHeaders;
 
@@ -40,7 +40,7 @@ namespace Fittify.Api.Controllers.Sport
             _asyncGppd = asyncGppd;
             _shortCamelCasedControllerName = nameof(WeightLiftingSetApiController).ToShortCamelCasedControllerName();
             _urlHelper = urlHelper;
-            _controllerGuardClause = new ControllerGuardClauses<WeightLiftingSetOfmForGet>(this);
+            _controllerGuardClause = new ControllerGuardClauses<WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int>(this);
             _hateoasLinkFactory = new HateoasLinkFactory<int>(urlHelper, nameof(WeightLiftingSetApiController));
             _incomingHeaders = Mapper.Map<IncomingHeaders>(httpContextAccesor.HttpContext.Items[nameof(IncomingRawHeaders)] as IncomingRawHeaders);
         }

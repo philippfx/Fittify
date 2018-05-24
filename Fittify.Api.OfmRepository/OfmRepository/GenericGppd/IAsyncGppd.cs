@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.Helpers;
+using Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport;
 using Fittify.Common;
 using Fittify.Common.ResourceParameters;
 
@@ -18,7 +19,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
         Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TOfmResourceParameters ofmResourceParameters, Guid ownerGuid);
         Task<TOfmForGet> Post(TOfmForPost entity, Guid ownerGuid);
         Task<TOfmForPatch> GetByIdOfmForPatch(TId id);
-        Task<TOfmForGet> UpdatePartially(TOfmForPatch ofmForPatch);
+        Task<TOfmForGet> UpdatePartially(TOfmForPatch ofmForPatch); //// Todo: Maybe returning OfmForGetQueryResult??
         Task<OfmDeletionQueryResult<TId>> Delete(TId id);
     }
 }

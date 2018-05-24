@@ -48,9 +48,6 @@ namespace Fittify.Api.Helpers
                 controller.Response.Headers.Add("X-Pagination",
                     Newtonsoft.Json.JsonConvert.SerializeObject(paginationMetadata));
             }
-
-
-
         }
     }
 }

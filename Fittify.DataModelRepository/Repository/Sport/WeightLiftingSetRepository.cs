@@ -24,27 +24,20 @@ namespace Fittify.DataModelRepository.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public override PagedList<WeightLiftingSet> GetCollection(WeightLiftingSetResourceParameters ofmResourceParameters)
+        public override async Task<PagedList<WeightLiftingSet>> GetPagedCollection(WeightLiftingSetResourceParameters ofmResourceParameters)
         {
-            var allEntitiesQueryable =
-                FittifyContext.Set<WeightLiftingSet>()
-                    .Where(o => o.OwnerGuid == ofmResourceParameters.OwnerGuid)
-                    .AsNoTracking()
-                    .Include(i => i.ExerciseHistory)
-                    .ApplySort(ofmResourceParameters.OrderBy);
+            var linqToEntityQuery = await base.CreateCollectionQueryable(ofmResourceParameters);
 
-            if (!String.IsNullOrWhiteSpace(ofmResourceParameters.Ids))
-            {
-                var ids = RangeString.ToCollectionOfId(ofmResourceParameters.Ids);
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => ids.Contains(w.Id));
-            }
-
+            linqToEntityQuery = linqToEntityQuery
+                .Include(i => i.ExerciseHistory)
+                .Where(o => o.OwnerGuid == ofmResourceParameters.OwnerGuid);
+            
             if (ofmResourceParameters.ExerciseHistoryId != null)
             {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.ExerciseHistoryId == ofmResourceParameters.ExerciseHistoryId);
+                linqToEntityQuery = linqToEntityQuery.Where(w => w.ExerciseHistoryId == ofmResourceParameters.ExerciseHistoryId);
             }
 
-            return PagedList<WeightLiftingSet>.Create(allEntitiesQueryable,
+            return await PagedList<WeightLiftingSet>.CreateAsync(linqToEntityQuery,
                 ofmResourceParameters.PageNumber,
                 ofmResourceParameters.PageSize);
         }

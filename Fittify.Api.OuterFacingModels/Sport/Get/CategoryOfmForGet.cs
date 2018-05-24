@@ -8,8 +8,8 @@ namespace Fittify.Api.OuterFacingModels.Sport.Get
     {
         public int Id { get; set; }
 
-        [ValidRegExRangeOfIntIds(FittifyRegularExpressions.RangeOfIntIds)]
-        [ValidAscendingOrderRangeOfIntIds]
-        public virtual string RangeOfWorkoutIds { get; set; }
+        ////[ValidRegExRangeOfIntIds(FittifyRegularExpressions.RangeOfIntIds)]
+        ////[ValidAscendingOrderRangeOfIntIds]
+        ////public virtual string RangeOfWorkoutIds { get; set; }
     }
 }

@@ -8,7 +8,5 @@ namespace Fittify.DataModelRepository.ResourceParameters.Sport
     {
         public string SearchQuery { get; set; }
         public Guid? OwnerGuid { get; set; }
-
-        public int? CategoryId { get; set; }
     }
 }

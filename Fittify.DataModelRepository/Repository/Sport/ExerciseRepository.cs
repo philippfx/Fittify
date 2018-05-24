@@ -14,35 +14,34 @@ namespace Fittify.DataModelRepository.Repository.Sport
     {
         public ExerciseRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
-
-        }
-
-        public override Task<Exercise> GetById(int id)
-        {
-            return FittifyContext.Exercises
-                .FirstOrDefaultAsync(wH => wH.Id == id);
-        }
-
-        public override PagedList<Exercise> GetCollection(ExerciseResourceParameters ofmResourceParameters)
-        {
-            var allEntitiesQueryable =
-                FittifyContext.Set<Exercise>()
-                    .Where(o => o.OwnerGuid == ofmResourceParameters.OwnerGuid || o.OwnerGuid == null) // Exercises may be public
-                    .AsNoTracking()
-                    .ApplySort(ofmResourceParameters.OrderBy);
             
-            if (!String.IsNullOrWhiteSpace(ofmResourceParameters.Ids))
-            {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w =>
-                    RangeString.ToCollectionOfId(ofmResourceParameters.Ids).Contains(w.Id));
-            }
+        }
+        
+        public override async Task<PagedList<Exercise>> GetPagedCollection(ExerciseResourceParameters ofmResourceParameters)
+        {
+            ////var allEntitiesQueryable =
+            ////    FittifyContext.Set<Exercise>()
+            ////        .Where(o => o.OwnerGuid == ofmResourceParameters.OwnerGuid || o.OwnerGuid == null) // Exercises may be public
+            ////        .AsNoTracking()
+            ////        .ApplySort(ofmResourceParameters.OrderBy);
+
+            ////if (!String.IsNullOrWhiteSpace(ofmResourceParameters.Ids))
+            ////{
+            ////    allEntitiesQueryable = allEntitiesQueryable.Where(w =>
+            ////        RangeString.ToCollectionOfId(ofmResourceParameters.Ids).Contains(w.Id));
+            ////}
+
+            var linqToEntityQuery = await base.CreateCollectionQueryable(ofmResourceParameters);
+
+            linqToEntityQuery = linqToEntityQuery.Where(w => w.OwnerGuid == ofmResourceParameters.OwnerGuid || w.OwnerGuid == null);
+
             if (!String.IsNullOrWhiteSpace(ofmResourceParameters.SearchQuery))
             {
-                allEntitiesQueryable = allEntitiesQueryable.Where(w => w.Name.Contains(ofmResourceParameters.SearchQuery));
+                linqToEntityQuery = linqToEntityQuery.Where(w => w.Name.ToLower().Contains(ofmResourceParameters.SearchQuery.ToLower()));
             }
 
-            return PagedList<Exercise>.Create(allEntitiesQueryable,
-                ofmResourceParameters.PageNumber,
+            return await PagedList<Exercise>.CreateAsync(linqToEntityQuery, 
+                ofmResourceParameters.PageNumber, 
                 ofmResourceParameters.PageSize);
         }
     }

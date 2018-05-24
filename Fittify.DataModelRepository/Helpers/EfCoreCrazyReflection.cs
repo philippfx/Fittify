@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -12,6 +13,7 @@ namespace Fittify.DataModelRepository.Helpers
     /// <summary>
     /// Allows to convert EF Core queries to sql string statements. Useful for profiling.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public static class EfCoreCrazyReflection
     {
         private static readonly TypeInfo QueryCompilerTypeInfo = typeof(QueryCompiler).GetTypeInfo();

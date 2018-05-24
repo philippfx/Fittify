@@ -6,9 +6,6 @@ namespace Fittify.Api.OuterFacingModels.Sport.Post
 {
     public class ExerciseHistoryOfmForPost
     {
-        public ExerciseHistoryOfmForPost()
-        { }
-
         public int? ExerciseId { get; set; }
 
         public int? WorkoutHistoryId { get; set; }

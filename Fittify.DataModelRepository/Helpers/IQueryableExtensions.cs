@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Reflection;
 using System.Text;
+using Fittify.Common;
 using Fittify.Common.CustomExceptions;
 using Microsoft.EntityFrameworkCore;
 
@@ -139,7 +140,7 @@ namespace Fittify.DataModelRepository.Helpers
         {
             if (source == null)
             {
-                throw new ArgumentNullException(nameof(source));
+                throw new ArgumentNullException(typeof(TSource).Name);
             }
             
             string selectClause = "new (";
@@ -168,7 +169,7 @@ namespace Fittify.DataModelRepository.Helpers
 
                     if (propertyInfo == null)
                     {
-                        throw new PropertyNotFoundException($"Property {propertyName} wasn't found on {typeof(TSource)}");
+                        throw new PropertyNotFoundException($"Property {propertyName} wasn't found on {typeof(TSource).Name}");
                     }
                 }
 
@@ -193,11 +194,12 @@ namespace Fittify.DataModelRepository.Helpers
             return source;
         }
 
-        public static IQueryable<TSource> ShapeLinqToEntityQuery<TSource, TDbContext>(
+        public static IQueryable<TSource> ShapeLinqToEntityQuery<TSource, TId, TDbContext>(
             this IQueryable<TSource> source,
             string fields, bool doIncludeId, TDbContext dbContext) 
-            where TSource : class, new()
+            where TSource : class, IEntityUniqueIdentifier<TId>, IEntityOwner, new()
             where TDbContext : DbContext
+            where TId : struct
         {
             if (dbContext == null)
             {
@@ -206,29 +208,14 @@ namespace Fittify.DataModelRepository.Helpers
 
             var entry = dbContext.Entry(new TSource());
             var primaryKey = entry.Metadata.FindPrimaryKey();
-            var keys = primaryKey.Properties.Select(k => k.Name).ToArray();
-            StringBuilder stringBuilder = new StringBuilder();
-            int arrayLength = 0;
-            for (int i = 0; i <= arrayLength; i++)
-            {
-                if (i == 0)
-                {
-                    stringBuilder.Append(keys[i]);
-                }
-                else
-                {
-                    stringBuilder.Append(",");
-                    stringBuilder.Append(keys[i]);
-                }
-            }
-            
+            var keys = primaryKey.Properties.Select(k => k.Name).ToList();
 
             fields = fields.Replace(" ", "");
             if (doIncludeId)
             {
-                if (!fields.ToLower().Contains(",id,"))
+                if (!fields.ToLower().Contains("," + keys.FirstOrDefault() + ","))
                 {
-                    fields += ",id";
+                    fields += "," + keys[0];
                 }
             }
 

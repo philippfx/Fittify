@@ -12,15 +12,18 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using AspNetCoreRateLimit;
+using Fittify.Api.Controllers.Generic;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Middleware;
 using Fittify.Api.Middleware.Extensions.ConfigureServices;
+using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport;
+using Fittify.Api.OfmRepository.OfmRepository.Sport;
 using Fittify.Api.OfmRepository.Services;
+using Fittify.Api.Services.ConfigureServices;
 using Fittify.Common.Helpers;
 using Fittify.DataModelRepository;
-using Fittify.Test.Core.Seed;
 using IdentityServer4.AccessTokenValidation;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Diagnostics;
@@ -29,6 +32,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
+using Fittify.DbResetter.Seed;
 
 namespace Fittify.Api
 {
@@ -84,7 +88,9 @@ namespace Fittify.Api
                 {
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver();
-                });
+                })
+                .ConfigureApplicationPartManager(p => // supports generic controllers 
+                    p.FeatureProviders.Add(new GenericControllerFeatureProvider())); ;
 
 
 
@@ -110,9 +116,7 @@ namespace Fittify.Api
             {
                 services.AddDbContext<FittifyContext>(options => options.UseSqlServer(dbConnectionString));
             }
-
-            services.AddScoped<IDbContext>(provider => provider.GetService(typeof(MyContext)));
-
+            
             //try
             //{
             //    services.AddAuthorization(authorizationOptions =>
@@ -206,7 +210,8 @@ namespace Fittify.Api
             
             services.AddFittifyDataRepositoryServices();
             services.AddFittifyGppdRepositoryServices();
-            services.AddScoped<IAsyncGppdForWorkoutHistory, AsyncGppdForWorkoutHistory>();
+            services.AddScoped<IAsyncGppdForWorkoutHistory, WorkoutHistoryOfmRepository>();
+            //services.AddScoped(typeof(IAsyncGppd<,,,,>), typeof(AsyncGppdBase<,,,,,,>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -247,35 +252,36 @@ namespace Fittify.Api
                    .AllowAnyHeader()
             );
             
-            AutoMapper.Mapper.Initialize(cfg =>
-            {
-                // Entity to OfmGet
-                cfg.CreateMap<Workout, WorkoutOfmForGet>()
-                    .ForMember(dest => dest.RangeOfWorkoutHistoryIds, opt => opt.MapFrom(src => src.WorkoutHistories.Select(s => s.Id).ToList().ToStringOfIds()))
-                    .ForMember(dest => dest.RangeOfExerciseIds, opt => opt.MapFrom(src => src.MapExerciseWorkout.Select(s => s.ExerciseId.GetValueOrDefault()).ToList().ToStringOfIds()));
-                cfg.CreateMap<Category, CategoryOfmForGet>()
-                    .ForMember(dest => dest.RangeOfWorkoutIds, opt => opt.MapFrom(src => src.Workouts.Select(w => w.Id).ToList().ToStringOfIds()));
-                cfg.CreateMap<CardioSet, CardioSetOfmForGet>();
-                cfg.CreateMap<WeightLiftingSet, WeightLiftingSetOfmForGet>();
-                cfg.CreateMap<Exercise, ExerciseOfmForGet>()
-                    .ForMember(dest => dest.RangeOfWorkoutIds, opt => opt.MapFrom(src => src.MapExerciseWorkout.Select(w => w.Workout.Id).ToList().ToStringOfIds()))
-                    .ForMember(dest => dest.RangeOfExerciseHistoryIds, opt => opt.MapFrom(src => src.ExerciseHistories.Select(s => s.Id).ToList().ToStringOfIds()));
-                cfg.CreateMap<ExerciseHistory, ExerciseHistoryOfmForGet>()
-                    .ForMember(dest => dest.Exercise, opt => opt.MapFrom(src => src.Exercise))
-                    .ForMember(dest => dest.RangeOfWeightLiftingSetIds, opt => opt.MapFrom(src => src.WeightLiftingSets.Select(s => s.Id).ToList().ToStringOfIds()))
-                    .ForMember(dest => dest.RangeOfCardioSetIds, opt => opt.MapFrom(src => src.CardioSets.Select(s => s.Id).ToList().ToStringOfIds()));
-                cfg.CreateMap<WorkoutHistory, WorkoutHistoryOfmForGet>()
-                    .ForMember(dest => dest.Workout, opt => opt.MapFrom(src => src.Workout))
-                    .ForMember(dest => dest.RangeOfExerciseHistoryIds, opt => opt.MapFrom(src => src.ExerciseHistories.Select(eH => eH.Id).ToList().ToStringOfIds()));
-                cfg.CreateMap<IncomingRawHeaders, IncomingHeaders>()
-                    .ForMember(dest => dest.IncludeHateoas, opt => opt.MapFrom(src => src.IncludeHateoas.ToBool()))
-                    .ForMember(dest => dest.IncludeHateoas, opt => opt.MapFrom(src => int.Parse(src.IncludeHateoas)));
+            AutoMapperForFittify.Initialize();
+            //AutoMapper.Mapper.Initialize(cfg =>
+            //{
+            //    // Entity to OfmGet
+            //    cfg.CreateMap<Workout, WorkoutOfmForGet>()
+            //        .ForMember(dest => dest.RangeOfWorkoutHistoryIds, opt => opt.MapFrom(src => src.WorkoutHistories.Select(s => s.Id).ToList().ToStringOfIds()))
+            //        .ForMember(dest => dest.RangeOfExerciseIds, opt => opt.MapFrom(src => src.MapExerciseWorkout.Select(s => s.ExerciseId.GetValueOrDefault()).ToList().ToStringOfIds()));
+            //    cfg.CreateMap<Category, CategoryOfmForGet>();
+            //        ////.ForMember(dest => dest.RangeOfWorkoutIds, opt => opt.MapFrom(src => src.Workouts.Select(w => w.Id).ToList().ToStringOfIds()));
+            //    cfg.CreateMap<CardioSet, CardioSetOfmForGet>();
+            //    cfg.CreateMap<WeightLiftingSet, WeightLiftingSetOfmForGet>();
+            //    cfg.CreateMap<Exercise, ExerciseOfmForGet>()
+            //        .ForMember(dest => dest.RangeOfWorkoutIds, opt => opt.MapFrom(src => src.MapExerciseWorkout.Select(w => w.Workout.Id).ToList().ToStringOfIds()))
+            //        .ForMember(dest => dest.RangeOfExerciseHistoryIds, opt => opt.MapFrom(src => src.ExerciseHistories.Select(s => s.Id).ToList().ToStringOfIds()));
+            //    cfg.CreateMap<ExerciseHistory, ExerciseHistoryOfmForGet>()
+            //        .ForMember(dest => dest.Exercise, opt => opt.MapFrom(src => src.Exercise))
+            //        .ForMember(dest => dest.RangeOfWeightLiftingSetIds, opt => opt.MapFrom(src => src.WeightLiftingSets.Select(s => s.Id).ToList().ToStringOfIds()))
+            //        .ForMember(dest => dest.RangeOfCardioSetIds, opt => opt.MapFrom(src => src.CardioSets.Select(s => s.Id).ToList().ToStringOfIds()));
+            //    cfg.CreateMap<WorkoutHistory, WorkoutHistoryOfmForGet>()
+            //        .ForMember(dest => dest.Workout, opt => opt.MapFrom(src => src.Workout))
+            //        .ForMember(dest => dest.RangeOfExerciseHistoryIds, opt => opt.MapFrom(src => src.ExerciseHistories.Select(eH => eH.Id).ToList().ToStringOfIds()));
+            //    cfg.CreateMap<IncomingRawHeaders, IncomingHeaders>()
+            //        .ForMember(dest => dest.IncludeHateoas, opt => opt.MapFrom(src => src.IncludeHateoas.ToBool()))
+            //        .ForMember(dest => dest.IncludeHateoas, opt => opt.MapFrom(src => int.Parse(src.IncludeHateoas)));
                 
-                //cfg.IgnoreUnmapped<WorkoutHistoryOfmForPpp, WorkoutHistoryOfmResourceParameters>(); // does not work as expected
+            //    //cfg.IgnoreUnmapped<WorkoutHistoryOfmForPpp, WorkoutHistoryOfmResourceParameters>(); // does not work as expected
 
-                // Must be last statement
-                cfg.IgnoreUnmapped();
-            });
+            //    // Must be last statement
+            //    cfg.IgnoreUnmapped();
+            //});
 
             Debug.Write(string.Format("Creating a foo: {0}", JsonConvert.SerializeObject(new WeightLiftingSet())));
 

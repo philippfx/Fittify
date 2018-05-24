@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Common;
 using Fittify.Common.ResourceParameters;
@@ -21,8 +22,15 @@ namespace Fittify.DataModelRepository.Repository
 
         Task<EntityDeletionResult<TId>> Delete(TId id);
 
-        Task<TEntity> GetById(TId id);
-        PagedList<TEntity> GetCollection(TResourceParameters ofmResourceParameters);
+        Task<TEntity> GetById(TId id); // Todo: Forward field shaping to DAL!
+
+        //Task<PagedList<TEntity>> GetPagedCollection(IQueryable<TEntity> linqToEntityQuery, int pageNumber, int pageSize);
+
+        //PagedList<TEntity> GetPagedCollection(TResourceParameters ofmResourceParameters);
+
+        Task<PagedList<TEntity>> GetPagedCollection(TResourceParameters ofmResourceParameters);
+
+        Task<IQueryable<TEntity>> CreateCollectionQueryable(TResourceParameters ofmResourceParameters);
 
         Task<bool> SaveContext();
     }

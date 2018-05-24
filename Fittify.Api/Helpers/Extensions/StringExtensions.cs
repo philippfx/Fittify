@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Text.RegularExpressions;
+using Fittify.Common.Helpers;
+using Newtonsoft.Json.Linq;
 
 namespace Fittify.Api.Helpers.Extensions
 {
@@ -35,6 +38,32 @@ namespace Fittify.Api.Helpers.Extensions
                 return str;
             }
             return str.Replace(apiControllerString, "");
+        }
+
+        /// <summary>
+        /// Cuts ApiController name down to entity name. Useful, for example, for the creation of dynamic controller action names. 
+        /// </summary>
+        /// <param name="str">Full name of the controller, for example "WorkoutApiController"</param>
+        /// <returns>Short pascal cased controller name, for example "WorkoutOfmResourceParameters", or the unmodified input string</returns>
+        public static string ToShortPascalCasedOfmForGetName(this String str)
+        {
+            if (str == null) return null;
+            string ofmForGetString = "OfmForGet";
+            if (!str.Contains(ofmForGetString))
+            {
+                return str;
+            }
+            return str.Replace(ofmForGetString, "");
+        }
+
+        public static string PrettifyJson(this string source)
+        {
+            return JToken.Parse(source).ToString();
+        }
+
+        public static string MinifyJson(this string source)
+        {
+            return Regex.Replace(source, @"(""(?:[^""\\]|\\.)*"")|\s+", "$1");
         }
     }
 }

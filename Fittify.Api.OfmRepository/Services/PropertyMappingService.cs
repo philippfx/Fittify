@@ -34,6 +34,7 @@ namespace Fittify.Api.OfmRepository.Services
             propertyMappings.Add(new PropertyMapping<WeightLiftingSetOfmForGet, WeightLiftingSet>(_authorPropertyMapping));
             propertyMappings.Add(new PropertyMapping<WorkoutHistoryOfmForGet, WorkoutHistory>(_authorPropertyMapping));
             propertyMappings.Add(new PropertyMapping<WorkoutOfmForGet, Workout>(_authorPropertyMapping));
+            propertyMappings.Add(new PropertyMapping<AnimalOfmForGet, Animal>(_authorPropertyMapping));
 
         }
         public Dictionary<string, PropertyMappingValue> GetPropertyMapping

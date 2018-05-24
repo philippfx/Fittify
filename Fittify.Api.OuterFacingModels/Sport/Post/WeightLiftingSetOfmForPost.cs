@@ -4,7 +4,5 @@ namespace Fittify.Api.OuterFacingModels.Sport.Post
 {
     public class WeightLiftingSetOfmForPost : WeightLiftingSetOfmBase
     {
-        public WeightLiftingSetOfmForPost()
-        { }
     }
 }

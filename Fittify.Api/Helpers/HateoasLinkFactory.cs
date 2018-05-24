@@ -37,7 +37,7 @@ namespace Fittify.Api.Helpers
             }
             
             links.Add(
-                new HateoasLink(UrlHelper.Link("Create" + ShortPascalCasedControllerName, null),
+                new HateoasLink(UrlHelper.Link("CreateAsync" + ShortPascalCasedControllerName, null),
                     "create_" + ShortCamelCasedControllerName,
                     "POST"));
 

@@ -11,7 +11,7 @@ namespace Fittify.DataModels.Models.Sport
         public Exercise Exercise { get; set; }
         public int? ExerciseId { get; set; }
         
-        public virtual WorkoutHistory WorkoutHistory { get; set; }
+        public WorkoutHistory WorkoutHistory { get; set; }
         public int? WorkoutHistoryId { get; set; }
 
         public DateTime ExecutedOnDateTime { get; set; }

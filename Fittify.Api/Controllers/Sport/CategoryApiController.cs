@@ -24,7 +24,7 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IAsyncGppd<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmResourceParameters> _asyncGppd;
         private readonly string _shortCamelCasedControllerName;
         private readonly IUrlHelper _urlHelper;
-        private readonly ControllerGuardClauses<CategoryOfmForGet> _controllerGuardClause;
+        private readonly ControllerGuardClauses<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int> _controllerGuardClause;
         private readonly HateoasLinkFactory<int> _hateoasLinkFactory;
         private readonly IncomingHeaders _incomingHeaders;
 
@@ -36,8 +36,8 @@ namespace Fittify.Api.Controllers.Sport
             _asyncGppd = asyncGppd;
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerName();
             _urlHelper = urlHelper;
-            _controllerGuardClause = new ControllerGuardClauses<CategoryOfmForGet>(this);
-            _hateoasLinkFactory = new HateoasLinkFactory<int>(urlHelper, nameof(CategoryApiController));
+            _controllerGuardClause = new ControllerGuardClauses<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(this);
+            _hateoasLinkFactory = new HateoasLinkFactory<int>(_urlHelper, nameof(CategoryApiController));
             _incomingHeaders = Mapper.Map<IncomingHeaders>(httpContextAccesor.HttpContext.Items[nameof(IncomingRawHeaders)] as IncomingRawHeaders);
         }
 
@@ -52,7 +52,8 @@ namespace Fittify.Api.Controllers.Sport
             }
             var expandable = ofmForGetQueryResult.ReturnedTOfmForGet.ToExpandableOfm();
             var shapedExpandable = expandable.Shape(fields); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
-            if (_incomingHeaders.IncludeHateoas) shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, fields).ToList());
+            if (_incomingHeaders.IncludeHateoas)
+                shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, fields).ToList());
             return Ok(shapedExpandable);
         }
 
@@ -60,11 +61,11 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> GetCollection(CategoryOfmResourceParameters resourceParameters)
         {
-            //var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            //if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();
-            //var ownerGuid = new Guid(stringGuid);
+            var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();
+            var ownerGuid = new Guid(stringGuid);
 
-            var ofmForGetCollectionQueryResult = await _asyncGppd.GetCollection(resourceParameters, Guid.NewGuid());
+            var ofmForGetCollectionQueryResult = await _asyncGppd.GetCollection(resourceParameters, ownerGuid);
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
             if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasForExpandableOfmForGets<CategoryOfmForGet, int>(_urlHelper, nameof(CategoryApiController), resourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
@@ -91,12 +92,14 @@ namespace Fittify.Api.Controllers.Sport
             if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();
             var ownerGuid = new Guid(stringGuid);
 
-            if (ofmForPost == null) return BadRequest();
+            if (!_controllerGuardClause.ValidatePost(ofmForPost, out ObjectResult objectResult))
+                return objectResult;
+            //if (ofmForPost == null) return BadRequest("The request body is null");
 
-            if (!ModelState.IsValid)
-            {
-                return new UnprocessableEntityObjectResult(ModelState);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return new UnprocessableEntityObjectResult(ModelState);
+            //}
 
             var ofmForGet = await _asyncGppd.Post(ofmForPost, ownerGuid);
 
@@ -109,25 +112,8 @@ namespace Fittify.Api.Controllers.Sport
         public async Task<IActionResult> Delete(int id)
         {
             var ofmDeletionQueryResult = await _asyncGppd.Delete(id);
-            if (ofmDeletionQueryResult.IsDeleted == false)
-            {
-                if (ofmDeletionQueryResult.ErrorMessages.Count != 0)
-                {
-                    foreach (var blockingOfmForGet in ofmDeletionQueryResult.ErrorMessages)
-                    {
-                        ModelState.AddModelError(_shortCamelCasedControllerName, blockingOfmForGet);
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError(_shortCamelCasedControllerName, "There was an unknown error deleting this entity. Please contact support.");
-                }
-            }
 
-            if (!ModelState.IsValid)
-            {
-                return new UnprocessableEntityObjectResult(ModelState);
-            }
+            if (!_controllerGuardClause.ValidateDelete(ofmDeletionQueryResult, id, out ObjectResult objectResult)) return objectResult;
 
             return NoContent();
         }
@@ -136,42 +122,36 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<CategoryOfmForPatch> jsonPatchDocument)
         {
+            //// Todo: Prohibit trying to patch id!
             if (jsonPatchDocument == null)
             {
                 ModelState.AddModelError(_shortCamelCasedControllerName, "You sent an empty body (null) for " + _shortCamelCasedControllerName + " with id=" + id);
+                return new BadRequestObjectResult(ModelState);
+            }
+            
+            // Get entity with original values from context
+            var ofmForPatch = await _asyncGppd.GetByIdOfmForPatch(id);
+            if (ofmForPatch == null)
+            {
+                ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
                 return new EntityNotFoundObjectResult(ModelState);
             }
 
-            try
+            // Apply new values from jsonPatchDocument to ofm (the ofm that was just created based on fresh entity from context)
+            jsonPatchDocument.ApplyTo(ofmForPatch, ModelState);
+
+            // Validating ofm
+            TryValidateModel(ofmForPatch); // This is important to catch invalid model states caused by applying the jsonPatch, for example if a required field that previously had a value is now set to null
+            if (!ModelState.IsValid)
             {
-                // Get entity with original values from context
-                var ofmForPatch = await _asyncGppd.GetByIdOfmForPatch(id);
-                if (ofmForPatch == null)
-                {
-                    ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
-                    return new EntityNotFoundObjectResult(ModelState);
-                }
-
-                // Apply new values from jsonPatchDocument to ofm (the ofm that was just created based on fresh entity from context)
-                jsonPatchDocument.ApplyTo(ofmForPatch, ModelState);
-
-                // Validating ofm
-                TryValidateModel(ofmForPatch); // This is important to catch invalid model states caused by applying the jsonPatch, for example if a required field that previously had a value is now set to null
-                if (!ModelState.IsValid)
-                {
-                    return new UnprocessableEntityObjectResult(ModelState);
-                }
-
-                // returning the patched ofm as response
-                var ofmForGet = _asyncGppd.UpdatePartially(ofmForPatch).Result;
-                return new JsonResult(ofmForGet);
-
+                return new UnprocessableEntityObjectResult(ModelState);
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+
+            // returning the patched ofm as response
+            var ofmForGet = await _asyncGppd.UpdatePartially(ofmForPatch);
+            return Ok(ofmForGet);
         }
     }
 }
+
+
