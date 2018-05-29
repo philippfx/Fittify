@@ -3,7 +3,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Helpers;
+using Fittify.Api.Helpers.CustomAttributes;
 using Fittify.Api.Helpers.Extensions;
+using Fittify.Api.Helpers.ObjectResults;
 using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
@@ -14,6 +16,7 @@ using Fittify.Common.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using BadRequestObjectResult = Fittify.Api.Helpers.ObjectResults.BadRequestObjectResult;
 
 namespace Fittify.Api.Controllers.Sport
 {
@@ -66,10 +69,17 @@ namespace Fittify.Api.Controllers.Sport
             var ownerGuid = new Guid(stringGuid);
 
             var ofmForGetCollectionQueryResult = await _asyncGppd.GetCollection(resourceParameters, ownerGuid);
+
+            ////var ofmForGetCollectionQueryResult = await _asyncGppd.GetCollection(resourceParameters, Guid.NewGuid());
+
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
             if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasForExpandableOfmForGets<CategoryOfmForGet, int>(_urlHelper, nameof(CategoryApiController), resourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
             expandableOfmForGetCollection = expandableOfmForGetCollection.Shape(resourceParameters.Fields, _incomingHeaders.IncludeHateoas).ToList();
+
+            this.AddPaginationMetadata<int, CategoryOfmForGet>(ofmForGetCollectionQueryResult,
+                _incomingHeaders, resourceParameters.AsDictionary().RemoveNullValues(), _urlHelper, nameof(CategoryApiController));
+
             if (!_incomingHeaders.IncludeHateoas)
             {
                 return Ok(expandableOfmForGetCollection);

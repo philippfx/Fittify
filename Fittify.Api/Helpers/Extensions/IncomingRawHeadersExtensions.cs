@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 
 //using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
-namespace Fittify.Api.Helpers
+namespace Fittify.Api.Helpers.Extensions
 {
     public static class IncomingRawHeadersExtensions
     {
@@ -20,7 +22,6 @@ namespace Fittify.Api.Helpers
                 }
             }
 
-
             var latestSupportedApiVersion = appConfiguration.GetValue<int>("LatestApiVersion");
             if (!String.IsNullOrWhiteSpace(incomingRawHeaders.ApiVersion))
             {
@@ -34,11 +35,13 @@ namespace Fittify.Api.Helpers
                 {
                     errorMessages.Add(unacceptableIncomingApiVersionErrorMessage);
                 }
+
+                errorMessages = errorMessages.Distinct().ToList();
             }
-            else
-            {
-                errorMessages.Add("A header '" + ConstantHttpHeaderNames.ApiVersion.ToLower() + "' must be specified and take an integer value greater than or equal to '1'. The latest supported version is " + latestSupportedApiVersion);
-            }
+            ////else
+            ////{
+            ////    errorMessages.Add("A header '" + ConstantHttpHeaderNames.ApiVersion.ToLower() + "' must be specified and take an integer value greater than or equal to '1'. The latest supported version is " + latestSupportedApiVersion);
+            ////}
 
             if (errorMessages.Count > 0)
             {

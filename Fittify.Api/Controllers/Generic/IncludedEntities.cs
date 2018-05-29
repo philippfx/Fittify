@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Fittify.Api.Controllers.Generic
 {
+    [ExcludeFromCodeCoverage]
     public static class IncludedEntities
     {
         public static readonly IReadOnlyList<TypeInfo> Types;

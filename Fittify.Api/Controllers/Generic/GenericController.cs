@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.Controllers.Sport;
@@ -28,7 +29,8 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Fittify.Api.Controllers.Generic
 {
     [Route("[controller]")]
-    [GenericControllerNameAttribute]
+    [GenericControllerName]
+    [ExcludeFromCodeCoverage]
     public class GenericController<T> : Controller where T : class
     {
         //private readonly IAsyncGppd<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmResourceParameters> _asyncGppd;

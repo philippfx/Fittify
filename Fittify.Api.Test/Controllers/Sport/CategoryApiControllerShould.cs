@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -15,7 +16,6 @@ using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Api.Services.ConfigureServices;
-using Fittify.Api.Test.Controllers.Sport.TestCases;
 using Fittify.Api.Test.TestHelpers;
 using Fittify.Common.Helpers;
 using Fittify.DataModels.Models.Sport;
@@ -24,6 +24,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.Extensions.Primitives;
 using Moq;
 using Moq.Protected;
 using Newtonsoft.Json;
@@ -38,7 +39,6 @@ namespace Fittify.Api.Test.Controllers.Sport
         [SetUp]
         public void Init()
         {
-            AutoMapper.Mapper.Reset();
             AutoMapperForFittify.Initialize();
         }
         
@@ -206,37 +206,37 @@ namespace Fittify.Api.Test.Controllers.Sport
             var expectedJsonResult =
                 @"
                     {
-                              ""Value"": {
-                                ""Id"": 1,
-                                ""Name"": ""Mock Category"",
-                                ""links"": [
-                                  {
-                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                    ""Rel"": ""self"",
-                                    ""Method"": ""GET""
-                                  },
-                                  {
-                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                    ""Rel"": ""create_category"",
-                                    ""Method"": ""POST""
-                                  },
-                                  {
-                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                    ""Rel"": ""partially_update_category"",
-                                    ""Method"": ""PATCH""
-                                  },
-                                  {
-                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                    ""Rel"": ""delete_category"",
-                                    ""Method"": ""DELETE""
-                                  }
-                                ]
-                              },
-                              ""Formatters"": [],
-                              ""ContentTypes"": [],
-                              ""DeclaredType"": null,
-                              ""StatusCode"": 200
-                            }
+                      ""Value"": {
+                        ""Id"": 1,
+                        ""Name"": ""Mock Category"",
+                        ""links"": [
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""self"",
+                            ""Method"": ""GET""
+                          },
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""create_category"",
+                            ""Method"": ""POST""
+                          },
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""partially_update_category"",
+                            ""Method"": ""PATCH""
+                          },
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""delete_category"",
+                            ""Method"": ""DELETE""
+                          }
+                        ]
+                      },
+                      ""Formatters"": [],
+                      ""ContentTypes"": [],
+                      ""DeclaredType"": null,
+                      ""StatusCode"": 200
+                    }
                 ".MinifyJson().PrettifyJson();
 
             Assert.AreEqual(actualObjectResult, expectedJsonResult);
@@ -394,7 +394,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }));
 
             // Mock IUrlHelper
-            var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
+            ////var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
+            var mockUrlHelper = new Mock<IUrlHelper>();
 
             // Mock IHttpContextAccessor
             var httpContextAccessorMock = new Mock<IHttpContextAccessor>(); // Is mocked to avoid exception. All resulting values will be overidden by mock.
@@ -497,7 +498,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }));
 
             // Mock IUrlHelper
-            var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
+            var mockUrlHelper = new Mock<IUrlHelper>();
 
             // Mock IHttpContextAccessor
             var httpContextAccessorMock = new Mock<IHttpContextAccessor>(); // Is mocked to avoid exception. All resulting values will be overidden by mock.
@@ -739,6 +740,181 @@ namespace Fittify.Api.Test.Controllers.Sport
                 ".MinifyJson().PrettifyJson();
 
             Assert.AreEqual(actualObjectResult, expectedJsonResult);
+        }
+
+        [Test]
+        public async Task ReturnXPaginationHeader_NotUsingHateoas_ForMinimumQuery_WhenUsingGetGollection()
+        {
+            // Arrange
+            var categoryOfmResourceParameters = new CategoryOfmResourceParameters();
+            // Mock GppdRepo
+            var asyncGppdMock = new Mock<IAsyncGppd<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmResourceParameters>>();
+            asyncGppdMock
+                .Setup(s => s.GetCollection(categoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
+                .Returns(Task.FromResult(
+                    new OfmForGetCollectionQueryResult<CategoryOfmForGet>()
+                    {
+                        ReturnedTOfmForGetCollection = new OfmForGetCollection<CategoryOfmForGet>()
+                        {
+                            OfmForGets = new List<CategoryOfmForGet>()
+                            {
+                                new CategoryOfmForGet()
+                                {
+                                    Id = 2,
+                                    Name = "MockCategory2"
+                                }
+                            }
+                        },
+                        CurrentPage = 2,
+                        PageSize = 1,
+                        TotalCount = 30,
+                        TotalPages = 30
+                    }));
+
+            // Mock IUrlHelper
+            var mockUrlHelper = new Mock<IUrlHelper>();
+            mockUrlHelper
+                .Setup(s => s.Link("GetCategoryCollection", It.IsAny<ExpandoObject>()))
+                .Returns("https://mockedHost:0000/categories?paremeters=Omitted");
+
+            // Mock IHttpContextAccessor
+            var httpContextAccessorMock = new Mock<IHttpContextAccessor>(); // Is mocked to avoid exception. All resulting values will be overidden by mock.
+            httpContextAccessorMock.Setup(s => s.HttpContext.Items).Returns(new Dictionary<object, object>()
+            {
+                {
+                    nameof(IncomingRawHeaders),
+                    IncomingRawHeadersMock.GetDefaultIncomingRawHeaders()
+                }
+            });
+
+            // Initialize controller
+            var categoryController = new CategoryApiController(
+                asyncGppdMock.Object,
+                mockUrlHelper.Object,
+                httpContextAccessorMock.Object);
+
+            // Mock User
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("sub", "00000000-0000-0000-0000-000000000000")
+            }));
+
+            categoryController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
+            // Act
+            var objectResult = await categoryController.GetCollection(categoryOfmResourceParameters);
+
+            // Assert
+            var actualHeaderResult = categoryController.Response.Headers["X-Pagination"].ToString().MinifyJson().PrettifyJson();
+            var expectedHeaderResult =
+                @"
+                    {
+                       ""totalCount"": 30,
+                       ""pageSize"": 1,
+                       ""currentPage"": 2,
+                       ""totalPages"": 30,
+                       ""previousPage"": ""https://mockedHost:0000/categories?paremeters=Omitted"",
+                       ""nextPage"": ""https://mockedHost:0000/categories?paremeters=Omitted""
+                    }
+                ".MinifyJson().PrettifyJson();
+
+            Assert.AreEqual(actualHeaderResult, expectedHeaderResult);
+        }
+
+        [Test]
+        public async Task NotReturnXPaginationHeader_UsingHateoas_ForMinimumQuery_WhenUsingGetGollection()
+        {
+            await Task.Run(() =>
+            {
+                // Arrange
+                var categoryOfmResourceParameters = new CategoryOfmResourceParameters();
+                // Mock GppdRepo
+                var asyncGppdMock =
+                    new Mock<IAsyncGppd<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int,
+                        CategoryOfmResourceParameters>>();
+                asyncGppdMock
+                    .Setup(s => s.GetCollection(categoryOfmResourceParameters,
+                        new Guid("00000000-0000-0000-0000-000000000000")))
+                    .Returns(Task.FromResult(
+                        new OfmForGetCollectionQueryResult<CategoryOfmForGet>()
+                        {
+                            ReturnedTOfmForGetCollection = new OfmForGetCollection<CategoryOfmForGet>()
+                            {
+                                OfmForGets = new List<CategoryOfmForGet>()
+                                {
+                                    new CategoryOfmForGet()
+                                    {
+                                        Id = 2,
+                                        Name = "MockCategory2"
+                                    }
+                                }
+                            },
+                            CurrentPage = 2,
+                            PageSize = 1,
+                            TotalCount = 30,
+                            TotalPages = 30
+                        }));
+
+                // Mock IUrlHelper
+                var mockUrlHelper = new Mock<IUrlHelper>();
+                mockUrlHelper
+                    .Setup(s => s.Link("GetCategoryCollection", It.IsAny<ExpandoObject>()))
+                    .Returns("https://mockedHost:0000/categories?paremeters=Omitted");
+
+                // Mock IHttpContextAccessor
+                var incomingheaders = IncomingRawHeadersMock.GetDefaultIncomingRawHeaders();
+                incomingheaders.IncludeHateoas = "1";
+
+                var httpContextAccessorMock =
+                    new Mock<IHttpContextAccessor>(); // Is mocked to avoid exception. All resulting values will be overidden by mock.
+                httpContextAccessorMock.Setup(s => s.HttpContext.Items).Returns(new Dictionary<object, object>()
+                {
+                    {
+                        nameof(IncomingRawHeaders),
+                        incomingheaders
+                    }
+                });
+
+                // Initialize controller
+                var categoryController = new CategoryApiController(
+                    asyncGppdMock.Object,
+                    mockUrlHelper.Object,
+                    httpContextAccessorMock.Object);
+
+                // Mock User
+                var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                {
+                    new Claim("sub", "00000000-0000-0000-0000-000000000000")
+                }));
+
+                categoryController.ControllerContext = new ControllerContext()
+                {
+                    HttpContext = new DefaultHttpContext() {User = user}
+                };
+
+                // Act
+                var objectResult = categoryController.GetCollection(categoryOfmResourceParameters).GetAwaiter()
+                    .GetResult();
+
+                // Assert
+                var actualHeaderResult = categoryController.Response.Headers["X-Pagination"].ToString().MinifyJson()
+                    .PrettifyJson();
+                var expectedHeaderResult =
+                    @"
+                    {
+                       ""totalCount"": 30,
+                       ""pageSize"": 1,
+                       ""currentPage"": 2,
+                       ""totalPages"": 30
+                    }
+                ".MinifyJson().PrettifyJson();
+
+                Assert.AreEqual(actualHeaderResult, expectedHeaderResult);
+
+            });
         }
 
         [Test]

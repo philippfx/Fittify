@@ -53,6 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Helpers\HttpHeaders\" />
     <Folder Include="Middleware\Extensions\DependencyInjection\" />
   </ItemGroup>
 

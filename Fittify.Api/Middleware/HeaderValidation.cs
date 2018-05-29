@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using Fittify.Api.Helpers;
+using Fittify.Api.Helpers.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
@@ -13,7 +16,7 @@ using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 namespace Fittify.Api.Middleware
 {
     /// <summary>
-    /// Global header validator before reaching any controller
+    /// Global header validator for middleware (before reaching any controller)
     /// </summary>
     public class HeaderValidation
     {
@@ -38,17 +41,9 @@ namespace Fittify.Api.Middleware
                 if (headers["Content-Type"].ToString().ToLower().Contains("xml"))
                 {
                     httpContext.Response.ContentType = "application/xml";
-                    var xml = "";
-                    using (var sw = new StringWriter())
-                    {
-                        XmlSerializer xsSubmit = new XmlSerializer(typeof(Dictionary<string, List<string>>));
-                        
-                        using (XmlWriter writer = XmlWriter.Create(sw))
-                        {
-                            xsSubmit.Serialize(writer, expandableErrorMessage);
-                            xml = sw.ToString();
-                        }
-                    }
+                    var xmlOutput = new XElement("headers", expandableErrorMessage["headers"].Select(i => new XElement("value", i)));
+                    string xml = xmlOutput.ToString();
+                    await httpContext.Response.WriteAsync(xml, Encoding.UTF8);
                 }
                 else
                 {

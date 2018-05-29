@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport;
 using Fittify.Api.OfmRepository.OfmRepository.Sport;
@@ -16,6 +17,7 @@ using Fittify.DataModelRepository.ResourceParameters;
 using Fittify.DataModelRepository.ResourceParameters.Sport;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.Extensions.DependencyInjection;
+
 
 namespace Fittify.Api.OfmFactory
 {
@@ -35,6 +37,7 @@ namespace Fittify.Api.OfmFactory
     //    }
     //}
 
+    [ExcludeFromCodeCoverage]
     public class OfmRepository<T> : AsyncGppdBase<Animal, AnimalOfmForGet, AnimalOfmForPost, AnimalOfmForPatch, int, AnimalOfmResourceParameters, AnimalResourceParameters>
         where T : class
     {
@@ -52,6 +55,7 @@ namespace Fittify.Api.OfmFactory
     {
     }
 
+    [ExcludeFromCodeCoverage]
     public abstract class AsyncGppdFactory<TEntity, TOfmForGet, TOfmForPost, TOfmForPatch, TId, TOfmResourceParameters, TEntityResourceParameters>
         //: IAsyncGppd<TOfmForGet, TOfmForPost, TOfmForPatch, TId, TOfmResourceParameters>
         where TEntity : class, IEntityUniqueIdentifier<TId>
@@ -65,6 +69,7 @@ namespace Fittify.Api.OfmFactory
         public abstract AsyncGppdBase<TEntity, TOfmForGet, TOfmForPost, TOfmForPatch, TId, TOfmResourceParameters, TEntityResourceParameters> CreateInstance(string type);
     }
 
+    [ExcludeFromCodeCoverage]
     public class AsyncGppdFactory<R> where R : class
     {
         private readonly IServiceProvider _services;

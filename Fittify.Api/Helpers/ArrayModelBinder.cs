@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace Fittify.Api.Helpers
     /// <summary>
     /// Helps binding enumerable multiple id query parameter (string separated by comma)
     /// </summary>
+    [ExcludeFromCodeCoverage] // Taken from external source: https://app.pluralsight.com/player?course=asp-dot-net-core-restful-api-building&author=kevin-dockx&name=asp-dot-net-core-restful-api-building-m3&clip=6&mode=live
     public class ArrayModelBinder : IModelBinder
     {
         public Task BindModelAsync(ModelBindingContext bindingContext)

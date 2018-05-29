@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
 
-namespace Fittify.Api.Helpers
+namespace Fittify.Api.Helpers.Extensions
 {
+    [ExcludeFromCodeCoverage] // Code taken from an external source: https://stackoverflow.com/questions/954480/automapper-ignore-the-rest#answer-38073718
     public static class AutomapperUnmappedPropertyExtensions
     {
         private static void IgnoreUnmappedProperties(TypeMap map, IMappingExpression expr)

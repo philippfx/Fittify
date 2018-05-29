@@ -8,20 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="appsettingsOld.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="..\Fittify.Api\bin\Debug\netcoreapp2.0\appsettings.json" Link="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="appsettingsOld.json">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Geekality.IO" Version="1.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
     <PackageReference Include="Moq" Version="4.8.2" />

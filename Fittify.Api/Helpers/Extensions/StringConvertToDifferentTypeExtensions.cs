@@ -5,7 +5,7 @@ namespace Fittify.Api.Helpers.Extensions
     public static class StringConvertToDifferentTypeExtensions
     {
         /// <summary>
-        /// Converts a string of "1" or case-insensitive "true" to true
+        /// Converts a string of "1" or case-insensitive "true" to true. Can handle leading and trailing whitespaces. Anything else returns false. 
         /// </summary>
         /// <param name="str"></param>
         public static bool ToBool(this String str)

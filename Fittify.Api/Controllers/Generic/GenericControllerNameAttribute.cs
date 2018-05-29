@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
 namespace Fittify.Api.Controllers.Generic
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    [ExcludeFromCodeCoverage]
     public class GenericControllerNameAttribute : Attribute, IControllerModelConvention
     {
         public void Apply(ControllerModel controller)

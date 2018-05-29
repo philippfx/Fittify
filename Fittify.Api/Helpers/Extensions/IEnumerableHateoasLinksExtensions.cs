@@ -3,7 +3,7 @@ using System.Linq;
 using Fittify.Api.OfmRepository.Helpers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Fittify.Api.Helpers
+namespace Fittify.Api.Helpers.Extensions
 {
     public static class IEnumerableHateoasLinksExtensions
     {

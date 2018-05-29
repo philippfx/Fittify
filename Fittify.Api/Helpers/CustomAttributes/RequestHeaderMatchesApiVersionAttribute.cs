@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 
-namespace Fittify.Api.Helpers
+namespace Fittify.Api.Helpers.CustomAttributes
 {
     [AttributeUsage(AttributeTargets.All, Inherited = true, AllowMultiple = true)]
     public sealed class RequestHeaderMatchesApiVersionAttribute : Attribute, IActionConstraint

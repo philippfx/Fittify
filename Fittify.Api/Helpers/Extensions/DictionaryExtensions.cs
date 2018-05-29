@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Extensions.Primitives;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
-namespace Fittify.Api.Helpers
+namespace Fittify.Api.Helpers.Extensions
 {
     public static class DictionaryExtensions
     {
@@ -14,16 +13,9 @@ namespace Fittify.Api.Helpers
 
             foreach (var item in source)
             {
-                try
-                {
-                    objectType
-                        .GetProperty(item.Key.Replace("-", ""))?
-                        .SetValue(incomingRawHeaders, item.Value.ToString(), null);
-                }
-                catch (Exception e)
-                {
-                    var msg = e;
-                }
+                objectType
+                    .GetProperty(item.Key.Replace("-", ""))?
+                    .SetValue(incomingRawHeaders, item.Value.ToString(), null);
             }
 
             return incomingRawHeaders;

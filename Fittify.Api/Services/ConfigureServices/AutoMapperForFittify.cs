@@ -15,6 +15,7 @@ namespace Fittify.Api.Services.ConfigureServices
     {
         public static void Initialize()
         {
+            AutoMapper.Mapper.Reset();
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 // Entity to OfmGet
