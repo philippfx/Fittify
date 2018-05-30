@@ -22,6 +22,7 @@ using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport;
 using Fittify.Api.OfmRepository.OfmRepository.Sport;
 using Fittify.Api.OfmRepository.Services;
+using Fittify.Api.Services;
 using Fittify.Api.Services.ConfigureServices;
 using Fittify.Common.Helpers;
 using Fittify.DataModelRepository;
@@ -43,9 +44,9 @@ namespace Fittify.Api
         private IConfiguration Configuration { get; }
         private IHostingEnvironment HostingEnvironment { get; set; }
 
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public Startup(/*IConfiguration configuration, */IHostingEnvironment hostingEnvironment)
         {
-            Configuration = configuration;
+            //Configuration = configuration;
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -188,7 +189,7 @@ namespace Fittify.Api
 
             services.AddMemoryCache(); // Necessary for rate limit
 
-            if (!HostingEnvironment.IsDevelopment())
+            if (!HostingEnvironment.IsDevelopment() && !HostingEnvironment.IsTestInMemoryDb())
             {
                 services.Configure<IpRateLimitOptions>((options) =>
                 {
@@ -216,10 +217,12 @@ namespace Fittify.Api
             services.AddFittifyDataRepositoryServices();
             services.AddFittifyGppdRepositoryServices();
             services.AddScoped<IAsyncGppdForWorkoutHistory, WorkoutHistoryOfmRepository>();
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment() || env.IsTestInMemoryDb())
             {
@@ -260,7 +263,7 @@ namespace Fittify.Api
 
             Debug.Write(string.Format("Creating a foo: {0}", JsonConvert.SerializeObject(new WeightLiftingSet())));
 
-            if (!HostingEnvironment.IsDevelopment())
+            if (!HostingEnvironment.IsDevelopment() && !HostingEnvironment.IsTestInMemoryDb())
             {
                 app.UseIpRateLimiting();
             }
@@ -282,21 +285,21 @@ namespace Fittify.Api
             {
                 app.Run(async (context) =>
                 {
-                    await context.Response.WriteAsync("<h1>Environment DEVELOPMENT</h1>");
+                    await context.Response.WriteAsync("<h1>Environment Development</h1>");
                 });
             }
             if (env.IsProduction())
             {
                 app.Run(async (context) =>
                 {
-                    await context.Response.WriteAsync("<h1>Environment PRODUCTION</h1>");
+                    await context.Response.WriteAsync("<h1>Environment Production</h1>");
                 });
             }
             if (env.IsTestInMemoryDb())
             {
                 app.Run(async (context) =>
                 {
-                    await context.Response.WriteAsync("<h1>Environment InMemoryDb</h1>");
+                    await context.Response.WriteAsync("<h1>Environment TestInMemoryDb</h1>");
                 });
             }
         }

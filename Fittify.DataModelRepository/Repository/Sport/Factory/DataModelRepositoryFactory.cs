@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
 using Fittify.Common;
@@ -9,6 +10,7 @@ using Fittify.DataModels.Models.Sport;
 
 namespace Fittify.DataModelRepository.Repository.Sport.Factory
 {
+    [ExcludeFromCodeCoverage] // Is an experiment for generic controllers
     public class DataModelRepositoryFactory
     {
         private readonly FittifyContext _fittifyContext;

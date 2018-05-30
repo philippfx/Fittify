@@ -96,5 +96,14 @@ namespace Fittify.Api.OuterFacingModels.Test
             Assert.IsTrue(result);
         }
 
+        [Test]
+        public void ReturnFalse_ForUnparsableFirstCharater()
+        {
+            object str = "a,b,c,1,2,3";
+            var attributeInstance = new ValidAscendingOrderRangeOfIntIdsAttribute();
+            var result = attributeInstance.IsValid(str);
+            Assert.IsFalse(result);
+        }
+
     }
 }

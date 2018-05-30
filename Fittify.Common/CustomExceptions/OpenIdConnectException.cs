@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Fittify.Common.CustomExceptions
 {
     [Serializable]
+    [ExcludeFromCodeCoverage]
     public class OpenIdConnectException : Exception
     {
         public OpenIdConnectException()

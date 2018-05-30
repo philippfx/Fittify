@@ -117,7 +117,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }));
 
             // Mock IUrlHelper
-            var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
+            var mockUrlHelper = new Mock<IUrlHelper>();
 
             // Mock IHttpContextAccessor
             var httpContextAccessorMock = new Mock<IHttpContextAccessor>(); // Is mocked to avoid exception. All resulting values will be overidden by mock.
@@ -208,6 +208,91 @@ namespace Fittify.Api.Test.Controllers.Sport
                     {
                       ""Value"": {
                         ""Id"": 1,
+                        ""Name"": ""Mock Category"",
+                        ""links"": [
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""self"",
+                            ""Method"": ""GET""
+                          },
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""create_category"",
+                            ""Method"": ""POST""
+                          },
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""partially_update_category"",
+                            ""Method"": ""PATCH""
+                          },
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""delete_category"",
+                            ""Method"": ""DELETE""
+                          }
+                        ]
+                      },
+                      ""Formatters"": [],
+                      ""ContentTypes"": [],
+                      ""DeclaredType"": null,
+                      ""StatusCode"": 200
+                    }
+                ".MinifyJson().PrettifyJson();
+
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+        }
+
+        [Test]
+        public async Task ReturnOkObjectResult_ForSelectedFieldsIncludingHateoas_WhenUsingGetById()
+        {
+            // Arrange
+            // Mock GppdRepo
+            var asyncGppdMock = new Mock<IAsyncGppd<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmResourceParameters>>();
+            asyncGppdMock.Setup(s => s.GetById(1, "Name")).Returns(Task.FromResult(
+                    new OfmForGetQueryResult<CategoryOfmForGet>()
+                    {
+                        ReturnedTOfmForGet = new CategoryOfmForGet()
+                        {
+                            Id = 1,
+                            Name = "Mock Category"
+                        }
+                    }));
+
+            // Mock IUrlHelper
+            var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
+            string mockedHateoasLinks = "{ Omitted Hateoas Link, because it requires too much maintainenance }";
+            mockUrlHelper.Setup(s => s.Link(It.IsAny<string>(), It.IsAny<object>()))
+                .Returns(mockedHateoasLinks);
+
+            // Mock IHttpContextAccessor
+            var httpContextAccessorMock = new Mock<IHttpContextAccessor>(); // Is mocked to avoid exception. All resulting values will be overidden by mock.
+
+            var incomingRawHeadersMock =
+                IncomingRawHeadersMock.GetDefaultIncomingRawHeaders();
+            incomingRawHeadersMock.IncludeHateoas = "1";
+            httpContextAccessorMock.Setup(s => s.HttpContext.Items).Returns(new Dictionary<object, object>()
+            {
+                {
+                    nameof(IncomingRawHeaders),
+                    incomingRawHeadersMock
+                }
+            });
+
+            // Initialize controller
+            var categoryController = new CategoryApiController(
+                asyncGppdMock.Object,
+                mockUrlHelper.Object,
+                httpContextAccessorMock.Object);
+
+            // Act
+            var objectResult = await categoryController.GetById(1, "Name");
+
+            // Assert
+            var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
+            var expectedJsonResult =
+                @"
+                    {
+                      ""Value"": {
                         ""Name"": ""Mock Category"",
                         ""links"": [
                           {
@@ -1247,6 +1332,75 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""ContentTypes"": [],
                       ""DeclaredType"": null,
                       ""StatusCode"": 400
+                    }
+                ".MinifyJson().PrettifyJson();
+
+            Assert.AreEqual(actualObjectResult, expectedObjectResult);
+        }
+
+        [Test]
+        public async Task ReturnUnprocessableEntityObjectResult_ForInvalidPostModel_WhenUsingPost()
+        {
+            // Arrange
+            var modelForPost = new CategoryOfmForPost() { Name = null};
+            // Mock GppdRepo
+            var asyncGppdMock = new Mock<IAsyncGppd<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmResourceParameters>>();
+            asyncGppdMock
+                .Setup(s => s.Post(modelForPost, new Guid("00000000-0000-0000-0000-000000000000")))
+                .Returns(Task.FromResult(
+                    new CategoryOfmForGet()
+                    {
+                        Id = 1,
+                        Name = "Mock Category"
+                    }));
+
+            // Mock IUrlHelper
+            var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
+
+            // Mock IHttpContextAccessor
+            var httpContextAccessorMock = new Mock<IHttpContextAccessor>(); // Is mocked to avoid exception. All resulting values will be overidden by mock.
+            httpContextAccessorMock.Setup(s => s.HttpContext.Items).Returns(new Dictionary<object, object>()
+            {
+                {
+                    nameof(IncomingRawHeaders),
+                    IncomingRawHeadersMock.GetDefaultIncomingRawHeaders()
+                }
+            });
+
+            // Initialize controller
+            var categoryController = new CategoryApiController(
+                asyncGppdMock.Object,
+                mockUrlHelper.Object,
+                httpContextAccessorMock.Object);
+
+            // Mock User
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("sub", "00000000-0000-0000-0000-000000000000")
+            }));
+            categoryController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+            categoryController.ModelState.AddModelError("Name", "The Name Field is required");
+
+            // Act
+            var objectResult = await categoryController.Post(modelForPost);
+
+            // Assert
+            var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
+            var expectedObjectResult =
+                @"
+                    {
+                      ""Value"": {
+                        ""Name"": [
+                          ""The Name Field is required""
+                        ]
+                      },
+                      ""Formatters"": [],
+                      ""ContentTypes"": [],
+                      ""DeclaredType"": null,
+                      ""StatusCode"": 422
                     }
                 ".MinifyJson().PrettifyJson();
 

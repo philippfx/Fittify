@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using AutoMapper;
 using Fittify.Api.Helpers;
@@ -11,7 +12,8 @@ using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace Fittify.Api.Controllers
 {
-    [Route("api")]
+    [Route("root")]
+    [ExcludeFromCodeCoverage] // Todo: Test this controller
     public class RootController : Controller
     {
         private readonly IUrlHelper _urlHelper;
@@ -33,9 +35,6 @@ namespace Fittify.Api.Controllers
         [HttpGet(Name = "GetRoot")]
         public IActionResult GetRoot()
         {
-            //if (!incomingRawHeaders.Validate(_appConfiguration, out var errorMessages)) return BadRequest(new Dictionary<string, List<string>>() { { "header", errorMessages } });
-            //var incomingHeaders = Mapper.Map<IncomingHeaders>(incomingRawHeaders);
-
             var routes = _provider.ActionDescriptors.Items
                 .Select(x => new
                 {

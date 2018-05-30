@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using System.Reflection;
 using Fittify.Common.CustomExceptions;
@@ -8,6 +9,7 @@ namespace Fittify.Common.Helpers
 {
     public static class IEnumerableExtensions
     {
+        [ExcludeFromCodeCoverage] // Found a better way to do this (expandableOfmForGets). Code basically taken from https://app.pluralsight.com/player?course=asp-dot-net-core-restful-api-building&author=kevin-dockx&name=asp-dot-net-core-restful-api-building-m7&clip=8&mode=live
         public static IEnumerable<ExpandoObject> ShapeData<TSource>(
             this IEnumerable<TSource> source,
             string fields)

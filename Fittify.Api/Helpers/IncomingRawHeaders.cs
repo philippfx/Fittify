@@ -15,7 +15,7 @@ namespace Fittify.Api.Helpers
             var mostRecentApiVersion = AppConfiguration.GetValue<string>("LatestApiVersion");
             if (!int.TryParse(mostRecentApiVersion, out var version) || version <= 0)
             {
-                throw new ArgumentException("The latest " + ConstantHttpHeaderNames.ApiVersion.ToLower() + " is incorrectly set in the appsettings. It must be an integer value greather than '0'.");
+                throw new ArgumentException("The value for 'LatestApiVersion' is incorrectly set in the appsettings or it is missing. It must exist and take an integer value greather than '0'.");
             }
             ////if (version <= 0)
             ////{

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using Fittify.Common.Extensions;
 
 namespace Fittify.Api.OuterFacingModels.Helpers
@@ -14,6 +15,7 @@ namespace Fittify.Api.OuterFacingModels.Helpers
             _maximumLength = maximumLength;
         }
 
+        [ExcludeFromCodeCoverage]
         public override string FormatErrorMessage(string propertyName)
         {
             return this.ErrorMessage = "The maxinum string length of '" + propertyName.ToCamelCase() + "' is '" + _maximumLength + "'";

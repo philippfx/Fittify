@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
@@ -9,6 +10,8 @@ namespace Fittify.Common.Helpers
 {
     public static class ObjectExtensions
     {
+        [ExcludeFromCodeCoverage] // Found a better way to do this (expandableOfmForGet). Code basically taken from https://app.pluralsight.com/player?course=asp-dot-net-core-restful-api-building&author=kevin-dockx&name=asp-dot-net-core-restful-api-building-m7&clip=11&mode=live
+
         public static ExpandoObject ShapeData<TSource>(this TSource source,
           string fields)
         {
@@ -69,6 +72,8 @@ namespace Fittify.Common.Helpers
             return dataShapedObject;
         }
 
+        [Obsolete("If you want to use this method, back it up with unit tests!")]
+        [ExcludeFromCodeCoverage] // Works for simple cases, but no tests exist yet. As of 29.05.2018 no references. Code taken from: https://stackoverflow.com/questions/4943817/mapping-object-to-dictionary-and-vice-versa
         public static T ToObject<T>(this IDictionary<string, object> source)
             where T : class, new()
         {

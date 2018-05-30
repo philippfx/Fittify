@@ -13,7 +13,8 @@ namespace Fittify.Common.Helpers
             var split = str.Split(new char[] { ',', '-' });
             int current;
             int next;
-            if (!int.TryParse(split[0], out current)) return false; // Covering the case when input is only a single int
+            if (split.Length == 1 && !int.TryParse(split[0], out current))
+                return false; // Covering the case when input is only a single int
             for (int i = 0; i < split.Length - 1; i++)
             {
                 if (!int.TryParse(split[i], out current)) return false;

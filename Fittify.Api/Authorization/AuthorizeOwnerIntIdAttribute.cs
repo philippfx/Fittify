@@ -42,7 +42,7 @@ namespace Fittify.Api.Authorization
             var idString = context.RouteData.Values["id"].ToString();
             if (!int.TryParse(idString, out var entityId))
             {
-                context.Result = new UnauthorizedResult();
+                context.Result = new BadRequestResult();
                 return;
             }
             

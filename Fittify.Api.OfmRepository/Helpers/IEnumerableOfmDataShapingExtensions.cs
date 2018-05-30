@@ -7,7 +7,6 @@ namespace Fittify.Api.OfmRepository.Helpers
 {
     public static class IEnumerableOfmDataShapingExtensions
     {
-
         public static IEnumerable<ExpandableOfmForGet> Shape(
             this IEnumerable<ExpandableOfmForGet> expandableOfmForGetSourceCollection,
             string fields,

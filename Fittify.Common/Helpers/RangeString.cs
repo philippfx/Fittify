@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -7,15 +8,15 @@ namespace Fittify.Common.Helpers
 {
     public static class RangeString
     {
-        public static bool ValidateInputString(string str)
-        {
-            if (Regex.IsMatch(str, FittifyRegularExpressions.RangeOfIntIds))
-            {
-                return false;
-            }
+        ////public static bool ValidateInputString(string str)
+        ////{
+        ////    if (Regex.IsMatch(str, FittifyRegularExpressions.RangeOfIntIds))
+        ////    {
+        ////        return false;
+        ////    }
 
-            return true;
-        }
+        ////    return true;
+        ////}
 
         /// <summary>
         /// Converts a valid concatenated string of ints to List of ints
@@ -74,31 +75,31 @@ namespace Fittify.Common.Helpers
         public static string ToStringOfIds(this List<int> ints)
         {
             if (ints == null) return null;
-            ints.Remove(0); // Note: Remove this if you like to include the Value 0
+            ////ints.Remove(0); // Note: Remove this if you like to include the Value 0
             if (ints.Count < 1) return "";
             ints.Sort();
             var lng = ints.Count;
             if (lng == 1)
                 return ints[0].ToString();
 
-            var fromnums = new List<int>();
-            var tonums = new List<int>();
+            var fromNumbers = new List<int>();
+            var toNumbers = new List<int>();
             for (var i = 0; i < lng - 1; i++)
             {
                 if (i == 0)
-                    fromnums.Add(ints[0]);
+                    fromNumbers.Add(ints[0]);
                 if (ints[i + 1] > ints[i] + 1)
                 {
-                    tonums.Add(ints[i]);
-                    fromnums.Add(ints[i + 1]);
+                    toNumbers.Add(ints[i]);
+                    fromNumbers.Add(ints[i + 1]);
                 }
             }
-            tonums.Add(ints[lng - 1]);
+            toNumbers.Add(ints[lng - 1]);
 
 
-            string[] ranges = Enumerable.Range(0, tonums.Count).Select(
-                i => fromnums[i].ToString() +
-                     (tonums[i] == fromnums[i] ? "" : "-" + tonums[i].ToString())
+            string[] ranges = Enumerable.Range(0, toNumbers.Count).Select(
+                i => fromNumbers[i].ToString() +
+                     (toNumbers[i] == fromNumbers[i] ? "" : "-" + toNumbers[i].ToString())
             ).ToArray();
 
             if (ranges.Length == 1)

@@ -10,30 +10,31 @@ namespace Fittify.Api.Test.TestHelpers
 {
     public class AppConfigurationMock : IDisposable
     {
-        private string FilePath { get; set; }
+        private string FullFilePath { get; set; }
         public IConfiguration Instance { get; set; }
         public AppConfigurationMock(string appSettingsJsonString)
         {
-            FilePath = Path.GetDirectoryName(typeof(CategoryApiControllerShould).GetTypeInfo().Assembly.Location) + "\\appsettings_" + Guid.NewGuid() + ".json";
-            if (File.Exists(FilePath))
+            var appSettingsFileName = "appsettings_" + Guid.NewGuid() + ".json";
+            FullFilePath = Path.GetDirectoryName(typeof(CategoryApiControllerShould).GetTypeInfo().Assembly.Location) + "\\" + appSettingsFileName;
+            if (File.Exists(FullFilePath))
             {
-                File.Delete(FilePath);
+                File.Delete(FullFilePath);
             }
 
-            File.Create(Path.Combine(FilePath)).Close();
-            File.WriteAllText(FilePath, appSettingsJsonString);
+            File.Create(Path.Combine(FullFilePath)).Close();
+            File.WriteAllText(FullFilePath, appSettingsJsonString);
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Path.GetDirectoryName(typeof(CategoryApiControllerShould).GetTypeInfo().Assembly.Location)) // The only way I found to get directory path of unit test project / bin /debug
-                .AddJsonFile("appsettings.json"); // Includes appsettings.json configuartion file
+                .AddJsonFile(appSettingsFileName); // Includes appsettings.json configuartion file
             Instance = builder.Build();
         }
 
         public void Dispose()
         {
-            if (File.Exists(FilePath))
+            if (File.Exists(FullFilePath))
             {
-                File.Delete(FilePath);
+                File.Delete(FullFilePath);
             }
         }
 

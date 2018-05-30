@@ -12,7 +12,7 @@ namespace Fittify.Api.Helpers.CustomAttributes
         public RequestHeaderMatchesApiVersionAttribute(string requestHeaderToMatch,
             string[] versions)
         {
-            _requestHeaderToMatch = requestHeaderToMatch;
+            _requestHeaderToMatch = ConstantHttpHeaderNames.ApiVersion;
             _versions = versions;
         }
 
