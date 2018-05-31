@@ -48,7 +48,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet("{id}", Name = "GetExerciseHistoryById")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         [AuthorizeOwnerIntId(typeof(ExerciseHistoryRepository))]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
@@ -64,7 +64,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet(Name = "GetExerciseHistoryCollection")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> GetCollection(ExerciseHistoryOfmResourceParameters resourceParameters)
         {
             var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
@@ -91,7 +91,7 @@ namespace Fittify.Api.Controllers.Sport
         }
         
         [HttpPost(Name = "CreateExerciseHistory")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> Post([FromBody] ExerciseHistoryOfmForPost ofmForPost)
         {
             var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
@@ -112,7 +112,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpDelete("{id}", Name = "DeleteExerciseHistory")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         [AuthorizeOwnerIntId(typeof(ExerciseHistoryRepository))]
         public async Task<IActionResult> Delete(int id)
         {
@@ -141,7 +141,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpPatch("{id}", Name = "PartiallyUpdateExerciseHistory")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         [AuthorizeOwnerIntId(typeof(ExerciseHistoryRepository))]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<ExerciseHistoryOfmForPatch> jsonPatchDocument)
         {

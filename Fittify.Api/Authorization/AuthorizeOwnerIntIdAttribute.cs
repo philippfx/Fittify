@@ -12,20 +12,20 @@ namespace Fittify.Api.Authorization
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public sealed class AuthorizeOwnerIntIdAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
-        private object _entityRepositoryObject;
+        private object _ofmRepositoryObject;
         private IAsyncOwnerIntId _entityRepository;
-        private readonly Type _TCrudRepository;
+        private readonly Type _TOfmRepository;
 
-        public AuthorizeOwnerIntIdAttribute(Type TCrudRepository)
+        public AuthorizeOwnerIntIdAttribute(Type ofmRepository)
         {
-            _TCrudRepository = TCrudRepository;
+            _TOfmRepository = ofmRepository;
         }
 
         public async void OnAuthorization(AuthorizationFilterContext context)
         {
-            var fittifyContext = context.HttpContext.RequestServices.GetService<FittifyContext>();
-            _entityRepositoryObject = Activator.CreateInstance(_TCrudRepository, fittifyContext);
-            _entityRepository = _entityRepositoryObject as IAsyncOwnerIntId;
+            var fittifyContext = context.HttpContext.RequestServices.GetService(typeof(FittifyContext));
+            _ofmRepositoryObject = Activator.CreateInstance(_TOfmRepository, fittifyContext);
+            _entityRepository = _ofmRepositoryObject as IAsyncOwnerIntId;
 
             var user = context.HttpContext.User;
 
@@ -34,7 +34,7 @@ namespace Fittify.Api.Authorization
                 // it isn't needed to set unauthorized result 
                 // as the base class already requires the user to be authenticated
                 // this also makes redirect to a login page work properly
-                // context.Result = new UnauthorizedResult();
+                context.Result = new UnauthorizedResult(); // I do it anyway
                 return;
             }
 

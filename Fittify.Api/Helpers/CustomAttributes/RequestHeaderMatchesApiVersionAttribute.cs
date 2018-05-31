@@ -9,8 +9,7 @@ namespace Fittify.Api.Helpers.CustomAttributes
         private readonly string[] _versions;
         private readonly string _requestHeaderToMatch;
 
-        public RequestHeaderMatchesApiVersionAttribute(string requestHeaderToMatch,
-            string[] versions)
+        public RequestHeaderMatchesApiVersionAttribute(string[] versions)
         {
             _requestHeaderToMatch = ConstantHttpHeaderNames.ApiVersion;
             _versions = versions;

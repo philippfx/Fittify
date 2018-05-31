@@ -48,7 +48,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet("{id}", Name = "GetCardioSetById")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         [AuthorizeOwnerIntId(typeof(CardioSetRepository))]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
@@ -64,7 +64,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet(Name = "GetCardioSetCollection")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> GetCollection(CardioSetOfmResourceParameters ofmResourceParameters)
         {
             var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
@@ -95,7 +95,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpPost(Name = "CreateCardioSet")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> Post([FromBody] CardioSetOfmForPost ofmForPost)
         {
             var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
@@ -116,7 +116,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpDelete("{id}", Name = "DeleteCardioSet")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         [AuthorizeOwnerIntId(typeof(CardioSetRepository))]
         public async Task<IActionResult> Delete(int id)
         {
@@ -145,7 +145,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpPatch("{id}", Name = "PartiallyUpdateCardioSet")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         [AuthorizeOwnerIntId(typeof(CardioSetRepository))]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<CardioSetOfmForPatch> jsonPatchDocument)
         {

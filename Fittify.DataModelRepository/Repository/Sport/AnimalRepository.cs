@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Get;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository.Repository.Sport
 {
+    [ExcludeFromCodeCoverage] // Test for generic controller
     public class AnimalRepository : AsyncCrudBase<Animal, int, AnimalResourceParameters>, IAsyncOwnerIntId
     {
         public AnimalRepository(FittifyContext fittifyContext) : base(fittifyContext)

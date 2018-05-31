@@ -39,6 +39,11 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
             AsyncGetOfmGuardClause = new AsyncGetOfmGuardClauses<TOfmForGet, TId>(TypeHelperService);
         }
 
+        public Task<bool> IsEntityOwner(TId id, Guid ownerGuid)
+        {
+            return Repo.IsEntityOwner(id, ownerGuid);
+        }
+
         public virtual async Task<OfmForGetQueryResult<TOfmForGet>> GetById(TId id, string fields)
         {
             var ofmForGetResult = new OfmForGetQueryResult<TOfmForGet>();

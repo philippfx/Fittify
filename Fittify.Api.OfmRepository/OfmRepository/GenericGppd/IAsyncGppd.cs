@@ -15,6 +15,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
         where TOfmResourceParameters : class, IResourceParameters
 
     {
+        Task<bool> IsEntityOwner(TId id, Guid ownerGuid);
         Task<OfmForGetQueryResult<TOfmForGet>> GetById(TId id, string fields);
         Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TOfmResourceParameters ofmResourceParameters, Guid ownerGuid);
         Task<TOfmForGet> Post(TOfmForPost entity, Guid ownerGuid);

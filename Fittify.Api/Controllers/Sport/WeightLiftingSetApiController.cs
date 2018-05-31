@@ -48,7 +48,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet("{id}", Name = "GetWeightLiftingSetById")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         [AuthorizeOwnerIntId(typeof(WeightLiftingSetRepository))]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
@@ -64,7 +64,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet(Name = "GetWeightLiftingSetCollection")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> GetCollection(WeightLiftingSetOfmResourceParameters resourceParameters)
         {
             var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
@@ -91,7 +91,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpPost(Name = "CreateWeightLiftingSet")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> Post([FromBody] WeightLiftingSetOfmForPost ofmForPost)
         {
             var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
@@ -112,7 +112,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpDelete("{id}", Name = "DeleteWeightLiftingSet")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         [AuthorizeOwnerIntId(typeof(WeightLiftingSetRepository))]
         public async Task<IActionResult> Delete(int id)
         {
@@ -141,7 +141,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpPatch("{id}", Name = "PartiallyUpdateWeightLiftingSet")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         [AuthorizeOwnerIntId(typeof(WeightLiftingSetRepository))]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<WeightLiftingSetOfmForPatch> jsonPatchDocument)
         {

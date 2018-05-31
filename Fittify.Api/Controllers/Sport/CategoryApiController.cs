@@ -45,7 +45,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet("{id}", Name = "GetCategoryById")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
             var ofmForGetQueryResult = await _asyncGppd.GetById(id, fields);
@@ -61,7 +61,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpGet(Name = "GetCategoryCollection")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> GetCollection(CategoryOfmResourceParameters resourceParameters)
         {
             var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
@@ -95,7 +95,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpPost(Name = "CreateCategory")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> Post([FromBody] CategoryOfmForPost ofmForPost)
         {
             var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
@@ -118,7 +118,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpDelete("{id}", Name = "DeleteCategory")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> Delete(int id)
         {
             var ofmDeletionQueryResult = await _asyncGppd.Delete(id);
@@ -129,7 +129,7 @@ namespace Fittify.Api.Controllers.Sport
         }
 
         [HttpPatch("{id}", Name = "PartiallyUpdateCategory")]
-        [RequestHeaderMatchesApiVersion(ConstantHttpHeaderNames.ApiVersion, new[] { "1" })]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<CategoryOfmForPatch> jsonPatchDocument)
         {
             //// Todo: Prohibit trying to patch id!

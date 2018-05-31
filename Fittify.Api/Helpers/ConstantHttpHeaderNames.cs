@@ -1,4 +1,9 @@
-﻿namespace Fittify.Api.Helpers
+﻿using System.Reflection;
+using System.Runtime.CompilerServices;
+
+
+[assembly: InternalsVisibleTo("Fittify.Api.Test")]
+namespace Fittify.Api.Helpers
 {
     public static class ConstantHttpHeaderNames
     {
