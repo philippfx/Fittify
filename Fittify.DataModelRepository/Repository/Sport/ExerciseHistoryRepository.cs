@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Fittify.DataModelRepository.Repository.Sport
 {
     public class ExerciseHistoryRepository : AsyncCrudBase<ExerciseHistory, int, ExerciseHistoryResourceParameters>,
-        IAsyncOwnerIntId
+        IAsyncEntityOwnerIntId
     {
         public ExerciseHistoryRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {

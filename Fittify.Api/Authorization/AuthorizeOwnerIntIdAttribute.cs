@@ -1,5 +1,13 @@
 ﻿using System;
 using System.Linq;
+using Fittify.Api.OfmRepository.OfmRepository;
+using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
+using Fittify.Api.OfmRepository.Services;
+using Fittify.Api.OfmRepository.Services.OfmDataRepositoryMapping;
+using Fittify.Api.OuterFacingModels.Sport.Get;
+using Fittify.Api.OuterFacingModels.Sport.Patch;
+using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.DataModelRepository;
 using Fittify.DataModelRepository.Repository;
 using Microsoft.AspNetCore.Authorization;
@@ -13,19 +21,38 @@ namespace Fittify.Api.Authorization
     public sealed class AuthorizeOwnerIntIdAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
         private object _ofmRepositoryObject;
-        private IAsyncOwnerIntId _entityRepository;
-        private readonly Type _TOfmRepository;
+        private IAsyncOfmOwnerIntId _ofmRepository;
+        private readonly Type _ofmRepositoryType;
 
-        public AuthorizeOwnerIntIdAttribute(Type ofmRepository)
+        public AuthorizeOwnerIntIdAttribute(Type ofmRepositoryType)
         {
-            _TOfmRepository = ofmRepository;
+            _ofmRepositoryType = ofmRepositoryType;
         }
 
         public async void OnAuthorization(AuthorizationFilterContext context)
         {
-            var fittifyContext = context.HttpContext.RequestServices.GetService(typeof(FittifyContext));
-            _ofmRepositoryObject = Activator.CreateInstance(_TOfmRepository, fittifyContext);
-            _entityRepository = _ofmRepositoryObject as IAsyncOwnerIntId;
+            //var test = context.HttpContext.RequestServices.GetServices()
+
+            //var services = context.HttpContext.RequestServices.GetServices(_ofmRepositoryType);
+            //var moreServices = context.HttpContext.RequestServices.GetRequiredService(_ofmRepositoryType);
+            var evenMoreServices = context.HttpContext.RequestServices.GetService(_ofmRepositoryType);
+
+
+            //var servicesby = context.HttpContext.RequestServices.GetServices(typeof(IAsyncOfmRepository<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutOfmResourceParameters>));
+            //var moreServicesby = context.HttpContext.RequestServices.GetRequiredService(typeof(IAsyncOfmRepository<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutOfmResourceParameters>));
+            //var evenMoreServicesby = context.HttpContext.RequestServices.GetService(typeof(IAsyncOfmRepository<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutOfmResourceParameters>));
+
+            //var fittifyContext = context.HttpContext.RequestServices.GetService(typeof(FittifyContext));
+            //var ofmRepositoryService = context.HttpContext.RequestServices.GetService(_ofmRepositoryType);
+            //var propertyMappingService = context.HttpContext.RequestServices.GetService(typeof(IPropertyMappingService));
+            //var typeHelperService = context.HttpContext.RequestServices.GetService(typeof(ITypeHelperService));
+            //var ofmDataRepositoryMappingService = context.HttpContext.RequestServices.GetService(typeof(IOfmDataRepositoryMappingService)) as IOfmDataRepositoryMappingService;
+            //var dataRepositoryType = ofmDataRepositoryMappingService.GetDestination(_ofmRepositoryType);
+            //var dataRepository = 
+
+
+            //_ofmRepositoryObject = Activator.CreateInstance(_ofmRepositoryType, new object[] { ofmRepositoryService, null, null });
+            _ofmRepository = evenMoreServices as IAsyncOfmOwnerIntId;
 
             var user = context.HttpContext.User;
 
@@ -54,7 +81,7 @@ namespace Fittify.Api.Authorization
                 return;
             }
             
-            if (_entityRepository != null && await _entityRepository?.IsEntityOwner(entityId, ownerGuid) == false)
+            if (_ofmRepository != null && await _ofmRepository?.IsEntityOwner(entityId, ownerGuid) == false)
             {
                 context.Result = new UnauthorizedResult();
             }

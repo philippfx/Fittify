@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository.Repository.Sport
 {
-    public class CardioSetRepository : AsyncCrudBase<CardioSet, int, CardioSetResourceParameters>, IAsyncOwnerIntId
+    public class CardioSetRepository : AsyncCrudBase<CardioSet, int, CardioSetResourceParameters>, IAsyncEntityOwnerIntId
     {
         public CardioSetRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {

@@ -1,5 +1,6 @@
 ﻿using Fittify.DataModelRepository.Repository;
 using Fittify.DataModelRepository.Repository.Sport;
+using Fittify.DataModels.Models.Sport;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Fittify.Api.Middleware.Extensions.ConfigureServices

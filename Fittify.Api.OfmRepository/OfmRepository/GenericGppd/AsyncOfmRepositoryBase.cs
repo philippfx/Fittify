@@ -14,8 +14,8 @@ using ITypeHelperService = Fittify.Api.OfmRepository.Services.ITypeHelperService
 
 namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
 {
-    public abstract class AsyncGppdBase<TEntity, TOfmForGet, TOfmForPost, TOfmForPatch, TId, TOfmResourceParameters, TEntityResourceParameters> 
-        : IAsyncGppd<TOfmForGet, TOfmForPost, TOfmForPatch, TId, TOfmResourceParameters>
+    public abstract class AsyncOfmRepositoryBase<TEntity, TOfmForGet, TOfmForPost, TOfmForPatch, TId, TOfmResourceParameters, TEntityResourceParameters> 
+        : IAsyncOfmRepository<TOfmForGet, TOfmForPost, TOfmForPatch, TId, TOfmResourceParameters>
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TOfmForGet : class, IEntityUniqueIdentifier<TId>
         where TOfmForPost : class
@@ -29,7 +29,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
         protected readonly ITypeHelperService TypeHelperService;
         protected readonly AsyncGetOfmGuardClauses<TOfmForGet, TId> AsyncGetOfmGuardClause;
 
-        public AsyncGppdBase(IAsyncCrud<TEntity, TId, TEntityResourceParameters> repository,
+        public AsyncOfmRepositoryBase(IAsyncCrud<TEntity, TId, TEntityResourceParameters> repository,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService)
         {

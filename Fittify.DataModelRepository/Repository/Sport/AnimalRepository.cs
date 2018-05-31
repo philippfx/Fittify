@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Fittify.DataModelRepository.Repository.Sport
 {
     [ExcludeFromCodeCoverage] // Test for generic controller
-    public class AnimalRepository : AsyncCrudBase<Animal, int, AnimalResourceParameters>, IAsyncOwnerIntId
+    public class AnimalRepository : AsyncCrudBase<Animal, int, AnimalResourceParameters>, IAsyncEntityOwnerIntId
     {
         public AnimalRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {

@@ -81,6 +81,23 @@ namespace Fittify.Api.Test
         }
 
         [Test]
+        public async Task ReturnUnauthorizedResult_ForAuthenticatedUser_WhenUserIsNotEntityOwner()
+        {
+            using (var server = GetTestServerInstance())
+            {
+                var client = server.CreateClient();
+                client.DefaultRequestHeaders.Add("X-Integration-Testing", "abcde-12345");
+                client.DefaultRequestHeaders.Add("my-name", "test");
+                client.DefaultRequestHeaders.Add("my-id", "12345");
+                client.DefaultRequestHeaders.Add("sub", "55555555-5555-5555-5555-55555aaa5555");
+                var result = await client.GetAsync("/api/workouts/1");
+                var responseStatusCode = result.StatusCode;
+
+                Assert.AreEqual((int)responseStatusCode, 401);
+            }
+        }
+
+        [Test]
         public async Task ReturnFail_ForWrongApiVersion()
         {
             using (var server = GetTestServerInstance())

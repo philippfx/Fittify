@@ -7,7 +7,7 @@ using Fittify.Api.OuterFacingModels.Sport.Post;
 
 namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport
 {
-    public interface IAsyncGppdForWorkoutHistory : IAsyncGppd<WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int, WorkoutHistoryOfmResourceParameters>
+    public interface IAsyncOfmRepositoryForWorkoutHistory : IAsyncOfmRepository<WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmForPatch, int, WorkoutHistoryOfmResourceParameters>
     {
         Task<WorkoutHistoryOfmForGet> PostIncludingExerciseHistories(WorkoutHistoryOfmForPost ofmForPost, Guid onwerGuid);
     }

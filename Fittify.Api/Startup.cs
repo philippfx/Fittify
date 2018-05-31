@@ -91,9 +91,9 @@ namespace Fittify.Api
                 {
                     options.SerializerSettings.ContractResolver =
                         new CamelCasePropertyNamesContractResolver();
-                })
-                .ConfigureApplicationPartManager(p => // supports generic controllers 
-                    p.FeatureProviders.Add(new GenericControllerFeatureProvider())); ;
+                });
+                ////.ConfigureApplicationPartManager(p => // supports generic controllers 
+                ////    p.FeatureProviders.Add(new GenericControllerFeatureProvider())); 
 
 
 
@@ -215,8 +215,8 @@ namespace Fittify.Api
 
             
             services.AddFittifyDataRepositoryServices();
-            services.AddFittifyGppdRepositoryServices();
-            services.AddScoped<IAsyncGppdForWorkoutHistory, WorkoutHistoryOfmRepository>();
+            services.AddFittifyOfmRepositoryServices();
+            services.AddScoped<IAsyncOfmRepositoryForWorkoutHistory, WorkoutHistoryOfmRepository>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

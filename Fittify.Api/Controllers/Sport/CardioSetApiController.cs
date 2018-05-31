@@ -27,7 +27,7 @@ namespace Fittify.Api.Controllers.Sport
     public class CardioSetApiController :
         Controller
     {
-        private readonly IAsyncGppd<CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int, CardioSetOfmResourceParameters> _asyncGppd;
+        private readonly IAsyncOfmRepository<CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int, CardioSetOfmResourceParameters> _asyncOfmRepository;
         private readonly string _shortCamelCasedControllerName;
         private readonly IUrlHelper _urlHelper;
         private readonly ControllerGuardClauses<CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int> _controllerGuardClause;
@@ -37,9 +37,9 @@ namespace Fittify.Api.Controllers.Sport
         public CardioSetApiController(
             IUrlHelper urlHelper,
             IHttpContextAccessor httpContextAccesor,
-            IAsyncGppd<CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int, CardioSetOfmResourceParameters> asyncGppd)
+            IAsyncOfmRepository<CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int, CardioSetOfmResourceParameters> asyncOfmRepository)
         {
-            _asyncGppd = asyncGppd;
+            _asyncOfmRepository = asyncOfmRepository;
             _shortCamelCasedControllerName = nameof(CardioSetApiController).ToShortCamelCasedControllerName();
             _urlHelper = urlHelper;
             _controllerGuardClause = new ControllerGuardClauses<CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int>(this);
@@ -52,7 +52,7 @@ namespace Fittify.Api.Controllers.Sport
         [AuthorizeOwnerIntId(typeof(CardioSetRepository))]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
-            var ofmForGetQueryResult = await _asyncGppd.GetById(id, fields);
+            var ofmForGetQueryResult = await _asyncOfmRepository.GetById(id, fields);
             if (!_controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
             {
                 return objectResult;
@@ -71,7 +71,7 @@ namespace Fittify.Api.Controllers.Sport
             if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();
             var ownerGuid = new Guid(stringOwnerGuid);
 
-            var ofmForGetCollectionQueryResult = await _asyncGppd.GetCollection(ofmResourceParameters, ownerGuid);
+            var ofmForGetCollectionQueryResult = await _asyncOfmRepository.GetCollection(ofmResourceParameters, ownerGuid);
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
             if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasForExpandableOfmForGets<CardioSetOfmForGet, int>(_urlHelper, nameof(CardioSetApiController), ofmResourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
@@ -109,7 +109,7 @@ namespace Fittify.Api.Controllers.Sport
                 return new UnprocessableEntityObjectResult(ModelState);
             }
 
-            var ofmForGet = await _asyncGppd.Post(ofmForPost, ownerGuid);
+            var ofmForGet = await _asyncOfmRepository.Post(ofmForPost, ownerGuid);
 
             var result = CreatedAtRoute(routeName: "GetCardioSetById", routeValues: new { id = ofmForGet.Id }, value: ofmForGet);
             return result;
@@ -120,7 +120,7 @@ namespace Fittify.Api.Controllers.Sport
         [AuthorizeOwnerIntId(typeof(CardioSetRepository))]
         public async Task<IActionResult> Delete(int id)
         {
-            var ofmDeletionQueryResult = await _asyncGppd.Delete(id);
+            var ofmDeletionQueryResult = await _asyncOfmRepository.Delete(id);
             if (ofmDeletionQueryResult.IsDeleted == false)
             {
                 if (ofmDeletionQueryResult.ErrorMessages.Count != 0)
@@ -158,7 +158,7 @@ namespace Fittify.Api.Controllers.Sport
             try
             {
                 // Get entity with original values from context
-                var ofmForPatch = await _asyncGppd.GetByIdOfmForPatch(id);
+                var ofmForPatch = await _asyncOfmRepository.GetByIdOfmForPatch(id);
                 if (ofmForPatch == null)
                 {
                     ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
@@ -176,7 +176,7 @@ namespace Fittify.Api.Controllers.Sport
                 }
 
                 // returning the patched ofm as response
-                var ofmForGet = _asyncGppd.UpdatePartially(ofmForPatch).Result;
+                var ofmForGet = _asyncOfmRepository.UpdatePartially(ofmForPatch).Result;
                 return new JsonResult(ofmForGet);
 
             }

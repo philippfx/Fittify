@@ -7,7 +7,7 @@ using Fittify.Common.ResourceParameters;
 
 namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
 {
-    public interface IAsyncGppd<TOfmForGet, in TOfmForPost, TOfmForPatch, TId, in TOfmResourceParameters>
+    public interface IAsyncOfmRepository<TOfmForGet, in TOfmForPost, TOfmForPatch, TId, in TOfmResourceParameters>
         where TOfmForGet : class, IEntityUniqueIdentifier<TId>
         where TOfmForPost : class
         where TOfmForPatch : class

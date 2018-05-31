@@ -24,7 +24,7 @@ namespace Fittify.Api.Controllers.Sport
     public class CategoryApiController :
         Controller
     {
-        private readonly IAsyncGppd<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmResourceParameters> _asyncGppd;
+        private readonly IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmResourceParameters> _asyncOfmRepository;
         private readonly string _shortCamelCasedControllerName;
         private readonly IUrlHelper _urlHelper;
         private readonly ControllerGuardClauses<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int> _controllerGuardClause;
@@ -32,23 +32,26 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IncomingHeaders _incomingHeaders;
 
         public CategoryApiController(
-            IAsyncGppd<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmResourceParameters> asyncGppd,
+            IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmResourceParameters> asyncOfmRepository,
             IUrlHelper urlHelper,
             IHttpContextAccessor httpContextAccesor)
         {
-            _asyncGppd = asyncGppd;
+            _asyncOfmRepository = asyncOfmRepository;
             _shortCamelCasedControllerName = nameof(CategoryApiController).ToShortCamelCasedControllerName();
             _urlHelper = urlHelper;
             _controllerGuardClause = new ControllerGuardClauses<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(this);
             _hateoasLinkFactory = new HateoasLinkFactory<int>(_urlHelper, nameof(CategoryApiController));
             _incomingHeaders = Mapper.Map<IncomingHeaders>(httpContextAccesor.HttpContext.Items[nameof(IncomingRawHeaders)] as IncomingRawHeaders);
+            ////var workoutOfmRepo = httpContextAccesor.HttpContext.RequestServices.GetService(typeof(IAsyncOfmRepository<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutOfmResourceParameters>)) as IAsyncOfmRepository<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int,
+            ////    WorkoutOfmResourceParameters>;
+
         }
 
         [HttpGet("{id}", Name = "GetCategoryById")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
         {
-            var ofmForGetQueryResult = await _asyncGppd.GetById(id, fields);
+            var ofmForGetQueryResult = await _asyncOfmRepository.GetById(id, fields);
             if (!_controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
             {
                 return objectResult;
@@ -68,9 +71,9 @@ namespace Fittify.Api.Controllers.Sport
             if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();
             var ownerGuid = new Guid(stringGuid);
 
-            var ofmForGetCollectionQueryResult = await _asyncGppd.GetCollection(resourceParameters, ownerGuid);
+            var ofmForGetCollectionQueryResult = await _asyncOfmRepository.GetCollection(resourceParameters, ownerGuid);
 
-            ////var ofmForGetCollectionQueryResult = await _asyncGppd.GetCollection(resourceParameters, Guid.NewGuid());
+            ////var ofmForGetCollectionQueryResult = await _asyncOfmRepository.GetCollection(resourceParameters, Guid.NewGuid());
 
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
@@ -111,7 +114,7 @@ namespace Fittify.Api.Controllers.Sport
             //    return new UnprocessableEntityObjectResult(ModelState);
             //}
 
-            var ofmForGet = await _asyncGppd.Post(ofmForPost, ownerGuid);
+            var ofmForGet = await _asyncOfmRepository.Post(ofmForPost, ownerGuid);
 
             var result = CreatedAtRoute(routeName: "GetCategoryById", routeValues: new { id = ofmForGet.Id }, value: ofmForGet);
             return result;
@@ -121,7 +124,7 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> Delete(int id)
         {
-            var ofmDeletionQueryResult = await _asyncGppd.Delete(id);
+            var ofmDeletionQueryResult = await _asyncOfmRepository.Delete(id);
 
             if (!_controllerGuardClause.ValidateDelete(ofmDeletionQueryResult, id, out ObjectResult objectResult)) return objectResult;
 
@@ -140,7 +143,7 @@ namespace Fittify.Api.Controllers.Sport
             }
             
             // Get entity with original values from context
-            var ofmForPatch = await _asyncGppd.GetByIdOfmForPatch(id);
+            var ofmForPatch = await _asyncOfmRepository.GetByIdOfmForPatch(id);
             if (ofmForPatch == null)
             {
                 ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
@@ -158,7 +161,7 @@ namespace Fittify.Api.Controllers.Sport
             }
 
             // returning the patched ofm as response
-            var ofmForGet = await _asyncGppd.UpdatePartially(ofmForPatch);
+            var ofmForGet = await _asyncOfmRepository.UpdatePartially(ofmForPatch);
             return Ok(ofmForGet);
         }
     }

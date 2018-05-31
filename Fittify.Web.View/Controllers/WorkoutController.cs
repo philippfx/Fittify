@@ -24,7 +24,7 @@ namespace Fittify.Web.View.Controllers
     [Route("workouts")]
     public class WorkoutController : Controller
     {
-        //private IAsyncGppd<int, WorkoutOfmForPost, WorkoutViewModel> _asyncGppd;
+        //private IAsyncOfmRepository<int, WorkoutOfmForPost, WorkoutViewModel> _asyncOfmRepository;
         private readonly IConfiguration _appConfiguration;
         private readonly WorkoutViewModelRepository _workoutViewModelRepo;
         private IHttpContextAccessor _httpContextAccessor;
