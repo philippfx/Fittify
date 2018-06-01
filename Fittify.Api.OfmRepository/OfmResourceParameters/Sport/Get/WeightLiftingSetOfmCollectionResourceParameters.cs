@@ -1,6 +1,6 @@
 ﻿namespace Fittify.Api.OfmRepository.OfmResourceParameters.Sport
 {
-    public class WeightLiftingSetOfmResourceParameters : OfmResourceParametersBase
+    public class WeightLiftingSetOfmCollectionResourceParameters : OfmResourceParametersBase
     {
         public int? ExerciseHistoryId { get; set; }
     }

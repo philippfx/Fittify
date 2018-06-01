@@ -52,6 +52,7 @@ namespace Fittify.Api.Test
             }
         }
 
+        // Todo: Refactor TestServerStartup
         [Test]
         public async Task ReturnWorkout_ForAuthenticatedUser_WhenGettingWorkoutById()
         {
@@ -124,5 +125,387 @@ namespace Fittify.Api.Test
                 Assert.AreEqual(actualObjectResult, expectedObjectResult);
             }
         }
+        [Test]
+        public async Task ReturnFullWorkoutHistoryRepository_ForFullQuery()
+        {
+            using (var server = GetTestServerInstance())
+            {
+                var client = server.CreateClient();
+                client.DefaultRequestHeaders.Add("X-Integration-Testing", "abcde-12345");
+                client.DefaultRequestHeaders.Add("sub", "d860efca-22d9-47fd-8249-791ba61b07c7");
+                client.DefaultRequestHeaders.Add("ApiVersion", "1");
+                var result = await client.GetAsync("/api/workouthistories/5?IncludeExerciseHistories=1&IncludeWeightLiftingSets=1&IncludePreviousExerciseHistories=1&IncludeCardioSets=1");
+                var responseString = await result.Content.ReadAsStringAsync();
+
+                var actualObjectResult = responseString.MinifyJson().PrettifyJson();
+                var expectedObjectResult =
+                    @"
+                       	{
+						  ""id"": 5,
+						  ""workout"": {
+						    ""id"": 2,
+						    ""name"": ""WednesdayBackSeed""
+						  },
+						  ""rangeOfExerciseHistoryIds"": ""21-25"",
+						  ""exerciseHistories"": [
+						    {
+						      ""id"": 21,
+						      ""previousExerciseHistory"": {
+						        ""id"": 6,
+						        ""previousExerciseHistory"": null,
+						        ""exercise"": null,
+						        ""rangeOfWeightLiftingSetIds"": ""52-53,55"",
+						        ""weightLiftingSets"": [
+						          {
+						            ""id"": 52,
+						            ""weightFull"": 30,
+						            ""repetitionsFull"": 12,
+						            ""weightReduced"": 20,
+						            ""repetitionsReduced"": 8,
+						            ""weightBurn"": 10,
+						            ""exerciseHistoryId"": 6
+						          },
+						          {
+						            ""id"": 53,
+						            ""weightFull"": 30,
+						            ""repetitionsFull"": 12,
+						            ""weightReduced"": 20,
+						            ""repetitionsReduced"": 8,
+						            ""weightBurn"": 10,
+						            ""exerciseHistoryId"": 6
+						          },
+						          {
+						            ""id"": 55,
+						            ""weightFull"": 30,
+						            ""repetitionsFull"": 12,
+						            ""weightReduced"": 20,
+						            ""repetitionsReduced"": 8,
+						            ""weightBurn"": 10,
+						            ""exerciseHistoryId"": 6
+						          }
+						        ],
+						        ""rangeOfCardioSetIds"": """",
+						        ""cardioSets"": [],
+						        ""workoutHistoryId"": 2,
+						        ""executedOnDateTime"": ""2017-05-03T13:04:12"",
+						        ""previousExerciseHistoryId"": null
+						      },
+						      ""exercise"": {
+						        ""id"": 4,
+						        ""name"": ""DeadLiftSeed"",
+						        ""exerciseType"": ""WeightLifting""
+						      },
+						      ""rangeOfWeightLiftingSetIds"": ""68-70"",
+						      ""weightLiftingSets"": [
+						        {
+						          ""id"": 68,
+						          ""weightFull"": 30,
+						          ""repetitionsFull"": 12,
+						          ""weightReduced"": 20,
+						          ""repetitionsReduced"": 8,
+						          ""weightBurn"": 10,
+						          ""exerciseHistoryId"": 21
+						        },
+						        {
+						          ""id"": 69,
+						          ""weightFull"": 30,
+						          ""repetitionsFull"": 12,
+						          ""weightReduced"": 20,
+						          ""repetitionsReduced"": 8,
+						          ""weightBurn"": 10,
+						          ""exerciseHistoryId"": 21
+						        },
+						        {
+						          ""id"": 70,
+						          ""weightFull"": 30,
+						          ""repetitionsFull"": 12,
+						          ""weightReduced"": 20,
+						          ""repetitionsReduced"": 8,
+						          ""weightBurn"": 10,
+						          ""exerciseHistoryId"": 21
+						        }
+						      ],
+						      ""rangeOfCardioSetIds"": """",
+						      ""cardioSets"": [],
+						      ""workoutHistoryId"": 5,
+						      ""executedOnDateTime"": ""2017-05-10T13:04:12"",
+						      ""previousExerciseHistoryId"": 6
+						    },
+						    {
+						      ""id"": 22,
+						      ""previousExerciseHistory"": {
+						        ""id"": 7,
+						        ""previousExerciseHistory"": null,
+						        ""exercise"": null,
+						        ""rangeOfWeightLiftingSetIds"": ""51"",
+						        ""weightLiftingSets"": [
+						          {
+						            ""id"": 51,
+						            ""weightFull"": 30,
+						            ""repetitionsFull"": 12,
+						            ""weightReduced"": 20,
+						            ""repetitionsReduced"": 8,
+						            ""weightBurn"": 10,
+						            ""exerciseHistoryId"": 7
+						          }
+						        ],
+						        ""rangeOfCardioSetIds"": """",
+						        ""cardioSets"": [],
+						        ""workoutHistoryId"": 2,
+						        ""executedOnDateTime"": ""2017-05-03T13:04:12"",
+						        ""previousExerciseHistoryId"": null
+						      },
+						      ""exercise"": {
+						        ""id"": 5,
+						        ""name"": ""SeatedPullDownSeed"",
+						        ""exerciseType"": ""WeightLifting""
+						      },
+						      ""rangeOfWeightLiftingSetIds"": ""45,65"",
+						      ""weightLiftingSets"": [
+						        {
+						          ""id"": 45,
+						          ""weightFull"": 30,
+						          ""repetitionsFull"": 12,
+						          ""weightReduced"": 20,
+						          ""repetitionsReduced"": 8,
+						          ""weightBurn"": 10,
+						          ""exerciseHistoryId"": 22
+						        },
+						        {
+						          ""id"": 65,
+						          ""weightFull"": 30,
+						          ""repetitionsFull"": 12,
+						          ""weightReduced"": 20,
+						          ""repetitionsReduced"": 8,
+						          ""weightBurn"": 10,
+						          ""exerciseHistoryId"": 22
+						        }
+						      ],
+						      ""rangeOfCardioSetIds"": """",
+						      ""cardioSets"": [],
+						      ""workoutHistoryId"": 5,
+						      ""executedOnDateTime"": ""2017-05-10T13:04:12"",
+						      ""previousExerciseHistoryId"": 7
+						    },
+						    {
+						      ""id"": 23,
+						      ""previousExerciseHistory"": {
+						        ""id"": 8,
+						        ""previousExerciseHistory"": null,
+						        ""exercise"": null,
+						        ""rangeOfWeightLiftingSetIds"": ""47-50"",
+						        ""weightLiftingSets"": [
+						          {
+						            ""id"": 47,
+						            ""weightFull"": 10,
+						            ""repetitionsFull"": 20,
+						            ""weightReduced"": 5,
+						            ""repetitionsReduced"": 20,
+						            ""weightBurn"": 0,
+						            ""exerciseHistoryId"": 8
+						          },
+						          {
+						            ""id"": 48,
+						            ""weightFull"": 10,
+						            ""repetitionsFull"": 20,
+						            ""weightReduced"": 5,
+						            ""repetitionsReduced"": 20,
+						            ""weightBurn"": 0,
+						            ""exerciseHistoryId"": 8
+						          },
+						          {
+						            ""id"": 49,
+						            ""weightFull"": 10,
+						            ""repetitionsFull"": 20,
+						            ""weightReduced"": 5,
+						            ""repetitionsReduced"": 20,
+						            ""weightBurn"": 0,
+						            ""exerciseHistoryId"": 8
+						          },
+						          {
+						            ""id"": 50,
+						            ""weightFull"": 10,
+						            ""repetitionsFull"": 20,
+						            ""weightReduced"": 5,
+						            ""repetitionsReduced"": 20,
+						            ""weightBurn"": 0,
+						            ""exerciseHistoryId"": 8
+						          }
+						        ],
+						        ""rangeOfCardioSetIds"": """",
+						        ""cardioSets"": [],
+						        ""workoutHistoryId"": 2,
+						        ""executedOnDateTime"": ""2017-05-03T13:04:12"",
+						        ""previousExerciseHistoryId"": null
+						      },
+						      ""exercise"": {
+						        ""id"": 6,
+						        ""name"": ""RowSeed"",
+						        ""exerciseType"": ""WeightLifting""
+						      },
+						      ""rangeOfWeightLiftingSetIds"": ""44"",
+						      ""weightLiftingSets"": [
+						        {
+						          ""id"": 44,
+						          ""weightFull"": 30,
+						          ""repetitionsFull"": 12,
+						          ""weightReduced"": 20,
+						          ""repetitionsReduced"": 8,
+						          ""weightBurn"": 10,
+						          ""exerciseHistoryId"": 23
+						        }
+						      ],
+						      ""rangeOfCardioSetIds"": """",
+						      ""cardioSets"": [],
+						      ""workoutHistoryId"": 5,
+						      ""executedOnDateTime"": ""2017-05-10T13:04:12"",
+						      ""previousExerciseHistoryId"": 8
+						    },
+						    {
+						      ""id"": 24,
+						      ""previousExerciseHistory"": {
+						        ""id"": 14,
+						        ""previousExerciseHistory"": null,
+						        ""exercise"": null,
+						        ""rangeOfWeightLiftingSetIds"": ""80-81"",
+						        ""weightLiftingSets"": [
+						          {
+						            ""id"": 80,
+						            ""weightFull"": 30,
+						            ""repetitionsFull"": 12,
+						            ""weightReduced"": 20,
+						            ""repetitionsReduced"": 8,
+						            ""weightBurn"": 10,
+						            ""exerciseHistoryId"": 14
+						          },
+						          {
+						            ""id"": 81,
+						            ""weightFull"": 30,
+						            ""repetitionsFull"": 12,
+						            ""weightReduced"": 20,
+						            ""repetitionsReduced"": 8,
+						            ""weightBurn"": 10,
+						            ""exerciseHistoryId"": 14
+						          }
+						        ],
+						        ""rangeOfCardioSetIds"": """",
+						        ""cardioSets"": [],
+						        ""workoutHistoryId"": 3,
+						        ""executedOnDateTime"": ""2017-05-05T13:04:12"",
+						        ""previousExerciseHistoryId"": null
+						      },
+						      ""exercise"": {
+						        ""id"": 10,
+						        ""name"": ""SitupsSeed"",
+						        ""exerciseType"": ""WeightLifting""
+						      },
+						      ""rangeOfWeightLiftingSetIds"": ""17-19,21"",
+						      ""weightLiftingSets"": [
+						        {
+						          ""id"": 17,
+						          ""weightFull"": 10,
+						          ""repetitionsFull"": 20,
+						          ""weightReduced"": 5,
+						          ""repetitionsReduced"": 20,
+						          ""weightBurn"": 0,
+						          ""exerciseHistoryId"": 24
+						        },
+						        {
+						          ""id"": 18,
+						          ""weightFull"": 10,
+						          ""repetitionsFull"": 20,
+						          ""weightReduced"": 5,
+						          ""repetitionsReduced"": 20,
+						          ""weightBurn"": 0,
+						          ""exerciseHistoryId"": 24
+						        },
+						        {
+						          ""id"": 19,
+						          ""weightFull"": 10,
+						          ""repetitionsFull"": 20,
+						          ""weightReduced"": 5,
+						          ""repetitionsReduced"": 20,
+						          ""weightBurn"": 0,
+						          ""exerciseHistoryId"": 24
+						        },
+						        {
+						          ""id"": 21,
+						          ""weightFull"": 10,
+						          ""repetitionsFull"": 20,
+						          ""weightReduced"": 5,
+						          ""repetitionsReduced"": 20,
+						          ""weightBurn"": 0,
+						          ""exerciseHistoryId"": 24
+						        }
+						      ],
+						      ""rangeOfCardioSetIds"": """",
+						      ""cardioSets"": [],
+						      ""workoutHistoryId"": 5,
+						      ""executedOnDateTime"": ""2017-05-10T13:04:12"",
+						      ""previousExerciseHistoryId"": 14
+						    },
+						    {
+						      ""id"": 25,
+						      ""previousExerciseHistory"": {
+						        ""id"": 14,
+						        ""previousExerciseHistory"": null,
+						        ""exercise"": null,
+						        ""rangeOfWeightLiftingSetIds"": ""80-81"",
+						        ""weightLiftingSets"": [
+						          {
+						            ""id"": 80,
+						            ""weightFull"": 30,
+						            ""repetitionsFull"": 12,
+						            ""weightReduced"": 20,
+						            ""repetitionsReduced"": 8,
+						            ""weightBurn"": 10,
+						            ""exerciseHistoryId"": 14
+						          },
+						          {
+						            ""id"": 81,
+						            ""weightFull"": 30,
+						            ""repetitionsFull"": 12,
+						            ""weightReduced"": 20,
+						            ""repetitionsReduced"": 8,
+						            ""weightBurn"": 10,
+						            ""exerciseHistoryId"": 14
+						          }
+						        ],
+						        ""rangeOfCardioSetIds"": """",
+						        ""cardioSets"": [],
+						        ""workoutHistoryId"": 3,
+						        ""executedOnDateTime"": ""2017-05-05T13:04:12"",
+						        ""previousExerciseHistoryId"": null
+						      },
+						      ""exercise"": {
+						        ""id"": 11,
+						        ""name"": ""SpinningBikeSeed"",
+						        ""exerciseType"": ""Cardio""
+						      },
+						      ""rangeOfWeightLiftingSetIds"": """",
+						      ""weightLiftingSets"": [],
+						      ""rangeOfCardioSetIds"": ""5"",
+						      ""cardioSets"": [
+						        {
+						          ""id"": 5,
+						          ""dateTimeStart"": ""2017-05-10T13:24:12"",
+						          ""dateTimeEnd"": ""2017-05-10T13:34:12"",
+						          ""exerciseHistoryId"": 25
+						        }
+						      ],
+						      ""workoutHistoryId"": 5,
+						      ""executedOnDateTime"": ""2017-05-10T13:04:12"",
+						      ""previousExerciseHistoryId"": 14
+						    }
+						  ],
+						  ""dateTimeStart"": ""2017-05-10T12:01:05"",
+						  ""dateTimeEnd"": ""2017-05-10T14:32:01""
+						}
+                    ".MinifyJson().PrettifyJson();
+
+                Assert.AreEqual(actualObjectResult, expectedObjectResult);
+            }
+        }
     }
 }
+        

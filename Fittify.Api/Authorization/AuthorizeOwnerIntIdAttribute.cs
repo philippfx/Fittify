@@ -4,7 +4,6 @@ using Fittify.Api.OfmRepository.OfmRepository;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OfmRepository.Services;
-using Fittify.Api.OfmRepository.Services.OfmDataRepositoryMapping;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -20,7 +19,6 @@ namespace Fittify.Api.Authorization
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public sealed class AuthorizeOwnerIntIdAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
-        private object _ofmRepositoryObject;
         private IAsyncOfmOwnerIntId _ofmRepository;
         private readonly Type _ofmRepositoryType;
 
@@ -31,37 +29,14 @@ namespace Fittify.Api.Authorization
 
         public async void OnAuthorization(AuthorizationFilterContext context)
         {
-            //var test = context.HttpContext.RequestServices.GetServices()
-
-            //var services = context.HttpContext.RequestServices.GetServices(_ofmRepositoryType);
-            //var moreServices = context.HttpContext.RequestServices.GetRequiredService(_ofmRepositoryType);
-            var evenMoreServices = context.HttpContext.RequestServices.GetService(_ofmRepositoryType);
-
-
-            //var servicesby = context.HttpContext.RequestServices.GetServices(typeof(IAsyncOfmRepository<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutOfmResourceParameters>));
-            //var moreServicesby = context.HttpContext.RequestServices.GetRequiredService(typeof(IAsyncOfmRepository<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutOfmResourceParameters>));
-            //var evenMoreServicesby = context.HttpContext.RequestServices.GetService(typeof(IAsyncOfmRepository<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutOfmResourceParameters>));
-
-            //var fittifyContext = context.HttpContext.RequestServices.GetService(typeof(FittifyContext));
-            //var ofmRepositoryService = context.HttpContext.RequestServices.GetService(_ofmRepositoryType);
-            //var propertyMappingService = context.HttpContext.RequestServices.GetService(typeof(IPropertyMappingService));
-            //var typeHelperService = context.HttpContext.RequestServices.GetService(typeof(ITypeHelperService));
-            //var ofmDataRepositoryMappingService = context.HttpContext.RequestServices.GetService(typeof(IOfmDataRepositoryMappingService)) as IOfmDataRepositoryMappingService;
-            //var dataRepositoryType = ofmDataRepositoryMappingService.GetDestination(_ofmRepositoryType);
-            //var dataRepository = 
-
-
-            //_ofmRepositoryObject = Activator.CreateInstance(_ofmRepositoryType, new object[] { ofmRepositoryService, null, null });
-            _ofmRepository = evenMoreServices as IAsyncOfmOwnerIntId;
+            var ofmRepositoryObject = context.HttpContext.RequestServices.GetService(_ofmRepositoryType);
+            _ofmRepository = ofmRepositoryObject as IAsyncOfmOwnerIntId;
 
             var user = context.HttpContext.User;
 
             if (!user.Identity.IsAuthenticated)
             {
-                // it isn't needed to set unauthorized result 
-                // as the base class already requires the user to be authenticated
-                // this also makes redirect to a login page work properly
-                context.Result = new UnauthorizedResult(); // I do it anyway
+                context.Result = new UnauthorizedResult();
                 return;
             }
 

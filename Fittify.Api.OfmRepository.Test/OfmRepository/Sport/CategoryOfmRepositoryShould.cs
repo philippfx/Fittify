@@ -137,7 +137,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
             var categoryOfmRepository = new CategoryOfmRepository(asyncDataCrudMock.Object, new PropertyMappingService(), new TypeHelperService());
 
             // Act
-            var categoryOfmCollectionQueryResult = await categoryOfmRepository.GetCollection(new CategoryOfmResourceParameters(), _ownerGuid);
+            var categoryOfmCollectionQueryResult = await categoryOfmRepository.GetCollection(new CategoryOfmCollectionResourceParameters(), _ownerGuid);
 
             // Assert
             var actualCategoryOfmCollectionQueryResult = JsonConvert.SerializeObject(categoryOfmCollectionQueryResult,
@@ -202,7 +202,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
             var categoryOfmRepository = new CategoryOfmRepository(asyncDataCrudMock.Object, new PropertyMappingService(), new TypeHelperService());
 
             // Act
-            var categoryOfmCollectionQueryResult = await categoryOfmRepository.GetCollection(new CategoryOfmResourceParameters()
+            var categoryOfmCollectionQueryResult = await categoryOfmRepository.GetCollection(new CategoryOfmCollectionResourceParameters()
             {
                 Fields = "ThisFieldDoesntExistOnCategory",
                 OrderBy = "ThisFieldDoesntExistOnCategory",

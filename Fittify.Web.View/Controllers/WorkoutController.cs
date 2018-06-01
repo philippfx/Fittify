@@ -41,7 +41,7 @@ namespace Fittify.Web.View.Controllers
             await WriteOutIdentityAndAccessInformation();
             //await WriteOutAccessInformation();
 
-            var queryResult = await _workoutViewModelRepo.GetCollection(new WorkoutOfmResourceParameters());
+            var queryResult = await _workoutViewModelRepo.GetCollection(new WorkoutOfmCollectionResourceParameters());
 
             if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 queryResult.HttpStatusCode == HttpStatusCode.Forbidden)
@@ -112,7 +112,7 @@ namespace Fittify.Web.View.Controllers
             var repo = new WorkoutHistoryViewModelRepository(_appConfiguration, _httpContextAccessor);
             //var workoutHistoryViewModels = await repo.GetCollectionByWorkoutId(workoutId);
             var workoutHistoryViewModelsCollectionQueryResult =
-                await repo.GetCollection(new WorkoutHistoryOfmResourceParameters() { WorkoutId = workoutId });
+                await repo.GetCollection(new WorkoutHistoryOfmCollectionResourceParameters() { WorkoutId = workoutId });
 
             if (workoutHistoryViewModelsCollectionQueryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 workoutHistoryViewModelsCollectionQueryResult.HttpStatusCode == HttpStatusCode.Forbidden)
@@ -190,7 +190,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when deletion failed
             }
             
-            return RedirectToAction("Overview", "WorkoutOfmResourceParameters", null);
+            return RedirectToAction("Overview", "WorkoutOfmCollectionResourceParameters", null);
         }
 
         [HttpPost]
@@ -215,7 +215,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when patching failed
             }
 
-            return RedirectToAction("Overview", "WorkoutOfmResourceParameters", null);
+            return RedirectToAction("Overview", "WorkoutOfmCollectionResourceParameters", null);
         }
 
         [HttpPost]

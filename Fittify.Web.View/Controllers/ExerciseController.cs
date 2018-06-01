@@ -26,7 +26,7 @@ namespace Fittify.Web.View.Controllers
 
         public async Task<IActionResult> Overview()
         {
-            var exerciseViewModelCollectionResult = await _exerciseViewModelRepository.GetCollection(new ExerciseOfmResourceParameters());
+            var exerciseViewModelCollectionResult = await _exerciseViewModelRepository.GetCollection(new ExerciseOfmCollectionResourceParameters());
 
             if (exerciseViewModelCollectionResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 exerciseViewModelCollectionResult.HttpStatusCode == HttpStatusCode.Forbidden)
@@ -78,7 +78,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when deleting failed
             }
 
-            return RedirectToAction("Overview", "ExerciseOfmResourceParameters", null);
+            return RedirectToAction("Overview", "ExerciseOfmCollectionResourceParameters", null);
         }
 
         [HttpPost]
@@ -102,7 +102,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when posting failed
             }
 
-            return RedirectToAction("Overview", "ExerciseOfmResourceParameters", null);
+            return RedirectToAction("Overview", "ExerciseOfmCollectionResourceParameters", null);
         }
     }
 }

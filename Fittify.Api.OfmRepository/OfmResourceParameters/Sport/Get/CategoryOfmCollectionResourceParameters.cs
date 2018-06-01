@@ -2,8 +2,9 @@
 
 namespace Fittify.Api.OfmRepository.OfmResourceParameters.Sport
 {
-    public class ExerciseOfmResourceParameters : OfmResourceParametersBase, ISearchQueryResourceParameters
+    public class CategoryOfmCollectionResourceParameters : OfmResourceParametersBase, ISearchQueryResourceParameters
     {
         public string SearchQuery { get; set; }
+
     }
 }

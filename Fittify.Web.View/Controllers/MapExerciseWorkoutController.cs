@@ -25,7 +25,7 @@ namespace Fittify.Web.View.Controllers
         [Route("deletion")]
         public async Task<RedirectToActionResult> Delete([FromQuery] int workoutId, [FromQuery] int exerciseId)
         {
-            var getMapExerciseWorkoutViewModelResult = await _mapExerciseWorkoutViewModelRepository.GetCollection(new MapExerciseWorkoutOfmResourceParameters()
+            var getMapExerciseWorkoutViewModelResult = await _mapExerciseWorkoutViewModelRepository.GetCollection(new MapExerciseWorkoutOfmCollectionResourceParameters()
             {
                 ExerciseId = exerciseId,
                 WorkoutId = workoutId

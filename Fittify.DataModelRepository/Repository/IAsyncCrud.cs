@@ -16,6 +16,8 @@ namespace Fittify.DataModelRepository.Repository
 
         Task<bool> DoesEntityExist(TId id);
 
+        IQueryable<TEntity> LinqToEntityQueryable();
+
         Task<TEntity> Create(TEntity entity, Guid? ownerGuid);
 
         Task<TEntity> Update(TEntity entity);
@@ -30,7 +32,7 @@ namespace Fittify.DataModelRepository.Repository
 
         Task<PagedList<TEntity>> GetPagedCollection(TResourceParameters ofmResourceParameters);
 
-        Task<IQueryable<TEntity>> CreateCollectionQueryable(TResourceParameters ofmResourceParameters);
+        Task<IQueryable<TEntity>> GetCollectionQueryable(TResourceParameters ofmResourceParameters);
 
         Task<bool> SaveContext();
     }

@@ -33,7 +33,7 @@
 ////    [ExcludeFromCodeCoverage]
 ////    public class GenericController<T> : Controller where T : class
 ////    {
-////        //private readonly IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmResourceParameters> _asyncOfmRepository;
+////        //private readonly IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters> _asyncOfmRepository;
 ////        //private readonly AsyncOfmRepositoryFactory<AnimalOfmRepository> _asyncOfmRepository;
 ////        private readonly AnimalOfmRepository _animalOfmRepository;
 ////        private readonly string _shortCamelCasedControllerName;
@@ -43,7 +43,7 @@
 ////        private readonly IncomingHeaders _incomingHeaders;
 
 ////        public GenericController(
-////            //IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmResourceParameters> asyncOfmRepository,
+////            //IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters> asyncOfmRepository,
 ////            //IAsyncOfmRepository<T> asyncOfmRepository,
 ////            IServiceProvider serviceProvier,
 ////            IUrlHelper urlHelper,
@@ -67,7 +67,7 @@
 ////        [HttpGet("data")]
 ////        public async Task<IActionResult> GetData()
 ////        {
-////            var result = await _animalOfmRepository.GetCollection(new AnimalOfmResourceParameters(), Guid.NewGuid());
+////            var result = await _animalOfmRepository.GetCollection(new AnimalOfmCollectionResourceParameters(), Guid.NewGuid());
 ////            return new JsonResult(result);
 ////        }
 ////    }

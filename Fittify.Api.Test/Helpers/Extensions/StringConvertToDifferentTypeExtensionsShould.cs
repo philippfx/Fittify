@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Fittify.Api.Helpers.Extensions;
+using Fittify.Common.Extensions;
 using NUnit.Framework;
 
 namespace Fittify.Api.Test.Helpers.Extensions

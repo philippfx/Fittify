@@ -11,7 +11,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Web.ViewModelRepository.Sport
 {
-    public class WorkoutViewModelRepository : GenericViewModelRepository<int, WorkoutViewModel, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmResourceParameters>
+    public class WorkoutViewModelRepository : GenericViewModelRepository<int, WorkoutViewModel, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters>
     {
         public WorkoutViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor) 
             : base(appConfiguration, httpContextAccessor, "Workout")
@@ -39,11 +39,11 @@ namespace Fittify.Web.ViewModelRepository.Sport
             if (!String.IsNullOrWhiteSpace(ofmQueryResult.OfmForGet.RangeOfExerciseIds))
             {
                 var exerciseViewModelCollectionQuery = await exerciseViewModelRepository.GetCollection(
-                    new ExerciseOfmResourceParameters() { Ids = ofmQueryResult.OfmForGet.RangeOfExerciseIds });
+                    new ExerciseOfmCollectionResourceParameters() { Ids = ofmQueryResult.OfmForGet.RangeOfExerciseIds });
                 workoutViewModelQueryResult.ViewModel.AssociatedExercises = exerciseViewModelCollectionQuery.ViewModelForGetCollection.ToList();
             }
 
-            var allExerciseViewModelCollectionQuery = await exerciseViewModelRepository.GetCollection(new ExerciseOfmResourceParameters());
+            var allExerciseViewModelCollectionQuery = await exerciseViewModelRepository.GetCollection(new ExerciseOfmCollectionResourceParameters());
             workoutViewModelQueryResult.ViewModel.AllExercises = allExerciseViewModelCollectionQuery.ViewModelForGetCollection.ToList();
 
             return workoutViewModelQueryResult;

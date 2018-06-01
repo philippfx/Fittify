@@ -23,7 +23,7 @@ namespace Fittify.Web.View.Controllers
 
         public async Task<IActionResult> Overview()
         {
-            var categoryViewModelCollectionResult = await _categoryViewModelRepository.GetCollection(new CategoryOfmResourceParameters());
+            var categoryViewModelCollectionResult = await _categoryViewModelRepository.GetCollection(new CategoryOfmCollectionResourceParameters());
 
             if (categoryViewModelCollectionResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 categoryViewModelCollectionResult.HttpStatusCode == HttpStatusCode.Forbidden)

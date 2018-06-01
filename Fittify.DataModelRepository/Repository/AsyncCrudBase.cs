@@ -37,7 +37,7 @@ namespace Fittify.DataModelRepository.Repository
             if (entity != null) return true;
             return false;
         }
-
+        
         public virtual async Task<TEntity> Create(TEntity entity, Guid? ownerGuid)
         {
             entity.OwnerGuid = ownerGuid;
@@ -65,12 +65,21 @@ namespace Fittify.DataModelRepository.Repository
             {
                 ofmResourceParameters = new TResourceParameters();
             }
-            var linqToEntityQuery = await CreateCollectionQueryable(ofmResourceParameters);
+            var linqToEntityQuery = await GetCollectionQueryable(ofmResourceParameters);
 
             return await PagedList<TEntity>.CreateAsync(linqToEntityQuery, ofmResourceParameters.PageNumber, ofmResourceParameters.PageSize);
         }
 
-        public async Task<IQueryable<TEntity>> CreateCollectionQueryable(TResourceParameters ofmResourceParameters)
+        /// <summary>
+        /// Creates a queryable for TEntity, which can be used for customized linq to entity query.
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<TEntity> LinqToEntityQueryable()
+        {
+            return FittifyContext.Set<TEntity>().AsNoTracking();
+        }
+
+        public async Task<IQueryable<TEntity>> GetCollectionQueryable(TResourceParameters ofmResourceParameters)
         {
             IQueryable<TEntity> collectionQueryable = null;
 

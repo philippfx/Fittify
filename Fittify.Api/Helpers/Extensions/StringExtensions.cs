@@ -31,7 +31,7 @@ namespace Fittify.Api.Helpers.Extensions
         /// Cuts case sensitive ApiController name down to pascal cased entity name. Useful, for example, for the creation of dynamic controller action names. 
         /// </summary>
         /// <param name="str">Full name of the controller, for example "WorkoutApiController"</param>
-        /// <returns>Short pascal cased controller name, for example "WorkoutOfmResourceParameters", or the unmodified input string</returns>
+        /// <returns>Short pascal cased controller name, for example "WorkoutOfmCollectionResourceParameters", or the unmodified input string</returns>
         public static string ToShortPascalCasedControllerName(this String str)
         {
             if (str == null) return null;
@@ -47,7 +47,7 @@ namespace Fittify.Api.Helpers.Extensions
         /// Cuts case sensitive ApiController name down to pascal cased ofmForGet name. Useful, for example, for the creation of dynamic controller action names. 
         /// </summary>
         /// <param name="str">Full name of the controller, for example "WorkoutApiController"</param>
-        /// <returns>Short pascal cased controller name, for example "WorkoutOfmResourceParameters", or the unmodified input string</returns>
+        /// <returns>Short pascal cased controller name, for example "WorkoutOfmCollectionResourceParameters", or the unmodified input string</returns>
         public static string ToShortPascalCasedOfmForGetName(this String str)
         {
             if (str == null) return null;

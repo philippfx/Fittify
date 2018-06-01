@@ -70,7 +70,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
         public override async Task<PagedList<WorkoutHistory>> GetPagedCollection(
             WorkoutHistoryResourceParameters ofmResourceParameters)
         {
-            var linqToEntityQuery = await base.CreateCollectionQueryable(ofmResourceParameters);
+            var linqToEntityQuery = await base.GetCollectionQueryable(ofmResourceParameters);
 
             linqToEntityQuery = linqToEntityQuery
                 .Include(i => i.Workout)

@@ -10,5 +10,6 @@ namespace Fittify.Api.OuterFacingModels.Sport.Get
         //public string Name { get; set; }
         public string RangeOfWorkoutIds { get; set; }
         public string RangeOfExerciseHistoryIds { get; set; }
+        public string RangeOfPreviousExerciseHistoryIds { get; set; }
     }
 }

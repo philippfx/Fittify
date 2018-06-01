@@ -21,12 +21,12 @@
 
 ////namespace Fittify.Api.OfmFactory
 ////{
-////    public interface IAsyncOfmRepositoryForAnimal : IAsyncOfmRepository<AnimalOfmForGet, AnimalOfmForPost, AnimalOfmForPatch, int, AnimalOfmResourceParameters>
+////    public interface IAsyncOfmRepositoryForAnimal : IAsyncOfmRepository<AnimalOfmForGet, AnimalOfmForPost, AnimalOfmForPatch, int, AnimalOfmCollectionResourceParameters>
 ////    {
 
 ////    }
 
-////    //public class AnimalOfmRepository : AsyncOfmRepositoryBase<Animal, AnimalOfmForGet, AnimalOfmForPost, AnimalOfmForPatch, int, AnimalOfmResourceParameters, AnimalResourceParameters>
+////    //public class AnimalOfmRepository : AsyncOfmRepositoryBase<Animal, AnimalOfmForGet, AnimalOfmForPost, AnimalOfmForPatch, int, AnimalOfmCollectionResourceParameters, AnimalResourceParameters>
 ////    //{
 ////    //    public AnimalOfmRepository(IAsyncCrud<Animal, int, AnimalResourceParameters> repo,
 ////    //        IPropertyMappingService propertyMappingService,
@@ -38,7 +38,7 @@
 ////    //}
 
 ////    [ExcludeFromCodeCoverage]
-////    public class OfmRepository<T> : AsyncOfmRepositoryBase<Animal, AnimalOfmForGet, AnimalOfmForPost, AnimalOfmForPatch, int, AnimalOfmResourceParameters, AnimalResourceParameters>
+////    public class OfmRepository<T> : AsyncOfmRepositoryBase<Animal, AnimalOfmForGet, AnimalOfmForPost, AnimalOfmForPatch, int, AnimalOfmCollectionResourceParameters, AnimalResourceParameters>
 ////        where T : class
 ////    {
 ////        public OfmRepository(IAsyncCrud<Animal, int, AnimalResourceParameters> repo,
@@ -50,7 +50,7 @@
 ////        }
 ////    }
 
-////    public interface IAsyncOfmRepository<T> : IAsyncOfmRepository<AnimalOfmForGet, AnimalOfmForPost, AnimalOfmForPatch, int, AnimalOfmResourceParameters>
+////    public interface IAsyncOfmRepository<T> : IAsyncOfmRepository<AnimalOfmForGet, AnimalOfmForPost, AnimalOfmForPatch, int, AnimalOfmCollectionResourceParameters>
 ////        where T: class
 ////    {
 ////    }
@@ -88,7 +88,7 @@
 ////                var repoFactory = new DataModelRepositoryFactory(fittifyContext);
 ////                //var animalRepo = repoFactory.CreateGeneric<Animal, int, AnimalResourceParameters>();
 
-////                var ofmRepo = (IAsyncOfmRepository <AnimalOfmForGet, AnimalOfmForPost, AnimalOfmForPatch, int, AnimalOfmResourceParameters>)
+////                var ofmRepo = (IAsyncOfmRepository <AnimalOfmForGet, AnimalOfmForPost, AnimalOfmForPatch, int, AnimalOfmCollectionResourceParameters>)
 ////                    new AnimalOfmRepository(animalRepo, new PropertyMappingService(), new TypeHelperService());
 
 ////                return (R)ofmRepo;

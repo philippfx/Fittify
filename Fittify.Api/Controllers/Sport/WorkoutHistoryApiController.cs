@@ -48,32 +48,36 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet("{id}", Name = "GetWorkoutHistoryById")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
         [AuthorizeOwnerIntId(typeof(WorkoutHistoryRepository))]
-        public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
-        {
-            var ofmForGetQueryResult = await _asyncOfmRepository.GetById(id, fields);
-            if (!_controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
-            {
-                return objectResult;
-            }
-            var expandable = ofmForGetQueryResult.ReturnedTOfmForGet.ToExpandableOfm();
-            var shapedExpandable = expandable.Shape(fields); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
-            if (_incomingHeaders.IncludeHateoas) shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, fields).ToList());
-            return Ok(shapedExpandable);
-        }
-
-        [HttpGet(Name = "GetWorkoutHistoryCollection")]
-        [RequestHeaderMatchesApiVersion(new[] { "1" })]
-        public async Task<IActionResult> GetCollection(WorkoutHistoryOfmResourceParameters resourceParameters)
+        public async Task<IActionResult> GetById(int id, WorkoutHistoryOfmResourceParameters resourceParameters)
         {
             var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
             if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();
             var ownerGuid = new Guid(stringOwnerGuid);
 
-            var ofmForGetCollectionQueryResult = await _asyncOfmRepository.GetCollection(resourceParameters, ownerGuid);
+            var ofmForGetQueryResult = await _asyncOfmRepository.GetById(id, resourceParameters, ownerGuid);
+            if (!_controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
+            {
+                return objectResult;
+            }
+            var expandable = ofmForGetQueryResult.ReturnedTOfmForGet.ToExpandableOfm();
+            var shapedExpandable = expandable.Shape(resourceParameters.Fields); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
+            if (_incomingHeaders.IncludeHateoas) shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, resourceParameters.Fields).ToList());
+            return Ok(shapedExpandable);
+        }
+
+        [HttpGet(Name = "GetWorkoutHistoryCollection")]
+        [RequestHeaderMatchesApiVersion(new[] { "1" })]
+        public async Task<IActionResult> GetCollection(WorkoutHistoryOfmCollectionResourceParameters collectionResourceParameters)
+        {
+            var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();
+            var ownerGuid = new Guid(stringOwnerGuid);
+
+            var ofmForGetCollectionQueryResult = await _asyncOfmRepository.GetCollection(collectionResourceParameters, ownerGuid);
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
-            if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasForExpandableOfmForGets<WorkoutHistoryOfmForGet, int>(_urlHelper, nameof(WorkoutHistoryApiController), resourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
-            expandableOfmForGetCollection = expandableOfmForGetCollection.Shape(resourceParameters.Fields, _incomingHeaders.IncludeHateoas).ToList();
+            if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasForExpandableOfmForGets<WorkoutHistoryOfmForGet, int>(_urlHelper, nameof(WorkoutHistoryApiController), collectionResourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
+            expandableOfmForGetCollection = expandableOfmForGetCollection.Shape(collectionResourceParameters.Fields, _incomingHeaders.IncludeHateoas).ToList();
             if (!_incomingHeaders.IncludeHateoas)
             {
                 return Ok(expandableOfmForGetCollection);
@@ -82,7 +86,7 @@ namespace Fittify.Api.Controllers.Sport
             dynamic result = new
             {
                 value = expandableOfmForGetCollection,
-                links = _hateoasLinkFactory.CreateLinksForOfmGetGeneric(resourceParameters.AsDictionary().RemoveNullValues(),
+                links = _hateoasLinkFactory.CreateLinksForOfmGetGeneric(collectionResourceParameters.AsDictionary().RemoveNullValues(),
                     ofmForGetCollectionQueryResult.HasPrevious, ofmForGetCollectionQueryResult.HasNext).ToList()
             };
             return Ok(result);

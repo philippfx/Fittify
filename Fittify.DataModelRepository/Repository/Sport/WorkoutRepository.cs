@@ -27,7 +27,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
 
         public override async Task<PagedList<Workout>> GetPagedCollection(WorkoutResourceParameters ofmResourceParameters)
         {
-            var linqToEntityQuery = await base.CreateCollectionQueryable(ofmResourceParameters);
+            var linqToEntityQuery = await base.GetCollectionQueryable(ofmResourceParameters);
 
             linqToEntityQuery = linqToEntityQuery.Where(w => w.OwnerGuid == ofmResourceParameters.OwnerGuid || w.OwnerGuid == null);
 

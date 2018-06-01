@@ -31,7 +31,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
             ////        RangeString.ToCollectionOfId(ofmResourceParameters.Ids).Contains(w.Id));
             ////}
 
-            var linqToEntityQuery = await base.CreateCollectionQueryable(ofmResourceParameters);
+            var linqToEntityQuery = await base.GetCollectionQueryable(ofmResourceParameters);
 
             linqToEntityQuery = linqToEntityQuery.Where(w => w.OwnerGuid == ofmResourceParameters.OwnerGuid || w.OwnerGuid == null);
 

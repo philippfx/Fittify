@@ -1,4 +1,5 @@
-﻿using Fittify.Api.OuterFacingModels.Sport.Abstract;
+﻿using System.Collections.Generic;
+using Fittify.Api.OuterFacingModels.Sport.Abstract;
 using Fittify.Common;
 
 namespace Fittify.Api.OuterFacingModels.Sport.Get
@@ -12,5 +13,7 @@ namespace Fittify.Api.OuterFacingModels.Sport.Get
         }
         public WorkoutOfm Workout { get; set; }
         public string RangeOfExerciseHistoryIds { get; set; }
+
+        public IEnumerable<ExerciseHistoryOfmForGet> ExerciseHistories { get; set; }
     }
 }
