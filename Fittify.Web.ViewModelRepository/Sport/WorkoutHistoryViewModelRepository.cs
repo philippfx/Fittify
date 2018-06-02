@@ -47,15 +47,15 @@ namespace Fittify.Web.ViewModelRepository.Sport
             // WorkoutHistoryOfmCollectionResourceParameters
             var workoutHistoryOfmForGetQueryResult = await base.GetById(id);
 
-            // ExerciseHistories
-            var exerciseHistoryViewModelRepository = new ExerciseHistoryViewModelRepository(_appConfiguration, HttpContextAccessor);
+            //// ExerciseHistories
+            //var exerciseHistoryViewModelRepository = new ExerciseHistoryViewModelRepository(_appConfiguration, HttpContextAccessor);
 
-            var exerciseHistoryViewModelCollectionQueryResult 
-                = await exerciseHistoryViewModelRepository.GetCollection(
-                new ExerciseHistoryOfmCollectionResourceParameters() { WorkoutHistoryId = workoutHistoryOfmForGetQueryResult.ViewModel.Id });
+            //var exerciseHistoryViewModelCollectionQueryResult
+            //    = await exerciseHistoryViewModelRepository.GetCollection(
+            //    new ExerciseHistoryOfmCollectionResourceParameters() { WorkoutHistoryId = workoutHistoryOfmForGetQueryResult.ViewModel.Id });
 
-            workoutHistoryOfmForGetQueryResult.ViewModel.ExerciseHistories
-                = exerciseHistoryViewModelCollectionQueryResult.ViewModelForGetCollection;
+            //workoutHistoryOfmForGetQueryResult.ViewModel.ExerciseHistories
+            //    = exerciseHistoryViewModelCollectionQueryResult.ViewModelForGetCollection;
 
             // Exercises
             var exerciseViewModelRepository = new ExerciseViewModelRepository(_appConfiguration, HttpContextAccessor);
