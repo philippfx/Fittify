@@ -28,8 +28,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Fittify.Web.ViewModelRepository\Fittify.Web.ViewModelRepository.csproj" />
-    <ProjectReference Include="..\Fittify.Web.ViewModels\Fittify.Web.ViewModels.csproj" />
+    <ProjectReference Include="..\Fittify.Client.ViewModelRepository\Fittify.Client.ViewModelRepository.csproj" />
+    <ProjectReference Include="..\Fittify.Client.ViewModels\Fittify.Client.ViewModels.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AspNetCore.Authentication.Cookies">

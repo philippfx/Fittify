@@ -17,7 +17,7 @@
     <ProjectReference Include="..\Fittify.Api.OfmRepository\Fittify.Api.OfmRepository.csproj" />
     <ProjectReference Include="..\Fittify.Api.OuterFacingModels\Fittify.Api.OuterFacingModels.csproj" />
     <ProjectReference Include="..\Fittify.Common\Fittify.Common.csproj" />
-    <ProjectReference Include="..\Fittify.Web.ViewModels\Fittify.Web.ViewModels.csproj" />
+    <ProjectReference Include="..\Fittify.Client.ViewModels\Fittify.Client.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>
