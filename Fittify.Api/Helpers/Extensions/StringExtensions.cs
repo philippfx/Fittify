@@ -58,26 +58,5 @@ namespace Fittify.Api.Helpers.Extensions
             }
             return str.Replace(ofmForGetString, "");
         }
-        
-        public static string PrettifyJson(this string source)
-        {
-            return JToken.Parse(source).ToString();
-        }
-
-        public static string MinifyJson(this string source)
-        {
-            return Regex.Replace(source, @"(""(?:[^""\\]|\\.)*"")|\s+", "$1");
-        }
-
-        public static string MinifyXml(this string source)
-        {
-            return Regex.Replace(source, @">\s*<", "><").Trim();
-        }
-
-        public static string PrettifyXml(this string source)
-        {
-            XDocument doc = XDocument.Parse(source);
-            return doc.ToString();
-        }
     }
 }

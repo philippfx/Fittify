@@ -17,6 +17,7 @@ using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Api.Services.ConfigureServices;
 using Fittify.Api.Test.TestHelpers;
+using Fittify.Common.Extensions;
 using Fittify.Common.Helpers;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.Http;

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Fittify.Common.CustomExceptions;
+using Fittify.Web.ApiModelRepositories;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -10,11 +11,11 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
-namespace Fittify.Web.ApiModelRepositories
+namespace Fittify.Client.ApiModelRepositories
 {
-    public static class HttpRequestFactory
+    public class HttpRequestHandler : IHttpRequestHandler
     {
-        public static async Task<HttpResponseMessage> GetSingle(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+        public async Task<HttpResponseMessage> GetSingle(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
 
@@ -26,7 +27,7 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        public static async Task<HttpResponseMessage> GetCollection(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+        public async Task<HttpResponseMessage> GetCollection(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
 
@@ -38,7 +39,7 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        public static async Task<HttpResponseMessage> Post(
+        public async Task<HttpResponseMessage> Post(
             Uri requestUri, object value, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
@@ -52,7 +53,7 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        public static async Task<HttpResponseMessage> Put(
+        public async Task<HttpResponseMessage> Put(
             Uri requestUri, object value)
         {
             var builder = new HttpRequestBuilder()
@@ -63,7 +64,7 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        public static async Task<HttpResponseMessage> Patch(
+        public async Task<HttpResponseMessage> Patch(
             Uri requestUri, JsonPatchDocument jsonPatchDocument /*object jsonPatchDocument*/, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
@@ -77,7 +78,7 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        public static async Task<HttpResponseMessage> Delete(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+        public async Task<HttpResponseMessage> Delete(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
 
@@ -89,7 +90,7 @@ namespace Fittify.Web.ApiModelRepositories
             return await builder.SendAsync();
         }
 
-        private static async Task<string> GetAccessToken(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+        private async Task<string> GetAccessToken(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             string accessToken = string.Empty;
             var currentContext = httpContextAccessor.HttpContext;
@@ -116,7 +117,7 @@ namespace Fittify.Web.ApiModelRepositories
             return accessToken;
         }
 
-        private static async Task<string> RenewTokens(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+        private async Task<string> RenewTokens(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             // get the current HttpContext to access the tokens
             var currentContext = httpContextAccessor.HttpContext;

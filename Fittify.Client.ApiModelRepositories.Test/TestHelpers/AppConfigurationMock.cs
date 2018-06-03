@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using Fittify.Api.Test.Controllers.Sport;
+using Fittify.Web.ApiModelRepositories;
 using Microsoft.Extensions.Configuration;
 
-namespace Fittify.Api.Test.TestHelpers
+namespace Fittify.Client.ApiModelRepositories.Test.TestHelpers
 {
     public class AppConfigurationMock : IDisposable
     {
@@ -13,7 +13,7 @@ namespace Fittify.Api.Test.TestHelpers
         public AppConfigurationMock(string appSettingsJsonString)
         {
             var appSettingsFileName = "appsettings_" + Guid.NewGuid() + ".json";
-            FullFilePath = Path.GetDirectoryName(typeof(CategoryApiControllerShould).GetTypeInfo().Assembly.Location) + "\\" + appSettingsFileName;
+            FullFilePath = Path.GetDirectoryName(typeof(GenericAsyncGppdOfm<,,,>).GetTypeInfo().Assembly.Location) + "\\" + appSettingsFileName;
             if (File.Exists(FullFilePath))
             {
                 File.Delete(FullFilePath);
@@ -23,7 +23,7 @@ namespace Fittify.Api.Test.TestHelpers
             File.WriteAllText(FullFilePath, appSettingsJsonString);
 
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Path.GetDirectoryName(typeof(CategoryApiControllerShould).GetTypeInfo().Assembly.Location)) // The only way I found to get directory path of unit test project / bin /debug
+                .SetBasePath(Path.GetDirectoryName(typeof(GenericAsyncGppdOfm<,,,>).GetTypeInfo().Assembly.Location)) // The only way I found to get directory path of unit test project / bin /debug
                 .AddJsonFile(appSettingsFileName); // Includes appsettings.json configuartion file
             Instance = builder.Build();
         }

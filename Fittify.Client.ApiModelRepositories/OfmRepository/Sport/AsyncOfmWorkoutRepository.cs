@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Client.ApiModelRepositories;
 using Fittify.Common.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -18,11 +19,13 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
     {
         private IConfiguration _appConfiguration;
         private IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpRequestHandler HttpRequestHandler;
 
-        public AsyncOfmWorkoutRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+        public AsyncOfmWorkoutRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequestHandler)
         {
             _appConfiguration = appConfiguration;
             _httpContextAccessor = httpContextAccessor;
+            HttpRequestHandler = httpRequestHandler;
         }
 
         public virtual async Task<OfmQueryResult<WorkoutOfmForGet>> GetSingle(int id)
@@ -35,7 +38,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
                 );
             try
             {
-                var httpResponse = await HttpRequestFactory.GetSingle(uri, _appConfiguration, _httpContextAccessor);
+                var httpResponse = await HttpRequestHandler.GetSingle(uri, _appConfiguration, _httpContextAccessor);
                 ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -98,8 +101,8 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
                 _appConfiguration.GetValue<string>("MappedFittifyApiActions:WorkoutOfmCollectionResourceParameters")
             );
 
-            //var httpResponse = await HttpRequestFactory.GetPagedCollection(new Uri(_fittifyApiBaseUri + "api/workouts" + queryParamter));
-            var httpResponse = await HttpRequestFactory.GetCollection(new Uri(uri + queryParamter), _appConfiguration, _httpContextAccessor);
+            //var httpResponse = await HttpRequestHandler.GetPagedCollection(new Uri(_fittifyApiBaseUri + "api/workouts" + queryParamter));
+            var httpResponse = await HttpRequestHandler.GetCollection(new Uri(uri + queryParamter), _appConfiguration, _httpContextAccessor);
             ofmCollectionQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmCollectionQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -124,7 +127,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
             );
             try
             {
-                var httpResponse = await HttpRequestFactory.Post(uri, workoutOfmForPost, _appConfiguration, _httpContextAccessor);
+                var httpResponse = await HttpRequestHandler.Post(uri, workoutOfmForPost, _appConfiguration, _httpContextAccessor);
                 ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -154,7 +157,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
             );
             try
             {
-                var httpResponse = await HttpRequestFactory.Delete(uri, _appConfiguration, _httpContextAccessor);
+                var httpResponse = await HttpRequestHandler.Delete(uri, _appConfiguration, _httpContextAccessor);
                 ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -183,7 +186,7 @@ namespace Fittify.Web.ApiModelRepositories.OfmRepository.Sport
             );
             try
             {
-                var httpResponse = await HttpRequestFactory.Patch(uri, jsonPatchDocument, _appConfiguration, _httpContextAccessor);
+                var httpResponse = await HttpRequestHandler.Patch(uri, jsonPatchDocument, _appConfiguration, _httpContextAccessor);
                 ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
                 ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 

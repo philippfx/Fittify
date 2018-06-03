@@ -10,6 +10,7 @@ using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Middleware;
 using Fittify.Api.Test.Controllers.Sport;
 using Fittify.Api.Test.TestHelpers;
+using Fittify.Common.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Moq;

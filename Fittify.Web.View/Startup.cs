@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNetCore.RouteAnalyzer;
 using Fittify.Api.OuterFacingModels.Sport.Get;
+using Fittify.Client.ApiModelRepositories;
 using Fittify.Common.Helpers;
 using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.Authentication;
@@ -144,6 +145,7 @@ namespace Fittify.Web.View
             services.AddMvc();
             services.AddRouteAnalyzer();
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton<IHttpRequestHandler, HttpRequestHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
