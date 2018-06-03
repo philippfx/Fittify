@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Web.ApiModelRepositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -8,20 +9,20 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Web.ViewModelRepository
 {
-    public class GenericViewModelRepository<TId, TViewModel, TOfmForGet, TOfmForPost, TResourceParameters>
+    public class GenericViewModelRepository<TId, TViewModel, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters>
         where TId : struct
         where TViewModel : class
         where TOfmForGet : class
-        where TResourceParameters : class
+        where TGetCollectionResourceParameters : class
         where TOfmForPost : class
     {
-        protected readonly GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TResourceParameters> GenericAsyncGppdOfmWorkout;
+        protected readonly GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters> GenericAsyncGppdOfmWorkout;
         protected readonly IHttpContextAccessor HttpContextAccessor;
         protected readonly IConfiguration AppConfiguration;
 
         public GenericViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey)
         {
-            GenericAsyncGppdOfmWorkout = new GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TResourceParameters>(appConfiguration, httpContextAccessor, mappedControllerActionKey);
+            GenericAsyncGppdOfmWorkout = new GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters>(appConfiguration, httpContextAccessor, mappedControllerActionKey);
             HttpContextAccessor = httpContextAccessor;
             AppConfiguration = appConfiguration;
         }
@@ -47,7 +48,27 @@ namespace Fittify.Web.ViewModelRepository
             return workoutViewModelQueryResult;
         }
 
-        public virtual async Task<ViewModelCollectionQueryResult<TViewModel>> GetCollection(TResourceParameters resourceParameters)
+        public virtual async Task<ViewModelQueryResult<TViewModel>> GetById<TResourceParameters>(TId id, TResourceParameters resourceParameters) where TResourceParameters : class
+        {
+            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.GetSingle(id, resourceParameters);
+
+            var workoutViewModelQueryResult = new ViewModelQueryResult<TViewModel>();
+            workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
+
+            if ((int)ofmQueryResult.HttpStatusCode == 200)
+            {
+                workoutViewModelQueryResult.ViewModel =
+                    Mapper.Map<TViewModel>(ofmQueryResult.OfmForGet);
+            }
+            else
+            {
+                workoutViewModelQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
+            }
+
+            return workoutViewModelQueryResult;
+        }
+
+        public virtual async Task<ViewModelCollectionQueryResult<TViewModel>> GetCollection(TGetCollectionResourceParameters resourceParameters)
         {
             var ofmCollectionQueryResult = await GenericAsyncGppdOfmWorkout.GetCollection(resourceParameters);
 

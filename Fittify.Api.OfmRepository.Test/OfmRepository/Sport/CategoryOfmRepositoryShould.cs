@@ -171,7 +171,6 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
                 new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore, Formatting = Formatting.Indented });
 
             Assert.AreEqual(expectedOfmForGetCollectionQueryResult, actualCategoryOfmCollectionQueryResult);
-
         }
 
         [Test]

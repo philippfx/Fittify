@@ -9,8 +9,10 @@ using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Helpers.ObjectResults;
 using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
+using Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport;
 using Fittify.Api.OfmRepository.OfmRepository.Sport;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
@@ -28,7 +30,7 @@ namespace Fittify.Api.Controllers.Sport
     public class WorkoutApiController :
         Controller
     {
-        private readonly IAsyncOfmRepository<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutOfmCollectionResourceParameters> _asyncOfmRepository;
+        private readonly IAsyncOfmRepositoryForWorkout _asyncOfmRepository;
         private readonly string _shortCamelCasedControllerName;
         private readonly IUrlHelper _urlHelper;
         private readonly ControllerGuardClauses<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int> _controllerGuardClause;
@@ -36,7 +38,7 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IncomingHeaders _incomingHeaders;
 
         public WorkoutApiController(
-            IAsyncOfmRepository<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutOfmCollectionResourceParameters> asyncOfmRepository,
+            IAsyncOfmRepositoryForWorkout asyncOfmRepository,
             IUrlHelper urlHelper,
             IHttpContextAccessor httpContextAccesor)
         {
@@ -52,16 +54,20 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
         //[Authorize(Policy = "MustOwnEntityIntId")]
         [AuthorizeOwnerIntId(typeof(WorkoutOfmRepository))]
-        public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
+        public async Task<IActionResult> GetById(int id, WorkoutOfmResourceParameters resourceParameters)
         {
-            var ofmForGetQueryResult = await _asyncOfmRepository.GetById(id, fields);
+            var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();
+            var ownerGuid = new Guid(stringGuid);
+
+            var ofmForGetQueryResult = await _asyncOfmRepository.GetById(id, resourceParameters, ownerGuid);
             if (!_controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
             {
                 return objectResult;
             }
             var expandable = ofmForGetQueryResult.ReturnedTOfmForGet.ToExpandableOfm();
-            var shapedExpandable = expandable.Shape(fields); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
-            if (_incomingHeaders.IncludeHateoas) shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, fields).ToList());
+            var shapedExpandable = expandable.Shape(resourceParameters.Fields); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
+            if (_incomingHeaders.IncludeHateoas) shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, resourceParameters.Fields).ToList());
             return Ok(shapedExpandable);
         }
 

@@ -6,16 +6,16 @@ namespace Fittify.Api.OfmRepository.Helpers
 {
     public static class ExpandableOfmForGetExtensions
     {
-        public static ExpandableOfmForGet Shape(this ExpandableOfmForGet source, string fields)
+        public static ExpandableOfmForGet Shape(this ExpandableOfmForGet expandableOfmForGetSource, string fields)
         {
-            if (source == null)
+            if (expandableOfmForGetSource == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException("expandableOfmForGetSource");
             }
 
             if (string.IsNullOrWhiteSpace(fields))
             {
-                return source;
+                return expandableOfmForGetSource;
             }
 
             // the field are separated by ",", so we split it.
@@ -24,7 +24,7 @@ namespace Fittify.Api.OfmRepository.Helpers
             var shapedExpandableOfmForGet = new ExpandableOfmForGet();
             foreach (var field in fieldsAfterSplit)
             {
-                var property = source.FirstOrDefault(f => f.Key.ToLowerInvariant() == field);
+                var property = expandableOfmForGetSource.FirstOrDefault(f => f.Key.ToLowerInvariant() == field);
 
                 if (!property.IsDefault()) // in effect if the struct KeyValuePair is not null
                 {

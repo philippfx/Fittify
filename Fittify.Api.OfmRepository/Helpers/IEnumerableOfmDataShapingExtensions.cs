@@ -14,7 +14,7 @@ namespace Fittify.Api.OfmRepository.Helpers
         {
             if (expandableOfmForGetSourceCollection == null)
             {
-                throw new ArgumentNullException("ofmForGetSource");
+                throw new ArgumentNullException("expandableOfmForGetSourceCollection");
             }
 
             var expandableOfmForGetList = new List<ExpandableOfmForGet>();

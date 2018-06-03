@@ -28,22 +28,12 @@ namespace Fittify.Web.ViewModels.Sport
 
         public class CurrentAndHistoricWeightLiftingSetPair
         {
-            public CurrentAndHistoricWeightLiftingSetPair(WeightLiftingSetViewModel historicWeightLiftingSet, WeightLiftingSetViewModel currentWeightLiftingSet)
-            {
-                HistoricWeightLiftingSet = historicWeightLiftingSet;
-                CurrentWeightLiftingSet = currentWeightLiftingSet;
-            }
             public WeightLiftingSetViewModel HistoricWeightLiftingSet { get; set; }
             public WeightLiftingSetViewModel CurrentWeightLiftingSet { get; set; }
         }
 
         public class CurrentAndHistoricCardioSetPair
         {
-            public CurrentAndHistoricCardioSetPair(CardioSetViewModel historicCardioSet, CardioSetViewModel currentCardioSet)
-            {
-                HistoricCardioSet = historicCardioSet;
-                CurrentCardioSet = currentCardioSet;
-            }
             public CardioSetViewModel HistoricCardioSet { get; set; }
             public CardioSetViewModel CurrentCardioSet { get; set; }
         }

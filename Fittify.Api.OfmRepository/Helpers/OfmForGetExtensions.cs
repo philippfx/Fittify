@@ -7,11 +7,11 @@ namespace Fittify.Api.OfmRepository.Helpers
 {
     public static class OfmForGetExtensions
     {
-        public static ExpandableOfmForGet ToExpandableOfm<TOfmForGet>(this TOfmForGet source) where TOfmForGet : IOfmForGet
+        public static ExpandableOfmForGet ToExpandableOfm<TOfmForGet>(this TOfmForGet ofmForGetSource) where TOfmForGet : IOfmForGet
         {
-            if (source == null)
+            if (ofmForGetSource == null)
             {
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException("ofmForGetSource");
             }
 
             var expandableOfm = new ExpandableOfmForGet();
@@ -22,8 +22,8 @@ namespace Fittify.Api.OfmRepository.Helpers
 
             foreach (var propertyInfo in propertyInfos)
             {
-                // get the value of the property on the source object
-                var propertyValue = propertyInfo.GetValue(source);
+                // get the value of the property on the ofmForGetSource object
+                var propertyValue = propertyInfo.GetValue(ofmForGetSource);
 
                 // add the field to the ExpandoObject
                 ((IDictionary<string, object>)expandableOfm).Add(propertyInfo.Name, propertyValue);

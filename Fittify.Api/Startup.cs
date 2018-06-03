@@ -217,6 +217,7 @@ namespace Fittify.Api
             services.AddFittifyDataRepositoryServices();
             services.AddFittifyOfmRepositoryServices();
             services.AddScoped<IAsyncOfmRepositoryForWorkoutHistory, WorkoutHistoryOfmRepository>();
+            services.AddScoped<IAsyncOfmRepositoryForWorkout, WorkoutOfmRepository>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

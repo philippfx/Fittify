@@ -374,26 +374,6 @@ namespace Fittify.DataModelRepository.Test.Repository.Sport
             }
         }
 
-        ////[Test]
-        ////public async Task ReturnSearchQueriedCollection()
-        ////{
-        ////    var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
-        ////    try
-        ////    {
-        ////        using (var context = new FittifyContext(options))
-        ////        {
-        ////            var resourceParameters = new CategoryResourceParameters() { SearchQuery = "thcategory", OwnerGuid = _ownerGuid };
-        ////            var categoryRepository = new CategoryRepository(context);
-        ////            var categoryCollection = categoryRepository.GetPagedCollection(resourceParameters);
-        ////            Assert.AreEqual(6, categoryCollection.Count);
-        ////        }
-        ////    }
-        ////    finally
-        ////    {
-        ////        connection.Close();
-        ////    }
-        ////}
-
         [Test]
         public async Task ReturnQueriedIdCollection()
         {
@@ -406,6 +386,26 @@ namespace Fittify.DataModelRepository.Test.Repository.Sport
                     var categoryRepository = new CategoryRepository(context);
                     var categoryCollection = await categoryRepository.GetPagedCollection(resourceParameters);
                     Assert.AreEqual(3, categoryCollection.Count);
+                }
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        [Test]
+        public async Task ReturnCollectionQueryable_WhenResourceParametersAreNull()
+        {
+            var (connection, options) = await CreateUniqueMockDbConnectionForThisTest();
+            try
+            {
+                using (var context = new FittifyContext(options))
+                {
+                    var resourceParameters = (CategoryResourceParameters)null;
+                    var categoryRepository = new CategoryRepository(context);
+                    var categoryCollectionQueryable = await categoryRepository.GetCollectionQueryable(resourceParameters);
+                    Assert.IsNotNull(categoryCollectionQueryable);
                 }
             }
             finally

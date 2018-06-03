@@ -49,7 +49,29 @@ namespace Fittify.Api.OfmRepository.Test.Services
             Assert.AreEqual(expectedErrorMessages, actualErrorMessages);
             Assert.IsFalse(validationResult);
         }
-        
+
+        [Test]
+        public void ReturnTrueAndNoErrorMessages_WhenPropertyNameDoesExistOnEntity()
+        {
+            // Arrange
+            var propertyMappingService = new PropertyMappingService();
+
+            List<string> errorMessages = new List<string>();
+            var validationResult =
+                propertyMappingService.ValidMappingExistsFor<CategoryOfmForGet, Category>("Name",
+                    ref errorMessages);
+
+            var actualErrorMessages = JsonConvert.SerializeObject(errorMessages,
+                new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore, Formatting = Formatting.Indented });
+
+            var expectedErrorMessages = JsonConvert.SerializeObject(
+                new List<string>(),
+                new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore, Formatting = Formatting.Indented });
+
+            Assert.AreEqual(expectedErrorMessages, actualErrorMessages);
+            Assert.IsTrue(validationResult);
+        }
+
         [TestCase("")]
         [TestCase(null)]
         public void ReturnTrue_WhenQueriedFieldsAreNullOrWhiteSpace(string fields)

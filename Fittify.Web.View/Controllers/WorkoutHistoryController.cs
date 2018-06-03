@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ViewModelRepository.Sport;
+using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +31,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when posting failed
             }
 
-            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = postResult.ViewModel.Id });
+            return RedirectToAction("HistoryDetails", new { workoutHistoryId = postResult.ViewModel.Id });
         }
 
         [HttpPost]
@@ -42,7 +45,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when deleting failed
             }
 
-            return RedirectToAction("Histories", "Workout", new { workoutId = workoutId });
+            return RedirectToAction("HistoryDetails", new { workoutId = workoutId });
         }
 
         [HttpPost]
@@ -59,7 +62,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when posting failed
             }
 
-            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
+            return RedirectToAction("HistoryDetails", new { workoutHistoryId = workoutHistoryId });
         }
 
         [HttpPost]
@@ -76,7 +79,35 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when posting failed
             }
 
-            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
+            return RedirectToAction("HistoryDetails", new { workoutHistoryId = workoutHistoryId });
+        }
+        
+        [Route("{id}/details")]
+        public async Task<IActionResult> HistoryDetails(int id)
+        {
+            var resourceParameters = new WorkoutHistoryOfmResourceParameters()
+            {
+                IncludeExerciseHistories = "1",
+                IncludePreviousExerciseHistories = "1",
+                IncludeCardioSets = "1",
+                IncludeWeightLiftingSets = "1"
+            };
+            var workoutHistoryViewModelQueryResult =
+                await _workoutHistoryViewModelRepository.GetById(id, resourceParameters);
+
+            if (workoutHistoryViewModelQueryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                workoutHistoryViewModelQueryResult.HttpStatusCode == HttpStatusCode.Forbidden)
+            {
+                return RedirectToAction("AccessDenied", "Authorization");
+            }
+
+            WorkoutHistoryViewModel workoutHistoryViewModel = null;
+            if ((int)workoutHistoryViewModelQueryResult.HttpStatusCode == 200)
+            {
+                workoutHistoryViewModel = workoutHistoryViewModelQueryResult.ViewModel;
+            }
+
+            return View("HistoryDetails", workoutHistoryViewModel);
         }
     }
 }

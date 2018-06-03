@@ -1,19 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Common;
 using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Web.ViewModelRepository.Sport
 {
-    public class WorkoutViewModelRepository : GenericViewModelRepository<int, WorkoutViewModel, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters>
+    public class WorkoutViewModelRepository : GenericViewModelRepository<int, WorkoutViewModel, WorkoutOfmForGet,
+        WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters>
     {
-        public WorkoutViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor) 
+        public WorkoutViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
             : base(appConfiguration, httpContextAccessor, "Workout")
         {
         }
@@ -25,7 +29,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
             var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
 
-            if ((int)ofmQueryResult.HttpStatusCode == 200)
+            if ((int) ofmQueryResult.HttpStatusCode == 200)
             {
                 workoutViewModelQueryResult.ViewModel =
                     Mapper.Map<WorkoutViewModel>(ofmQueryResult.OfmForGet);
@@ -39,13 +43,54 @@ namespace Fittify.Web.ViewModelRepository.Sport
             if (!String.IsNullOrWhiteSpace(ofmQueryResult.OfmForGet.RangeOfExerciseIds))
             {
                 var exerciseViewModelCollectionQuery = await exerciseViewModelRepository.GetCollection(
-                    new ExerciseOfmCollectionResourceParameters() { Ids = ofmQueryResult.OfmForGet.RangeOfExerciseIds });
-                workoutViewModelQueryResult.ViewModel.AssociatedExercises = exerciseViewModelCollectionQuery.ViewModelForGetCollection.ToList();
+                    new ExerciseOfmCollectionResourceParameters()
+                    {
+                        Ids = ofmQueryResult.OfmForGet.RangeOfExerciseIds
+                    });
+                workoutViewModelQueryResult.ViewModel.AssociatedExercises =
+                    exerciseViewModelCollectionQuery.ViewModelForGetCollection.ToList();
             }
 
-            var allExerciseViewModelCollectionQuery = await exerciseViewModelRepository.GetCollection(new ExerciseOfmCollectionResourceParameters());
-            workoutViewModelQueryResult.ViewModel.AllExercises = allExerciseViewModelCollectionQuery.ViewModelForGetCollection.ToList();
+            var allExerciseViewModelCollectionQuery =
+                await exerciseViewModelRepository.GetCollection(new ExerciseOfmCollectionResourceParameters());
+            workoutViewModelQueryResult.ViewModel.AllExercises =
+                allExerciseViewModelCollectionQuery.ViewModelForGetCollection.ToList();
 
+            return workoutViewModelQueryResult;
+        }
+
+        public async Task<ViewModelQueryResult<WorkoutViewModel>> GetById(int id,
+            WorkoutOfmResourceParameters workoutHistoryOfmResourceParameters)
+        {
+            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.GetSingle(id, workoutHistoryOfmResourceParameters);
+
+            var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutViewModel>();
+            workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
+
+            if ((int) ofmQueryResult.HttpStatusCode == 200)
+            {
+                workoutViewModelQueryResult.ViewModel =
+                    Mapper.Map<WorkoutViewModel>(ofmQueryResult.OfmForGet);
+
+                workoutViewModelQueryResult.ViewModel.AssociatedExercises =
+                    Mapper.Map<List<ExerciseViewModel>>(ofmQueryResult.OfmForGet.Exercises);
+            }
+            else
+            {
+                workoutViewModelQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
+            }
+
+            // Exercises
+            var exerciseViewModelRepository = new ExerciseViewModelRepository(AppConfiguration, HttpContextAccessor);
+
+            var exerciseViewModelCollectionQueryResult
+                = await exerciseViewModelRepository.GetCollection(
+                    new ExerciseOfmCollectionResourceParameters());
+
+            workoutViewModelQueryResult.ViewModel.AllExercises
+                = exerciseViewModelCollectionQueryResult.ViewModelForGetCollection.ToList();
+
+            // Done
             return workoutViewModelQueryResult;
         }
     }

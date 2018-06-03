@@ -5,6 +5,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNetCore.RouteAnalyzer;
+using Fittify.Api.OuterFacingModels.Sport.Get;
+using Fittify.Common.Helpers;
+using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -149,6 +152,10 @@ namespace Fittify.Web.View
 
             AutoMapper.Mapper.Initialize(cfg =>
             {
+                ////    cfg.CreateMap<ExerciseHistoryOfmForGet, ExerciseHistoryViewModel>()
+                ////        .ForMember(dest => dest.CurrentAndHistoricWeightLiftingSetPairs, opt => opt.MapFrom(src => src.))
+                ////        .ForMember(dest => dest.RangeOfExerciseHistoryIds, opt => opt.MapFrom(src => src.ExerciseHistories.Select(eH => eH.Id).ToList().ToStringOfIds()));
+
                 cfg.IgnoreUnmapped();
             });
 

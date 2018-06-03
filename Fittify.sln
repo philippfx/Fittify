@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Spielwiese", "Fittify.Spielwiese\Fittify.Spielwiese.csproj", "{0689FF45-5805-4456-831A-E980187B1FAB}"
 EndProject
@@ -53,7 +53,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.OfmRepository",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.OfmRepository.Test", "Fittify.Api.OfmRepository.Test\Fittify.Api.OfmRepository.Test.csproj", "{A8749129-EFEB-4A80-B544-198BCC3B7A50}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fittify.Api.Test", "Fittify.Api.Test\Fittify.Api.Test.csproj", "{0D70CA9D-B98E-40BE-ACDA-D70A143FAD06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Api.Test", "Fittify.Api.Test\Fittify.Api.Test.csproj", "{0D70CA9D-B98E-40BE-ACDA-D70A143FAD06}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{0DE45F3B-16BF-4938-AF63-853A40961761}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -167,6 +169,7 @@ Global
 		{0C0F95CF-A86A-494C-9998-EE9FCE5F010C} = {416CE764-41B2-4A2E-84DA-13F47C6F5DC9}
 		{A8749129-EFEB-4A80-B544-198BCC3B7A50} = {E4C2E774-6288-4D70-93DA-D9BE069E3258}
 		{0D70CA9D-B98E-40BE-ACDA-D70A143FAD06} = {E4C2E774-6288-4D70-93DA-D9BE069E3258}
+		{0DE45F3B-16BF-4938-AF63-853A40961761} = {61B2FCA8-F355-46A9-B5CD-231A070A4A2A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B305ABF-A3CE-4E97-BE76-377367E1E5B8}

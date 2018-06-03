@@ -105,6 +105,7 @@ namespace Fittify.DataModelRepository.Repository
                     }
                     else
                     {
+                        // For example Guid Ids
                         listTIds = ofmResourceParameters.Ids.Split(",") as TId[];
                     }
 

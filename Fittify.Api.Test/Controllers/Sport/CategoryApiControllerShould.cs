@@ -828,6 +828,190 @@ namespace Fittify.Api.Test.Controllers.Sport
         }
 
         [Test]
+        public async Task ReturnOkObjectResult_ForQueriedNameFieldIncludingHateoas_WhenUsingGetGollection()
+        {
+            // Arrange
+            var categoryOfmResourceParameters = new CategoryOfmCollectionResourceParameters() { Fields = "Name" };
+            // Mock GppdRepo
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            asyncGppdMock
+                .Setup(s => s.GetCollection(categoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
+                .Returns(Task.FromResult(
+                    new OfmForGetCollectionQueryResult<CategoryOfmForGet>()
+                    {
+                        ReturnedTOfmForGetCollection = new OfmForGetCollection<CategoryOfmForGet>()
+                        {
+                            OfmForGets = new List<CategoryOfmForGet>()
+                            {
+                                new CategoryOfmForGet()
+                                {
+                                    Id = 1,
+                                    Name = "MockCategory1"
+                                },
+                                new CategoryOfmForGet()
+                                {
+                                    Id = 2,
+                                    Name = "MockCategory2"
+                                },
+                                new CategoryOfmForGet()
+                                {
+                                    Id = 3,
+                                    Name = "MockCategory3"
+                                }
+                            }
+                        },
+                        CurrentPage = 1,
+                        PageSize = 3,
+                        TotalCount = 30,
+                        TotalPages = 10
+                    }));
+
+            // Mock IUrlHelper
+            var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
+            string mockedHateoasLinks = "{ Omitted Hateoas Link, because it requires too much maintainenance }";
+            mockUrlHelper.Setup(s => s.Link(It.IsAny<string>(), It.IsAny<object>()))
+                .Returns(mockedHateoasLinks);
+
+            // Mock IHttpContextAccessor
+            var httpContextAccessorMock = new Mock<IHttpContextAccessor>(); // Is mocked to avoid exception. All resulting values will be overidden by mock.
+
+            var incomingRawHeadersMock =
+                IncomingRawHeadersMock.GetDefaultIncomingRawHeaders();
+            incomingRawHeadersMock.IncludeHateoas = "1";
+            httpContextAccessorMock.Setup(s => s.HttpContext.Items).Returns(new Dictionary<object, object>()
+            {
+                {
+                    nameof(IncomingRawHeaders),
+                    incomingRawHeadersMock
+                }
+            });
+
+            // Initialize controller
+            var categoryController = new CategoryApiController(
+                asyncGppdMock.Object,
+                mockUrlHelper.Object,
+                httpContextAccessorMock.Object);
+
+            // Mock User
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("sub", "00000000-0000-0000-0000-000000000000")
+            }));
+            categoryController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
+            // Act
+            var objectResult = await categoryController.GetCollection(categoryOfmResourceParameters);
+
+            // Assert
+            var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
+            var expectedJsonResult =
+                @"
+                            {
+                              ""Value"": {
+                                ""value"": [
+                                  {
+                                    ""Name"": ""MockCategory1"",
+                                    ""links"": [
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""self"",
+                                        ""Method"": ""GET""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""create_category"",
+                                        ""Method"": ""POST""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""partially_update_category"",
+                                        ""Method"": ""PATCH""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""delete_category"",
+                                        ""Method"": ""DELETE""
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    ""Name"": ""MockCategory2"",
+                                    ""links"": [
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""self"",
+                                        ""Method"": ""GET""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""create_category"",
+                                        ""Method"": ""POST""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""partially_update_category"",
+                                        ""Method"": ""PATCH""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""delete_category"",
+                                        ""Method"": ""DELETE""
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    ""Name"": ""MockCategory3"",
+                                    ""links"": [
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""self"",
+                                        ""Method"": ""GET""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""create_category"",
+                                        ""Method"": ""POST""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""partially_update_category"",
+                                        ""Method"": ""PATCH""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""delete_category"",
+                                        ""Method"": ""DELETE""
+                                      }
+                                    ]
+                                  }
+                                ],
+                                ""links"": [
+                                  {
+                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                    ""Rel"": ""self"",
+                                    ""Method"": ""GET""
+                                  },
+                                  {
+                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                    ""Rel"": ""nextPage"",
+                                    ""Method"": ""GET""
+                                  }
+                                ]
+                              },
+                              ""Formatters"": [],
+                              ""ContentTypes"": [],
+                              ""DeclaredType"": null,
+                              ""StatusCode"": 200
+                            }
+                ".MinifyJson().PrettifyJson();
+
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+        }
+
+        [Test]
         public async Task ReturnXPaginationHeader_NotUsingHateoas_ForMinimumQuery_WhenUsingGetGollection()
         {
             // Arrange

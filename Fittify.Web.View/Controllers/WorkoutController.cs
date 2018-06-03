@@ -6,6 +6,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Web.ViewModelRepository.Sport;
@@ -62,7 +63,11 @@ namespace Fittify.Web.View.Controllers
         [Route("{workoutId}/associatedexercises", Name = "AssociatedExercises")]
         public async Task<IActionResult> AssociatedExercises(int workoutId)
         {
-            var queryResult = await _workoutViewModelRepo.GetById(workoutId);
+            var workoutResourceParameters = new WorkoutOfmResourceParameters()
+            {
+                IncludeExercises = "1"
+            };
+            var queryResult = await _workoutViewModelRepo.GetById(workoutId, workoutResourceParameters);
 
             if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 queryResult.HttpStatusCode == HttpStatusCode.Forbidden)
@@ -128,29 +133,7 @@ namespace Fittify.Web.View.Controllers
 
             return View(workoutHistoryViewModels?.ToList());
         }
-
-        [Route("historydetails/{workouthistoryId}")]
-        public async Task<IActionResult> HistoryDetails(int workoutHistoryId)
-        {
-            var workoutHistoryViewModelRepository = new WorkoutHistoryViewModelRepository(_appConfiguration, _httpContextAccessor);
-            var workoutHistoryViewModelQueryResult =
-                await workoutHistoryViewModelRepository.GetById(workoutHistoryId);
-
-            if (workoutHistoryViewModelQueryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
-                workoutHistoryViewModelQueryResult.HttpStatusCode == HttpStatusCode.Forbidden)
-            {
-                return RedirectToAction("AccessDenied", "Authorization");
-            }
-
-            WorkoutHistoryViewModel workoutHistoryViewModel = null;
-            if ((int)workoutHistoryViewModelQueryResult.HttpStatusCode == 200)
-            {
-                workoutHistoryViewModel = workoutHistoryViewModelQueryResult.ViewModel;
-            }
-
-            return View(workoutHistoryViewModel);
-        }
-
+        
         [HttpPost]
         public async Task<IActionResult> CreateNewWorkout([FromForm] WorkoutOfmForPost workoutOfmForPost)
         {
@@ -292,7 +275,7 @@ namespace Fittify.Web.View.Controllers
                     // Todo: Do something when patching failed
                 }
             }
-            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
+            return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }
 
         private async Task WriteOutIdentityAndAccessInformation()

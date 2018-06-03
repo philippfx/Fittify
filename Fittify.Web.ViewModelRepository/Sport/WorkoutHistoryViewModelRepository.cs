@@ -1,8 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Common;
 using Fittify.Web.ApiModelRepositories.OfmRepository.Sport;
 using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
@@ -42,21 +45,82 @@ namespace Fittify.Web.ViewModelRepository.Sport
             return workoutViewModelQueryResult;
         }
 
-        public override async Task<ViewModelQueryResult<WorkoutHistoryViewModel>> GetById(int id)
+        public async Task<ViewModelQueryResult<WorkoutHistoryViewModel>> GetById(int id, WorkoutHistoryOfmResourceParameters workoutHistoryOfmResourceParameters)
         {
-            // WorkoutHistoryOfmCollectionResourceParameters
-            var workoutHistoryOfmForGetQueryResult = await base.GetById(id);
+            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.GetSingle(id, workoutHistoryOfmResourceParameters);
 
-            //// ExerciseHistories
-            //var exerciseHistoryViewModelRepository = new ExerciseHistoryViewModelRepository(_appConfiguration, HttpContextAccessor);
+            var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutHistoryViewModel>();
+            workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
 
-            //var exerciseHistoryViewModelCollectionQueryResult
-            //    = await exerciseHistoryViewModelRepository.GetCollection(
-            //    new ExerciseHistoryOfmCollectionResourceParameters() { WorkoutHistoryId = workoutHistoryOfmForGetQueryResult.ViewModel.Id });
+            if ((int)ofmQueryResult.HttpStatusCode == 200)
+            {
+                workoutViewModelQueryResult.ViewModel =
+                    Mapper.Map<WorkoutHistoryViewModel>(ofmQueryResult.OfmForGet);
 
-            //workoutHistoryOfmForGetQueryResult.ViewModel.ExerciseHistories
-            //    = exerciseHistoryViewModelCollectionQueryResult.ViewModelForGetCollection;
+                foreach (var eH in ofmQueryResult.OfmForGet.ExerciseHistories)
+                {
+                    var relatedViewModelExerciseHistory = workoutViewModelQueryResult.ViewModel.ExerciseHistories.FirstOrDefault(f => f.Id == eH.Id);
+                    if (relatedViewModelExerciseHistory != null)
+                    {
+                        if(relatedViewModelExerciseHistory.Exercise.ExerciseType == ExerciseTypeEnum.WeightLifting.ToString())
+                        {
+                            var historicWeightLiftingSets = eH.PreviousExerciseHistory.WeightLiftingSets.OrderBy(o => o.Id).ToArray();
+                            var currentWeightLiftingSets = eH.WeightLiftingSets.OrderBy(o => o.Id).ToArray();
+                            var historicWeightLiftingSetsCount = eH.PreviousExerciseHistory.WeightLiftingSets.Count();
+                            var currentWeightLiftingSetsCount = eH.WeightLiftingSets.Count();
+                            var maxWeightLiftingSetsCount = Math.Max(historicWeightLiftingSetsCount, currentWeightLiftingSetsCount);
 
+                            for (int i = 0; i < maxWeightLiftingSetsCount; i++)
+                            {
+                                var currentAndHistoricWeightLiftingSetPair = new ExerciseHistoryViewModel.CurrentAndHistoricWeightLiftingSetPair();
+                                if (historicWeightLiftingSetsCount > i)
+                                {
+                                    currentAndHistoricWeightLiftingSetPair.HistoricWeightLiftingSet
+                                        = Mapper.Map<WeightLiftingSetViewModel>(historicWeightLiftingSets[i]);
+                                }
+
+                                if (currentWeightLiftingSetsCount > i)
+                                {
+                                    currentAndHistoricWeightLiftingSetPair.CurrentWeightLiftingSet
+                                        = Mapper.Map<WeightLiftingSetViewModel>(currentWeightLiftingSets[i]);
+                                }
+                                relatedViewModelExerciseHistory.CurrentAndHistoricWeightLiftingSetPairs.Add(currentAndHistoricWeightLiftingSetPair);
+                            }
+                        }
+
+                        if (relatedViewModelExerciseHistory.Exercise.ExerciseType == ExerciseTypeEnum.Cardio.ToString())
+                        {
+                            var historicCardioSets = eH.CardioSets.OrderBy(o => o.Id).ToArray();
+                            var currentCardioSets = eH.CardioSets.OrderBy(o => o.Id).ToArray();
+                            var historicCardioSetsCount = eH.PreviousExerciseHistory.CardioSets.Count();
+                            var currentCardioSetsCount = eH.CardioSets.Count();
+                            var maxCardioSetsCount = Math.Max(historicCardioSetsCount, currentCardioSetsCount);
+
+                            for (int i = 0; i < maxCardioSetsCount; i++)
+                            {
+                                var currentAndHistoricCardioSetPair = new ExerciseHistoryViewModel.CurrentAndHistoricCardioSetPair();
+                                if (historicCardioSetsCount > i)
+                                {
+                                    currentAndHistoricCardioSetPair.HistoricCardioSet
+                                        = Mapper.Map<CardioSetViewModel>(historicCardioSets[i]);
+                                }
+
+                                if (currentCardioSetsCount > i)
+                                {
+                                    currentAndHistoricCardioSetPair.CurrentCardioSet
+                                        = Mapper.Map<CardioSetViewModel>(currentCardioSets[i]);
+                                }
+                                relatedViewModelExerciseHistory.CurrentAndHistoricCardioSetPairs.Add(currentAndHistoricCardioSetPair);
+                            }
+                        }
+                    }                        
+                }
+            }
+            else
+            {
+                workoutViewModelQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
+            }
+            
             // Exercises
             var exerciseViewModelRepository = new ExerciseViewModelRepository(_appConfiguration, HttpContextAccessor);
 
@@ -64,11 +128,11 @@ namespace Fittify.Web.ViewModelRepository.Sport
                 = await exerciseViewModelRepository.GetCollection(
                     new ExerciseOfmCollectionResourceParameters());
 
-            workoutHistoryOfmForGetQueryResult.ViewModel.AllExercises
+            workoutViewModelQueryResult.ViewModel.AllExercises
                 = exerciseViewModelCollectionQueryResult.ViewModelForGetCollection;
 
             // Done
-            return workoutHistoryOfmForGetQueryResult;
+            return workoutViewModelQueryResult;
         }
     }
 }

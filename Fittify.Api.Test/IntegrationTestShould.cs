@@ -47,7 +47,7 @@ namespace Fittify.Api.Test
                 var client = server.CreateClient();
                 var response = await client.GetAsync("/api/workouts/1");
                 var responseString = await response.Content.ReadAsStringAsync();
-                
+
                 Assert.AreEqual((int) response.StatusCode, 401);
             }
         }
@@ -72,6 +72,7 @@ namespace Fittify.Api.Test
                     {
 	                    ""id"": 1,
 	                    ""rangeOfExerciseIds"": ""1-3,10-11"",
+                        ""exercises"": null,
 	                    ""rangeOfWorkoutHistoryIds"": ""1,4,7"",
 	                    ""name"": ""MondayChestSeed""
                     }
@@ -94,7 +95,7 @@ namespace Fittify.Api.Test
                 var result = await client.GetAsync("/api/workouts/1");
                 var responseStatusCode = result.StatusCode;
 
-                Assert.AreEqual((int)responseStatusCode, 401);
+                Assert.AreEqual((int) responseStatusCode, 401);
             }
         }
 
@@ -125,6 +126,7 @@ namespace Fittify.Api.Test
                 Assert.AreEqual(actualObjectResult, expectedObjectResult);
             }
         }
+
         [Test]
         public async Task ReturnFullWorkoutHistoryRepository_ForFullQuery()
         {
@@ -134,7 +136,9 @@ namespace Fittify.Api.Test
                 client.DefaultRequestHeaders.Add("X-Integration-Testing", "abcde-12345");
                 client.DefaultRequestHeaders.Add("sub", "d860efca-22d9-47fd-8249-791ba61b07c7");
                 client.DefaultRequestHeaders.Add("ApiVersion", "1");
-                var result = await client.GetAsync("/api/workouthistories/5?IncludeExerciseHistories=1&IncludeWeightLiftingSets=1&IncludePreviousExerciseHistories=1&IncludeCardioSets=1");
+                var result =
+                    await client.GetAsync(
+                        "/api/workouthistories/5?IncludeExerciseHistories=1&IncludeWeightLiftingSets=1&IncludePreviousExerciseHistories=1&IncludeCardioSets=1");
                 var responseString = await result.Content.ReadAsStringAsync();
 
                 var actualObjectResult = responseString.MinifyJson().PrettifyJson();
@@ -501,6 +505,75 @@ namespace Fittify.Api.Test
 						  ""dateTimeStart"": ""2017-05-10T12:01:05"",
 						  ""dateTimeEnd"": ""2017-05-10T14:32:01""
 						}
+                    ".MinifyJson().PrettifyJson();
+
+                Assert.AreEqual(actualObjectResult, expectedObjectResult);
+            }
+        }
+
+        [Test]
+        public async Task ReturnFullWorkoutRepository_ForFullQuery()
+        {
+            using (var server = GetTestServerInstance())
+            {
+                var client = server.CreateClient();
+                client.DefaultRequestHeaders.Add("X-Integration-Testing", "abcde-12345");
+                client.DefaultRequestHeaders.Add("sub", "d860efca-22d9-47fd-8249-791ba61b07c7");
+                client.DefaultRequestHeaders.Add("ApiVersion", "1");
+                var result = await client.GetAsync("/api/workouts/2?IncludeExercises=1");
+                var responseString = await result.Content.ReadAsStringAsync();
+
+                var actualObjectResult = responseString.MinifyJson().PrettifyJson();
+                var expectedObjectResult =
+                    @"
+                        {
+                          ""id"": 2,
+                          ""rangeOfExerciseIds"": ""4-6,10-11"",
+                          ""exercises"": [
+                            {
+                              ""id"": 4,
+                              ""rangeOfWorkoutIds"": ""2"",
+                              ""rangeOfExerciseHistoryIds"": null,
+                              ""rangeOfPreviousExerciseHistoryIds"": null,
+                              ""name"": ""DeadLiftSeed"",
+                              ""exerciseType"": ""WeightLifting""
+                            },
+                            {
+                              ""id"": 5,
+                              ""rangeOfWorkoutIds"": ""2"",
+                              ""rangeOfExerciseHistoryIds"": null,
+                              ""rangeOfPreviousExerciseHistoryIds"": null,
+                              ""name"": ""SeatedPullDownSeed"",
+                              ""exerciseType"": ""WeightLifting""
+                            },
+                            {
+                              ""id"": 6,
+                              ""rangeOfWorkoutIds"": ""2"",
+                              ""rangeOfExerciseHistoryIds"": null,
+                              ""rangeOfPreviousExerciseHistoryIds"": null,
+                              ""name"": ""RowSeed"",
+                              ""exerciseType"": ""WeightLifting""
+                            },
+                            {
+                              ""id"": 10,
+                              ""rangeOfWorkoutIds"": ""2"",
+                              ""rangeOfExerciseHistoryIds"": null,
+                              ""rangeOfPreviousExerciseHistoryIds"": null,
+                              ""name"": ""SitupsSeed"",
+                              ""exerciseType"": ""WeightLifting""
+                            },
+                            {
+                              ""id"": 11,
+                              ""rangeOfWorkoutIds"": ""2"",
+                              ""rangeOfExerciseHistoryIds"": null,
+                              ""rangeOfPreviousExerciseHistoryIds"": null,
+                              ""name"": ""SpinningBikeSeed"",
+                              ""exerciseType"": ""Cardio""
+                            }
+                          ],
+                          ""rangeOfWorkoutHistoryIds"": ""2,5,8"",
+                          ""name"": ""WednesdayBackSeed""
+                        }
                     ".MinifyJson().PrettifyJson();
 
                 Assert.AreEqual(actualObjectResult, expectedObjectResult);
