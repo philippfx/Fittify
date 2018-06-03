@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
+using Fittify.Client.ApiModelRepositories;
 using Fittify.Web.ApiModelRepositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -13,16 +14,18 @@ namespace Fittify.Web.ViewModelRepository
         where TId : struct
         where TViewModel : class
         where TOfmForGet : class
-        where TGetCollectionResourceParameters : class
+        where TGetCollectionResourceParameters : class, new()
         where TOfmForPost : class
     {
         protected readonly GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters> GenericAsyncGppdOfmWorkout;
         protected readonly IHttpContextAccessor HttpContextAccessor;
         protected readonly IConfiguration AppConfiguration;
+        protected readonly IHttpRequestHandler HttpRequestHandler;
 
-        public GenericViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey)
+        public GenericViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey, IHttpRequestHandler httpRequestHandler)
         {
-            GenericAsyncGppdOfmWorkout = new GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters>(appConfiguration, httpContextAccessor, mappedControllerActionKey);
+            HttpRequestHandler = httpRequestHandler;
+            GenericAsyncGppdOfmWorkout = new GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters>(appConfiguration, httpContextAccessor, mappedControllerActionKey, HttpRequestHandler);
             HttpContextAccessor = httpContextAccessor;
             AppConfiguration = appConfiguration;
         }

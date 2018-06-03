@@ -7,6 +7,7 @@ using Fittify.Api.Authorization;
 using Fittify.Api.Helpers.CustomAttributes;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.OfmRepository.OfmRepository.Sport;
+using Fittify.Common.Extensions;
 using Fittify.DataModelRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

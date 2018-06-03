@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Net.Http;
 using Newtonsoft.Json;
 
 namespace Fittify.Web.ApiModelRepositories
@@ -14,12 +15,14 @@ namespace Fittify.Web.ApiModelRepositories
                     JsonConvert.DeserializeObject<T>(data);
         }
 
+        [ExcludeFromCodeCoverage] // As of 3rd of June 2018 no references to this extension method exist
         public static string ContentAsJson(this HttpResponseMessage response)
         {
             var data = response.Content.ReadAsStringAsync().Result;
             return JsonConvert.SerializeObject(data);
         }
 
+        [ExcludeFromCodeCoverage] // As of 3rd of June 2018 no references to this extension method exist
         public static string ContentAsString(this HttpResponseMessage response)
         {
             return response.Content.ReadAsStringAsync().Result;

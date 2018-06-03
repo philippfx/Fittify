@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Client.ApiModelRepositories;
 using Fittify.Common;
 using Fittify.Web.ApiModelRepositories;
 using Fittify.Web.ViewModels.Sport;
@@ -17,10 +18,10 @@ namespace Fittify.Web.ViewModelRepository.Sport
         private readonly GenericAsyncGppdOfm<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmCollectionResourceParameters> _asyncGppdOfmExerciseHistory;
         private readonly IConfiguration _appConfiguration;
 
-        public ExerciseHistoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
-            : base(appConfiguration, httpContextAccessor, "ExerciseHistory")
+        public ExerciseHistoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequestHandler)
+            : base(appConfiguration, httpContextAccessor, "ExerciseHistory", httpRequestHandler)
         {
-            _asyncGppdOfmExerciseHistory = new GenericAsyncGppdOfm<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmCollectionResourceParameters>(appConfiguration, httpContextAccessor, "ExerciseHistoryOfmCollectionResourceParameters");
+            _asyncGppdOfmExerciseHistory = new GenericAsyncGppdOfm<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmCollectionResourceParameters>(appConfiguration, httpContextAccessor, "ExerciseHistoryOfmCollectionResourceParameters", httpRequestHandler);
             _appConfiguration = appConfiguration;
         }
         

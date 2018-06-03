@@ -11,6 +11,7 @@ using Fittify.Api.OfmRepository.Services;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Api.Services.ConfigureServices;
+using Fittify.Common.Extensions;
 using Fittify.DataModelRepository.Helpers;
 using Fittify.DataModelRepository.Repository;
 using Fittify.DataModelRepository.Repository.Sport.ExtendedInterfaces;

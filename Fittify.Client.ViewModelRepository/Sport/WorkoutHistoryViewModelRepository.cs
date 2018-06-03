@@ -5,6 +5,7 @@ using AutoMapper;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Client.ApiModelRepositories;
 using Fittify.Common;
 using Fittify.Web.ApiModelRepositories.OfmRepository.Sport;
 using Fittify.Web.ViewModels.Sport;
@@ -18,10 +19,10 @@ namespace Fittify.Web.ViewModelRepository.Sport
         private readonly AsyncWorkoutHistoryOfmRepository asyncGppdOfmWorkoutHistory;
         private readonly IConfiguration _appConfiguration;
 
-        public WorkoutHistoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
-            : base(appConfiguration, httpContextAccessor, "WorkoutHistory")
+        public WorkoutHistoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequestHandler)
+            : base(appConfiguration, httpContextAccessor, "WorkoutHistory", httpRequestHandler)
         {
-            asyncGppdOfmWorkoutHistory = new AsyncWorkoutHistoryOfmRepository(appConfiguration, httpContextAccessor, "WorkoutHistoryOfmCollectionResourceParameters");
+            asyncGppdOfmWorkoutHistory = new AsyncWorkoutHistoryOfmRepository(appConfiguration, httpContextAccessor, "WorkoutHistoryOfmCollectionResourceParameters", httpRequestHandler);
             _appConfiguration = appConfiguration;
         }
 
@@ -122,7 +123,7 @@ namespace Fittify.Web.ViewModelRepository.Sport
             }
             
             // Exercises
-            var exerciseViewModelRepository = new ExerciseViewModelRepository(_appConfiguration, HttpContextAccessor);
+            var exerciseViewModelRepository = new ExerciseViewModelRepository(_appConfiguration, HttpContextAccessor, HttpRequestHandler);
 
             var exerciseViewModelCollectionQueryResult
                 = await exerciseViewModelRepository.GetCollection(

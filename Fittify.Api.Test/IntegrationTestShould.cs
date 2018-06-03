@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Test.TestHelpers;
+using Fittify.Common.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;

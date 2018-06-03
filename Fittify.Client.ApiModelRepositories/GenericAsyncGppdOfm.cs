@@ -16,7 +16,7 @@ namespace Fittify.Web.ApiModelRepositories
     public class GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters> 
         where TId : struct
         where TOfmForGet : class
-        where TGetCollectionResourceParameters : class
+        where TGetCollectionResourceParameters : class, new()
         where TOfmForPost : class
 
     {
@@ -41,25 +41,19 @@ namespace Fittify.Web.ApiModelRepositories
                 + AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
                 + "/" + id
                 );
-            try
-            {
-                var httpResponse = await HttpRequestHandler.GetSingle(uri, AppConfiguration, HttpContextAccessor);
-                var contentAsString = httpResponse.Content.ReadAsStringAsync();
-                ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
-                ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
-                if (!Regex.Match(((int)ofmQueryResult.HttpStatusCode).ToString(), FittifyRegularExpressions.HttpStatusCodeStartsWith2).Success)
-                {
-                    ofmQueryResult.ErrorMessagesPresented = httpResponse.ContentAsType<IReadOnlyDictionary<string, object>>();
-                }
-                else
-                {
-                    ofmQueryResult.OfmForGet = httpResponse.ContentAsType<TOfmForGet>();
-                }
-            }
-            catch (Exception e)
+            var httpResponse = await HttpRequestHandler.GetSingle(uri, AppConfiguration, HttpContextAccessor);
+            var contentAsString = httpResponse.Content.ReadAsStringAsync();
+            ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
+            ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
+
+            if (!Regex.Match(((int)ofmQueryResult.HttpStatusCode).ToString(), FittifyRegularExpressions.HttpStatusCodeStartsWith2).Success)
             {
-                var msg = e.Message;
+                ofmQueryResult.ErrorMessagesPresented = httpResponse.ContentAsType<IReadOnlyDictionary<string, object>>();
+            }
+            else
+            {
+                ofmQueryResult.OfmForGet = httpResponse.ContentAsType<TOfmForGet>();
             }
             return ofmQueryResult;
         }
@@ -73,25 +67,18 @@ namespace Fittify.Web.ApiModelRepositories
                 + AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
                 + "/" + id + resourceParameters.ToQueryParameterString()
             );
-            try
-            {
-                var httpResponse = await HttpRequestHandler.GetSingle(uri, AppConfiguration, HttpContextAccessor);
-                var contentAsString = httpResponse.Content.ReadAsStringAsync();
-                ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
-                ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
+            var httpResponse = await HttpRequestHandler.GetSingle(uri, AppConfiguration, HttpContextAccessor);
+            var contentAsString = httpResponse.Content.ReadAsStringAsync();
+            ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
+            ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
-                if (!Regex.Match(((int)ofmQueryResult.HttpStatusCode).ToString(), FittifyRegularExpressions.HttpStatusCodeStartsWith2).Success)
-                {
-                    ofmQueryResult.ErrorMessagesPresented = httpResponse.ContentAsType<IReadOnlyDictionary<string, object>>();
-                }
-                else
-                {
-                    ofmQueryResult.OfmForGet = httpResponse.ContentAsType<TOfmForGet>();
-                }
-            }
-            catch (Exception e)
+            if (!Regex.Match(((int)ofmQueryResult.HttpStatusCode).ToString(), FittifyRegularExpressions.HttpStatusCodeStartsWith2).Success)
             {
-                var msg = e.Message;
+                ofmQueryResult.ErrorMessagesPresented = httpResponse.ContentAsType<IReadOnlyDictionary<string, object>>();
+            }
+            else
+            {
+                ofmQueryResult.OfmForGet = httpResponse.ContentAsType<TOfmForGet>();
             }
             return ofmQueryResult;
         }
@@ -100,47 +87,18 @@ namespace Fittify.Web.ApiModelRepositories
         {
             var ofmCollectionQueryResult = new OfmCollectionQueryResult<TOfmForGet>();
 
-            // Todo: Use extension method
-            PropertyInfo[] properties = resourceParameters.GetType().GetProperties();
-            string queryParamter = "";
-            foreach (var p in properties)
+            if (resourceParameters == null)
             {
-                var pName = p.Name;
-                var pVal = p.GetValue(resourceParameters);
-
-                if (pVal != null)
-                {
-                    if (pVal as string != null && pVal as string != "")
-                    {
-                        if (String.IsNullOrWhiteSpace(queryParamter))
-                        {
-                            queryParamter = "?" + pName + "=" + pVal;
-                        }
-                        else
-                        {
-                            queryParamter += "&" + pName + "=" + pVal;
-                        }
-                    }
-                    else
-                    {
-                        if (String.IsNullOrWhiteSpace(queryParamter))
-                        {
-                            queryParamter = "?" + pName + "=" + pVal;
-                        }
-                        else
-                        {
-                            queryParamter += "&" + pName + "=" + pVal;
-                        }
-                    }
-                }
+                resourceParameters = new TGetCollectionResourceParameters();
             }
 
             var uri = new Uri(
                 AppConfiguration.GetValue<string>("FittifyApiBaseUrl") +
                 AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
+                + resourceParameters.ToQueryParameterString()
             );
 
-            var httpResponse = await HttpRequestHandler.GetCollection(new Uri(uri + queryParamter), AppConfiguration, HttpContextAccessor);
+            var httpResponse = await HttpRequestHandler.GetCollection(uri, AppConfiguration, HttpContextAccessor);
             var contentAsString = httpResponse.Content.ReadAsStringAsync();
             ofmCollectionQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmCollectionQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
@@ -194,10 +152,6 @@ namespace Fittify.Web.ApiModelRepositories
             if (!Regex.Match(((int)ofmQueryResult.HttpStatusCode).ToString(), FittifyRegularExpressions.HttpStatusCodeStartsWith2).Success)
             {
                 ofmQueryResult.ErrorMessagesPresented = httpResponse.ContentAsType<IReadOnlyDictionary<string, object>>();
-            }
-            else
-            {
-                ofmQueryResult.OfmForGet = httpResponse.ContentAsType<TOfmForGet>();
             }
             return ofmQueryResult;
         }
