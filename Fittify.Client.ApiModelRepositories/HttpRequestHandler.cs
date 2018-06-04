@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Fittify.Common.CustomExceptions;
-using Fittify.Web.ApiModelRepositories;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -29,12 +28,16 @@ namespace Fittify.Client.ApiModelRepositories
 
         public async Task<HttpResponseMessage> GetCollection(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
-            string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
-
             var builder = new HttpRequestBuilder()
                 .AddMethod(HttpMethod.Get)
-                .AddRequestUri(requestUri)
-                .AddBearerToken(accessToken);
+                .AddRequestUri(requestUri);
+
+            //string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
+
+            //var builder = new HttpRequestBuilder()
+            //    .AddMethod(HttpMethod.Get)
+            //    .AddRequestUri(requestUri)
+            //    .AddBearerToken(accessToken);
 
             return await builder.SendAsync();
         }

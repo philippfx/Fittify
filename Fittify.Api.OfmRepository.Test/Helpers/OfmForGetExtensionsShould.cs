@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OuterFacingModels.Sport.Get;

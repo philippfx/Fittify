@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 
-namespace Fittify.Web.ViewModelRepository
+namespace Fittify.Client.ViewModelRepository
 {
     public class ViewModelQueryResultBase
     {

@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 
-namespace Fittify.Web.View.Helpers
+namespace Fittify.Client.ApiModelRepositories.Helpers
 {
     public static class ObjectExtensions
     {
         /// <summary>
-        /// Converts any instance of a resourceParameters to a query parameters string
+        /// Converts any instance of a resourceParameters to a query parameters string. NullOrWhiteSpace string queryParameters are ignored and not added to the returned queryParameterString.
         /// </summary>
         /// <param name="source">Resource parameter instance</param>
         /// <returns>Query parameter string</returns>
@@ -25,16 +21,9 @@ namespace Fittify.Web.View.Helpers
 
                 if (pVal != null)
                 {
-                    if (pVal as string != null && pVal as string != "")
+                    if (pVal is string s && String.IsNullOrWhiteSpace(s))
                     {
-                        if (String.IsNullOrWhiteSpace(queryParamters))
-                        {
-                            queryParamters = "?" + pName + "=" + pVal;
-                        }
-                        else
-                        {
-                            queryParamters += "&" + pName + "=" + pVal;
-                        }
+                        // Do nothing, because we don't need empty query parameters
                     }
                     else
                     {

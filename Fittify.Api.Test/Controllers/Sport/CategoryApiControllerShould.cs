@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Fittify.Api.Controllers;
 using Fittify.Api.Controllers.Sport;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
@@ -18,18 +17,13 @@ using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Api.Services.ConfigureServices;
 using Fittify.Api.Test.TestHelpers;
 using Fittify.Common.Extensions;
-using Fittify.Common.Helpers;
-using Fittify.DataModels.Models.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using Microsoft.Extensions.Primitives;
 using Moq;
-using Moq.Protected;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
 namespace Fittify.Api.Test.Controllers.Sport

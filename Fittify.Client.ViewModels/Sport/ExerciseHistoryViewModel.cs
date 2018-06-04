@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using Fittify.Api.OuterFacingModels.Sport.Abstract;
 using Fittify.Common;
 
-namespace Fittify.Web.ViewModels.Sport
+namespace Fittify.Client.ViewModels.Sport
 {
     public class ExerciseHistoryViewModel : WorkoutHistoryOfmBase, IEntityUniqueIdentifier<int>
     {
+        [ExcludeFromCodeCoverage] // No need to test this simple constructor
         public ExerciseHistoryViewModel()
         {
             CurrentAndHistoricWeightLiftingSetPairs = new List<CurrentAndHistoricWeightLiftingSetPair>();

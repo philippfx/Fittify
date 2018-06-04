@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 
-namespace Fittify.Api.OfmRepository.Services
+namespace Fittify.Api.OfmRepository.Services.TypeHelper
 {
     /// <summary>
     /// Is used to validate input fields when data will be shaped https://app.pluralsight.com/player?course=asp-dot-net-core-restful-api-building&author=kevin-dockx&name=asp-dot-net-core-restful-api-building-m7&clip=9&mode=live

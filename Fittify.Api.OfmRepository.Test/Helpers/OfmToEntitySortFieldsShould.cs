@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.Services;
-using Fittify.Api.OuterFacingModels.Sport.Get;
-using Fittify.DataModels.Models.Sport;
-using Newtonsoft.Json;
+using Fittify.Api.OfmRepository.Services.PropertyMapping;
 using NUnit.Framework;
 
 namespace Fittify.Api.OfmRepository.Test.Helpers

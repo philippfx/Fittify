@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Helpers.ObjectResults;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Fittify.Api.Test.Helpers.ObjectResults
 {

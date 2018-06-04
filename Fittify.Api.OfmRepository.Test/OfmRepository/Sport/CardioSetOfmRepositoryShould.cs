@@ -1,5 +1,7 @@
 ﻿using Fittify.Api.OfmRepository.OfmRepository.Sport;
 using Fittify.Api.OfmRepository.Services;
+using Fittify.Api.OfmRepository.Services.PropertyMapping;
+using Fittify.Api.OfmRepository.Services.TypeHelper;
 using Fittify.DataModelRepository.Repository;
 using Fittify.DataModelRepository.ResourceParameters.Sport;
 using Fittify.DataModels.Models.Sport;

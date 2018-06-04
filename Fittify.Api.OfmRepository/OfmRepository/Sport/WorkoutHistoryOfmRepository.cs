@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,19 +6,18 @@ using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
-using Fittify.Common;
 using Fittify.Common.Extensions;
 using Fittify.DataModelRepository.Repository;
-using Fittify.DataModelRepository.Repository.Sport;
 using Fittify.DataModelRepository.Repository.Sport.ExtendedInterfaces;
 using Fittify.DataModelRepository.ResourceParameters.Sport;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.EntityFrameworkCore;
-using IPropertyMappingService = Fittify.Api.OfmRepository.Services.IPropertyMappingService;
-using ITypeHelperService = Fittify.Api.OfmRepository.Services.ITypeHelperService;
+using IPropertyMappingService = Fittify.Api.OfmRepository.Services.PropertyMapping.IPropertyMappingService;
+using ITypeHelperService = Fittify.Api.OfmRepository.Services.TypeHelper.ITypeHelperService;
 
 namespace Fittify.Api.OfmRepository.OfmRepository.Sport
 {

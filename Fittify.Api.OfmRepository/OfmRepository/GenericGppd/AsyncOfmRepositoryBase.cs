@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fittify.Api.OfmRepository.Helpers;
@@ -9,8 +8,8 @@ using Fittify.Common;
 using Fittify.Common.Helpers;
 using Fittify.DataModelRepository.Repository;
 using Fittify.DataModelRepository.ResourceParameters;
-using IPropertyMappingService = Fittify.Api.OfmRepository.Services.IPropertyMappingService;
-using ITypeHelperService = Fittify.Api.OfmRepository.Services.ITypeHelperService;
+using IPropertyMappingService = Fittify.Api.OfmRepository.Services.PropertyMapping.IPropertyMappingService;
+using ITypeHelperService = Fittify.Api.OfmRepository.Services.TypeHelper.ITypeHelperService;
 
 namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
 {

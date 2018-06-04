@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 
-namespace Fittify.Web.ApiModelRepositories
+namespace Fittify.Client.ApiModelRepositories
 {
     public class OfmQueryResultBase
     {

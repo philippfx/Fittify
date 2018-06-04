@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport

@@ -1,4 +1,4 @@
-﻿namespace Fittify.Web.ViewModelRepository
+﻿namespace Fittify.Client.ViewModelRepository
 {
     public class ViewModelQueryResult<TViewModel> : ViewModelQueryResultBase where TViewModel : class
     {

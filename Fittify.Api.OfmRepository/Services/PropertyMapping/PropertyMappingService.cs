@@ -5,7 +5,7 @@ using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common.CustomExceptions;
 using Fittify.DataModels.Models.Sport;
 
-namespace Fittify.Api.OfmRepository.Services
+namespace Fittify.Api.OfmRepository.Services.PropertyMapping
 {
     public class PropertyMappingService : IPropertyMappingService
     {

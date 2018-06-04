@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Fittify.Common;
 
 namespace Fittify.DataModels.Models.Sport

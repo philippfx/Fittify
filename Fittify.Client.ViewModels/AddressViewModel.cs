@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace Fittify.Web.ViewModels
+namespace Fittify.Client.ViewModels
 {
     [ExcludeFromCodeCoverage] //// Was just playing around with authorization policies
     public class AddressViewModel

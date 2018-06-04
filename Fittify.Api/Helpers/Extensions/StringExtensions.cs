@@ -1,10 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using Fittify.Common.Helpers;
-using Newtonsoft.Json.Linq;
 
 namespace Fittify.Api.Helpers.Extensions
 {

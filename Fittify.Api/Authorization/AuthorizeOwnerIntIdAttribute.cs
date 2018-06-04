@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Fittify.Api.OfmRepository.OfmRepository;
-using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
-using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
-using Fittify.Api.OfmRepository.Services;
-using Fittify.Api.OuterFacingModels.Sport.Get;
-using Fittify.Api.OuterFacingModels.Sport.Patch;
-using Fittify.Api.OuterFacingModels.Sport.Post;
-using Fittify.DataModelRepository;
-using Fittify.DataModelRepository.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Fittify.Api.Authorization
 {

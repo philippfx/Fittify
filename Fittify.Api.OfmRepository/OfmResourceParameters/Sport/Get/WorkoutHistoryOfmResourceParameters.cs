@@ -1,7 +1,4 @@
-﻿using System;
-using Fittify.Common.ResourceParameters;
-
-namespace Fittify.Api.OfmRepository.OfmResourceParameters.Sport
+﻿namespace Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get
 {
     public class WorkoutHistoryOfmResourceParameters
     {

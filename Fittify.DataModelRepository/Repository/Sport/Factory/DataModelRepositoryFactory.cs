@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
-using System.Threading;
-using Fittify.Common;
-using Fittify.Common.ResourceParameters;
-using Fittify.DataModelRepository.ResourceParameters.Sport;
-using Fittify.DataModels.Models.Sport;
 
 namespace Fittify.DataModelRepository.Repository.Sport.Factory
 {

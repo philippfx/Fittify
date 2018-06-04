@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Fittify.Common.Helpers;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Fittify.Common.Test.Helpers
 {

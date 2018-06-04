@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Fittify.Api.OfmRepository.OfmResourceParameters;
 using Fittify.Common.Helpers;
 using Microsoft.AspNetCore.Mvc;
 

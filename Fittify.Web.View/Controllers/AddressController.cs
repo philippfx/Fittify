@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Fittify.Client.ViewModels;
 using Fittify.Common.CustomExceptions;
-using Fittify.Web.ViewModels;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Fittify.Client.ApiModelRepositories;
+using Fittify.Client.ApiModelRepositories.Helpers;
 using Fittify.Common.Helpers;
-using Fittify.Web.View.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Configuration;
 
-namespace Fittify.Web.ApiModelRepositories
+namespace Fittify.Client.ApiModelRepositories
 {
     public class GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters> 
         where TId : struct

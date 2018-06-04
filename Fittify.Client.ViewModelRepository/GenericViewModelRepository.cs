@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Client.ApiModelRepositories;
-using Fittify.Web.ApiModelRepositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Configuration;
 
-namespace Fittify.Web.ViewModelRepository
+namespace Fittify.Client.ViewModelRepository
 {
     public class GenericViewModelRepository<TId, TViewModel, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters>
         where TId : struct

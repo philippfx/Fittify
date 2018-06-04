@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using AutoMapper;
 using Fittify.Api.Helpers;
-using Fittify.Api.OuterFacingModels;
 using Fittify.Common.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

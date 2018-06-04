@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Fittify.Web.ApiModelRepositories
+namespace Fittify.Client.ApiModelRepositories
 {
     public class JsonContent : StringContent
     {

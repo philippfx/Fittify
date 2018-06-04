@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using System.Threading;
+﻿using System.IO;
 using System.Threading.Tasks;
-using Fittify.Api.Helpers;
-using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Middleware;
-using Fittify.Api.Test.Controllers.Sport;
 using Fittify.Api.Test.TestHelpers;
 using Fittify.Common.Extensions;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Fittify.Api.Test.Middleware

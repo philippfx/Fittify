@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using PropertyMappingValue = Fittify.Api.OfmRepository.Services.PropertyMappingValue;
+using PropertyMappingValue = Fittify.Api.OfmRepository.Services.PropertyMapping.PropertyMappingValue;
 
 namespace Fittify.Api.OfmRepository.Helpers
 {

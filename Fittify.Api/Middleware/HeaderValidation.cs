@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Microsoft.AspNetCore.Http;

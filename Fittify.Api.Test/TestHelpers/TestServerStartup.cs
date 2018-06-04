@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Fittify.Api.Test.TestHelpers
 {
-    class TestServerStartup : Startup
+    public class TestServerStartup : Startup
     {
         public TestServerStartup(IHostingEnvironment env) : base(env)
         {

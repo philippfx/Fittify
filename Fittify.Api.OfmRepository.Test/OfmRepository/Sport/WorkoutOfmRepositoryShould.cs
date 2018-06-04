@@ -5,6 +5,8 @@ using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.OfmRepository.Sport;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OfmRepository.Services;
+using Fittify.Api.OfmRepository.Services.PropertyMapping;
+using Fittify.Api.OfmRepository.Services.TypeHelper;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.DataModelRepository.Repository;
 using Fittify.DataModelRepository.ResourceParameters.Sport;

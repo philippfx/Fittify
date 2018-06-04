@@ -1,4 +1,4 @@
-﻿namespace Fittify.Api.OfmRepository.OfmResourceParameters.Sport
+﻿namespace Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get
 {
     public class WeightLiftingSetOfmCollectionResourceParameters : OfmResourceParametersBase
     {

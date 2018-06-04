@@ -4,10 +4,15 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
-namespace Fittify.Web.ApiModelRepositories
+namespace Fittify.Client.ApiModelRepositories
 {
     public class HttpRequestBuilder
     {
+        private readonly IHttpClient _httpClient;
+        public HttpRequestBuilder(IHttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
         private HttpMethod _method = null;
         private Uri _requestUri = null;
         private HttpContent _content = null;

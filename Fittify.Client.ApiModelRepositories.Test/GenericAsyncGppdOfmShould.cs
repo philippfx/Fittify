@@ -1,34 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Client.ApiModelRepositories.Test.TestHelpers;
-using Fittify.Web.ApiModelRepositories;
 using Microsoft.AspNetCore.Http;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using Formatting = System.Xml.Formatting;
 using System.Net;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
+using Fittify.Client.ApiModelRepositories.Helpers;
 using Fittify.Common.Extensions;
-using Fittify.Web.View.Helpers;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 
 namespace Fittify.Client.ApiModelRepositories.Test
 {
     [TestFixture]
-    class CategoryOfmRepositoryShould
+    class GenericAsyncGppdOfmShould
     {
-        private readonly Guid _ownerGuid = new Guid("00000000-0000-0000-0000-000000000000");
-
         private string _defaultAppConfigurationString =
             @"
                 {
@@ -39,7 +33,6 @@ namespace Fittify.Client.ApiModelRepositories.Test
                   }
                 }
             ";
-
 
         [Test]
         public async Task ReturnSuccessfulOfmQueryResult_UsingGetSingle()

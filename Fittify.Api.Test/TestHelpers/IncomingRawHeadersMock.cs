@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using Fittify.Api.Helpers;
-using Fittify.Api.Test.Controllers.Sport;
-using Microsoft.Extensions.Configuration;
+﻿using Fittify.Api.Helpers;
 
 namespace Fittify.Api.Test.TestHelpers
 {

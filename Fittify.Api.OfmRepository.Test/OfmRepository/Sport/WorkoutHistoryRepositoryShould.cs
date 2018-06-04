@@ -1,27 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.OfmRepository.Helpers;
-using Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport;
 using Fittify.Api.OfmRepository.OfmRepository.Sport;
-using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
-using Fittify.Api.OfmRepository.Services;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
+using Fittify.Api.OfmRepository.Services.PropertyMapping;
+using Fittify.Api.OfmRepository.Services.TypeHelper;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Api.Services.ConfigureServices;
 using Fittify.Common.Extensions;
-using Fittify.DataModelRepository.Helpers;
-using Fittify.DataModelRepository.Repository;
 using Fittify.DataModelRepository.Repository.Sport.ExtendedInterfaces;
-using Fittify.DataModelRepository.ResourceParameters.Sport;
 using Fittify.DataModels.Models.Sport;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace Fittify.Api.OfmRepository.Test.OfmRepository.GenericGppd.Sport
+namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
 {
     [TestFixture]
     class AsyncGppdForWorkoutHistoryShouldcs

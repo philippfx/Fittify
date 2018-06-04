@@ -14,10 +14,9 @@ using Fittify.Common.Extensions;
 using Fittify.DataModelRepository.Repository;
 using Fittify.DataModelRepository.ResourceParameters.Sport;
 using Fittify.DataModels.Models.Sport;
-using IPropertyMappingService = Fittify.Api.OfmRepository.Services.IPropertyMappingService;
-using ITypeHelperService = Fittify.Api.OfmRepository.Services.ITypeHelperService;
+using IPropertyMappingService = Fittify.Api.OfmRepository.Services.PropertyMapping.IPropertyMappingService;
+using ITypeHelperService = Fittify.Api.OfmRepository.Services.TypeHelper.ITypeHelperService;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Extensions.Internal;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport;
 
 namespace Fittify.Api.OfmRepository.OfmRepository.Sport

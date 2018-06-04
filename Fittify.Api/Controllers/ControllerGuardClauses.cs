@@ -1,10 +1,8 @@
 ﻿using System.Linq;
-using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Helpers.ObjectResults;
 using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Common.Extensions;
-using Fittify.Common.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using BadRequestObjectResult = Fittify.Api.Helpers.ObjectResults.BadRequestObjectResult;
 

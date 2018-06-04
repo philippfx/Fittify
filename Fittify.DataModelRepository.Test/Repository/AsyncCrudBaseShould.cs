@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fittify.DataModelRepository.Repository.Sport;
 using Fittify.DataModelRepository.ResourceParameters.Sport;
-using Fittify.DataModelRepository.Test.TestHelper.EntityFrameworkCore;
 using Fittify.DataModels.Models.Sport;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +11,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using Assert = NUnit.Framework.Assert;
 
-namespace Fittify.DataModelRepository.Test.Repository.Sport
+namespace Fittify.DataModelRepository.Test.Repository
 {
     [TestFixture]
     class AsyncCrudBaseShould

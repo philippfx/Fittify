@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.Helpers;
-using Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport;
 using Fittify.Common;
 using Fittify.Common.ResourceParameters;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Fittify.Api.OfmRepository.Services;
+using Fittify.Api.OfmRepository.Services.PropertyMapping;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.DataModels.Models.Sport;
 

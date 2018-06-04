@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Fittify.Api.Helpers.Extensions;
+﻿using System.Threading.Tasks;
 using Fittify.Api.Test.TestHelpers;
 using Fittify.Common.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Fittify.Api.Test

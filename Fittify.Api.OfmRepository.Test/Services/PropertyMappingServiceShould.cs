@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Fittify.Api.OfmRepository.Services;
+using Fittify.Api.OfmRepository.Services.PropertyMapping;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Common.CustomExceptions;
 using Fittify.DataModels.Models.Sport;

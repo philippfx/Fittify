@@ -5,9 +5,7 @@ using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.OfmResourceParameters;
 using Fittify.Common;
 using Fittify.Common.Helpers;
-using Fittify.Common.ResourceParameters;
-using Microsoft.EntityFrameworkCore.Internal;
-using ITypeHelperService = Fittify.Api.OfmRepository.Services.ITypeHelperService;
+using ITypeHelperService = Fittify.Api.OfmRepository.Services.TypeHelper.ITypeHelperService;
 
 namespace Fittify.Api.OfmRepository.OfmRepository
 {
