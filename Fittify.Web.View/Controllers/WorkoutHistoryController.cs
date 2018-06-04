@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Client.ApiModelRepositories;
 using Fittify.Web.ViewModelRepository.Sport;
 using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
@@ -16,9 +17,9 @@ namespace Fittify.Web.View.Controllers
     public class WorkoutHistoryController : Controller
     {
         private readonly WorkoutHistoryViewModelRepository _workoutHistoryViewModelRepository;
-        public WorkoutHistoryController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+        public WorkoutHistoryController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequesthandler)
         {
-            _workoutHistoryViewModelRepository = new WorkoutHistoryViewModelRepository(appConfiguration, httpContextAccessor);
+            _workoutHistoryViewModelRepository = new WorkoutHistoryViewModelRepository(appConfiguration, httpContextAccessor, httpRequesthandler);
         }
 
         [HttpPost]

@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Client.ApiModelRepositories;
 using Fittify.Web.ViewModelRepository.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
@@ -14,9 +15,9 @@ namespace Fittify.Web.View.Controllers
     public class CardioSetController : Controller
     {
         private readonly CardioSetViewModelRepository _cardioSetViewModelRepository;
-        public CardioSetController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+        public CardioSetController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequestHandler)
         {
-            _cardioSetViewModelRepository = new CardioSetViewModelRepository(appConfiguration, httpContextAccessor);
+            _cardioSetViewModelRepository = new CardioSetViewModelRepository(appConfiguration, httpContextAccessor, httpRequestHandler);
 
         }
 

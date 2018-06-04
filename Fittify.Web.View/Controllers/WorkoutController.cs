@@ -9,6 +9,7 @@ using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
+using Fittify.Client.ApiModelRepositories;
 using Fittify.Web.ViewModelRepository.Sport;
 using Fittify.Web.ViewModels.Sport;
 using Microsoft.AspNetCore.Authentication;
@@ -29,11 +30,13 @@ namespace Fittify.Web.View.Controllers
         private readonly IConfiguration _appConfiguration;
         private readonly WorkoutViewModelRepository _workoutViewModelRepo;
         private IHttpContextAccessor _httpContextAccessor;
+        private IHttpRequestHandler _httpRequesthandler;
 
-        public WorkoutController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+        public WorkoutController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequesthandler)
         {
+            _httpRequesthandler = httpRequesthandler;
             _appConfiguration = appConfiguration;
-            _workoutViewModelRepo = new WorkoutViewModelRepository(appConfiguration, httpContextAccessor);
+            _workoutViewModelRepo = new WorkoutViewModelRepository(appConfiguration, httpContextAccessor, _httpRequesthandler);
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -94,7 +97,7 @@ namespace Fittify.Web.View.Controllers
                 ExerciseId = exerciseViewModel.Id
             };
             
-            var mapExerciseWorkoutViewModelRepo = new MapExerciseWorkoutViewModelRepository(_appConfiguration, _httpContextAccessor);
+            var mapExerciseWorkoutViewModelRepo = new MapExerciseWorkoutViewModelRepository(_appConfiguration, _httpContextAccessor, _httpRequesthandler);
             var postResult = await mapExerciseWorkoutViewModelRepo.Create(mapExerciseWorkout);
 
             if (postResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
@@ -114,7 +117,7 @@ namespace Fittify.Web.View.Controllers
         [Route("{workoutId}/history")]
         public async Task<IActionResult> Histories(int workoutId)
         {
-            var repo = new WorkoutHistoryViewModelRepository(_appConfiguration, _httpContextAccessor);
+            var repo = new WorkoutHistoryViewModelRepository(_appConfiguration, _httpContextAccessor, _httpRequesthandler);
             //var workoutHistoryViewModels = await repo.GetCollectionByWorkoutId(workoutId);
             var workoutHistoryViewModelsCollectionQueryResult =
                 await repo.GetCollection(new WorkoutHistoryOfmCollectionResourceParameters() { WorkoutId = workoutId });
@@ -137,7 +140,7 @@ namespace Fittify.Web.View.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateNewWorkout([FromForm] WorkoutOfmForPost workoutOfmForPost)
         {
-            var workoutViewModelRepo = new WorkoutViewModelRepository(_appConfiguration, _httpContextAccessor);
+            var workoutViewModelRepo = new WorkoutViewModelRepository(_appConfiguration, _httpContextAccessor, _httpRequesthandler);
             var postResult = await workoutViewModelRepo.Create(workoutOfmForPost);
 
             if (postResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
@@ -159,7 +162,7 @@ namespace Fittify.Web.View.Controllers
         [Route("{id}/deletion")]
         public async Task<RedirectToActionResult> Delete(/*[Bind("id")] int workoutId,*/ [FromQuery] int workoutId/*, [FromQuery] int workoutHistoryId*/)
         {
-            var workoutViewModelRepo = new WorkoutViewModelRepository(_appConfiguration, _httpContextAccessor);
+            var workoutViewModelRepo = new WorkoutViewModelRepository(_appConfiguration, _httpContextAccessor, _httpRequesthandler);
             var queryResult = await workoutViewModelRepo.Delete(workoutId);
 
             if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
@@ -184,7 +187,7 @@ namespace Fittify.Web.View.Controllers
 
             jsonPatchDocument.Replace("/" + nameof(workoutOfmForPatch.Name), workoutOfmForPatch.Name);
 
-            var workoutViewModelRepo = new WorkoutViewModelRepository(_appConfiguration, _httpContextAccessor);
+            var workoutViewModelRepo = new WorkoutViewModelRepository(_appConfiguration, _httpContextAccessor, _httpRequesthandler);
             var queryResult = await workoutViewModelRepo.PartiallyUpdate(id, jsonPatchDocument);
 
             if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
@@ -261,7 +264,7 @@ namespace Fittify.Web.View.Controllers
                     }
                 }
 
-                var wlsViewModelRepository = new WeightLiftingSetViewModelRepository(_appConfiguration, _httpContextAccessor);
+                var wlsViewModelRepository = new WeightLiftingSetViewModelRepository(_appConfiguration, _httpContextAccessor, _httpRequesthandler);
                 var patchResult = await wlsViewModelRepository.PartiallyUpdate(wls.Id, jsonPatchDocument);
 
                 if (patchResult.HttpStatusCode == HttpStatusCode.Unauthorized ||

@@ -19,7 +19,7 @@ namespace Fittify.DataModelRepository.Test
             await Task.Run(() =>
             {
                 using (var context = new FittifyContext(
-                    "Server=.\\SQLEXPRESS;Database=FittifyTestCreation;User Id=seifert-1;Password=merlin;"))
+                    "Server=.\\SQLEXPRESS2016S1;Database=FittifyTestCreation;User Id=seifert-1;Password=merlin;"))
                 {
                     try
                     {

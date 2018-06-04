@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
+using Fittify.Client.ApiModelRepositories;
 using Fittify.Web.ViewModelRepository.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,9 +16,9 @@ namespace Fittify.Web.View.Controllers
         private MapExerciseWorkoutViewModelRepository _mapExerciseWorkoutViewModelRepository;
         //// private IHttpContextAccessor _httpContextAccessor;
 
-        public MapExerciseWorkoutController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+        public MapExerciseWorkoutController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequestHandler)
         {
-            _mapExerciseWorkoutViewModelRepository = new MapExerciseWorkoutViewModelRepository(appConfiguration, httpContextAccessor);
+            _mapExerciseWorkoutViewModelRepository = new MapExerciseWorkoutViewModelRepository(appConfiguration, httpContextAccessor, httpRequestHandler);
             //// _httpContextAccessor = httpContextAccessor;
         }
         
