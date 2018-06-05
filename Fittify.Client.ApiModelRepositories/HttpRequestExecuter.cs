@@ -12,23 +12,28 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Fittify.Client.ApiModelRepositories
 {
-    public class HttpRequestHandler : IHttpRequestHandler
+    public class HttpRequestExecuter : IHttpRequestExecuter
     {
+        private readonly IHttpRequestBuilder _httpRequestBuilder;
+        public HttpRequestExecuter(IHttpRequestBuilder httpRequestBuilder)
+        {
+            _httpRequestBuilder = httpRequestBuilder;
+        }
         public async Task<HttpResponseMessage> GetSingle(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
 
-            var builder = new HttpRequestBuilder()
+            _httpRequestBuilder
                 .AddMethod(HttpMethod.Get)
                 .AddRequestUri(requestUri)
                 .AddBearerToken(accessToken);
 
-            return await builder.SendAsync();
+            return await _httpRequestBuilder.SendAsync();
         }
 
         public async Task<HttpResponseMessage> GetCollection(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
-            var builder = new HttpRequestBuilder()
+            _httpRequestBuilder
                 .AddMethod(HttpMethod.Get)
                 .AddRequestUri(requestUri);
 
@@ -39,7 +44,7 @@ namespace Fittify.Client.ApiModelRepositories
             //    .AddRequestUri(requestUri)
             //    .AddBearerToken(accessToken);
 
-            return await builder.SendAsync();
+            return await _httpRequestBuilder.SendAsync();
         }
 
         public async Task<HttpResponseMessage> Post(
@@ -47,24 +52,24 @@ namespace Fittify.Client.ApiModelRepositories
         {
             string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
 
-            var builder = new HttpRequestBuilder()
+            _httpRequestBuilder
                 .AddMethod(HttpMethod.Post)
                 .AddRequestUri(requestUri)
                 .AddContent(new JsonContent(value))
                 .AddBearerToken(accessToken);
             
-            return await builder.SendAsync();
+            return await _httpRequestBuilder.SendAsync();
         }
 
         public async Task<HttpResponseMessage> Put(
             Uri requestUri, object value)
         {
-            var builder = new HttpRequestBuilder()
+            _httpRequestBuilder
                 .AddMethod(HttpMethod.Put)
                 .AddRequestUri(requestUri)
                 .AddContent(new JsonContent(value));
 
-            return await builder.SendAsync();
+            return await _httpRequestBuilder.SendAsync();
         }
 
         public async Task<HttpResponseMessage> Patch(
@@ -72,25 +77,25 @@ namespace Fittify.Client.ApiModelRepositories
         {
             string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
 
-            var builder = new HttpRequestBuilder()
+            _httpRequestBuilder
                 .AddMethod(new HttpMethod("PATCH"))
                 .AddRequestUri(requestUri)
                 .AddContent(new PatchContent(jsonPatchDocument))
                 .AddBearerToken(accessToken);
 
-            return await builder.SendAsync();
+            return await _httpRequestBuilder.SendAsync();
         }
 
         public async Task<HttpResponseMessage> Delete(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
 
-            var builder = new HttpRequestBuilder()
+            _httpRequestBuilder
                 .AddMethod(HttpMethod.Delete)
                 .AddRequestUri(requestUri)
                 .AddBearerToken(accessToken);
 
-            return await builder.SendAsync();
+            return await _httpRequestBuilder.SendAsync();
         }
 
         private async Task<string> GetAccessToken(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
@@ -174,3 +179,4 @@ namespace Fittify.Client.ApiModelRepositories
         }
     }
 }
+

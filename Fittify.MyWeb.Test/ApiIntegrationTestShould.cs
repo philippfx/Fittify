@@ -1,15 +1,15 @@
 ﻿using System.Threading.Tasks;
-using Fittify.Api.Test.TestHelpers;
 using Fittify.Common.Extensions;
+using Fittify.MyWeb.Test.TestHelpers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 
-namespace Fittify.Api.Test
+namespace Fittify.MyWeb.Test
 {
     [TestFixture]
-    class IntegrationTestShould
+    class ApiIntegrationTestShould
     {
         public TestServer GetTestServerInstance()
         {

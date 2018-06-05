@@ -14,8 +14,8 @@ namespace Fittify.Client.ApiModelRepositories.OfmRepository.Sport
 {
     public class AsyncWorkoutHistoryOfmRepository : GenericAsyncGppdOfm<int, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters>
     {
-        public AsyncWorkoutHistoryOfmRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey, IHttpRequestHandler httpRequestHandler)
-            : base(appConfiguration, httpContextAccessor, mappedControllerActionKey, httpRequestHandler)
+        public AsyncWorkoutHistoryOfmRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey, IHttpRequestExecuter httpRequestExecuter)
+            : base(appConfiguration, httpContextAccessor, mappedControllerActionKey, httpRequestExecuter)
         {
 
         }
@@ -28,7 +28,7 @@ namespace Fittify.Client.ApiModelRepositories.OfmRepository.Sport
                 AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
                 + "?" + "includeExerciseHistories=1"
             );
-            var httpResponse = await HttpRequestHandler.Post(uri, ofmForPost, AppConfiguration, HttpContextAccessor);
+            var httpResponse = await HttpRequestExecuter.Post(uri, ofmForPost, AppConfiguration, HttpContextAccessor);
             ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 

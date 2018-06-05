@@ -14,9 +14,9 @@ namespace Fittify.Web.View.Controllers
     {
         private readonly ExerciseHistoryViewModelRepository _exerciseHistoryViewModelRepository;
 
-        public ExerciseHistoryController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequestHandler)
+        public ExerciseHistoryController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
         {
-            _exerciseHistoryViewModelRepository = new ExerciseHistoryViewModelRepository(appConfiguration, httpContextAccessor, httpRequestHandler);
+            _exerciseHistoryViewModelRepository = new ExerciseHistoryViewModelRepository(appConfiguration, httpContextAccessor, httpRequestExecuter);
         }
 
         [HttpPost]

@@ -19,35 +19,35 @@
 ////    {
 ////        public async Task<HttpResponseMessage> GetSingle(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
 ////        {
-////            return await HttpRequestHandler.GetSingle(requestUri, appConfiguration, httpContextAccessor);
+////            return await HttpRequestExecuter.GetSingle(requestUri, appConfiguration, httpContextAccessor);
 ////        }
 
 ////        public async Task<HttpResponseMessage> GetCollection(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
 ////        {
-////            return await HttpRequestHandler.GetCollection(requestUri, appConfiguration, httpContextAccessor);
+////            return await HttpRequestExecuter.GetCollection(requestUri, appConfiguration, httpContextAccessor);
 ////        }
 
 ////        public async Task<HttpResponseMessage> Post(
 ////            Uri requestUri, object value, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
 ////        {
-////            return await HttpRequestHandler.Post(requestUri, value, appConfiguration, httpContextAccessor);
+////            return await HttpRequestExecuter.Post(requestUri, value, appConfiguration, httpContextAccessor);
 ////        }
 
 ////        public async Task<HttpResponseMessage> Put(
 ////            Uri requestUri, object value)
 ////        {
-////            return await HttpRequestHandler.Put(requestUri, value);
+////            return await HttpRequestExecuter.Put(requestUri, value);
 ////        }
 
 ////        public async Task<HttpResponseMessage> Patch(
 ////            Uri requestUri, JsonPatchDocument jsonPatchDocument, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
 ////        {
-////            return await HttpRequestHandler.Patch(requestUri, jsonPatchDocument, appConfiguration, httpContextAccessor);
+////            return await HttpRequestExecuter.Patch(requestUri, jsonPatchDocument, appConfiguration, httpContextAccessor);
 ////        }
 
 ////        public async Task<HttpResponseMessage> Delete(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
 ////        {
-////            return await HttpRequestHandler.Delete(requestUri, appConfiguration, httpContextAccessor);
+////            return await HttpRequestExecuter.Delete(requestUri, appConfiguration, httpContextAccessor);
 ////        }
 ////    }
 ////}

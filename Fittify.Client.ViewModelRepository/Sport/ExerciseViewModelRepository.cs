@@ -10,8 +10,8 @@ namespace Fittify.Client.ViewModelRepository.Sport
 {
     public class ExerciseViewModelRepository : GenericViewModelRepository<int, ExerciseViewModel, ExerciseOfmForGet, ExerciseOfmForPost, ExerciseOfmCollectionResourceParameters>
     {
-        public ExerciseViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequestHandler)
-            : base(appConfiguration, httpContextAccessor, "Exercise", httpRequestHandler)
+        public ExerciseViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
+            : base(appConfiguration, httpContextAccessor, "Exercise", httpRequestExecuter)
         {
         }
     }

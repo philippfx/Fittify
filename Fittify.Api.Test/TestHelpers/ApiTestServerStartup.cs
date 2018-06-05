@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.IO;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace Fittify.Api.Test.TestHelpers
 {
-    public class TestServerStartup : Startup
+    public class ApiTestServerStartup : Startup
     {
-        public TestServerStartup(IHostingEnvironment env) : base(env)
+        public ApiTestServerStartup(IConfiguration configuration, IHostingEnvironment env) : base(configuration, env)
         {
-
+            
         }
+
 
         public override void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {

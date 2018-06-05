@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using AspNetCoreRateLimit;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Middleware;
@@ -39,14 +40,21 @@ namespace Fittify.Api
         private IConfiguration Configuration { get; }
         private IHostingEnvironment HostingEnvironment { get; set; }
 
-        public Startup(/*IConfiguration configuration, */IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             //Configuration = configuration;
 
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json"); // includes appsettings.json configuartion file
-            Configuration = builder.Build();
+            if (configuration.AsEnumerable().Count() == 3)
+            {
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json"); // includes appsettings.json configuartion file
+                Configuration = builder.Build();
+            }
+            else
+            {
+                Configuration = configuration;
+            }
 
             HostingEnvironment = hostingEnvironment;
         }

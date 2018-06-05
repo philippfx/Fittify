@@ -40,7 +40,7 @@ namespace Fittify.Client.ApiModelRepositories.Test.OfmRepository
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var workoutHistoryOfmRepository = new AsyncWorkoutHistoryOfmRepository(
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, "WorkoutHistory", httpRequestHandlerMock.Object);
 
@@ -105,7 +105,7 @@ namespace Fittify.Client.ApiModelRepositories.Test.OfmRepository
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var workoutHistoryOfmRepository = new AsyncWorkoutHistoryOfmRepository(
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, "WorkoutHistory", httpRequestHandlerMock.Object);
 

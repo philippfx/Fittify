@@ -13,7 +13,7 @@ namespace Fittify.Web.View.Controllers
     public class WeightLiftingSetWebController : Controller
     {
         private readonly WeightLiftingSetViewModelRepository _weightLiftingSetViewModelRepository;
-        public WeightLiftingSetWebController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequesthandler)
+        public WeightLiftingSetWebController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequesthandler)
         {
             _weightLiftingSetViewModelRepository = new WeightLiftingSetViewModelRepository(appConfiguration, httpContextAccessor, httpRequesthandler);
         }

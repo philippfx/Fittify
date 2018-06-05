@@ -18,12 +18,12 @@ namespace Fittify.Client.ViewModelRepository
         protected readonly GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters> GenericAsyncGppdOfmWorkout;
         protected readonly IHttpContextAccessor HttpContextAccessor;
         protected readonly IConfiguration AppConfiguration;
-        protected readonly IHttpRequestHandler HttpRequestHandler;
+        protected readonly IHttpRequestExecuter HttpRequestExecuter;
 
-        public GenericViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey, IHttpRequestHandler httpRequestHandler)
+        public GenericViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey, IHttpRequestExecuter httpRequestExecuter)
         {
-            HttpRequestHandler = httpRequestHandler;
-            GenericAsyncGppdOfmWorkout = new GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters>(appConfiguration, httpContextAccessor, mappedControllerActionKey, HttpRequestHandler);
+            HttpRequestExecuter = httpRequestExecuter;
+            GenericAsyncGppdOfmWorkout = new GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters>(appConfiguration, httpContextAccessor, mappedControllerActionKey, HttpRequestExecuter);
             HttpContextAccessor = httpContextAccessor;
             AppConfiguration = appConfiguration;
         }

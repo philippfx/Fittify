@@ -30,9 +30,9 @@ namespace Fittify.Web.View.Controllers
         private readonly IConfiguration _appConfiguration;
         private readonly WorkoutViewModelRepository _workoutViewModelRepo;
         private IHttpContextAccessor _httpContextAccessor;
-        private IHttpRequestHandler _httpRequesthandler;
+        private IHttpRequestExecuter _httpRequesthandler;
 
-        public WorkoutController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequesthandler)
+        public WorkoutController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequesthandler)
         {
             _httpRequesthandler = httpRequesthandler;
             _appConfiguration = appConfiguration;

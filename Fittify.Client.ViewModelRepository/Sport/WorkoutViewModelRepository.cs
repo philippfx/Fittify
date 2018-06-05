@@ -16,8 +16,8 @@ namespace Fittify.Client.ViewModelRepository.Sport
     public class WorkoutViewModelRepository : GenericViewModelRepository<int, WorkoutViewModel, WorkoutOfmForGet,
         WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters>
     {
-        public WorkoutViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequestHandler)
-            : base(appConfiguration, httpContextAccessor, "Workout", httpRequestHandler)
+        public WorkoutViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
+            : base(appConfiguration, httpContextAccessor, "Workout", httpRequestExecuter)
         {
         }
 
@@ -38,7 +38,7 @@ namespace Fittify.Client.ViewModelRepository.Sport
                 workoutViewModelQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
             }
 
-            var exerciseViewModelRepository = new ExerciseViewModelRepository(AppConfiguration, HttpContextAccessor, HttpRequestHandler);
+            var exerciseViewModelRepository = new ExerciseViewModelRepository(AppConfiguration, HttpContextAccessor, HttpRequestExecuter);
             if (!String.IsNullOrWhiteSpace(ofmQueryResult.OfmForGet.RangeOfExerciseIds))
             {
                 var exerciseViewModelCollectionQuery = await exerciseViewModelRepository.GetCollection(
@@ -80,7 +80,7 @@ namespace Fittify.Client.ViewModelRepository.Sport
             }
 
             // Exercises
-            var exerciseViewModelRepository = new ExerciseViewModelRepository(AppConfiguration, HttpContextAccessor, HttpRequestHandler);
+            var exerciseViewModelRepository = new ExerciseViewModelRepository(AppConfiguration, HttpContextAccessor, HttpRequestExecuter);
 
             var exerciseViewModelCollectionQueryResult
                 = await exerciseViewModelRepository.GetCollection(

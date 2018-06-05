@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using System.IO;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
 namespace Fittify.Web.View
@@ -28,6 +29,7 @@ namespace Fittify.Web.View
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseContentRoot(@"C:\VS_2017_Projects\Fittify\Fittify.Web.View")
                 .Build();
     }
     

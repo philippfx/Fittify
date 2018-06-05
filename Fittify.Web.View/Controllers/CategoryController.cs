@@ -18,9 +18,9 @@ namespace Fittify.Web.View.Controllers
     public class CategoryController : Controller
     {
         private readonly CategoryViewModelRepository _categoryViewModelRepository;
-        public CategoryController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequestHandler)
+        public CategoryController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
         {
-            _categoryViewModelRepository = new CategoryViewModelRepository(appConfiguration, httpContextAccessor, httpRequestHandler);
+            _categoryViewModelRepository = new CategoryViewModelRepository(appConfiguration, httpContextAccessor, httpRequestExecuter);
         }
 
         public async Task<IActionResult> Overview()

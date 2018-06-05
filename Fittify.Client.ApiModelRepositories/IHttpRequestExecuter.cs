@@ -7,19 +7,16 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Client.ApiModelRepositories
 {
-    public interface IHttpRequestHandler
+    public interface IHttpRequestExecuter
     {
         Task<HttpResponseMessage> GetSingle(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor);
         Task<HttpResponseMessage> GetCollection(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor);
 
-        Task<HttpResponseMessage> Post(
-            Uri requestUri, object value, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor);
+        Task<HttpResponseMessage> Post(Uri requestUri, object value, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor);
 
-        Task<HttpResponseMessage> Put(
-            Uri requestUri, object value);
+        Task<HttpResponseMessage> Put(Uri requestUri, object value);
 
-        Task<HttpResponseMessage> Patch(
-            Uri requestUri, JsonPatchDocument jsonPatchDocument /*object jsonPatchDocument*/, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor);
+        Task<HttpResponseMessage> Patch(Uri requestUri, JsonPatchDocument jsonPatchDocument, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor);
 
         Task<HttpResponseMessage> Delete(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor);
     }

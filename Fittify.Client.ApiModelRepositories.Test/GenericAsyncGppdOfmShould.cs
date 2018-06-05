@@ -44,7 +44,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
 
@@ -94,7 +94,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var genericAsyncGppdOfm =
                         new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost,
                             CategoryOfmCollectionResourceParameters>(
@@ -158,7 +158,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters>(
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, "Workout", httpRequestHandlerMock.Object);
 
@@ -214,7 +214,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters>(
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, "Workout", httpRequestHandlerMock.Object);
 
@@ -276,7 +276,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
 
@@ -341,7 +341,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
 
@@ -406,7 +406,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
 
@@ -465,7 +465,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
 
@@ -520,7 +520,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
 
@@ -582,7 +582,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
                     
@@ -624,7 +624,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
 
@@ -680,7 +680,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
 
@@ -739,7 +739,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestHandler>();
+                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
 

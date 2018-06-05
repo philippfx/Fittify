@@ -15,9 +15,9 @@ namespace Fittify.Web.View.Controllers
     public class CardioSetController : Controller
     {
         private readonly CardioSetViewModelRepository _cardioSetViewModelRepository;
-        public CardioSetController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequestHandler)
+        public CardioSetController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
         {
-            _cardioSetViewModelRepository = new CardioSetViewModelRepository(appConfiguration, httpContextAccessor, httpRequestHandler);
+            _cardioSetViewModelRepository = new CardioSetViewModelRepository(appConfiguration, httpContextAccessor, httpRequestExecuter);
 
         }
 

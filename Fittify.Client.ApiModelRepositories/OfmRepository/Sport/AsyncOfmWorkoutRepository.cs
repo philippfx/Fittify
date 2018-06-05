@@ -19,13 +19,13 @@
 ////    {
 ////        private IConfiguration _appConfiguration;
 ////        private IHttpContextAccessor _httpContextAccessor;
-////        private readonly IHttpRequestHandler HttpRequestHandler;
+////        private readonly IHttpRequestExecuter HttpRequestExecuter;
 
-////        public AsyncOfmWorkoutRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequestHandler)
+////        public AsyncOfmWorkoutRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
 ////        {
 ////            _appConfiguration = appConfiguration;
 ////            _httpContextAccessor = httpContextAccessor;
-////            HttpRequestHandler = httpRequestHandler;
+////            HttpRequestExecuter = httpRequestExecuter;
 ////        }
 
 ////        public virtual async Task<OfmQueryResult<WorkoutOfmForGet>> GetSingle(int id)
@@ -38,7 +38,7 @@
 ////                );
 ////            try
 ////            {
-////                var httpResponse = await HttpRequestHandler.GetSingle(uri, _appConfiguration, _httpContextAccessor);
+////                var httpResponse = await HttpRequestExecuter.GetSingle(uri, _appConfiguration, _httpContextAccessor);
 ////                ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
 ////                ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -101,8 +101,8 @@
 ////                _appConfiguration.GetValue<string>("MappedFittifyApiActions:WorkoutOfmCollectionResourceParameters")
 ////            );
 
-////            //var httpResponse = await HttpRequestHandler.GetPagedCollection(new Uri(_fittifyApiBaseUri + "api/workouts" + queryParamter));
-////            var httpResponse = await HttpRequestHandler.GetCollection(new Uri(uri + queryParamter), _appConfiguration, _httpContextAccessor);
+////            //var httpResponse = await HttpRequestExecuter.GetPagedCollection(new Uri(_fittifyApiBaseUri + "api/workouts" + queryParamter));
+////            var httpResponse = await HttpRequestExecuter.GetCollection(new Uri(uri + queryParamter), _appConfiguration, _httpContextAccessor);
 ////            ofmCollectionQueryResult.HttpStatusCode = httpResponse.StatusCode;
 ////            ofmCollectionQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -127,7 +127,7 @@
 ////            );
 ////            try
 ////            {
-////                var httpResponse = await HttpRequestHandler.Post(uri, workoutOfmForPost, _appConfiguration, _httpContextAccessor);
+////                var httpResponse = await HttpRequestExecuter.Post(uri, workoutOfmForPost, _appConfiguration, _httpContextAccessor);
 ////                ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
 ////                ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -157,7 +157,7 @@
 ////            );
 ////            try
 ////            {
-////                var httpResponse = await HttpRequestHandler.Delete(uri, _appConfiguration, _httpContextAccessor);
+////                var httpResponse = await HttpRequestExecuter.Delete(uri, _appConfiguration, _httpContextAccessor);
 ////                ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
 ////                ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 
@@ -186,7 +186,7 @@
 ////            );
 ////            try
 ////            {
-////                var httpResponse = await HttpRequestHandler.Patch(uri, jsonPatchDocument, _appConfiguration, _httpContextAccessor);
+////                var httpResponse = await HttpRequestExecuter.Patch(uri, jsonPatchDocument, _appConfiguration, _httpContextAccessor);
 ////                ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
 ////                ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 

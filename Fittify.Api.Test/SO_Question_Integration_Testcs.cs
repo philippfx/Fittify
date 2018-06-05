@@ -15,14 +15,14 @@
 ////        public TestServer GetApiTestServerInstance()
 ////        {
 ////            return new TestServer(new WebHostBuilder()
-////                .UseStartup<TestServerStartup>()
+////                .UseStartup<ApiTestServerStartup>()
 ////                .UseEnvironment("TestInMemoryDb"));
 ////        }
 
 ////        public TestServer GetClientTestServerInstance()
 ////        {
 ////            return new TestServer(new WebHostBuilder()
-////                .UseStartup<TestServerStartup>()
+////                .UseStartup<ApiTestServerStartup>()
 ////                .UseEnvironment("Development"));
 ////        }
 

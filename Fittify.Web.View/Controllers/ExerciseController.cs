@@ -20,9 +20,9 @@ namespace Fittify.Web.View.Controllers
         private readonly ExerciseViewModelRepository _exerciseViewModelRepository;
         //// private IHttpContextAccessor _httpContextAccessor;
 
-        public ExerciseController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestHandler httpRequestHandler)
+        public ExerciseController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
         {
-            _exerciseViewModelRepository = new ExerciseViewModelRepository(appConfiguration, httpContextAccessor, httpRequestHandler);
+            _exerciseViewModelRepository = new ExerciseViewModelRepository(appConfiguration, httpContextAccessor, httpRequestExecuter);
             //// _httpContextAccessor = httpContextAccessor;
         }
 

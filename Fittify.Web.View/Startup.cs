@@ -2,15 +2,18 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNetCore.RouteAnalyzer;
 using Fittify.Client.ApiModelRepositories;
+using Fittify.Web.View.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,14 +26,19 @@ namespace Fittify.Web.View
 {
     public class Startup
     {
-        private IConfiguration Configuration { get; set; }
+        public IConfiguration Configuration { get; set; }
+        public IHostingEnvironment HostingEnvironment { get; set; }
 
-        public Startup()
+        public Startup(IHostingEnvironment env)
         {
+            var currentDirectory = Directory.GetCurrentDirectory();
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
+                //.SetBasePath(Directory.GetCurrentDirectory())
+                .SetBasePath(@"C:\VS_2017_Projects\Fittify\Fittify.Web.View")
                 .AddJsonFile("appsettings.json"); // includes appsettings.json configuartion file
             Configuration = builder.Build();
+
+            HostingEnvironment = env;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -142,7 +150,14 @@ namespace Fittify.Web.View
             services.AddMvc();
             services.AddRouteAnalyzer();
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddSingleton<IHttpRequestHandler, HttpRequestHandler>();
+            services.AddScoped<IHttpRequestExecuter, HttpRequestExecuter>();
+            services.AddScoped<IHttpRequestBuilder, HttpRequestBuilder>();
+
+            //if (!HostingEnvironment.IsClientTestServer())
+            //{
+                services.AddScoped<IHttpClient, FittifyHttpClient>();
+                // else it is injected through the TestServer builder in the TestFixture
+            //}
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

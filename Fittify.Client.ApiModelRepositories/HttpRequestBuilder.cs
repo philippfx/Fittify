@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace Fittify.Client.ApiModelRepositories
 {
-    public class HttpRequestBuilder
+    public class HttpRequestBuilder : IHttpRequestBuilder
     {
         private readonly IHttpClient _httpClient;
-        public HttpRequestBuilder(IHttpClient httpClient)
+        private readonly HttpClient _betterClient;
+        public HttpRequestBuilder(IHttpClient httpClient, IServiceProvider serviceProvider)
         {
             _httpClient = httpClient;
+
+            _betterClient = serviceProvider.GetService(typeof(HttpClient)) as HttpClient;
         }
         private HttpMethod _method = null;
         private Uri _requestUri = null;
@@ -99,10 +102,42 @@ namespace Fittify.Client.ApiModelRepositories
             }
 
             // Setup client
-            var client = new HttpClient();
-            client.Timeout = this._timeout;
+            ////var client = new HttpClient();
+            _httpClient.Timeout = this._timeout;
 
-            return await client.SendAsync(request);
+            _betterClient.DefaultRequestHeaders.Add("X-Integration-Testing", "abcde-12345");
+            _betterClient.DefaultRequestHeaders.Add("sub", "d860efca-22d9-47fd-8249-791ba61b07c7");
+            //var moreResult = await _betterClient.GetAsync("/root");
+            //var moreResponseString = await moreResult.Content.ReadAsStringAsync();
+
+
+            //var result = await _betterClient.GetAsync("/api/categories"); // THIS WORKS !!!
+
+            var baseAddress = _betterClient.BaseAddress;
+            //var result = await _betterClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, @"http://localhost/api/categories")); // WORKS !!!
+
+            //_betterClient.BaseAddress = new Uri(@"https://localhost:44353/");
+            //var result = await _betterClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, @"https://localhost:44353/api/categories")); // WORKS !!!
+            //var responseString = await result.Content.ReadAsStringAsync();
+
+            //var result3 = await _betterClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, @"https://localhost:44353/api/categories?ids=1,2")); // WORKS !!!
+            //var responseString3 = await result3.Content.ReadAsStringAsync();
+            //var result2 = await _betterClient.SendAsync(new HttpRequestMessage(HttpMethod.Get, @"http://localhost/api/categories")); // STILL WORKS !!!
+            //var responseString2 = await result2.Content.ReadAsStringAsync();
+
+            var result = await _betterClient.SendAsync(request); // STILL WORKS !!!
+            var content = await result.Content.ReadAsStringAsync();
+
+            //var result = await _httpClient.SendAsync(request);
+
+            return result;
+            //var result = await _betterClient.GetAsync("api/categories");
+            //var content = result.Content.ReadAsStringAsync();
+            //return result;
+
+
+            //return await _httpClient.GetAsync("/api/categories");
+            //return await _httpClient.SendAsync(request);
         }
     }
 }

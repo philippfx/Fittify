@@ -5,7 +5,8 @@ using System.Text;
 
 namespace Fittify.Client.ApiModelRepositories
 {
-    public class FittifyClientHttpClient : HttpClient, IHttpClient
+    public class FittifyHttpClient : HttpClient, IHttpClient
     {
+
     }
 }
