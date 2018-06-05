@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace Fittify.MyWeb.Test.TestHelpers
+namespace Fittify.Web.Test.TestHelpers
 {
     public class CreatedAtRouteResultWithDefaultConstructor : CreatedAtRouteResult
     {

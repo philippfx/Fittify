@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace Fittify.MyWeb.Test.TestHelpers
+namespace Fittify.Web.Test.TestHelpers
 {
     public class ApiTestServerStartup : Startup
     {

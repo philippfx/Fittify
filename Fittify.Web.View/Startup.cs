@@ -31,10 +31,10 @@ namespace Fittify.Web.View
 
         public Startup(IHostingEnvironment env)
         {
-            var currentDirectory = Directory.GetCurrentDirectory();
+            ////var currentDirectory = Directory.GetCurrentDirectory();
             var builder = new ConfigurationBuilder()
-                //.SetBasePath(Directory.GetCurrentDirectory())
-                .SetBasePath(@"C:\VS_2017_Projects\Fittify\Fittify.Web.View")
+                .SetBasePath(Directory.GetCurrentDirectory())
+                ////.SetBasePath(@"C:\VS_2017_Projects\Fittify\Fittify.Web.View")
                 .AddJsonFile("appsettings.json"); // includes appsettings.json configuartion file
             Configuration = builder.Build();
 
@@ -152,25 +152,18 @@ namespace Fittify.Web.View
             services.AddSingleton<IConfiguration>(Configuration);
             services.AddScoped<IHttpRequestExecuter, HttpRequestExecuter>();
             services.AddScoped<IHttpRequestBuilder, HttpRequestBuilder>();
-
-            //if (!HostingEnvironment.IsClientTestServer())
-            //{
-                services.AddScoped<IHttpClient, FittifyHttpClient>();
-                // else it is injected through the TestServer builder in the TestFixture
-            //}
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory/*, FittifyContext fittifyContext*/)
         {
-            //AutoMapper.Mapper.Initialize(cfg =>
-            //{
-            //    ////    cfg.CreateMap<ExerciseHistoryOfmForGet, ExerciseHistoryViewModel>()
-            //    ////        .ForMember(dest => dest.CurrentAndHistoricWeightLiftingSetPairs, opt => opt.MapFrom(src => src.))
-            //    ////        .ForMember(dest => dest.RangeOfExerciseHistoryIds, opt => opt.MapFrom(src => src.ExerciseHistories.Select(eH => eH.Id).ToList().ToStringOfIds()));
-
-            //    cfg.IgnoreUnmapped();
-            //});
+            if (!env.IsClientTestServer()) // need to exclude automapper initialization for full integration test of client app, because mapper is also initialized in Api Startup 
+            {
+                AutoMapper.Mapper.Initialize(cfg =>
+                {
+                    cfg.IgnoreUnmapped();
+                });
+            }
 
             loggerFactory.AddConsole();
 
@@ -178,8 +171,7 @@ namespace Fittify.Web.View
             //{
                 app.UseDeveloperExceptionPage();
             //}
-
-
+            
             app.UseFileServer();
             // is equivalent to:
             //app.UseDefaultFiles();

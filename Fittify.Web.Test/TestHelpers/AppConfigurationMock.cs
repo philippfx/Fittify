@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 
-namespace Fittify.MyWeb.Test.TestHelpers
+namespace Fittify.Web.Test.TestHelpers
 {
     public class AppConfigurationMock : IDisposable
     {
@@ -12,7 +12,7 @@ namespace Fittify.MyWeb.Test.TestHelpers
         public AppConfigurationMock(string appSettingsJsonString)
         {
             var appSettingsFileName = "appsettings_" + Guid.NewGuid() + ".json";
-            FullFilePath = Path.GetDirectoryName(typeof(ApiIntegrationTestShould).GetTypeInfo().Assembly.Location) + "\\" + appSettingsFileName;
+            FullFilePath = Path.GetDirectoryName(typeof(IntegrationTestShould).GetTypeInfo().Assembly.Location) + "\\" + appSettingsFileName;
             if (File.Exists(FullFilePath))
             {
                 File.Delete(FullFilePath);
@@ -22,7 +22,7 @@ namespace Fittify.MyWeb.Test.TestHelpers
             File.WriteAllText(FullFilePath, appSettingsJsonString);
 
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Path.GetDirectoryName(typeof(ApiIntegrationTestShould).GetTypeInfo().Assembly.Location)) // The only way I found to get directory path of unit test project / bin /debug
+                .SetBasePath(Path.GetDirectoryName(typeof(IntegrationTestShould).GetTypeInfo().Assembly.Location)) // The only way I found to get directory path of unit test project / bin /debug
                 .AddJsonFile(appSettingsFileName); // Includes appsettings.json configuartion file
             Instance = builder.Build();
         }

@@ -63,9 +63,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientLibrary", "ClientLibr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Client.ApiModelRepositories.Test", "Fittify.Client.ApiModelRepositories.Test\Fittify.Client.ApiModelRepositories.Test.csproj", "{B7CD67A9-FDCD-4840-B875-5669EBA64A1A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Web.View.Test", "Fittify.Web.View.Test\Fittify.Web.View.Test.csproj", "{F4DEF0CD-3053-4FB6-AFDC-3291CDEA42DD}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.MyWeb.Test", "Fittify.MyWeb.Test\Fittify.MyWeb.Test.csproj", "{3EC6F95A-37E8-47A9-BE3D-0D19098A6359}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Web.Test", "Fittify.Web.Test\Fittify.Web.Test.csproj", "{3EC6F95A-37E8-47A9-BE3D-0D19098A6359}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -161,10 +159,6 @@ Global
 		{B7CD67A9-FDCD-4840-B875-5669EBA64A1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7CD67A9-FDCD-4840-B875-5669EBA64A1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7CD67A9-FDCD-4840-B875-5669EBA64A1A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F4DEF0CD-3053-4FB6-AFDC-3291CDEA42DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F4DEF0CD-3053-4FB6-AFDC-3291CDEA42DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F4DEF0CD-3053-4FB6-AFDC-3291CDEA42DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F4DEF0CD-3053-4FB6-AFDC-3291CDEA42DD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3EC6F95A-37E8-47A9-BE3D-0D19098A6359}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3EC6F95A-37E8-47A9-BE3D-0D19098A6359}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EC6F95A-37E8-47A9-BE3D-0D19098A6359}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -194,7 +188,6 @@ Global
 		{0DE45F3B-16BF-4938-AF63-853A40961761} = {61B2FCA8-F355-46A9-B5CD-231A070A4A2A}
 		{245C31CD-ACB5-4B13-932F-0F15482705EA} = {61B2FCA8-F355-46A9-B5CD-231A070A4A2A}
 		{B7CD67A9-FDCD-4840-B875-5669EBA64A1A} = {245C31CD-ACB5-4B13-932F-0F15482705EA}
-		{F4DEF0CD-3053-4FB6-AFDC-3291CDEA42DD} = {0DE45F3B-16BF-4938-AF63-853A40961761}
 		{3EC6F95A-37E8-47A9-BE3D-0D19098A6359} = {0DE45F3B-16BF-4938-AF63-853A40961761}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

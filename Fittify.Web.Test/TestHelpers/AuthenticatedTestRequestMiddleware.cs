@@ -4,7 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace Fittify.MyWeb.Test.TestHelpers
+namespace Fittify.Web.Test.TestHelpers
 {
     /// <summary>
     /// Helper Middleware that allows to mock authenticated user by injecting user data via http headers
