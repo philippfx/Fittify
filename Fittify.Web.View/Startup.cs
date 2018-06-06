@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using AspNetCore.RouteAnalyzer;
 using Fittify.Client.ApiModelRepository;
 using Fittify.Web.View.Helpers;
+using Fittify.Web.View.Helpers.Extensions;
+using Fittify.Web.View.Middleware.Extensions.ConfigureServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -43,7 +45,7 @@ namespace Fittify.Web.View
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        public virtual void ConfigureServices(IServiceCollection services)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             services.AddAuthentication(options => {
@@ -150,8 +152,16 @@ namespace Fittify.Web.View
             services.AddMvc();
             services.AddRouteAnalyzer();
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddScoped<IHttpRequestExecuter, HttpRequestExecuter>();
+
+            if (!HostingEnvironment.IsClientTestServer())
+            {
+                services.AddScoped<IHttpRequestExecuter, HttpRequestExecuter>();
+            }
+
             services.AddScoped<IHttpRequestBuilder, HttpRequestBuilder>();
+
+            services.AddFittifyApiModelRepositoryServices();
+            services.AddFittifyViewModelRepositoryServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -164,7 +174,7 @@ namespace Fittify.Web.View
                     cfg.IgnoreUnmapped();
                 });
             }
-
+            
             loggerFactory.AddConsole();
 
             //if (env.IsDevelopment())

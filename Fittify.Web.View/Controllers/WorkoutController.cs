@@ -10,6 +10,7 @@ using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Client.ApiModelRepository;
+using Fittify.Client.ViewModelRepository;
 using Fittify.Client.ViewModelRepository.Sport;
 using Fittify.Client.ViewModels.Sport;
 using Microsoft.AspNetCore.Authentication;
@@ -26,18 +27,21 @@ namespace Fittify.Web.View.Controllers
     [Route("workouts")]
     public class WorkoutController : Controller
     {
-        //private IAsyncOfmRepository<int, WorkoutOfmForPost, WorkoutViewModel> _asyncOfmRepository;
-        private readonly IConfiguration _appConfiguration;
-        private readonly WorkoutViewModelRepository _workoutViewModelRepo;
-        private IHttpContextAccessor _httpContextAccessor;
-        private IHttpRequestExecuter _httpRequesthandler;
+        private readonly IViewModelRepository<int, WorkoutViewModel, WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters> _workoutViewModelRepository;
+        private readonly IViewModelRepository<int, MapExerciseWorkoutViewModel, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmCollectionResourceParameters> _mapExericseWorkoutViewModelRepository;
+        private readonly IViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters> _workoutHistoryViewModelRepository;
+        private readonly IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmCollectionResourceParameters> _weightLiftingSetViewModelRepository;
 
-        public WorkoutController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequesthandler)
+        public WorkoutController(
+            IViewModelRepository<int, WorkoutViewModel, WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters> workoutViewModelRepository,
+            IViewModelRepository<int, MapExerciseWorkoutViewModel, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmCollectionResourceParameters> mapExericseWorkoutViewModelRepository,
+            IViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters> workoutHistoryViewModelRepository,
+            IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmCollectionResourceParameters> weightLiftingSetViewModelRepository)
         {
-            _httpRequesthandler = httpRequesthandler;
-            _appConfiguration = appConfiguration;
-            _workoutViewModelRepo = new WorkoutViewModelRepository(appConfiguration, httpContextAccessor, _httpRequesthandler);
-            _httpContextAccessor = httpContextAccessor;
+            _workoutViewModelRepository = workoutViewModelRepository;
+            _mapExericseWorkoutViewModelRepository = mapExericseWorkoutViewModelRepository;
+            _workoutHistoryViewModelRepository = workoutHistoryViewModelRepository;
+            _weightLiftingSetViewModelRepository = weightLiftingSetViewModelRepository;
         }
 
         public async Task<IActionResult> Overview()
@@ -45,7 +49,7 @@ namespace Fittify.Web.View.Controllers
             await WriteOutIdentityAndAccessInformation();
             //await WriteOutAccessInformation();
 
-            var queryResult = await _workoutViewModelRepo.GetCollection(new WorkoutOfmCollectionResourceParameters());
+            var queryResult = await _workoutViewModelRepository.GetCollection(new WorkoutOfmCollectionResourceParameters());
 
             if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 queryResult.HttpStatusCode == HttpStatusCode.Forbidden)
@@ -70,7 +74,7 @@ namespace Fittify.Web.View.Controllers
             {
                 IncludeExercises = "1"
             };
-            var queryResult = await _workoutViewModelRepo.GetById(workoutId, workoutResourceParameters);
+            var queryResult = await _workoutViewModelRepository.GetById(workoutId, workoutResourceParameters);
 
             if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 queryResult.HttpStatusCode == HttpStatusCode.Forbidden)
@@ -97,8 +101,7 @@ namespace Fittify.Web.View.Controllers
                 ExerciseId = exerciseViewModel.Id
             };
             
-            var mapExerciseWorkoutViewModelRepo = new MapExerciseWorkoutViewModelRepository(_appConfiguration, _httpContextAccessor, _httpRequesthandler);
-            var postResult = await mapExerciseWorkoutViewModelRepo.Create(mapExerciseWorkout);
+            var postResult = await _mapExericseWorkoutViewModelRepository.Create(mapExerciseWorkout);
 
             if (postResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 postResult.HttpStatusCode == HttpStatusCode.Forbidden)
@@ -117,10 +120,8 @@ namespace Fittify.Web.View.Controllers
         [Route("{workoutId}/history")]
         public async Task<IActionResult> Histories(int workoutId)
         {
-            var repo = new WorkoutHistoryViewModelRepository(_appConfiguration, _httpContextAccessor, _httpRequesthandler);
-            //var workoutHistoryViewModels = await repo.GetCollectionByWorkoutId(workoutId);
             var workoutHistoryViewModelsCollectionQueryResult =
-                await repo.GetCollection(new WorkoutHistoryOfmCollectionResourceParameters() { WorkoutId = workoutId });
+                await _workoutHistoryViewModelRepository.GetCollection(new WorkoutHistoryOfmCollectionResourceParameters() { WorkoutId = workoutId });
 
             if (workoutHistoryViewModelsCollectionQueryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 workoutHistoryViewModelsCollectionQueryResult.HttpStatusCode == HttpStatusCode.Forbidden)
@@ -140,8 +141,7 @@ namespace Fittify.Web.View.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateNewWorkout([FromForm] WorkoutOfmForPost workoutOfmForPost)
         {
-            var workoutViewModelRepo = new WorkoutViewModelRepository(_appConfiguration, _httpContextAccessor, _httpRequesthandler);
-            var postResult = await workoutViewModelRepo.Create(workoutOfmForPost);
+            var postResult = await _workoutViewModelRepository.Create(workoutOfmForPost);
 
             if (postResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 postResult.HttpStatusCode == HttpStatusCode.Forbidden)
@@ -162,8 +162,7 @@ namespace Fittify.Web.View.Controllers
         [Route("{id}/deletion")]
         public async Task<RedirectToActionResult> Delete(/*[Bind("id")] int workoutId,*/ [FromQuery] int workoutId/*, [FromQuery] int workoutHistoryId*/)
         {
-            var workoutViewModelRepo = new WorkoutViewModelRepository(_appConfiguration, _httpContextAccessor, _httpRequesthandler);
-            var queryResult = await workoutViewModelRepo.Delete(workoutId);
+            var queryResult = await _workoutViewModelRepository.Delete(workoutId);
 
             if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 queryResult.HttpStatusCode == HttpStatusCode.Forbidden)
@@ -187,8 +186,7 @@ namespace Fittify.Web.View.Controllers
 
             jsonPatchDocument.Replace("/" + nameof(workoutOfmForPatch.Name), workoutOfmForPatch.Name);
 
-            var workoutViewModelRepo = new WorkoutViewModelRepository(_appConfiguration, _httpContextAccessor, _httpRequesthandler);
-            var queryResult = await workoutViewModelRepo.PartiallyUpdate(id, jsonPatchDocument);
+            var queryResult = await _workoutViewModelRepository.PartiallyUpdate(id, jsonPatchDocument);
 
             if (queryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 queryResult.HttpStatusCode == HttpStatusCode.Forbidden)
@@ -264,8 +262,7 @@ namespace Fittify.Web.View.Controllers
                     }
                 }
 
-                var wlsViewModelRepository = new WeightLiftingSetViewModelRepository(_appConfiguration, _httpContextAccessor, _httpRequesthandler);
-                var patchResult = await wlsViewModelRepository.PartiallyUpdate(wls.Id, jsonPatchDocument);
+                var patchResult = await _weightLiftingSetViewModelRepository.PartiallyUpdate(wls.Id, jsonPatchDocument);
 
                 if (patchResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                     patchResult.HttpStatusCode == HttpStatusCode.Forbidden)

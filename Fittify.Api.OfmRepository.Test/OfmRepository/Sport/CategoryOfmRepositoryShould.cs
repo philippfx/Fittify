@@ -321,14 +321,18 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         [Test]
         public async Task ThrowArgumentNullException_WhenCachedEntityIsNull()
         {
-            // Arrange
-            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int, CategoryResourceParameters>>();
+            await Task.Run(() =>
+            {
+                // Arrange
+                var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int, CategoryResourceParameters>>();
+
+                var categoryOfmRepository = new CategoryOfmRepository(asyncDataCrudMock.Object, new PropertyMappingService(), new TypeHelperService());
+                categoryOfmRepository.CachedEntityForPatch = null;
+
+                // Act and Assert
+                Assert.ThrowsAsync<ArgumentNullException>(() => categoryOfmRepository.UpdatePartially(null));
+            });
             
-            var categoryOfmRepository = new CategoryOfmRepository(asyncDataCrudMock.Object, new PropertyMappingService(), new TypeHelperService());
-            categoryOfmRepository.CachedEntityForPatch = null;
-            
-            // Act and Assert
-            Assert.ThrowsAsync<ArgumentNullException>(() => categoryOfmRepository.UpdatePartially(null));
         }
 
         [Test]

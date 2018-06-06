@@ -12,22 +12,36 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Client.ApiModelRepository.OfmRepository.Sport
 {
-    public class AsyncWorkoutHistoryOfmRepository : GenericAsyncGppdOfm<int, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters>
+    public class WorkoutHistoryApiModelRepository 
+        : ApiModelRepositoryBase<int, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters>, IWorkoutHistoryApiModelRepository
     {
-        public AsyncWorkoutHistoryOfmRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey, IHttpRequestExecuter httpRequestExecuter)
-            : base(appConfiguration, httpContextAccessor, mappedControllerActionKey, httpRequestExecuter)
+        public WorkoutHistoryApiModelRepository(
+            IConfiguration appConfiguration, 
+            IHttpContextAccessor httpContextAccessor, 
+            ////string mappedControllerActionKey, 
+            IHttpRequestExecuter httpRequestExecuter)
+            : base(
+                appConfiguration,
+                httpContextAccessor,
+                "WorkoutHistory",
+                httpRequestExecuter)
         {
 
         }
 
-        public override async Task<OfmQueryResult<WorkoutHistoryOfmForGet>> Post(WorkoutHistoryOfmForPost ofmForPost)
+        public async Task<OfmQueryResult<WorkoutHistoryOfmForGet>> Post(WorkoutHistoryOfmForPost ofmForPost, bool includeExerciseHistories)
         {
             var ofmQueryResult = new OfmQueryResult<WorkoutHistoryOfmForGet>();
             var uri = new Uri(
                 AppConfiguration.GetValue<string>("FittifyApiBaseUrl") +
                 AppConfiguration.GetValue<string>("MappedFittifyApiActions:" + MappedControllerActionKey)
-                + "?" + "includeExerciseHistories=1"
             );
+
+            if (includeExerciseHistories)
+            {
+                uri = new Uri(uri, "?" + "includeExerciseHistories=1");
+            }
+
             var httpResponse = await HttpRequestExecuter.Post(uri, ofmForPost, AppConfiguration, HttpContextAccessor);
             ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();

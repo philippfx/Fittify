@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Fittify.Web.View.Helpers
+namespace Fittify.Web.View.Helpers.Extensions
 {
     [ExcludeFromCodeCoverage]
     public static class EnvironmentExtensions

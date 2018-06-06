@@ -6,7 +6,9 @@ using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Client.ApiModelRepository;
+using Fittify.Client.ViewModelRepository;
 using Fittify.Client.ViewModelRepository.Sport;
+using Fittify.Client.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +19,12 @@ namespace Fittify.Web.View.Controllers
     [Route("exercises")]
     public class ExerciseController : Controller
     {
-        private readonly ExerciseViewModelRepository _exerciseViewModelRepository;
-        //// private IHttpContextAccessor _httpContextAccessor;
+        private readonly IViewModelRepository<int, ExerciseViewModel, ExerciseOfmForPost, ExerciseOfmCollectionResourceParameters> _exerciseViewModelRepository;
 
-        public ExerciseController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
+        public ExerciseController(
+            IViewModelRepository<int, ExerciseViewModel, ExerciseOfmForPost, ExerciseOfmCollectionResourceParameters> exerciseViewModelRepository)
         {
-            _exerciseViewModelRepository = new ExerciseViewModelRepository(appConfiguration, httpContextAccessor, httpRequestExecuter);
-            //// _httpContextAccessor = httpContextAccessor;
+            _exerciseViewModelRepository = exerciseViewModelRepository;
         }
 
         public async Task<IActionResult> Overview()

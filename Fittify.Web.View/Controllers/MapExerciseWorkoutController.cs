@@ -3,8 +3,11 @@ using System.Net;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
+using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Client.ApiModelRepository;
+using Fittify.Client.ViewModelRepository;
 using Fittify.Client.ViewModelRepository.Sport;
+using Fittify.Client.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -14,13 +17,12 @@ namespace Fittify.Web.View.Controllers
     [Route("mapexerciseworkout")]
     public class MapExerciseWorkoutController : Controller
     {
-        private MapExerciseWorkoutViewModelRepository _mapExerciseWorkoutViewModelRepository;
-        //// private IHttpContextAccessor _httpContextAccessor;
+        private readonly IViewModelRepository<int, MapExerciseWorkoutViewModel, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmCollectionResourceParameters> _mapExerciseWorkoutViewModelRepository;
 
-        public MapExerciseWorkoutController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
+        public MapExerciseWorkoutController(
+            IViewModelRepository<int, MapExerciseWorkoutViewModel, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmCollectionResourceParameters> mapExerciseWorkoutViewModelRepository)
         {
-            _mapExerciseWorkoutViewModelRepository = new MapExerciseWorkoutViewModelRepository(appConfiguration, httpContextAccessor, httpRequestExecuter);
-            //// _httpContextAccessor = httpContextAccessor;
+            _mapExerciseWorkoutViewModelRepository = mapExerciseWorkoutViewModelRepository;
         }
         
         [HttpPost]

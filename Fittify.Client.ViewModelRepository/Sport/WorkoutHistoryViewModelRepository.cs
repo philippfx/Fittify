@@ -14,21 +14,33 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Client.ViewModelRepository.Sport
 {
-    public class WorkoutHistoryViewModelRepository : GenericViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters>
+    public class WorkoutHistoryViewModelRepository : 
+        ViewModelRepositoryBase<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters>
     {
-        private readonly AsyncWorkoutHistoryOfmRepository asyncGppdOfmWorkoutHistory;
-        private readonly IConfiguration _appConfiguration;
+        private readonly IWorkoutHistoryApiModelRepository _workoutHistoryApiModelRepository;
 
-        public WorkoutHistoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
-            : base(appConfiguration, httpContextAccessor, "WorkoutHistory", httpRequestExecuter)
+        private readonly IViewModelRepository<int, ExerciseViewModel, ExerciseOfmForPost, ExerciseOfmCollectionResourceParameters> _exerciseHistoryViewModelRepository;
+
+        public WorkoutHistoryViewModelRepository(
+            ////IConfiguration appConfiguration,
+            ////IHttpContextAccessor httpContextAccessor,
+            ////IHttpRequestExecuter httpRequestExecuter,
+            IWorkoutHistoryApiModelRepository workoutHistoryApiModelRepository,
+            IViewModelRepository<int, ExerciseViewModel, ExerciseOfmForPost, ExerciseOfmCollectionResourceParameters> exerciseHistoryViewModelRepository)
+            : base(
+                ////appConfiguration,
+                ////httpContextAccessor,
+                ////"WorkoutHistory",
+                ////httpRequestExecuter,
+                workoutHistoryApiModelRepository)
         {
-            asyncGppdOfmWorkoutHistory = new AsyncWorkoutHistoryOfmRepository(appConfiguration, httpContextAccessor, "WorkoutHistoryOfmCollectionResourceParameters", httpRequestExecuter);
-            _appConfiguration = appConfiguration;
+            _workoutHistoryApiModelRepository = workoutHistoryApiModelRepository;
+            _exerciseHistoryViewModelRepository = exerciseHistoryViewModelRepository;
         }
 
         public override async Task<ViewModelQueryResult<WorkoutHistoryViewModel>> Create(WorkoutHistoryOfmForPost workoutOfmForPost)
         {
-            var ofmQueryResult = await asyncGppdOfmWorkoutHistory.Post(workoutOfmForPost);
+            var ofmQueryResult = await _workoutHistoryApiModelRepository.Post(workoutOfmForPost);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutHistoryViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
@@ -48,7 +60,7 @@ namespace Fittify.Client.ViewModelRepository.Sport
 
         public async Task<ViewModelQueryResult<WorkoutHistoryViewModel>> GetById(int id, WorkoutHistoryOfmResourceParameters workoutHistoryOfmResourceParameters)
         {
-            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.GetSingle(id, workoutHistoryOfmResourceParameters);
+            var ofmQueryResult = await _workoutHistoryApiModelRepository.GetSingle(id, workoutHistoryOfmResourceParameters);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutHistoryViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
@@ -123,7 +135,7 @@ namespace Fittify.Client.ViewModelRepository.Sport
             }
             
             // Exercises
-            var exerciseViewModelRepository = new ExerciseViewModelRepository(_appConfiguration, HttpContextAccessor, HttpRequestExecuter);
+            var exerciseViewModelRepository = _exerciseHistoryViewModelRepository;
 
             var exerciseViewModelCollectionQueryResult
                 = await exerciseViewModelRepository.GetCollection(

@@ -11,8 +11,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Client.ApiModelRepository
 {
-    public class GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters> 
-        where TId : struct
+    public abstract class ApiModelRepositoryBase<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters> : IApiModelRepository<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters> where TId : struct
         where TOfmForGet : class
         where TGetCollectionResourceParameters : class, new()
         where TOfmForPost : class
@@ -23,7 +22,7 @@ namespace Fittify.Client.ApiModelRepository
         protected IHttpContextAccessor HttpContextAccessor;
         protected readonly IHttpRequestExecuter HttpRequestExecuter;
 
-        public GenericAsyncGppdOfm(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey, IHttpRequestExecuter httpRequestExecuter)
+        public ApiModelRepositoryBase(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey, IHttpRequestExecuter httpRequestExecuter)
         {
             AppConfiguration = appConfiguration;
             MappedControllerActionKey = mappedControllerActionKey;

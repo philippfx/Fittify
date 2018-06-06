@@ -8,10 +8,19 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Client.ViewModelRepository.Sport
 {
-    public class CategoryViewModelRepository : GenericViewModelRepository<int, CategoryViewModel, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>
+    public class CategoryViewModelRepository : ViewModelRepositoryBase<int, CategoryViewModel, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>
     {
-        public CategoryViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
-            : base(appConfiguration, httpContextAccessor, "Category", httpRequestExecuter)
+        public CategoryViewModelRepository(
+            //IConfiguration appConfiguration,
+            //IHttpContextAccessor httpContextAccessor,
+            //IHttpRequestExecuter httpRequestExecuter,
+            IApiModelRepository<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters> cardioSetApiModelRepository)
+            : base(
+                ////appConfiguration,
+                ////httpContextAccessor,
+                ////"Category",
+                ////httpRequestExecuter,
+                cardioSetApiModelRepository)
         {
         }
     }

@@ -8,10 +8,19 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Client.ViewModelRepository.Sport
 {
-    public class WeightLiftingSetViewModelRepository : GenericViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmCollectionResourceParameters>
+    public class WeightLiftingSetViewModelRepository : ViewModelRepositoryBase<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmCollectionResourceParameters>
     {
-        public WeightLiftingSetViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
-            : base(appConfiguration, httpContextAccessor, "WeightLiftingSet", httpRequestExecuter)
+        public WeightLiftingSetViewModelRepository(
+            ////IConfiguration appConfiguration,
+            ////IHttpContextAccessor httpContextAccessor,
+            ////IHttpRequestExecuter httpRequestExecuter,
+            IApiModelRepository<int, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmCollectionResourceParameters> weightLiftingSetApiModelRepository)
+            : base(
+                ////appConfiguration,
+                ////httpContextAccessor,
+                ////"WeightLiftingSet",
+                ////httpRequestExecuter,
+                weightLiftingSetApiModelRepository)
         {
         }
     }

@@ -14,33 +14,37 @@ namespace Fittify.Api.OfmRepository.Test.Helpers
         [Test]
         public async Task OrderCorrectly_UsingBetterApplySort()
         {
-            // Arrange
-            Dictionary<string, PropertyMappingValue> filePropertyMapping =
-                new Dictionary<string, PropertyMappingValue>(StringComparer.OrdinalIgnoreCase)
+            await Task.Run(() =>
+            {
+                // Arrange
+                Dictionary<string, PropertyMappingValue> filePropertyMapping =
+                    new Dictionary<string, PropertyMappingValue>(StringComparer.OrdinalIgnoreCase)
+                    {
+                        {"Id", new PropertyMappingValue(new List<string>() {"Id"})},
+                        {"FullFileName", new PropertyMappingValue(new List<string>() { "FileName", "FileType"})},
+                        {"FileSizeInKb", new PropertyMappingValue(new List<string>() { "FileSizeInKb"})},
+                        {"Age", new PropertyMappingValue(new List<string>() { "FileCreatedOnDate" }, true)}
+                    };
+
+                var ofmOrderByClause = "FullFileName desc, FileSizeInKb desc, Age, Id";
+
+                //Act
+                var entityOrderByFields =
+                    ofmOrderByClause.ToEntityOrderBy(filePropertyMapping);
+
+                // Assert
+                var expectedOrder = new List<string>()
                 {
-                    {"Id", new PropertyMappingValue(new List<string>() {"Id"})},
-                    {"FullFileName", new PropertyMappingValue(new List<string>() { "FileName", "FileType"})},
-                    {"FileSizeInKb", new PropertyMappingValue(new List<string>() { "FileSizeInKb"})},
-                    {"Age", new PropertyMappingValue(new List<string>() { "FileCreatedOnDate" }, true)}
+                    "FileName desc",
+                    "FileType desc",
+                    "FileSizeInKb desc",
+                    "FileCreatedOnDate desc",
+                    "Id"
                 };
 
-            var ofmOrderByClause = "FullFileName desc, FileSizeInKb desc, Age, Id";
-
-            //Act
-            var entityOrderByFields =
-                ofmOrderByClause.ToEntityOrderBy(filePropertyMapping);
-
-            // Assert
-            var expectedOrder = new List<string>()
-            {
-                "FileName desc",
-                "FileType desc",
-                "FileSizeInKb desc",
-                "FileCreatedOnDate desc",
-                "Id"
-            };
-
-            Assert.AreEqual(entityOrderByFields, expectedOrder);
+                Assert.AreEqual(entityOrderByFields, expectedOrder);
+            });
+            
         }
 
         [TestCase("")]

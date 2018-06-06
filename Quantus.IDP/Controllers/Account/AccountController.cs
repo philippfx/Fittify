@@ -33,7 +33,7 @@ namespace Quantus.IDP.Controllers.Account
     [SecurityHeaders]
     public class AccountController : Controller
     {
-        private readonly TestUserStore _users; // replaced with quantus user store
+        ////private readonly TestUserStore _users; // replaced with quantus user store
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly IAuthenticationSchemeProvider _schemeProvider;

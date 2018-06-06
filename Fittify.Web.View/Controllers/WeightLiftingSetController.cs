@@ -1,8 +1,11 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Client.ApiModelRepository;
+using Fittify.Client.ViewModelRepository;
 using Fittify.Client.ViewModelRepository.Sport;
+using Fittify.Client.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,10 +15,12 @@ namespace Fittify.Web.View.Controllers
     [Route("weightliftingsets")]
     public class WeightLiftingSetWebController : Controller
     {
-        private readonly WeightLiftingSetViewModelRepository _weightLiftingSetViewModelRepository;
-        public WeightLiftingSetWebController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequesthandler)
+        private readonly IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmCollectionResourceParameters> _weightLiftingSetViewModelRepository;
+
+        public WeightLiftingSetWebController(
+            IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmCollectionResourceParameters> weightLiftingSetViewModelRepository)
         {
-            _weightLiftingSetViewModelRepository = new WeightLiftingSetViewModelRepository(appConfiguration, httpContextAccessor, httpRequesthandler);
+            _weightLiftingSetViewModelRepository = weightLiftingSetViewModelRepository;
         }
 
         [HttpPost]
@@ -34,7 +39,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when posting failed
             }
 
-            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
+            return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }
 
         [HttpPost]
@@ -54,7 +59,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when posting failed
             }
 
-            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
+            return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }
     }
 }

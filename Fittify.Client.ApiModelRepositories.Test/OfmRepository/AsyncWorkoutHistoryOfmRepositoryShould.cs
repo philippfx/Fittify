@@ -41,9 +41,9 @@ namespace Fittify.Client.ApiModelRepositories.Test.OfmRepository
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
-                    var workoutHistoryOfmRepository = new AsyncWorkoutHistoryOfmRepository(
-                        testAppConfiguration.Instance, httpContextAccessorMock.Object, "WorkoutHistory", httpRequestHandlerMock.Object);
+                    var httpRequestExecuter = new Mock<IHttpRequestExecuter>();
+                    var workoutHistoryOfmRepository = new WorkoutHistoryApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestExecuter.Object);
 
                     var workoutHistoryOfmForPost = new WorkoutHistoryOfmForPost()
                     { 
@@ -60,11 +60,11 @@ namespace Fittify.Client.ApiModelRepositories.Test.OfmRepository
                         }
                     };
 
-                    var uri = new Uri("https://somelocalhost:0000/api/workouthistories?includeExerciseHistories=1");
+                    var uri = new Uri("https://somelocalhost:0000/api/workouthistories");
                     var httpResponse = new HttpResponseMessage();
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(returnedWorkoutHistoryOfmForGet));
                     httpResponse.StatusCode = HttpStatusCode.OK;
-                    httpRequestHandlerMock.Setup(s => s.Post(uri, workoutHistoryOfmForPost, testAppConfiguration.Instance, httpContextAccessorMock.Object)).ReturnsAsync(httpResponse);
+                    httpRequestExecuter.Setup(s => s.Post(uri, workoutHistoryOfmForPost, testAppConfiguration.Instance, httpContextAccessorMock.Object)).ReturnsAsync(httpResponse);
 
                     // ACT
                     var ofmQueryResult = await workoutHistoryOfmRepository.Post(workoutHistoryOfmForPost);
@@ -106,9 +106,9 @@ namespace Fittify.Client.ApiModelRepositories.Test.OfmRepository
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
-                    var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
-                    var workoutHistoryOfmRepository = new AsyncWorkoutHistoryOfmRepository(
-                        testAppConfiguration.Instance, httpContextAccessorMock.Object, "WorkoutHistory", httpRequestHandlerMock.Object);
+                    var httpRequestExecuter = new Mock<IHttpRequestExecuter>();
+                    var workoutHistoryOfmRepository = new WorkoutHistoryApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestExecuter.Object);
 
                     var workoutHistoryOfmForPost = new WorkoutHistoryOfmForPost()
                     {
@@ -127,11 +127,11 @@ namespace Fittify.Client.ApiModelRepositories.Test.OfmRepository
                         }
                     };
 
-                    var uri = new Uri("https://somelocalhost:0000/api/workouthistories?includeExerciseHistories=1");
+                    var uri = new Uri("https://somelocalhost:0000/api/workouthistories");
                     var httpResponse = new HttpResponseMessage();
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(queryResult));
                     httpResponse.StatusCode = HttpStatusCode.BadRequest;
-                    httpRequestHandlerMock.Setup(s => s.Post(uri, workoutHistoryOfmForPost, testAppConfiguration.Instance, httpContextAccessorMock.Object)).ReturnsAsync(httpResponse);
+                    httpRequestExecuter.Setup(s => s.Post(uri, workoutHistoryOfmForPost, testAppConfiguration.Instance, httpContextAccessorMock.Object)).ReturnsAsync(httpResponse);
 
                     // ACT
                     var ofmQueryResult = await workoutHistoryOfmRepository.Post(workoutHistoryOfmForPost);

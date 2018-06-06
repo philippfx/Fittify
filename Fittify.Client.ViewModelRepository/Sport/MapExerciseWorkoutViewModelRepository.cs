@@ -8,10 +8,19 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Client.ViewModelRepository.Sport
 {
-    public class MapExerciseWorkoutViewModelRepository : GenericViewModelRepository<int, MapExerciseWorkoutViewModel, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmCollectionResourceParameters>
+    public class MapExerciseWorkoutViewModelRepository : ViewModelRepositoryBase<int, MapExerciseWorkoutViewModel, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmCollectionResourceParameters>
     {
-        public MapExerciseWorkoutViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
-            : base(appConfiguration, httpContextAccessor, "MapExerciseWorkout", httpRequestExecuter)
+        public MapExerciseWorkoutViewModelRepository(
+            ////IConfiguration appConfiguration,
+            ////IHttpContextAccessor httpContextAccessor,
+            ////IHttpRequestExecuter httpRequestExecuter,
+            IApiModelRepository<int, MapExerciseWorkoutOfmForGet, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmCollectionResourceParameters>  mapExerciseWorkoutApiModelRepository)
+            : base(
+                ////appConfiguration,
+                ////httpContextAccessor,
+                ////"MapExerciseWorkout",
+                ////httpRequestExecuter,
+                mapExerciseWorkoutApiModelRepository)
         {
         }
     }

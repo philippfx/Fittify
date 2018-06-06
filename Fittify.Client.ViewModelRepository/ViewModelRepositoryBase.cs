@@ -8,30 +8,36 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Client.ViewModelRepository
 {
-    public class GenericViewModelRepository<TId, TViewModel, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters>
+    public abstract class ViewModelRepositoryBase<TId, TViewModel, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters>
+        : IViewModelRepository<TId, TViewModel, TOfmForPost, TGetCollectionResourceParameters>
         where TId : struct
         where TViewModel : class
         where TOfmForGet : class
         where TGetCollectionResourceParameters : class, new()
         where TOfmForPost : class
     {
-        protected readonly GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters> GenericAsyncGppdOfmWorkout;
-        protected readonly IHttpContextAccessor HttpContextAccessor;
-        protected readonly IConfiguration AppConfiguration;
-        protected readonly IHttpRequestExecuter HttpRequestExecuter;
+        protected readonly IApiModelRepository<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters> ApiModelRepository;
+        ////protected readonly IHttpContextAccessor HttpContextAccessor;
+        ////protected readonly IConfiguration AppConfiguration;
+        ////protected readonly IHttpRequestExecuter HttpRequestExecuter;
 
-        public GenericViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, string mappedControllerActionKey, IHttpRequestExecuter httpRequestExecuter)
+        public ViewModelRepositoryBase(
+            ////IConfiguration appConfiguration,
+            ////IHttpContextAccessor httpContextAccessor,
+            ////string mappedControllerActionKey,
+            ////IHttpRequestExecuter httpRequestExecuter,
+            IApiModelRepository<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters> apiModelRepository)
         {
-            HttpRequestExecuter = httpRequestExecuter;
-            GenericAsyncGppdOfmWorkout = new GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters>(appConfiguration, httpContextAccessor, mappedControllerActionKey, HttpRequestExecuter);
-            HttpContextAccessor = httpContextAccessor;
-            AppConfiguration = appConfiguration;
+            ApiModelRepository = apiModelRepository;
+            ////HttpRequestExecuter = httpRequestExecuter;
+            ////HttpContextAccessor = httpContextAccessor;
+            ////AppConfiguration = appConfiguration;
         }
 
         public virtual async Task<ViewModelQueryResult<TViewModel>> GetById(TId id)
         {
 
-            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.GetSingle(id);
+            var ofmQueryResult = await ApiModelRepository.GetSingle(id);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<TViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
@@ -51,7 +57,7 @@ namespace Fittify.Client.ViewModelRepository
 
         public virtual async Task<ViewModelQueryResult<TViewModel>> GetById<TResourceParameters>(TId id, TResourceParameters resourceParameters) where TResourceParameters : class
         {
-            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.GetSingle(id, resourceParameters);
+            var ofmQueryResult = await ApiModelRepository.GetSingle(id, resourceParameters);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<TViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
@@ -71,7 +77,7 @@ namespace Fittify.Client.ViewModelRepository
 
         public virtual async Task<ViewModelCollectionQueryResult<TViewModel>> GetCollection(TGetCollectionResourceParameters resourceParameters)
         {
-            var ofmCollectionQueryResult = await GenericAsyncGppdOfmWorkout.GetCollection(resourceParameters);
+            var ofmCollectionQueryResult = await ApiModelRepository.GetCollection(resourceParameters);
 
             var workoutViewModelCollectionQueryResult = new ViewModelCollectionQueryResult<TViewModel>();
             workoutViewModelCollectionQueryResult.HttpStatusCode = ofmCollectionQueryResult.HttpStatusCode;
@@ -91,7 +97,7 @@ namespace Fittify.Client.ViewModelRepository
 
         public virtual async Task<ViewModelQueryResult<TViewModel>> Create(TOfmForPost workoutOfmForPost)
         {
-            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.Post(workoutOfmForPost);
+            var ofmQueryResult = await ApiModelRepository.Post(workoutOfmForPost);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<TViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
@@ -111,7 +117,7 @@ namespace Fittify.Client.ViewModelRepository
 
         public virtual async Task<ViewModelQueryResult<TViewModel>> Delete(TId id)
         {
-            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.Delete(id);
+            var ofmQueryResult = await ApiModelRepository.Delete(id);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<TViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
@@ -131,7 +137,7 @@ namespace Fittify.Client.ViewModelRepository
 
         public virtual async Task<ViewModelQueryResult<TViewModel>> PartiallyUpdate(TId id, JsonPatchDocument jsonPatchDocument)
         {
-            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.Patch(id, jsonPatchDocument);
+            var ofmQueryResult = await ApiModelRepository.Patch(id, jsonPatchDocument);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<TViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;

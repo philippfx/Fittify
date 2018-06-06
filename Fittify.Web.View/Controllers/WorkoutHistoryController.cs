@@ -5,6 +5,7 @@ using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Client.ApiModelRepository;
+using Fittify.Client.ViewModelRepository;
 using Fittify.Client.ViewModelRepository.Sport;
 using Fittify.Client.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
@@ -17,10 +18,11 @@ namespace Fittify.Web.View.Controllers
     [Route("workouthistories")]
     public class WorkoutHistoryController : Controller
     {
-        private readonly WorkoutHistoryViewModelRepository _workoutHistoryViewModelRepository;
-        public WorkoutHistoryController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequesthandler)
+        private readonly IViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters> _workoutHistoryViewModelRepository;
+        public WorkoutHistoryController(
+            IViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters> workoutHistoryViewModelRepository)
         {
-            _workoutHistoryViewModelRepository = new WorkoutHistoryViewModelRepository(appConfiguration, httpContextAccessor, httpRequesthandler);
+            _workoutHistoryViewModelRepository = workoutHistoryViewModelRepository;
         }
 
         [HttpPost]

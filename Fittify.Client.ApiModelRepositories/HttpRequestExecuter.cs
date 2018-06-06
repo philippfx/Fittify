@@ -37,12 +37,12 @@ namespace Fittify.Client.ApiModelRepository
                 .AddMethod(HttpMethod.Get)
                 .AddRequestUri(requestUri);
 
-            //string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
+            string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
 
-            //var builder = new HttpRequestBuilder()
-            //    .AddMethod(HttpMethod.Get)
-            //    .AddRequestUri(requestUri)
-            //    .AddBearerToken(accessToken);
+            var builder = _httpRequestBuilder
+                .AddMethod(HttpMethod.Get)
+                .AddRequestUri(requestUri)
+                .AddBearerToken(accessToken);
 
             return await _httpRequestBuilder.SendAsync();
         }

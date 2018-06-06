@@ -1,8 +1,11 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Client.ApiModelRepository;
+using Fittify.Client.ViewModelRepository;
 using Fittify.Client.ViewModelRepository.Sport;
+using Fittify.Client.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -12,11 +15,12 @@ namespace Fittify.Web.View.Controllers
     [Route("exercisehistories")]
     public class ExerciseHistoryController : Controller
     {
-        private readonly ExerciseHistoryViewModelRepository _exerciseHistoryViewModelRepository;
+        private readonly IViewModelRepository<int, ExerciseHistoryViewModel, ExerciseHistoryOfmForPost, ExerciseHistoryOfmCollectionResourceParameters> _exerciseHistoryViewModelRepository;
 
-        public ExerciseHistoryController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
+        public ExerciseHistoryController(
+            IViewModelRepository<int, ExerciseHistoryViewModel, ExerciseHistoryOfmForPost, ExerciseHistoryOfmCollectionResourceParameters> exerciseHistoryViewModelRepository)
         {
-            _exerciseHistoryViewModelRepository = new ExerciseHistoryViewModelRepository(appConfiguration, httpContextAccessor, httpRequestExecuter);
+            _exerciseHistoryViewModelRepository = exerciseHistoryViewModelRepository;
         }
 
         [HttpPost]
@@ -34,7 +38,7 @@ namespace Fittify.Web.View.Controllers
             {
                 // Todo: Do something when posting failed
             }
-            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = exerciseHistoryOfmForPost.WorkoutHistoryId });
+            return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = exerciseHistoryOfmForPost.WorkoutHistoryId });
         }
 
         [HttpPost]
@@ -54,7 +58,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when deleting failed
             }
 
-            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
+            return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }
     }
 }

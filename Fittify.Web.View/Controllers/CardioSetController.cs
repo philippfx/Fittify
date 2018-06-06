@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Client.ApiModelRepository;
+using Fittify.Client.ViewModelRepository;
 using Fittify.Client.ViewModelRepository.Sport;
+using Fittify.Client.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +17,11 @@ namespace Fittify.Web.View.Controllers
     [Route("cardiosets")]
     public class CardioSetController : Controller
     {
-        private readonly CardioSetViewModelRepository _cardioSetViewModelRepository;
-        public CardioSetController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
+        private readonly IViewModelRepository<int, CardioSetViewModel, CardioSetOfmForPost, CardioSetOfmCollectionResourceParameters> _cardioSetViewModelRepository;
+        public CardioSetController(
+            IViewModelRepository<int, CardioSetViewModel, CardioSetOfmForPost, CardioSetOfmCollectionResourceParameters> cardioSetViewModelRepository)
         {
-            _cardioSetViewModelRepository = new CardioSetViewModelRepository(appConfiguration, httpContextAccessor, httpRequestExecuter);
+            _cardioSetViewModelRepository = cardioSetViewModelRepository;
 
         }
 
@@ -37,7 +41,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when posting failed
             }
 
-            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
+            return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }
 
         [HttpPost]
@@ -60,7 +64,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when posting failed
             }
 
-            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
+            return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }
 
         [HttpPost]
@@ -83,7 +87,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when posting failed
             }
 
-            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
+            return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }
 
         [HttpPost]
@@ -103,7 +107,7 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when posting failed
             }
 
-            return RedirectToAction("HistoryDetails", "Workout", new { workoutHistoryId = workoutHistoryId });
+            return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }
     }
 }

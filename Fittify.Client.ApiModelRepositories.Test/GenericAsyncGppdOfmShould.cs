@@ -15,6 +15,7 @@ using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Client.ApiModelRepository;
 using Fittify.Client.ApiModelRepository.Helpers;
+using Fittify.Client.ApiModelRepository.OfmRepository.Sport;
 using Fittify.Common.Extensions;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
@@ -38,7 +39,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
         [Test]
         public async Task ReturnSuccessfulOfmQueryResult_UsingGetSingle()
         {
-            await Task.Run( async () =>
+            await Task.Run(async () =>
             {
                 // Arrange
                 using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
@@ -46,8 +47,8 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
                     var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
-                    var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
-                        testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
+                    var genericAsyncGppdOfm = new CategoryApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestHandlerMock.Object);
 
                     var returnedCategoryOfmForGet = new CategoryOfmForGet()
                     {
@@ -97,9 +98,8 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
                     var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
                     var genericAsyncGppdOfm =
-                        new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost,
-                            CategoryOfmCollectionResourceParameters>(
-                            testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category",
+                        new CategoryApiModelRepository(
+                            testAppConfiguration.Instance, httpContextAccessorMock.Object,
                             httpRequestHandlerMock.Object);
 
                     var returnedCategoryOfmForGet = new Dictionary<string, object>()
@@ -160,8 +160,8 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
                     var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
-                    var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters>(
-                        testAppConfiguration.Instance, httpContextAccessorMock.Object, "Workout", httpRequestHandlerMock.Object);
+                    var workoutApiModelRepository = new WorkoutApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestHandlerMock.Object);
 
                     var returnedWorkoutOfmForGet = new WorkoutOfmForGet()
                     {
@@ -180,7 +180,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     httpRequestHandlerMock.Setup(s => s.GetSingle(uri, testAppConfiguration.Instance, httpContextAccessorMock.Object)).ReturnsAsync(httpResponse);
 
                     // ACT
-                    var ofmQueryResult = await genericAsyncGppdOfm.GetSingle(1, resourceParameters);
+                    var ofmQueryResult = await workoutApiModelRepository.GetSingle(1, resourceParameters);
 
                     // Assert
                     var actualOfmQueryResult = JsonConvert.SerializeObject(ofmQueryResult, new JsonSerializerSettings() { Formatting = Newtonsoft.Json.Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -216,8 +216,8 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
                     var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
-                    var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters>(
-                        testAppConfiguration.Instance, httpContextAccessorMock.Object, "Workout", httpRequestHandlerMock.Object);
+                    var workoutApiModelRepository = new WorkoutApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestHandlerMock.Object);
 
                     var returnedWorkoutOfmForGet = new Dictionary<string, object>()
                     {
@@ -242,7 +242,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     httpRequestHandlerMock.Setup(s => s.GetSingle(uri, testAppConfiguration.Instance, httpContextAccessorMock.Object)).ReturnsAsync(httpResponse);
 
                     // ACT
-                    var ofmQueryResult = await genericAsyncGppdOfm.GetSingle(1, resourceParameters);
+                    var ofmQueryResult = await workoutApiModelRepository.GetSingle(1, resourceParameters);
 
                     // Assert
                     var actualOfmQueryResult = JsonConvert.SerializeObject(ofmQueryResult, new JsonSerializerSettings() { Formatting = Newtonsoft.Json.Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -278,8 +278,8 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
                     var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
-                    var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
-                        testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
+                    var genericAsyncGppdOfm = new CategoryApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestHandlerMock.Object);
 
                     var returnedCategoryOfmForGetCollection = new List<CategoryOfmForGet>()
                     {
@@ -343,8 +343,8 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
                     var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
-                    var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
-                        testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
+                    var genericAsyncGppdOfm = new CategoryApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestHandlerMock.Object);
 
                     var returnedCategoryOfmForGetCollection = new List<CategoryOfmForGet>()
                     {
@@ -408,8 +408,8 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
                     var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
-                    var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
-                        testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
+                    var genericAsyncGppdOfm = new CategoryApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestHandlerMock.Object);
 
                     var returnedOfmCollectionQueryResult = new Dictionary<string, object>()
                     {
@@ -467,8 +467,8 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
                     var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
-                    var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
-                        testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
+                    var genericAsyncGppdOfm = new CategoryApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestHandlerMock.Object);
 
                     var categoryOfmForPost = new CategoryOfmForPost()
                     {
@@ -522,8 +522,8 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
                     var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
-                    var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
-                        testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
+                    var genericAsyncGppdOfm = new CategoryApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestHandlerMock.Object);
 
                     var categoryOfmForPost = new CategoryOfmForPost()
                     {
@@ -584,10 +584,10 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
                     var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
-                    var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
-                        testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
-                    
-                    
+                    var genericAsyncGppdOfm = new CategoryApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestHandlerMock.Object);
+
+
                     var uri = new Uri("https://somelocalhost:0000/api/categories/1");
                     var httpResponse = new HttpResponseMessage();
                     //httpResponse.Content = new StringContent(JsonConvert.SerializeObject());
@@ -626,8 +626,8 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
                     var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
-                    var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
-                        testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
+                    var genericAsyncGppdOfm = new CategoryApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestHandlerMock.Object);
 
                     var queryResult = new Dictionary<string, object>()
                     {
@@ -682,8 +682,8 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
                     var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
-                    var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
-                        testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
+                    var genericAsyncGppdOfm = new CategoryApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestHandlerMock.Object);
 
                     var returnedCategoryOfmForGet = new CategoryOfmForGet()
                     {
@@ -704,7 +704,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(returnedCategoryOfmForGet));
                     httpResponse.StatusCode = HttpStatusCode.OK;
                     httpRequestHandlerMock.Setup(s => s.Patch(uri, patchDocument, testAppConfiguration.Instance, httpContextAccessorMock.Object)).ReturnsAsync(httpResponse);
-                   
+
 
                     // ACT
                     var ofmQueryResult = await genericAsyncGppdOfm.Patch(1, patchDocument);
@@ -741,8 +741,8 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
                     var httpRequestHandlerMock = new Mock<IHttpRequestExecuter>();
-                    var genericAsyncGppdOfm = new GenericAsyncGppdOfm<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>(
-                        testAppConfiguration.Instance, httpContextAccessorMock.Object, "Category", httpRequestHandlerMock.Object);
+                    var genericAsyncGppdOfm = new CategoryApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestHandlerMock.Object);
 
                     var returnedCategoryOfmForGet = new Dictionary<string, object>()
                     {

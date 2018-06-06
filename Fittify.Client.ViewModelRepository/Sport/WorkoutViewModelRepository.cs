@@ -13,17 +13,30 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Client.ViewModelRepository.Sport
 {
-    public class WorkoutViewModelRepository : GenericViewModelRepository<int, WorkoutViewModel, WorkoutOfmForGet,
+    public class WorkoutViewModelRepository : ViewModelRepositoryBase<int, WorkoutViewModel, WorkoutOfmForGet,
         WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters>
     {
-        public WorkoutViewModelRepository(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
-            : base(appConfiguration, httpContextAccessor, "Workout", httpRequestExecuter)
+        private readonly IViewModelRepository<int, ExerciseViewModel, ExerciseOfmForPost, ExerciseOfmCollectionResourceParameters> _exerciseViewModelRepository;
+
+        public WorkoutViewModelRepository(
+            ////IConfiguration appConfiguration,
+            ////IHttpContextAccessor httpContextAccessor,
+            ////IHttpRequestExecuter httpRequestExecuter,
+            IApiModelRepository<int, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters> workoutApiModelRepository,
+            IViewModelRepository<int, ExerciseViewModel, ExerciseOfmForPost, ExerciseOfmCollectionResourceParameters> exerciseViewModelRepository)
+            : base(
+                ////appConfiguration,
+                ////httpContextAccessor,
+                ////"Workout",
+                ////httpRequestExecuter,
+                workoutApiModelRepository)
         {
+            _exerciseViewModelRepository = exerciseViewModelRepository;
         }
 
         public override async Task<ViewModelQueryResult<WorkoutViewModel>> GetById(int id)
         {
-            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.GetSingle(id);
+            var ofmQueryResult = await ApiModelRepository.GetSingle(id);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
@@ -38,7 +51,7 @@ namespace Fittify.Client.ViewModelRepository.Sport
                 workoutViewModelQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
             }
 
-            var exerciseViewModelRepository = new ExerciseViewModelRepository(AppConfiguration, HttpContextAccessor, HttpRequestExecuter);
+            var exerciseViewModelRepository = _exerciseViewModelRepository;
             if (!String.IsNullOrWhiteSpace(ofmQueryResult.OfmForGet.RangeOfExerciseIds))
             {
                 var exerciseViewModelCollectionQuery = await exerciseViewModelRepository.GetCollection(
@@ -61,7 +74,7 @@ namespace Fittify.Client.ViewModelRepository.Sport
         public async Task<ViewModelQueryResult<WorkoutViewModel>> GetById(int id,
             WorkoutOfmResourceParameters workoutHistoryOfmResourceParameters)
         {
-            var ofmQueryResult = await GenericAsyncGppdOfmWorkout.GetSingle(id, workoutHistoryOfmResourceParameters);
+            var ofmQueryResult = await ApiModelRepository.GetSingle(id, workoutHistoryOfmResourceParameters);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
@@ -80,7 +93,7 @@ namespace Fittify.Client.ViewModelRepository.Sport
             }
 
             // Exercises
-            var exerciseViewModelRepository = new ExerciseViewModelRepository(AppConfiguration, HttpContextAccessor, HttpRequestExecuter);
+            var exerciseViewModelRepository = _exerciseViewModelRepository;
 
             var exerciseViewModelCollectionQueryResult
                 = await exerciseViewModelRepository.GetCollection(

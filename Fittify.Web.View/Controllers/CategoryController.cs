@@ -6,7 +6,9 @@ using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Client.ApiModelRepository;
+using Fittify.Client.ViewModelRepository;
 using Fittify.Client.ViewModelRepository.Sport;
+using Fittify.Client.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +19,11 @@ namespace Fittify.Web.View.Controllers
     [Route("categories")]
     public class CategoryController : Controller
     {
-        private readonly CategoryViewModelRepository _categoryViewModelRepository;
-        public CategoryController(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor, IHttpRequestExecuter httpRequestExecuter)
+        private readonly IViewModelRepository<int, CategoryViewModel, CategoryOfmForPost, CategoryOfmCollectionResourceParameters> _categoryViewModelRepository;
+        public CategoryController(
+            IViewModelRepository<int, CategoryViewModel, CategoryOfmForPost, CategoryOfmCollectionResourceParameters> categoryViewModelRepository)
         {
-            _categoryViewModelRepository = new CategoryViewModelRepository(appConfiguration, httpContextAccessor, httpRequestExecuter);
+            _categoryViewModelRepository = categoryViewModelRepository;
         }
 
         public async Task<IActionResult> Overview()
