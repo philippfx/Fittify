@@ -13,17 +13,17 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Client.ViewModelRepository.Sport
 {
-    public class WorkoutViewModelRepository : ViewModelRepositoryBase<int, WorkoutViewModel, WorkoutOfmForGet,
-        WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters>
+    public class WorkoutViewModelRepository 
+        : ViewModelRepositoryBase<int, WorkoutViewModel, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmResourceParameters, WorkoutOfmCollectionResourceParameters>
     {
-        private readonly IViewModelRepository<int, ExerciseViewModel, ExerciseOfmForPost, ExerciseOfmCollectionResourceParameters> _exerciseViewModelRepository;
+        private readonly IViewModelRepository<int, ExerciseViewModel, ExerciseOfmForPost, ExerciseOfmResourceParameters, ExerciseOfmCollectionResourceParameters> _exerciseViewModelRepository;
 
         public WorkoutViewModelRepository(
             ////IConfiguration appConfiguration,
             ////IHttpContextAccessor httpContextAccessor,
             ////IHttpRequestExecuter httpRequestExecuter,
             IApiModelRepository<int, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters> workoutApiModelRepository,
-            IViewModelRepository<int, ExerciseViewModel, ExerciseOfmForPost, ExerciseOfmCollectionResourceParameters> exerciseViewModelRepository)
+            IViewModelRepository<int, ExerciseViewModel, ExerciseOfmForPost, ExerciseOfmResourceParameters, ExerciseOfmCollectionResourceParameters> exerciseViewModelRepository)
             : base(
                 ////appConfiguration,
                 ////httpContextAccessor,
@@ -71,10 +71,10 @@ namespace Fittify.Client.ViewModelRepository.Sport
             return workoutViewModelQueryResult;
         }
 
-        public async Task<ViewModelQueryResult<WorkoutViewModel>> GetById(int id,
-            WorkoutOfmResourceParameters workoutHistoryOfmResourceParameters)
+        public override async Task<ViewModelQueryResult<WorkoutViewModel>> GetById(int id,
+            WorkoutOfmResourceParameters workoutOfmResourceParameters)
         {
-            var ofmQueryResult = await ApiModelRepository.GetSingle(id, workoutHistoryOfmResourceParameters);
+            var ofmQueryResult = await ApiModelRepository.GetSingle(id, workoutOfmResourceParameters);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;

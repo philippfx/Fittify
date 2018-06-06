@@ -19,9 +19,9 @@ namespace Fittify.Web.View.Controllers
     [Route("categories")]
     public class CategoryController : Controller
     {
-        private readonly IViewModelRepository<int, CategoryViewModel, CategoryOfmForPost, CategoryOfmCollectionResourceParameters> _categoryViewModelRepository;
+        private readonly IViewModelRepository<int, CategoryViewModel, CategoryOfmForPost, CategoryOfmResourceParameters, CategoryOfmCollectionResourceParameters> _categoryViewModelRepository;
         public CategoryController(
-            IViewModelRepository<int, CategoryViewModel, CategoryOfmForPost, CategoryOfmCollectionResourceParameters> categoryViewModelRepository)
+            IViewModelRepository<int, CategoryViewModel, CategoryOfmForPost, CategoryOfmResourceParameters, CategoryOfmCollectionResourceParameters> categoryViewModelRepository)
         {
             _categoryViewModelRepository = categoryViewModelRepository;
         }

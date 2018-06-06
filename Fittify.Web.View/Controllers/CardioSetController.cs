@@ -17,9 +17,9 @@ namespace Fittify.Web.View.Controllers
     [Route("cardiosets")]
     public class CardioSetController : Controller
     {
-        private readonly IViewModelRepository<int, CardioSetViewModel, CardioSetOfmForPost, CardioSetOfmCollectionResourceParameters> _cardioSetViewModelRepository;
+        private readonly IViewModelRepository<int, CardioSetViewModel, CardioSetOfmForPost, CardioSetOfmResourceParameters, CardioSetOfmCollectionResourceParameters> _cardioSetViewModelRepository;
         public CardioSetController(
-            IViewModelRepository<int, CardioSetViewModel, CardioSetOfmForPost, CardioSetOfmCollectionResourceParameters> cardioSetViewModelRepository)
+            IViewModelRepository<int, CardioSetViewModel, CardioSetOfmForPost, CardioSetOfmResourceParameters, CardioSetOfmCollectionResourceParameters> cardioSetViewModelRepository)
         {
             _cardioSetViewModelRepository = cardioSetViewModelRepository;
 

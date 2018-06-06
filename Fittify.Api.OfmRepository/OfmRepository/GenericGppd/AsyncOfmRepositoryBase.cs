@@ -6,6 +6,7 @@ using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.OfmResourceParameters;
 using Fittify.Common;
 using Fittify.Common.Helpers;
+using Fittify.Common.ResourceParameters;
 using Fittify.DataModelRepository.Repository;
 using Fittify.DataModelRepository.ResourceParameters;
 using IPropertyMappingService = Fittify.Api.OfmRepository.Services.PropertyMapping.IPropertyMappingService;
@@ -13,22 +14,19 @@ using ITypeHelperService = Fittify.Api.OfmRepository.Services.TypeHelper.ITypeHe
 
 namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
 {
-    public abstract class AsyncOfmRepositoryBase<TEntity, TOfmForGet, TOfmForPost, TOfmForPatch, TId, TOfmResourceParameters, TEntityResourceParameters> 
-        : IAsyncOfmRepository<TOfmForGet, TOfmForPost, TOfmForPatch, TId, TOfmResourceParameters>
+    public abstract class AsyncOfmRepositoryBase<TEntity, TOfmForGet, TId, TEntityCollectionResourceParameters> 
+        : IAsyncOfmRepository<TOfmForGet, TId>
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TOfmForGet : class, IEntityUniqueIdentifier<TId>
-        where TOfmForPost : class
-        where TOfmForPatch : class
         where TId : struct
-        where TOfmResourceParameters : OfmResourceParametersBase
-        where TEntityResourceParameters : EntityResourceParametersBase, IEntityOwner, new()
+        where TEntityCollectionResourceParameters : EntityResourceParametersBase, IEntityOwner, new()
     {
-        protected readonly IAsyncCrud<TEntity, TId> Repo;
+        protected readonly IAsyncCrud<TEntity, TId, TEntityCollectionResourceParameters> Repo;
         protected readonly IPropertyMappingService PropertyMappingService;
         protected readonly ITypeHelperService TypeHelperService;
         protected readonly AsyncGetOfmGuardClauses<TOfmForGet, TId> AsyncGetOfmGuardClause;
 
-        public AsyncOfmRepositoryBase(IAsyncCrud<TEntity, TId> repository,
+        public AsyncOfmRepositoryBase(IAsyncCrud<TEntity, TId, TEntityCollectionResourceParameters> repository,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService)
         {
@@ -58,7 +56,15 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
             return ofmForGetResult;
         }
 
-        public virtual async Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection(TOfmResourceParameters ofmResourceParameters, Guid ownerGuid)
+
+        //public virtual async Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection<TOfmResourceParameters1>(TOfmResourceParameters1 ofmResourceParameters, Guid ownerGuid)
+        //    where TOfmResourceParameters1 : class, IResourceParameters
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public virtual async Task<OfmForGetCollectionQueryResult<TOfmForGet>> GetCollection<TOfmResourceParameters>(TOfmResourceParameters ofmResourceParameters, Guid ownerGuid)
+            where TOfmResourceParameters : OfmResourceParametersBase
         {
             var ofmForGetCollectionQueryResult = new OfmForGetCollectionQueryResult<TOfmForGet>();
             
@@ -68,7 +74,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
                 return ofmForGetCollectionQueryResult;
             }
 
-            var entityResourceParameters = Mapper.Map<TEntityResourceParameters>(ofmResourceParameters);
+            var entityResourceParameters = Mapper.Map<TEntityCollectionResourceParameters>(ofmResourceParameters);
             entityResourceParameters.OwnerGuid = ownerGuid;
             entityResourceParameters.OrderBy = ofmResourceParameters.OrderBy.ToEntityOrderBy(PropertyMappingService.GetPropertyMapping<TOfmForGet, TEntity>());
 
@@ -79,7 +85,8 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
             return ofmForGetCollectionQueryResult;
         }
 
-        public virtual async Task<TOfmForGet> Post(TOfmForPost ofmForPost, Guid ownerGuid)
+        public virtual async Task<TOfmForGet> Post<TOfmForPost>(TOfmForPost ofmForPost, Guid ownerGuid)
+            where TOfmForPost : class
         {
             var entity = Mapper.Map<TOfmForPost, TEntity>(ofmForPost);
             entity = await Repo.Create(entity, ownerGuid);
@@ -88,14 +95,16 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
         }
 
         public TEntity CachedEntityForPatch;
-        public virtual async Task<TOfmForPatch> GetByIdOfmForPatch(TId id)
+        public virtual async Task<TOfmForPatch> GetByIdOfmForPatch<TOfmForPatch>(TId id)
+            where TOfmForPatch : class
         {
             CachedEntityForPatch = await Repo.GetById(id);
             var ofmForPatch = Mapper.Map<TEntity, TOfmForPatch>(CachedEntityForPatch);
             return ofmForPatch;
         }
 
-        public virtual async Task<TOfmForGet> UpdatePartially(TOfmForPatch ofmForPatch)
+        public virtual async Task<TOfmForGet> UpdatePartially<TOfmForPatch>(TOfmForPatch ofmForPatch)
+            where TOfmForPatch : class
         {
             if (CachedEntityForPatch == null)
             {

@@ -10,7 +10,7 @@ namespace Fittify.Api.Middleware.Extensions.ConfigureServices
         {
             services.Scan(scan => scan
                 .FromAssemblyOf<WorkoutRepository>()
-                .AddClasses(classes => classes.AssignableTo(typeof(IAsyncCrud<,>)))
+                .AddClasses(classes => classes.AssignableTo(typeof(IAsyncCrud<,,>)))
                 .AsImplementedInterfaces()
                 .WithTransientLifetime())
                 //.AddClasses(classes => classes.AssignableTo<IScopedService>())

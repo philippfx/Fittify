@@ -28,7 +28,7 @@ namespace Fittify.Api.Controllers.Sport
     public class ExerciseApiController :
         Controller
     {
-        private readonly IAsyncOfmRepository<ExerciseOfmForGet, ExerciseOfmForPost, ExerciseOfmForPatch, int, ExerciseOfmCollectionResourceParameters> _asyncOfmRepository;
+        private readonly IAsyncOfmRepository<ExerciseOfmForGet, int> _asyncOfmRepository;
         private readonly string _shortCamelCasedControllerName;
         private readonly IUrlHelper _urlHelper;
         private readonly ControllerGuardClauses<ExerciseOfmForGet, ExerciseOfmForPost, ExerciseOfmForPatch, int> _controllerGuardClause;
@@ -36,7 +36,7 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IncomingHeaders _incomingHeaders;
 
         public ExerciseApiController(
-            IAsyncOfmRepository<ExerciseOfmForGet, ExerciseOfmForPost, ExerciseOfmForPatch, int, ExerciseOfmCollectionResourceParameters> asyncOfmRepository,
+            IAsyncOfmRepository<ExerciseOfmForGet, int> asyncOfmRepository,
             IUrlHelper urlHelper,
             IHttpContextAccessor httpContextAccesor)
         {
@@ -51,16 +51,16 @@ namespace Fittify.Api.Controllers.Sport
         [HttpGet("{id}", Name = "GetExerciseById")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
         [AuthorizeOwnerIntId(typeof(ExerciseRepository))]
-        public async Task<IActionResult> GetById(int id, [FromQuery] string fields)
+        public async Task<IActionResult> GetById(int id, ExerciseOfmResourceParameters exerciseOfmResourceParameters)
         {
-            var ofmForGetQueryResult = await _asyncOfmRepository.GetById(id, fields);
+            var ofmForGetQueryResult = await _asyncOfmRepository.GetById(id, exerciseOfmResourceParameters.Fields);
             if (!_controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
             {
                 return objectResult;
             }
             var expandable = ofmForGetQueryResult.ReturnedTOfmForGet.ToExpandableOfm();
-            var shapedExpandable = expandable.Shape(fields); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
-            if (_incomingHeaders.IncludeHateoas) shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, fields).ToList());
+            var shapedExpandable = expandable.Shape(exerciseOfmResourceParameters.Fields); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
+            if (_incomingHeaders.IncludeHateoas) shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, exerciseOfmResourceParameters.Fields).ToList());
             return Ok(shapedExpandable);
         }
 
@@ -155,7 +155,7 @@ namespace Fittify.Api.Controllers.Sport
             try
             {
                 // Get entity with original values from context
-                var ofmForPatch = await _asyncOfmRepository.GetByIdOfmForPatch(id);
+                var ofmForPatch = await _asyncOfmRepository.GetByIdOfmForPatch<ExerciseOfmForPatch>(id);
                 if (ofmForPatch == null)
                 {
                     ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);

@@ -10,7 +10,7 @@ namespace Fittify.Api.Middleware.Extensions.ConfigureServices
         {
             services.Scan(scan => scan
                     .FromAssemblyOf<CardioSetOfmRepository>()
-                    .AddClasses(classes => classes.AssignableTo(typeof(IAsyncOfmRepository<,,,,>)))
+                    .AddClasses(classes => classes.AssignableTo(typeof(IAsyncOfmRepository<,>)))
                     .AsImplementedInterfaces()
                     .WithScopedLifetime())
                     //.AddClasses(classes => classes.AssignableTo<IScopedService>())

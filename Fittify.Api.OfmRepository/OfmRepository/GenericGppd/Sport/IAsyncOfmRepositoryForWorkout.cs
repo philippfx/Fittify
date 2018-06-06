@@ -9,7 +9,7 @@ using Fittify.Api.OuterFacingModels.Sport.Post;
 
 namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport
 {
-    public interface IAsyncOfmRepositoryForWorkout : IAsyncOfmRepository<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutOfmCollectionResourceParameters>
+    public interface IAsyncOfmRepositoryForWorkout : IAsyncOfmRepository<WorkoutOfmForGet, int>
     {
         Task<OfmForGetQueryResult<WorkoutOfmForGet>> GetById(int id, WorkoutOfmResourceParameters resourceParameters, Guid ownerGuid);
     }

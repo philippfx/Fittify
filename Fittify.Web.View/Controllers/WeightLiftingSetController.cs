@@ -15,10 +15,10 @@ namespace Fittify.Web.View.Controllers
     [Route("weightliftingsets")]
     public class WeightLiftingSetWebController : Controller
     {
-        private readonly IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmCollectionResourceParameters> _weightLiftingSetViewModelRepository;
+        private readonly IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmResourceParameters, WeightLiftingSetOfmCollectionResourceParameters> _weightLiftingSetViewModelRepository;
 
         public WeightLiftingSetWebController(
-            IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmCollectionResourceParameters> weightLiftingSetViewModelRepository)
+            IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmResourceParameters, WeightLiftingSetOfmCollectionResourceParameters> weightLiftingSetViewModelRepository)
         {
             _weightLiftingSetViewModelRepository = weightLiftingSetViewModelRepository;
         }

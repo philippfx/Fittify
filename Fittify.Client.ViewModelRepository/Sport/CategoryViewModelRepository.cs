@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Client.ViewModelRepository.Sport
 {
-    public class CategoryViewModelRepository : ViewModelRepositoryBase<int, CategoryViewModel, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters>
+    public class CategoryViewModelRepository : ViewModelRepositoryBase<int, CategoryViewModel, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmResourceParameters, CategoryOfmCollectionResourceParameters>
     {
         public CategoryViewModelRepository(
             //IConfiguration appConfiguration,

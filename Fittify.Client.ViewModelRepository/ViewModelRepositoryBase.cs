@@ -8,11 +8,12 @@ using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Client.ViewModelRepository
 {
-    public abstract class ViewModelRepositoryBase<TId, TViewModel, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters>
-        : IViewModelRepository<TId, TViewModel, TOfmForPost, TGetCollectionResourceParameters>
+    public abstract class ViewModelRepositoryBase<TId, TViewModel, TOfmForGet, TOfmForPost, TOfmResourceParameters, TGetCollectionResourceParameters>
+        : IViewModelRepository<TId, TViewModel, TOfmForPost, TOfmResourceParameters, TGetCollectionResourceParameters>
         where TId : struct
         where TViewModel : class
         where TOfmForGet : class
+        where TOfmResourceParameters : class, new()
         where TGetCollectionResourceParameters : class, new()
         where TOfmForPost : class
     {
@@ -55,7 +56,7 @@ namespace Fittify.Client.ViewModelRepository
             return workoutViewModelQueryResult;
         }
 
-        public virtual async Task<ViewModelQueryResult<TViewModel>> GetById<TResourceParameters>(TId id, TResourceParameters resourceParameters) where TResourceParameters : class
+        public virtual async Task<ViewModelQueryResult<TViewModel>> GetById(TId id, TOfmResourceParameters resourceParameters)
         {
             var ofmQueryResult = await ApiModelRepository.GetSingle(id, resourceParameters);
 

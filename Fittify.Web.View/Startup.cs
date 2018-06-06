@@ -6,7 +6,9 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNetCore.RouteAnalyzer;
+using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Client.ApiModelRepository;
+using Fittify.Client.ViewModels.Sport;
 using Fittify.Web.View.Helpers;
 using Fittify.Web.View.Helpers.Extensions;
 using Fittify.Web.View.Middleware.Extensions.ConfigureServices;
@@ -155,10 +157,10 @@ namespace Fittify.Web.View
 
             if (!HostingEnvironment.IsClientTestServer())
             {
-                services.AddScoped<IHttpRequestExecuter, HttpRequestExecuter>();
+                services.AddTransient<IHttpRequestExecuter, HttpRequestExecuter>();
             }
 
-            services.AddScoped<IHttpRequestBuilder, HttpRequestBuilder>();
+            services.AddTransient<IHttpRequestBuilder, HttpRequestBuilder>();
 
             services.AddFittifyApiModelRepositoryServices();
             services.AddFittifyViewModelRepositoryServices();
@@ -171,6 +173,17 @@ namespace Fittify.Web.View
             {
                 AutoMapper.Mapper.Initialize(cfg =>
                 {
+                    // OfmGet to ViewModel
+                    cfg.CreateMap<WorkoutOfmForGet, WorkoutViewModel>()
+                        .ForMember(dest => dest.AssociatedExercises, opt => opt.MapFrom(src => src.Exercises));
+                    cfg.CreateMap<CategoryOfmForGet, CategoryViewModel>();
+                    ////.ForMember(dest => dest.RangeOfWorkoutIds, opt => opt.MapFrom(src => src.Workouts.Select(w => w.Id).ToList().ToStringOfIds()));
+                    cfg.CreateMap<CardioSetOfmForGet, CardioSetViewModel>();
+                    cfg.CreateMap<WeightLiftingSetOfmForGet, WeightLiftingSetViewModel>();
+                    cfg.CreateMap<ExerciseOfmForGet, ExerciseViewModel>();
+                    cfg.CreateMap<ExerciseHistoryOfmForGet, ExerciseHistoryViewModel>();
+                    cfg.CreateMap<WorkoutHistoryOfmForGet, WorkoutHistoryViewModel>()
+                        .ForMember(dest => dest.ExerciseHistories, opt => opt.MapFrom(src => src.ExerciseHistories));
                     cfg.IgnoreUnmapped();
                 });
             }

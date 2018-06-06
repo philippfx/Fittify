@@ -27,16 +27,16 @@ namespace Fittify.Web.View.Controllers
     [Route("workouts")]
     public class WorkoutController : Controller
     {
-        private readonly IViewModelRepository<int, WorkoutViewModel, WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters> _workoutViewModelRepository;
-        private readonly IViewModelRepository<int, MapExerciseWorkoutViewModel, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmCollectionResourceParameters> _mapExericseWorkoutViewModelRepository;
-        private readonly IViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters> _workoutHistoryViewModelRepository;
-        private readonly IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmCollectionResourceParameters> _weightLiftingSetViewModelRepository;
+        private readonly IViewModelRepository<int, WorkoutViewModel, WorkoutOfmForPost, WorkoutOfmResourceParameters, WorkoutOfmCollectionResourceParameters> _workoutViewModelRepository;
+        private readonly IViewModelRepository<int, MapExerciseWorkoutViewModel, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmResourceParameters, MapExerciseWorkoutOfmCollectionResourceParameters> _mapExericseWorkoutViewModelRepository;
+        private readonly IViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForPost, WorkoutHistoryOfmResourceParameters, WorkoutHistoryOfmCollectionResourceParameters> _workoutHistoryViewModelRepository;
+        private readonly IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmResourceParameters, WeightLiftingSetOfmCollectionResourceParameters> _weightLiftingSetViewModelRepository;
 
         public WorkoutController(
-            IViewModelRepository<int, WorkoutViewModel, WorkoutOfmForPost, WorkoutOfmCollectionResourceParameters> workoutViewModelRepository,
-            IViewModelRepository<int, MapExerciseWorkoutViewModel, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmCollectionResourceParameters> mapExericseWorkoutViewModelRepository,
-            IViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters> workoutHistoryViewModelRepository,
-            IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmCollectionResourceParameters> weightLiftingSetViewModelRepository)
+            IViewModelRepository<int, WorkoutViewModel, WorkoutOfmForPost, WorkoutOfmResourceParameters, WorkoutOfmCollectionResourceParameters> workoutViewModelRepository,
+            IViewModelRepository<int, MapExerciseWorkoutViewModel, MapExerciseWorkoutOfmForPost, MapExerciseWorkoutOfmResourceParameters, MapExerciseWorkoutOfmCollectionResourceParameters> mapExericseWorkoutViewModelRepository,
+            IViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForPost, WorkoutHistoryOfmResourceParameters, WorkoutHistoryOfmCollectionResourceParameters> workoutHistoryViewModelRepository,
+            IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmResourceParameters, WeightLiftingSetOfmCollectionResourceParameters> weightLiftingSetViewModelRepository)
         {
             _workoutViewModelRepository = workoutViewModelRepository;
             _mapExericseWorkoutViewModelRepository = mapExericseWorkoutViewModelRepository;
@@ -121,7 +121,10 @@ namespace Fittify.Web.View.Controllers
         public async Task<IActionResult> Histories(int workoutId)
         {
             var workoutHistoryViewModelsCollectionQueryResult =
-                await _workoutHistoryViewModelRepository.GetCollection(new WorkoutHistoryOfmCollectionResourceParameters() { WorkoutId = workoutId });
+                await _workoutHistoryViewModelRepository.GetCollection(new WorkoutHistoryOfmCollectionResourceParameters()
+                {
+                    WorkoutId = workoutId
+                });
 
             if (workoutHistoryViewModelsCollectionQueryResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                 workoutHistoryViewModelsCollectionQueryResult.HttpStatusCode == HttpStatusCode.Forbidden)

@@ -165,7 +165,7 @@ namespace Fittify.Api.Controllers.Sport
             try
             {
                 // Get entity with original values from context
-                var ofmForPatch = await _asyncOfmRepository.GetByIdOfmForPatch(id);
+                var ofmForPatch = await _asyncOfmRepository.GetByIdOfmForPatch<WorkoutOfmForPatch>(id);
                 if (ofmForPatch == null)
                 {
                     ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);

@@ -12,7 +12,7 @@ namespace Fittify.Web.View.Middleware.Extensions.ConfigureServices
         {
             services.Scan(scan => scan
                     .FromAssemblyOf<WorkoutViewModelRepository>()
-                    .AddClasses(classes => classes.AssignableTo(typeof(IViewModelRepository<,,,>)))
+                    .AddClasses(classes => classes.AssignableTo(typeof(IViewModelRepository<,,,,>)))
                     .AsImplementedInterfaces()
                     .WithScopedLifetime())
                     //.AddClasses(classes => classes.AssignableTo<IScopedService>())

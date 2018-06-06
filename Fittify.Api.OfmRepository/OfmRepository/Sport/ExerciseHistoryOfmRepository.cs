@@ -12,9 +12,9 @@ using ITypeHelperService = Fittify.Api.OfmRepository.Services.TypeHelper.ITypeHe
 
 namespace Fittify.Api.OfmRepository.OfmRepository.Sport
 {
-    public class ExerciseHistoryOfmRepository : AsyncOfmRepositoryBase<ExerciseHistory, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int, ExerciseHistoryOfmCollectionResourceParameters, ExerciseHistoryResourceParameters>, IAsyncEntityOwnerIntId
+    public class ExerciseHistoryOfmRepository : AsyncOfmRepositoryBase<ExerciseHistory, ExerciseHistoryOfmForGet, int, ExerciseHistoryResourceParameters>, IAsyncEntityOwnerIntId
     {
-        public ExerciseHistoryOfmRepository(IAsyncCrud<ExerciseHistory, int> repo,
+        public ExerciseHistoryOfmRepository(IAsyncCrud<ExerciseHistory, int, ExerciseHistoryResourceParameters> repo,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService
         )

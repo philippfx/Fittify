@@ -14,9 +14,9 @@ using ITypeHelperService = Fittify.Api.OfmRepository.Services.TypeHelper.ITypeHe
 namespace Fittify.Api.OfmRepository.OfmRepository.Sport
 {
     [ExcludeFromCodeCoverage]
-    public class AnimalOfmRepository : AsyncOfmRepositoryBase<Animal, AnimalOfmForGet, AnimalOfmForPost, AnimalOfmForPatch, int, AnimalOfmCollectionResourceParameters, AnimalResourceParameters>
+    public class AnimalOfmRepository : AsyncOfmRepositoryBase<Animal, AnimalOfmForGet, int, AnimalResourceParameters>
     {
-        public AnimalOfmRepository(IAsyncCrud<Animal, int> repo,
+        public AnimalOfmRepository(IAsyncCrud<Animal, int, AnimalResourceParameters> repo,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService
         )

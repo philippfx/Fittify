@@ -16,7 +16,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         [Test]
         public void CreateNewOfmRepositoryInstance()
         {
-            var asyncDataCrudMock = new Mock<IAsyncCrud<ExerciseHistory, int>>();
+            var asyncDataCrudMock = new Mock<IAsyncCrud<ExerciseHistory, int, ExerciseHistoryResourceParameters>>();
 
             var categoryOfmRepository = new ExerciseHistoryOfmRepository(asyncDataCrudMock.Object, new PropertyMappingService(), new TypeHelperService());
 

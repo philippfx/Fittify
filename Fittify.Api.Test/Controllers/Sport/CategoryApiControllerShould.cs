@@ -36,14 +36,14 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             AutoMapperForFittify.Initialize();
         }
-        
+
         [Test]
         public async Task ReturnOkObjectResult_ForMinimumQuery_WhenUsingGetById()
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
-            asyncGppdMock.Setup(s => s.GetById(1, "")).Returns(Task.FromResult(
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
+            asyncGppdMock.Setup(s => s.GetById(1, null)).Returns(Task.FromResult(
                     new OfmForGetQueryResult<CategoryOfmForGet>()
                     {
                         ReturnedTOfmForGet = new CategoryOfmForGet()
@@ -71,13 +71,13 @@ namespace Fittify.Api.Test.Controllers.Sport
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
-            
+
             // Act
-            var objectResult = await categoryController.GetById(1, "");
+            var objectResult = await categoryController.GetById(1, new CategoryOfmResourceParameters());
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
-            var expectedJsonResult = 
+            var expectedJsonResult =
                 @"
                     {
                       ""Value"": {
@@ -100,7 +100,7 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock.Setup(s => s.GetById(1, "Name")).Returns(Task.FromResult(
                     new OfmForGetQueryResult<CategoryOfmForGet>()
                     {
@@ -131,7 +131,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 httpContextAccessorMock.Object);
 
             // Act
-            var objectResult = await categoryController.GetById(1, "Name");
+            var objectResult = await categoryController.GetById(1, new CategoryOfmResourceParameters(){ Fields = "Name" });
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -156,8 +156,8 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
-            asyncGppdMock.Setup(s => s.GetById(1, "")).Returns(Task.FromResult(
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
+            asyncGppdMock.Setup(s => s.GetById(1, null)).Returns(Task.FromResult(
                     new OfmForGetQueryResult<CategoryOfmForGet>()
                     {
                         ReturnedTOfmForGet = new CategoryOfmForGet()
@@ -194,7 +194,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 httpContextAccessorMock.Object);
 
             // Act
-            var objectResult = await categoryController.GetById(1, "");
+            var objectResult = await categoryController.GetById(1, new CategoryOfmResourceParameters());
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -242,7 +242,7 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock.Setup(s => s.GetById(1, "Name")).Returns(Task.FromResult(
                     new OfmForGetQueryResult<CategoryOfmForGet>()
                     {
@@ -280,7 +280,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 httpContextAccessorMock.Object);
 
             // Act
-            var objectResult = await categoryController.GetById(1, "Name");
+            var objectResult = await categoryController.GetById(1, new CategoryOfmResourceParameters(){ Fields = "Name" });
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -327,8 +327,8 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
-            asyncGppdMock.Setup(s => s.GetById(1, "")).Returns(Task.FromResult(
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
+            asyncGppdMock.Setup(s => s.GetById(1, null)).Returns(Task.FromResult(
                     new OfmForGetQueryResult<CategoryOfmForGet>()
                     {
                         ReturnedTOfmForGet = null,
@@ -358,7 +358,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 httpContextAccessorMock.Object);
 
             // Act
-            var objectResult = await categoryController.GetById(1, "");
+            var objectResult = await categoryController.GetById(1, new CategoryOfmResourceParameters());
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -385,8 +385,8 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
-            asyncGppdMock.Setup(s => s.GetById(1, "")).Returns(Task.FromResult(
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
+            asyncGppdMock.Setup(s => s.GetById(1, null)).Returns(Task.FromResult(
                     new OfmForGetQueryResult<CategoryOfmForGet>()
                     {
                         ReturnedTOfmForGet = null,
@@ -413,7 +413,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 httpContextAccessorMock.Object);
 
             // Act
-            var objectResult = await categoryController.GetById(1, "");
+            var objectResult = await categoryController.GetById(1, new CategoryOfmResourceParameters());
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -440,7 +440,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             var categoryOfmResourceParameters = new CategoryOfmCollectionResourceParameters();
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.GetCollection(categoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
@@ -544,7 +544,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 Fields = "Name"
             };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.GetCollection(categoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
@@ -641,7 +641,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             var categoryOfmResourceParameters = new CategoryOfmCollectionResourceParameters();
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.GetCollection(categoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
@@ -828,7 +828,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             var categoryOfmResourceParameters = new CategoryOfmCollectionResourceParameters() { Fields = "Name" };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.GetCollection(categoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
@@ -1012,7 +1012,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             var categoryOfmResourceParameters = new CategoryOfmCollectionResourceParameters();
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.GetCollection(categoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
@@ -1097,8 +1097,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 var categoryOfmResourceParameters = new CategoryOfmCollectionResourceParameters();
                 // Mock GppdRepo
                 var asyncGppdMock =
-                    new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int,
-                        CategoryOfmCollectionResourceParameters>>();
+                    new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
                 asyncGppdMock
                     .Setup(s => s.GetCollection(categoryOfmResourceParameters,
                         new Guid("00000000-0000-0000-0000-000000000000")))
@@ -1156,7 +1155,7 @@ namespace Fittify.Api.Test.Controllers.Sport
 
                 categoryController.ControllerContext = new ControllerContext()
                 {
-                    HttpContext = new DefaultHttpContext() {User = user}
+                    HttpContext = new DefaultHttpContext() { User = user }
                 };
 
                 // Act
@@ -1187,7 +1186,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             var categoryOfmResourceParameters = new CategoryOfmCollectionResourceParameters();
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.GetCollection(categoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
@@ -1258,7 +1257,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             var categoryOfmResourceParameters = new CategoryOfmCollectionResourceParameters();
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.GetCollection(categoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
@@ -1332,7 +1331,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             var categoryOfmResourceParameters = new CategoryOfmCollectionResourceParameters();
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.GetCollection(categoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
@@ -1391,7 +1390,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             var modelForPost = new CategoryOfmForPost() { Name = "Mock Category" };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.Post(modelForPost, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
@@ -1429,10 +1428,10 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
-            
+
             // Act
             var objectResult = await categoryController.Post(modelForPost);
-            
+
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
             var expectedObjectResult = JsonConvert.SerializeObject(
@@ -1455,7 +1454,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             CategoryOfmForPost modelForPost = null;
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.Post(modelForPost, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
@@ -1483,7 +1482,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
-            
+
             // Mock User
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
             {
@@ -1521,9 +1520,9 @@ namespace Fittify.Api.Test.Controllers.Sport
         public async Task ReturnUnprocessableEntityObjectResult_ForInvalidPostModel_WhenUsingPost()
         {
             // Arrange
-            var modelForPost = new CategoryOfmForPost() { Name = null};
+            var modelForPost = new CategoryOfmForPost() { Name = null };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.Post(modelForPost, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
@@ -1592,7 +1591,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             CategoryOfmForPost modelForPost = new CategoryOfmForPost() { Name = "Mock Category" };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.Post(modelForPost, It.IsAny<Guid>()))
                 .Returns(Task.FromResult(
@@ -1650,7 +1649,7 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.Delete(1))
                 .Returns(Task.FromResult(new OfmDeletionQueryResult<int>()
@@ -1678,10 +1677,10 @@ namespace Fittify.Api.Test.Controllers.Sport
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
-            
+
             // Act
             var objectResult = await categoryController.Delete(1);
-            
+
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
             var expectedObjectResult =
@@ -1699,7 +1698,7 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.Delete(1))
                 .Returns(Task.FromResult(new OfmDeletionQueryResult<int>()
@@ -1759,7 +1758,7 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
                 .Setup(s => s.Delete(1))
                 .Returns(Task.FromResult(new OfmDeletionQueryResult<int>()
@@ -1817,9 +1816,9 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             var ofmForPatchFromRepo = new CategoryOfmForPatch() { Id = 1, Name = "MockCategory" };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
-                .Setup(s => s.GetByIdOfmForPatch(1))
+                .Setup(s => s.GetByIdOfmForPatch<CategoryOfmForPatch>(1))
                 .Returns(Task.FromResult(ofmForPatchFromRepo));
             asyncGppdMock
                 .Setup(s => s.UpdatePartially(ofmForPatchFromRepo))
@@ -1843,7 +1842,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
-            
+
             // Mock Controller.TryValidate() method to avoid null reference exception
             var objectValidator = new Mock<IObjectModelValidator>();
             objectValidator.Setup(o => o.Validate(It.IsAny<ActionContext>(),
@@ -1886,9 +1885,9 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             var ofmForPatchFromRepo = new CategoryOfmForPatch() { Id = 1, Name = "MockCategory" };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
-                .Setup(s => s.GetByIdOfmForPatch(1))
+                .Setup(s => s.GetByIdOfmForPatch<CategoryOfmForPatch>(1))
                 .Returns(Task.FromResult(ofmForPatchFromRepo));
             asyncGppdMock
                 .Setup(s => s.UpdatePartially(ofmForPatchFromRepo))
@@ -1949,9 +1948,9 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
-                .Setup(s => s.GetByIdOfmForPatch(0))
+                .Setup(s => s.GetByIdOfmForPatch<CategoryOfmForPatch>(0))
                 .Returns(Task.FromResult((CategoryOfmForPatch)null));
 
             // Mock IUrlHelper
@@ -2016,9 +2015,9 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             var ofmForPatchFromRepo = new CategoryOfmForPatch() { Id = 1, Name = "MockCategory" };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepository<CategoryOfmForGet, int>>();
             asyncGppdMock
-                .Setup(s => s.GetByIdOfmForPatch(1))
+                .Setup(s => s.GetByIdOfmForPatch<CategoryOfmForPatch>(1))
                 .Returns(Task.FromResult(ofmForPatchFromRepo));
             asyncGppdMock
                 .Setup(s => s.UpdatePartially(ofmForPatchFromRepo))

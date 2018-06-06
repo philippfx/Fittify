@@ -15,10 +15,10 @@ namespace Fittify.Web.View.Controllers
     [Route("exercisehistories")]
     public class ExerciseHistoryController : Controller
     {
-        private readonly IViewModelRepository<int, ExerciseHistoryViewModel, ExerciseHistoryOfmForPost, ExerciseHistoryOfmCollectionResourceParameters> _exerciseHistoryViewModelRepository;
+        private readonly IViewModelRepository<int, ExerciseHistoryViewModel, ExerciseHistoryOfmForPost, ExerciseHistoryOfmResourceParameters, ExerciseHistoryOfmCollectionResourceParameters> _exerciseHistoryViewModelRepository;
 
         public ExerciseHistoryController(
-            IViewModelRepository<int, ExerciseHistoryViewModel, ExerciseHistoryOfmForPost, ExerciseHistoryOfmCollectionResourceParameters> exerciseHistoryViewModelRepository)
+            IViewModelRepository<int, ExerciseHistoryViewModel, ExerciseHistoryOfmForPost, ExerciseHistoryOfmResourceParameters, ExerciseHistoryOfmCollectionResourceParameters> exerciseHistoryViewModelRepository)
         {
             _exerciseHistoryViewModelRepository = exerciseHistoryViewModelRepository;
         }

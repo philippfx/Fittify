@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository.Repository.Sport
 {
-    public class MapExerciseWorkoutRepository : AsyncCrudBase<MapExerciseWorkout, int>, IAsyncEntityOwnerIntId
+    public class MapExerciseWorkoutRepository : AsyncCrudBase<MapExerciseWorkout, int, MapExerciseWorkoutResourceParameters>, IAsyncEntityOwnerIntId
     {
         public MapExerciseWorkoutRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
@@ -22,7 +22,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public async Task<PagedList<MapExerciseWorkout>> GetPagedCollection(MapExerciseWorkoutResourceParameters ofmResourceParameters)
+        public override async Task<PagedList<MapExerciseWorkout>> GetPagedCollection(MapExerciseWorkoutResourceParameters ofmResourceParameters)
         {
             var linqToEntityQuery = await base.GetCollectionQueryable(ofmResourceParameters);
 

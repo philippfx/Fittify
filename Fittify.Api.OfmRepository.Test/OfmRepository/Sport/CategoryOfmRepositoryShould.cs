@@ -39,7 +39,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         public async Task ReturnSingleOfmGetById()
         {
             // Arrange
-            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int>>();
+            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int, CategoryResourceParameters>>();
 
             asyncDataCrudMock
                 .Setup(s => s.GetById(It.IsAny<int>())).Returns(Task.FromResult(new Category()
@@ -77,7 +77,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         public async Task NotReturnSingleOfmGetById_WhenQueriedEntityFieldsAreErroneous()
         {
             // Arrange
-            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int>>();
+            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int, CategoryResourceParameters>>();
 
             asyncDataCrudMock
                 .Setup(s => s.GetById(It.IsAny<int>())).Returns(Task.FromResult(new Category()
@@ -114,7 +114,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         public async Task ReturnCorrectCategoryOfmCollectionQueryResult()
         {
             // Arrange
-            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int>>();
+            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int, CategoryResourceParameters>>();
 
             asyncDataCrudMock
                 .Setup(s => s.GetPagedCollection(It.IsAny<CategoryResourceParameters>())).Returns(Task.FromResult(new PagedList<Category>(
@@ -178,7 +178,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         public async Task NotReturnCategoryOfmCollection_WhenResourceParametersAreInvalid()
         {
             // Arrange
-            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int>>();
+            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int, CategoryResourceParameters>>();
 
             asyncDataCrudMock
                 .Setup(s => s.GetPagedCollection(It.IsAny<CategoryResourceParameters>())).Returns(Task.FromResult(new PagedList<Category>(
@@ -242,7 +242,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         public async Task ReturnCorrectlyOfmForPatch()
         {
             // Arrange
-            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int>>();
+            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int, CategoryResourceParameters>>();
 
             asyncDataCrudMock
                 .Setup(s => s.GetById(It.IsAny<int>())).Returns(Task.FromResult(new Category()
@@ -255,7 +255,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
             var categoryOfmRepository = new CategoryOfmRepository(asyncDataCrudMock.Object, new PropertyMappingService(), new TypeHelperService());
 
             // Act
-            var categoryOfmResult = await categoryOfmRepository.GetByIdOfmForPatch(1);
+            var categoryOfmResult = await categoryOfmRepository.GetByIdOfmForPatch<CategoryOfmForPatch>(1);
 
             // Assert
             var actualOfmResult = JsonConvert.SerializeObject(categoryOfmResult,
@@ -276,7 +276,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         public async Task CorrectlyUpdatePartially()
         {
             // Arrange
-            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int>>();
+            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int, CategoryResourceParameters>>();
 
             asyncDataCrudMock
                 .Setup(s => s.Update(It.IsAny<Category>())).Returns(Task.FromResult(new Category() //// Todo: Can It.IsAny<> be made more concrete?
@@ -324,13 +324,13 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
             await Task.Run(() =>
             {
                 // Arrange
-                var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int>>();
+                var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int, CategoryResourceParameters>>();
 
                 var categoryOfmRepository = new CategoryOfmRepository(asyncDataCrudMock.Object, new PropertyMappingService(), new TypeHelperService());
                 categoryOfmRepository.CachedEntityForPatch = null;
 
                 // Act and Assert
-                Assert.ThrowsAsync<ArgumentNullException>(() => categoryOfmRepository.UpdatePartially(null));
+                Assert.ThrowsAsync<ArgumentNullException>(() => categoryOfmRepository.UpdatePartially((CategoryOfmForPatch)null));
             });
 
         }
@@ -339,7 +339,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         public async Task CorrectlyCreateNewOfm()
         {
             // Arrange
-            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int>>();
+            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int, CategoryResourceParameters>>();
 
             asyncDataCrudMock
                 .Setup(s => s.Create(It.IsAny<Category>(), It.IsAny<Guid>())).Returns(Task.FromResult(new Category() //// Todo: Can It.IsAny<> be made more concrete?
@@ -377,7 +377,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         public async Task CorrectlyDeleteOfm()
         {
             // Arrange
-            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int>>();
+            var asyncDataCrudMock = new Mock<IAsyncCrud<Category, int, CategoryResourceParameters>>();
 
             asyncDataCrudMock
                 .Setup(s => s.Delete(It.IsAny<int>())).Returns(Task.FromResult(new EntityDeletionResult<int>() { DidEntityExist = true, IsDeleted = true }));

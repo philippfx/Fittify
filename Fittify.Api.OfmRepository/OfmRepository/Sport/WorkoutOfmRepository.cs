@@ -22,11 +22,11 @@ using Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport;
 namespace Fittify.Api.OfmRepository.OfmRepository.Sport
 {
     public class WorkoutOfmRepository : 
-        AsyncOfmRepositoryBase<Workout, WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutOfmCollectionResourceParameters, WorkoutResourceParameters>,
+        AsyncOfmRepositoryBase<Workout, WorkoutOfmForGet, int, WorkoutResourceParameters>,
         IAsyncOfmRepositoryForWorkout, 
         IAsyncOfmOwnerIntId
     {
-        public WorkoutOfmRepository(IAsyncCrud<Workout, int> repo,
+        public WorkoutOfmRepository(IAsyncCrud<Workout, int, WorkoutResourceParameters> repo,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService
         )

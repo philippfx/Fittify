@@ -8,9 +8,10 @@ using Fittify.DataModelRepository.ResourceParameters;
 
 namespace Fittify.DataModelRepository.Repository
 {
-    public interface IAsyncCrud<TEntity, TId>
+    public interface IAsyncCrud<TEntity, TId, in TResourceParameters>
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TId : struct
+        where TResourceParameters : EntityResourceParametersBase, IEntityOwner, new()
     {
         Task<bool> IsEntityOwner(TId id, Guid ownerGuid);
 
@@ -30,11 +31,9 @@ namespace Fittify.DataModelRepository.Repository
 
         //PagedList<TEntity> GetPagedCollection(TResourceParameters ofmResourceParameters);
 
-        Task<PagedList<TEntity>> GetPagedCollection<TResourceParameters>(TResourceParameters ofmResourceParameters)
-            where TResourceParameters : EntityResourceParametersBase, IEntityOwner, new();
+        Task<PagedList<TEntity>> GetPagedCollection(TResourceParameters ofmResourceParameters);
 
-        Task<IQueryable<TEntity>> GetCollectionQueryable<TResourceParameters>(TResourceParameters ofmResourceParameters)
-            where TResourceParameters : EntityResourceParametersBase, IEntityOwner, new();
+        Task<IQueryable<TEntity>> GetCollectionQueryable(TResourceParameters ofmResourceParameters);
 
         Task<bool> SaveContext();
     }

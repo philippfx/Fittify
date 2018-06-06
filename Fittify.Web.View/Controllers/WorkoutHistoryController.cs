@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
+using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Client.ApiModelRepository;
 using Fittify.Client.ViewModelRepository;
@@ -18,11 +19,14 @@ namespace Fittify.Web.View.Controllers
     [Route("workouthistories")]
     public class WorkoutHistoryController : Controller
     {
-        private readonly IViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters> _workoutHistoryViewModelRepository;
+        private readonly IViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForPost, WorkoutHistoryOfmResourceParameters, WorkoutHistoryOfmCollectionResourceParameters> _workoutHistoryViewModelRepository;
+        private readonly IApiModelRepository<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmCollectionResourceParameters> _exerciseHistoryApiModelRepository;
         public WorkoutHistoryController(
-            IViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters> workoutHistoryViewModelRepository)
+            IViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForPost, WorkoutHistoryOfmResourceParameters, WorkoutHistoryOfmCollectionResourceParameters> workoutHistoryViewModelRepository,
+            IApiModelRepository<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmCollectionResourceParameters> exerciseHistoryApiModelRepository)
         {
             _workoutHistoryViewModelRepository = workoutHistoryViewModelRepository;
+            _exerciseHistoryApiModelRepository = exerciseHistoryApiModelRepository;
         }
 
         [HttpPost]
