@@ -55,9 +55,7 @@ namespace Fittify.Api.Test
             using (var server = GetTestServerInstance())
             {
                 var client = server.CreateClient();
-                client.DefaultRequestHeaders.Add("X-Integration-Testing", "abcde-12345");
-                client.DefaultRequestHeaders.Add("my-name", "test");
-                client.DefaultRequestHeaders.Add("my-id", "12345");
+                client.DefaultRequestHeaders.Add("X-Integration-Testing-Authentication", "InjectClaimsViaHeaders");
                 client.DefaultRequestHeaders.Add("sub", "d860efca-22d9-47fd-8249-791ba61b07c7");
                 var result = await client.GetAsync("/api/workouts/1");
                 var responseString = await result.Content.ReadAsStringAsync();
@@ -85,7 +83,7 @@ namespace Fittify.Api.Test
             using (var server = GetTestServerInstance())
             {
                 var client = server.CreateClient();
-                client.DefaultRequestHeaders.Add("X-Integration-Testing", "abcde-12345");
+                client.DefaultRequestHeaders.Add("X-Integration-Testing-Authentication", "InjectClaimsViaHeaders");
                 client.DefaultRequestHeaders.Add("sub", "d860efca-22d9-47fd-8249-791ba61b07c7");
                 var result = await client.GetAsync("/api/categories");
                 var responseString = await result.Content.ReadAsStringAsync();
@@ -126,7 +124,7 @@ namespace Fittify.Api.Test
                 .UseEnvironment("TestInMemoryDb")))
             {
                 var client = server.CreateClient();
-                client.DefaultRequestHeaders.Add("X-Integration-Testing", "abcde-12345");
+                client.DefaultRequestHeaders.Add("X-Integration-Testing-Authentication", "InjectClaimsViaHeaders");
                 client.DefaultRequestHeaders.Add("sub", "d860efca-22d9-47fd-8249-791ba61b07c7");
                 var result = await client.GetAsync("/api/categories");
                 var responseString = await result.Content.ReadAsStringAsync();
@@ -162,9 +160,7 @@ namespace Fittify.Api.Test
             using (var server = GetTestServerInstance())
             {
                 var client = server.CreateClient();
-                client.DefaultRequestHeaders.Add("X-Integration-Testing", "abcde-12345");
-                client.DefaultRequestHeaders.Add("my-name", "test");
-                client.DefaultRequestHeaders.Add("my-id", "12345");
+                client.DefaultRequestHeaders.Add("X-Integration-Testing-Authentication", "InjectClaimsViaHeaders");
                 client.DefaultRequestHeaders.Add("sub", "55555555-5555-5555-5555-55555aaa5555");
                 var result = await client.GetAsync("/api/workouts/1");
                 var responseStatusCode = result.StatusCode;
@@ -179,9 +175,7 @@ namespace Fittify.Api.Test
             using (var server = GetTestServerInstance())
             {
                 var client = server.CreateClient();
-                client.DefaultRequestHeaders.Add("X-Integration-Testing", "abcde-12345");
-                client.DefaultRequestHeaders.Add("my-name", "test");
-                client.DefaultRequestHeaders.Add("my-id", "12345");
+                client.DefaultRequestHeaders.Add("X-Integration-Testing-Authentication", "InjectClaimsViaHeaders");
                 client.DefaultRequestHeaders.Add("sub", "d860efca-22d9-47fd-8249-791ba61b07c7");
                 client.DefaultRequestHeaders.Add("ApiVersion", int.MaxValue.ToString());
                 var result = await client.GetAsync("/api/workouts/1");
@@ -207,7 +201,7 @@ namespace Fittify.Api.Test
             using (var server = GetTestServerInstance())
             {
                 var client = server.CreateClient();
-                client.DefaultRequestHeaders.Add("X-Integration-Testing", "abcde-12345");
+                client.DefaultRequestHeaders.Add("X-Integration-Testing-Authentication", "InjectClaimsViaHeaders");
                 client.DefaultRequestHeaders.Add("sub", "d860efca-22d9-47fd-8249-791ba61b07c7");
                 client.DefaultRequestHeaders.Add("ApiVersion", "1");
                 var result =
@@ -591,7 +585,7 @@ namespace Fittify.Api.Test
             using (var server = GetTestServerInstance())
             {
                 var client = server.CreateClient();
-                client.DefaultRequestHeaders.Add("X-Integration-Testing", "abcde-12345");
+                client.DefaultRequestHeaders.Add("X-Integration-Testing-Authentication", "InjectClaimsViaHeaders");
                 client.DefaultRequestHeaders.Add("sub", "d860efca-22d9-47fd-8249-791ba61b07c7");
                 client.DefaultRequestHeaders.Add("ApiVersion", "1");
                 var result = await client.GetAsync("/api/workouts/2?IncludeExercises=1");

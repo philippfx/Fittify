@@ -12,8 +12,8 @@ namespace Fittify.Api.Test.TestHelpers
     public class AuthenticatedTestRequestMiddleware
     {
         public const string TestingCookieAuthentication = "TestCookieAuthentication";
-        public const string TestingHeader = "X-Integration-Testing";
-        public const string TestingHeaderValue = "abcde-12345";
+        public const string TestingHeader = "X-Integration-Testing-Authentication";
+        public const string TestingHeaderValue = "InjectClaimsViaHeaders";
 
         private readonly RequestDelegate _next;
 

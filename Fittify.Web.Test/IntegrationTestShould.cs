@@ -32,12 +32,14 @@ namespace Fittify.Web.Test
             // 2. .csproj file of test project must be adjusted, see http://www.dotnetcurry.com/aspnet-core/1420/integration-testing-aspnet-core (or references for view rendering are missing)
 
             var apiHttpClient = apiTestServer.CreateClient();
+            apiHttpClient.DefaultRequestHeaders.Add("X-Integration-Testing-Authentication", "InjectClaimsViaHeaders");
+            apiHttpClient.DefaultRequestHeaders.Add("sub", "d860efca-22d9-47fd-8249-791ba61b07c7");
             apiHttpClient.BaseAddress = new Uri(@"https://localhost:44353/");
             var currentDirectory =
                 Path.GetDirectoryName(Path.GetDirectoryName(TestContext.CurrentContext.TestDirectory));
             var contentRoot = Path.GetFullPath(Path.Combine(currentDirectory, @"..\..\Fittify.Web.View"));
             return new TestServer(new WebHostBuilder()
-                .UseStartup<Startup>()
+                .UseStartup<ClientTestServerStartup>()
                 .UseContentRoot(contentRoot)
                 .ConfigureServices(collection => collection.AddSingleton(apiHttpClient))
                 .UseEnvironment("ClientTestServer"));
@@ -60,6 +62,24 @@ namespace Fittify.Web.Test
         }
 
         [Test]
+        public async Task CorrectlyReturnWorkoutOverview()
+        {
+            using (var apiServer = GetApiTestServerInstance())
+            using (var clientServer = GetClientTestServerInstance(apiServer))
+            {
+                var clientHttpClient = clientServer.CreateClient();
+                clientHttpClient.DefaultRequestHeaders.Add("X-Integration-Testing-Authentication", "InjectClaimsViaHeaders");
+                clientHttpClient.DefaultRequestHeaders.Add("sub", "d860efca-22d9-47fd-8249-791ba61b07c7");
+                var response = await clientHttpClient.GetAsync("/workouts");
+                var responseString = await response.Content.ReadAsStringAsync();
+                response.EnsureSuccessStatusCode();
+
+                Assert.AreEqual("text/html; charset=utf-8",
+                    response.Content.Headers.ContentType.ToString());
+            }
+        }
+
+        [Test]
         public async Task ReturnCategories_ForAuthenticatedUser_WhenGettingCollectionccc()
         {
             var appConfiguration = new AppConfigurationMock(@"{ ""LatestApiVersion"" : 1 }");
@@ -71,7 +91,7 @@ namespace Fittify.Web.Test
                 .UseEnvironment("TestInMemoryDb")))
             {
                 var client = server.CreateClient();
-                client.DefaultRequestHeaders.Add("X-Integration-Testing", "abcde-12345");
+                client.DefaultRequestHeaders.Add("X-Integration-Testing-Authentication", "InjectClaimsViaHeaders");
                 client.DefaultRequestHeaders.Add("sub", "d860efca-22d9-47fd-8249-791ba61b07c7");
                 var result = await client.GetAsync("/api/categories");
                 var responseString = await result.Content.ReadAsStringAsync();

@@ -155,7 +155,7 @@ namespace Fittify.Web.View
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory/*, FittifyContext fittifyContext*/)
+        public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory/*, FittifyContext fittifyContext*/)
         {
             if (!env.IsClientTestServer()) // need to exclude automapper initialization for full integration test of client app, because mapper is also initialized in Api Startup 
             {
