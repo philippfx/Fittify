@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using Fittify.Client.ApiModelRepository;
 using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Client.ApiModelRepositories.Test.TestHelpers

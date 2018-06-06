@@ -2,7 +2,7 @@
 using System.Net.Http;
 using Newtonsoft.Json;
 
-namespace Fittify.Client.ApiModelRepositories
+namespace Fittify.Client.ApiModelRepository
 {
     public static class HttpResponseExtensions
     {

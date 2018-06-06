@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Fittify.Client.ApiModelRepositories.Helpers;
+using Fittify.Client.ApiModelRepository.Helpers;
 using Fittify.Common.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Configuration;
 
-namespace Fittify.Client.ApiModelRepositories
+namespace Fittify.Client.ApiModelRepository
 {
     public class GenericAsyncGppdOfm<TId, TOfmForGet, TOfmForPost, TGetCollectionResourceParameters> 
         where TId : struct

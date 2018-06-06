@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AspNetCore.RouteAnalyzer;
-using Fittify.Client.ApiModelRepositories;
+using Fittify.Client.ApiModelRepository;
 using Fittify.Web.View.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

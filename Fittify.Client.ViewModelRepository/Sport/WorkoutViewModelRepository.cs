@@ -6,7 +6,7 @@ using AutoMapper;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
-using Fittify.Client.ApiModelRepositories;
+using Fittify.Client.ApiModelRepository;
 using Fittify.Client.ViewModels.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;

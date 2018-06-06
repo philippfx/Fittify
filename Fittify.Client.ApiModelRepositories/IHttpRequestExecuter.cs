@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Configuration;
 
-namespace Fittify.Client.ApiModelRepositories
+namespace Fittify.Client.ApiModelRepository
 {
     public interface IHttpRequestExecuter
     {

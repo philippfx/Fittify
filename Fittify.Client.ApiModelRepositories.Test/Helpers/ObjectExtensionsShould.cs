@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
-using Fittify.Client.ApiModelRepositories.Helpers;
+using Fittify.Client.ApiModelRepository.Helpers;
 using Fittify.Common.Extensions;
 using Newtonsoft.Json;
 using NUnit.Framework;

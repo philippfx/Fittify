@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
-namespace Fittify.Client.ApiModelRepositories
+namespace Fittify.Client.ApiModelRepository
 {
     public class HttpRequestExecuter : IHttpRequestExecuter
     {

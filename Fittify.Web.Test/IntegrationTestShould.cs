@@ -64,6 +64,7 @@ namespace Fittify.Web.Test
         [Test]
         public async Task CorrectlyReturnWorkoutOverview()
         {
+            // When updating IdentityModel, an exception may be thrown. Here is a workaround https://stackoverflow.com/questions/50716859/an-assembly-with-the-same-simple-name-identitymodel-has-already-been-imported
             using (var apiServer = GetApiTestServerInstance())
             using (var clientServer = GetClientTestServerInstance(apiServer))
             {

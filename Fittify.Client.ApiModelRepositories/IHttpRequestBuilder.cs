@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Fittify.Client.ApiModelRepositories
+namespace Fittify.Client.ApiModelRepository
 {
     public interface IHttpRequestBuilder
     {

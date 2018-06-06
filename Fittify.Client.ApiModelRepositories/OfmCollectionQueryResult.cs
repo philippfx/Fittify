@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Fittify.Client.ApiModelRepositories
+namespace Fittify.Client.ApiModelRepository
 {
     public class OfmCollectionQueryResult<TOfmForGet> : OfmQueryResultBase where TOfmForGet : class
     {

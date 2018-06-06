@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Fittify.Client.ApiModelRepositories.Helpers
+namespace Fittify.Client.ApiModelRepository.Helpers
 {
     public static class ObjectExtensions
     {

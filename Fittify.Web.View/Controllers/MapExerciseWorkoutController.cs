@@ -3,7 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
-using Fittify.Client.ApiModelRepositories;
+using Fittify.Client.ApiModelRepository;
 using Fittify.Client.ViewModelRepository.Sport;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

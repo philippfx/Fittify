@@ -10,7 +10,7 @@ using Fittify.Common.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace Fittify.Client.ApiModelRepositories.OfmRepository.Sport
+namespace Fittify.Client.ApiModelRepository.OfmRepository.Sport
 {
     public class AsyncWorkoutHistoryOfmRepository : GenericAsyncGppdOfm<int, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters>
     {

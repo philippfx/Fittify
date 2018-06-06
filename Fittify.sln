@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{61B2FCA8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Common", "Fittify.Common\Fittify.Common.csproj", "{771DA5A6-84F4-4A1A-8A9E-26458B9550F8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Client.ApiModelRepositories", "Fittify.Client.ApiModelRepositories\Fittify.Client.ApiModelRepositories.csproj", "{D9188E50-F225-4587-A33A-926AF71A008D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Client.ApiModelRepository", "Fittify.Client.ApiModelRepositories\Fittify.Client.ApiModelRepository.csproj", "{D9188E50-F225-4587-A33A-926AF71A008D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{06847FC7-F55D-4BB2-896A-F3BFFA3DAB6B}"
 EndProject
@@ -64,6 +64,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Client.ApiModelRepositories.Test", "Fittify.Client.ApiModelRepositories.Test\Fittify.Client.ApiModelRepositories.Test.csproj", "{B7CD67A9-FDCD-4840-B875-5669EBA64A1A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fittify.Web.Test", "Fittify.Web.Test\Fittify.Web.Test.csproj", "{3EC6F95A-37E8-47A9-BE3D-0D19098A6359}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fittify.Client.ViewModelRepository.Test", "Fittify.Client.ViewModelRepository.Test\Fittify.Client.ViewModelRepository.Test.csproj", "{87B85430-B952-4A20-A2B2-712D30FBA66D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -163,6 +165,10 @@ Global
 		{3EC6F95A-37E8-47A9-BE3D-0D19098A6359}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EC6F95A-37E8-47A9-BE3D-0D19098A6359}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EC6F95A-37E8-47A9-BE3D-0D19098A6359}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87B85430-B952-4A20-A2B2-712D30FBA66D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87B85430-B952-4A20-A2B2-712D30FBA66D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87B85430-B952-4A20-A2B2-712D30FBA66D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87B85430-B952-4A20-A2B2-712D30FBA66D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -189,6 +195,7 @@ Global
 		{245C31CD-ACB5-4B13-932F-0F15482705EA} = {61B2FCA8-F355-46A9-B5CD-231A070A4A2A}
 		{B7CD67A9-FDCD-4840-B875-5669EBA64A1A} = {245C31CD-ACB5-4B13-932F-0F15482705EA}
 		{3EC6F95A-37E8-47A9-BE3D-0D19098A6359} = {0DE45F3B-16BF-4938-AF63-853A40961761}
+		{87B85430-B952-4A20-A2B2-712D30FBA66D} = {245C31CD-ACB5-4B13-932F-0F15482705EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B305ABF-A3CE-4E97-BE76-377367E1E5B8}
