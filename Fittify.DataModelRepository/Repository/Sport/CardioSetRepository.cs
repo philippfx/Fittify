@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository.Repository.Sport
 {
-    public class CardioSetRepository : AsyncCrudBase<CardioSet, int, CardioSetResourceParameters>, IAsyncEntityOwnerIntId
+    public class CardioSetRepository : AsyncCrudBase<CardioSet, int>, IAsyncEntityOwnerIntId
     {
         public CardioSetRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
@@ -21,7 +21,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public override async Task<PagedList<CardioSet>> GetPagedCollection(CardioSetResourceParameters ofmResourceParameters)
+        public async Task<PagedList<CardioSet>> GetPagedCollection(CardioSetResourceParameters ofmResourceParameters)
         {
             var linqToEntityQuery = await base.GetCollectionQueryable(ofmResourceParameters);
 

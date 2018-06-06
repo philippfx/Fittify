@@ -26,7 +26,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         [Test]
         public void CreateNewOfmRepositoryInstance()
         {
-            var asyncDataCrudMock = new Mock<IAsyncCrud<Workout, int, WorkoutResourceParameters>>();
+            var asyncDataCrudMock = new Mock<IAsyncCrud<Workout, int>>();
 
             var categoryOfmRepository = new WorkoutOfmRepository(asyncDataCrudMock.Object, new PropertyMappingService(), new TypeHelperService());
 
@@ -37,7 +37,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         public async Task NotReturnSingleOfmGetById_WhenQueriedEntityFieldsAreErroneous()
         {
             // Arrange
-            var asyncDataCrudMock = new Mock<IAsyncCrud<Workout, int, WorkoutResourceParameters>>();
+            var asyncDataCrudMock = new Mock<IAsyncCrud<Workout, int>>();
 
             asyncDataCrudMock
                 .Setup(s => s.GetById(It.IsAny<int>())).Returns(Task.FromResult(new Workout()
@@ -77,7 +77,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         public async Task NotReturnSingleOfmGetById_WhenNoEntityIsFound()
         {
             // Arrange
-            var asyncDataCrudMock = new Mock<IAsyncCrud<Workout, int, WorkoutResourceParameters>>();
+            var asyncDataCrudMock = new Mock<IAsyncCrud<Workout, int>>();
 
             asyncDataCrudMock
                 .Setup(s => s.GetById(It.IsAny<int>())).Returns(Task.FromResult((Workout)null));

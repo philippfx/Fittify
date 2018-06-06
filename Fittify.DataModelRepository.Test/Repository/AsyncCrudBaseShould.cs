@@ -521,7 +521,7 @@ namespace Fittify.DataModelRepository.Test.Repository
                     var serializedCategoriesFromContext = JsonConvert.SerializeObject(pagedCategoriesFromContext);
 
                     var categoryRepository = new CategoryRepository(context);
-                    var categoryCollection = await categoryRepository.GetPagedCollection(null);
+                    var categoryCollection = await categoryRepository.GetPagedCollection((CategoryResourceParameters)null);
                     var serializedCategoriesFromRepo = JsonConvert.SerializeObject(categoryCollection);
 
                     Assert.AreEqual(serializedCategoriesFromContext, serializedCategoriesFromRepo);

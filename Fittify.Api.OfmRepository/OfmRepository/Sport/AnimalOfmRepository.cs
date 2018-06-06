@@ -16,7 +16,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.Sport
     [ExcludeFromCodeCoverage]
     public class AnimalOfmRepository : AsyncOfmRepositoryBase<Animal, AnimalOfmForGet, AnimalOfmForPost, AnimalOfmForPatch, int, AnimalOfmCollectionResourceParameters, AnimalResourceParameters>
     {
-        public AnimalOfmRepository(IAsyncCrud<Animal, int, AnimalResourceParameters> repo,
+        public AnimalOfmRepository(IAsyncCrud<Animal, int> repo,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService
         )

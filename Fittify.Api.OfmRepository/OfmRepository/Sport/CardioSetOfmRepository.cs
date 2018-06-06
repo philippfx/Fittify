@@ -14,7 +14,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.Sport
 {
     public class CardioSetOfmRepository : AsyncOfmRepositoryBase<CardioSet, CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int, CardioSetOfmCollectionResourceParameters, CardioSetResourceParameters>, IAsyncEntityOwnerIntId
     {
-        public CardioSetOfmRepository(IAsyncCrud<CardioSet, int, CardioSetResourceParameters> repo,
+        public CardioSetOfmRepository(IAsyncCrud<CardioSet, int> repo,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService
             ) 

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 namespace Fittify.Web.Test.TestHelpers
 {
     /// <summary>
-    /// Ignores Access Token handling. These access tokens are not necessary, because an authenticated user mock is injected via headers into each request for the ApiTestServer. Other wise, the IDP Server needs to be mocked as well.
+    /// Ignores Access Token handling. These access tokens are not necessary, because an authenticated user mock is injected via headers into each request for the ApiTestServer. Otherwise, the IDP Server needs to be mocked as well.
     /// </summary>
     public class HttpRequestExecuterForIntegrationTest : IHttpRequestExecuter
     {

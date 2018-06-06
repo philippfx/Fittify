@@ -21,14 +21,14 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
         where TOfmForPatch : class
         where TId : struct
         where TOfmResourceParameters : OfmResourceParametersBase
-        where TEntityResourceParameters : EntityResourceParametersBase, IEntityOwner
+        where TEntityResourceParameters : EntityResourceParametersBase, IEntityOwner, new()
     {
-        protected readonly IAsyncCrud<TEntity, TId,  TEntityResourceParameters> Repo;
+        protected readonly IAsyncCrud<TEntity, TId> Repo;
         protected readonly IPropertyMappingService PropertyMappingService;
         protected readonly ITypeHelperService TypeHelperService;
         protected readonly AsyncGetOfmGuardClauses<TOfmForGet, TId> AsyncGetOfmGuardClause;
 
-        public AsyncOfmRepositoryBase(IAsyncCrud<TEntity, TId, TEntityResourceParameters> repository,
+        public AsyncOfmRepositoryBase(IAsyncCrud<TEntity, TId> repository,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService)
         {

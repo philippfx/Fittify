@@ -7,14 +7,14 @@ using Fittify.DataModels.Models.Sport;
 
 namespace Fittify.DataModelRepository.Repository.Sport
 {
-    public class ExerciseRepository : AsyncCrudBase<Exercise, int, ExerciseResourceParameters>, IAsyncEntityOwnerIntId
+    public class ExerciseRepository : AsyncCrudBase<Exercise, int>, IAsyncEntityOwnerIntId
     {
         public ExerciseRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
             
         }
         
-        public override async Task<PagedList<Exercise>> GetPagedCollection(ExerciseResourceParameters ofmResourceParameters)
+        public async Task<PagedList<Exercise>> GetPagedCollection(ExerciseResourceParameters ofmResourceParameters)
         {
             ////var allEntitiesQueryable =
             ////    FittifyContext.Set<Exercise>()

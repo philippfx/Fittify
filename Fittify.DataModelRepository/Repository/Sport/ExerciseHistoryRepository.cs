@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository.Repository.Sport
 {
-    public class ExerciseHistoryRepository : AsyncCrudBase<ExerciseHistory, int, ExerciseHistoryResourceParameters>,
+    public class ExerciseHistoryRepository : AsyncCrudBase<ExerciseHistory, int>,
         IAsyncEntityOwnerIntId
     {
         public ExerciseHistoryRepository(FittifyContext fittifyContext) : base(fittifyContext)
@@ -26,7 +26,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
                 .FirstOrDefaultAsync(wH => wH.Id == id);
         }
 
-        public override async Task<PagedList<ExerciseHistory>> GetPagedCollection(
+        public async Task<PagedList<ExerciseHistory>> GetPagedCollection(
             ExerciseHistoryResourceParameters ofmResourceParameters)
         {
             var linqToEntityQuery = await base.GetCollectionQueryable(ofmResourceParameters);
@@ -56,7 +56,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
             return FittifyContext.ExerciseHistories.FirstOrDefault(f => f.PreviousExerciseHistoryId == id);
         }
 
-        public override async Task<EntityDeletionResult<int>> Delete(int id)
+        public async Task<EntityDeletionResult<int>> Delete(int id)
         {
             if (!(await base.DoesEntityExist(id))) return new EntityDeletionResult<int>() { DidEntityExist = false, IsDeleted = false };
             

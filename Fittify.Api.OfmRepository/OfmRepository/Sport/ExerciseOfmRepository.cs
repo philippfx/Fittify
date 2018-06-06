@@ -14,7 +14,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.Sport
 {
     public class ExerciseOfmRepository : AsyncOfmRepositoryBase<Exercise, ExerciseOfmForGet, ExerciseOfmForPost, ExerciseOfmForPatch, int, ExerciseOfmCollectionResourceParameters, ExerciseResourceParameters>, IAsyncEntityOwnerIntId
     {
-        public ExerciseOfmRepository(IAsyncCrud<Exercise, int, ExerciseResourceParameters> repo,
+        public ExerciseOfmRepository(IAsyncCrud<Exercise, int> repo,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService
         )

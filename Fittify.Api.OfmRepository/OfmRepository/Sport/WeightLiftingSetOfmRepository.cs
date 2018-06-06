@@ -14,7 +14,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.Sport
 {
     public class WeightLiftingSetOfmRepository : AsyncOfmRepositoryBase<WeightLiftingSet, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmForPatch, int, WeightLiftingSetOfmCollectionResourceParameters, WeightLiftingSetResourceParameters>, IAsyncEntityOwnerIntId
     {
-        public WeightLiftingSetOfmRepository(IAsyncCrud<WeightLiftingSet, int, WeightLiftingSetResourceParameters> repo,
+        public WeightLiftingSetOfmRepository(IAsyncCrud<WeightLiftingSet, int> repo,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService
         )

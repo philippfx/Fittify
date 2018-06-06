@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using Fittify.Common;
 using Fittify.Common.ResourceParameters;
 using Fittify.DataModelRepository.Helpers;
+using Fittify.DataModelRepository.ResourceParameters;
 
 namespace Fittify.DataModelRepository.Repository
 {
-    public interface IAsyncCrud<TEntity, TId, in TResourceParameters>
+    public interface IAsyncCrud<TEntity, TId>
         where TEntity : class, IEntityUniqueIdentifier<TId>
         where TId : struct
-        where TResourceParameters : class, IResourceParameters
     {
         Task<bool> IsEntityOwner(TId id, Guid ownerGuid);
 
@@ -30,9 +30,11 @@ namespace Fittify.DataModelRepository.Repository
 
         //PagedList<TEntity> GetPagedCollection(TResourceParameters ofmResourceParameters);
 
-        Task<PagedList<TEntity>> GetPagedCollection(TResourceParameters ofmResourceParameters);
+        Task<PagedList<TEntity>> GetPagedCollection<TResourceParameters>(TResourceParameters ofmResourceParameters)
+            where TResourceParameters : EntityResourceParametersBase, IEntityOwner, new();
 
-        Task<IQueryable<TEntity>> GetCollectionQueryable(TResourceParameters ofmResourceParameters);
+        Task<IQueryable<TEntity>> GetCollectionQueryable<TResourceParameters>(TResourceParameters ofmResourceParameters)
+            where TResourceParameters : EntityResourceParametersBase, IEntityOwner, new();
 
         Task<bool> SaveContext();
     }

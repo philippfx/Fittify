@@ -16,7 +16,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         [Test]
         public void CreateNewOfmRepositoryInstance()
         {
-            var asyncDataCrudMock = new Mock<IAsyncCrud<CardioSet, int, CardioSetResourceParameters>>();
+            var asyncDataCrudMock = new Mock<IAsyncCrud<CardioSet, int>>();
             
             var categoryOfmRepository = new CardioSetOfmRepository(asyncDataCrudMock.Object, new PropertyMappingService(), new TypeHelperService());
 

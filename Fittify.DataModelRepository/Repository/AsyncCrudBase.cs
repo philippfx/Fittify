@@ -10,9 +10,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Fittify.DataModelRepository.Repository
 {
 
-    public abstract class AsyncCrudBase<TEntity, TId, TResourceParameters> : IAsyncCrud<TEntity, TId, TResourceParameters>
+    public abstract class AsyncCrudBase<TEntity, TId> : IAsyncCrud<TEntity, TId>
         where TEntity : class, IEntityUniqueIdentifier<TId>, IEntityOwner, new()
-        where TResourceParameters : EntityResourceParametersBase, IEntityOwner, new()
         where TId : struct
     {
         protected FittifyContext FittifyContext;
@@ -58,7 +57,8 @@ namespace Fittify.DataModelRepository.Repository
             return await FittifyContext.Set<TEntity>().FindAsync(id);
         }
 
-        public virtual async Task<PagedList<TEntity>> GetPagedCollection(TResourceParameters ofmResourceParameters)
+        public virtual async Task<PagedList<TEntity>> GetPagedCollection<TResourceParameters>(TResourceParameters ofmResourceParameters)
+            where TResourceParameters : EntityResourceParametersBase, IEntityOwner, new()
         {
             if (ofmResourceParameters == null)
             {
@@ -78,7 +78,8 @@ namespace Fittify.DataModelRepository.Repository
             return FittifyContext.Set<TEntity>().AsNoTracking();
         }
 
-        public async Task<IQueryable<TEntity>> GetCollectionQueryable(TResourceParameters ofmResourceParameters)
+        public async Task<IQueryable<TEntity>> GetCollectionQueryable<TResourceParameters>(TResourceParameters ofmResourceParameters)
+            where TResourceParameters : EntityResourceParametersBase, IEntityOwner, new()
         {
             IQueryable<TEntity> collectionQueryable = null;
 

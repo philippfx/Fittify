@@ -26,7 +26,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.Sport
         IAsyncOfmRepositoryForWorkout, 
         IAsyncOfmOwnerIntId
     {
-        public WorkoutOfmRepository(IAsyncCrud<Workout, int, WorkoutResourceParameters> repo,
+        public WorkoutOfmRepository(IAsyncCrud<Workout, int> repo,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService
         )

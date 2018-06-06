@@ -14,7 +14,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.Sport
 {
     public class CategoryOfmRepository : AsyncOfmRepositoryBase<Category, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int, CategoryOfmCollectionResourceParameters, CategoryResourceParameters>, IAsyncEntityOwnerIntId
     {
-        public CategoryOfmRepository(IAsyncCrud<Category, int, CategoryResourceParameters> repo,
+        public CategoryOfmRepository(IAsyncCrud<Category, int> repo,
             IPropertyMappingService propertyMappingService,
             ITypeHelperService typeHelperService
         )

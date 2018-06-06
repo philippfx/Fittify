@@ -8,14 +8,14 @@ using Fittify.DataModels.Models.Sport;
 namespace Fittify.DataModelRepository.Repository.Sport
 {
     [ExcludeFromCodeCoverage] // Test for generic controller
-    public class AnimalRepository : AsyncCrudBase<Animal, int, AnimalResourceParameters>, IAsyncEntityOwnerIntId
+    public class AnimalRepository : AsyncCrudBase<Animal, int>, IAsyncEntityOwnerIntId
     {
         public AnimalRepository(FittifyContext fittifyContext) : base(fittifyContext)
         {
 
         }
 
-        public override async Task<PagedList<Animal>> GetPagedCollection(AnimalResourceParameters ofmResourceParameters)
+        public async Task<PagedList<Animal>> GetPagedCollection(AnimalResourceParameters ofmResourceParameters)
         {
             return await Task.Run(() =>
             {
