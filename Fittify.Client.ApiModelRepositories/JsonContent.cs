@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ namespace Fittify.Client.ApiModelRepository
         {
         }
 
+        [ExcludeFromCodeCoverage] // As of 7th of June 2018, this method is not referenced
         public JsonContent(object value, string mediaType)
             : base(JsonConvert.SerializeObject(value), Encoding.UTF8, mediaType)
         {
@@ -28,6 +30,7 @@ namespace Fittify.Client.ApiModelRepository
         }
     }
 
+    [ExcludeFromCodeCoverage] // As of 7th of June 2018, this method is not referenced
     public class FileContent : MultipartFormDataContent
     {
         public FileContent(string filePath, string apiParamName)

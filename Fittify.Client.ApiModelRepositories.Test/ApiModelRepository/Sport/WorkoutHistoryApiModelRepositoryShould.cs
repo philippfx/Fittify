@@ -23,7 +23,7 @@ using NUnit.Framework;
 namespace Fittify.Client.ApiModelRepositories.Test.OfmRepository
 {
     [TestFixture]
-    class AsyncWorkoutHistoryOfmRepositoryShould
+    class WorkoutHistoryApiModelRepositoryShould
     {
         ////private string _defaultAppConfigurationString =
         ////    @"
@@ -141,6 +141,69 @@ namespace Fittify.Client.ApiModelRepositories.Test.OfmRepository
 
                     // ACT
                     var ofmQueryResult = await workoutHistoryOfmRepository.Post(workoutHistoryOfmForPost);
+
+                    // Assert
+                    var actualOfmQueryResult = JsonConvert.SerializeObject(ofmQueryResult, new JsonSerializerSettings() { Formatting = Newtonsoft.Json.Formatting.Indented }).MinifyJson().PrettifyJson();
+                    var expectedOfmQueryResult =
+                        @"
+                            {
+                              ""OfmForGet"": null,
+                              ""HttpStatusCode"": 400,
+                              ""HttpResponseHeaders"": [],
+                              ""ErrorMessagesPresented"": {
+                                ""workouthistory"": [
+                                  ""Some error message"",
+                                  ""Some other error message""
+                                ]
+                              }
+                            }
+                        ".MinifyJson().PrettifyJson();
+
+                    Assert.AreEqual(actualOfmQueryResult, expectedOfmQueryResult);
+                }
+            });
+        }
+
+
+        [Test]
+        public async Task ReturnOfmQueryResultWithErrorMessages_UsingPostWithIncludeExerciseHistoresOverload()
+        {
+            await Task.Run(async () =>
+            {
+                // Arrange
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
+                {
+                    // ARRANGE
+                    var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
+                    var httpRequestExecuter = new Mock<IHttpRequestExecuter>();
+                    var workoutHistoryOfmRepository = new WorkoutHistoryApiModelRepository(
+                        testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestExecuter.Object);
+
+                    var workoutHistoryOfmForPost = new WorkoutHistoryOfmForPost()
+                    {
+                        WorkoutId = 4
+                    };
+
+                    var queryResult = new Dictionary<string, object>()
+                    {
+                        {
+                            "workouthistory",
+                            new List<string>()
+                            {
+                                "Some error message",
+                                "Some other error message"
+                            }
+                        }
+                    };
+
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/workouthistories?includeExerciseHistories=1");
+                    var httpResponse = new HttpResponseMessage();
+                    httpResponse.Content = new StringContent(JsonConvert.SerializeObject(queryResult));
+                    httpResponse.StatusCode = HttpStatusCode.BadRequest;
+                    httpRequestExecuter.Setup(s => s.Post(uri, workoutHistoryOfmForPost, testAppConfiguration.Instance, httpContextAccessorMock.Object)).ReturnsAsync(httpResponse);
+
+                    // ACT
+                    var ofmQueryResult = await workoutHistoryOfmRepository.Post(workoutHistoryOfmForPost, includeExerciseHistories: true);
 
                     // Assert
                     var actualOfmQueryResult = JsonConvert.SerializeObject(ofmQueryResult, new JsonSerializerSettings() { Formatting = Newtonsoft.Json.Formatting.Indented }).MinifyJson().PrettifyJson();

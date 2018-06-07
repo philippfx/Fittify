@@ -53,7 +53,7 @@ namespace Fittify.Client.ViewModelRepository.Sport
             }
             else
             {
-                ofmQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
+                workoutViewModelQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
             }
 
             return workoutViewModelQueryResult;
@@ -129,21 +129,21 @@ namespace Fittify.Client.ViewModelRepository.Sport
                         }
                     }                        
                 }
+
+                // Exercises
+                var exerciseViewModelRepository = _exerciseHistoryViewModelRepository;
+
+                var exerciseViewModelCollectionQueryResult
+                    = await exerciseViewModelRepository.GetCollection(
+                        new ExerciseOfmCollectionResourceParameters());
+
+                workoutViewModelQueryResult.ViewModel.AllExercises
+                    = exerciseViewModelCollectionQueryResult.ViewModelForGetCollection;
             }
             else
             {
                 workoutViewModelQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
             }
-            
-            // Exercises
-            var exerciseViewModelRepository = _exerciseHistoryViewModelRepository;
-
-            var exerciseViewModelCollectionQueryResult
-                = await exerciseViewModelRepository.GetCollection(
-                    new ExerciseOfmCollectionResourceParameters());
-
-            workoutViewModelQueryResult.ViewModel.AllExercises
-                = exerciseViewModelCollectionQueryResult.ViewModelForGetCollection;
 
             // Done
             return workoutViewModelQueryResult;

@@ -8,7 +8,7 @@ using Fittify.DataModels.Models.Sport;
 
 namespace Fittify.Api.Services.ConfigureServices
 {
-    public static class AutoMapperForFittify
+    public static class AutoMapperForFittifyApi
     {
         public static void Initialize()
         {

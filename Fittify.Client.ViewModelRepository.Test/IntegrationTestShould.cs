@@ -648,9 +648,9 @@ namespace Fittify.Client.ViewModelRepository.Test
 							          ""ExerciseType"": ""Cardio""
 							        },
 							        ""WorkoutHistoryId"": 5,
-							        ""PreviousExerciseHistoryId"": 14,
+							        ""PreviousExerciseHistoryId"": 15,
 							        ""PreviousExerciseHistory"": {
-							          ""Id"": 14,
+							          ""Id"": 15,
 							          ""Exercise"": null,
 							          ""WorkoutHistoryId"": 3,
 							          ""PreviousExerciseHistoryId"": null,
@@ -663,11 +663,30 @@ namespace Fittify.Client.ViewModelRepository.Test
 							        ""CurrentAndHistoricWeightLiftingSetPairs"": [],
 							        ""CurrentAndHistoricCardioSetPairs"": [
 							          {
-							            ""HistoricCardioSet"": null,
+							            ""HistoricCardioSet"": {
+							              ""Id"": 12,
+							              ""DateTimeStart"": ""2017-05-05T14:04:12"",
+							              ""DateTimeEnd"": ""2017-05-05T14:24:12"",
+							              ""ExerciseHistoryId"": 15
+							            },
 							            ""CurrentCardioSet"": {
-							              ""Id"": 5,
-							              ""DateTimeStart"": ""2017-05-10T13:24:12"",
-							              ""DateTimeEnd"": ""2017-05-10T13:34:12"",
+							              ""Id"": 8,
+							              ""DateTimeStart"": ""2017-05-10T14:04:12"",
+							              ""DateTimeEnd"": ""2017-05-10T14:24:12"",
+							              ""ExerciseHistoryId"": 25
+							            }
+							          },
+							          {
+							            ""HistoricCardioSet"": {
+							              ""Id"": 13,
+							              ""DateTimeStart"": ""2017-05-05T13:04:12"",
+							              ""DateTimeEnd"": ""2017-05-05T13:09:12"",
+							              ""ExerciseHistoryId"": 15
+							            },
+							            ""CurrentCardioSet"": {
+							              ""Id"": 9,
+							              ""DateTimeStart"": ""2017-05-10T13:04:12"",
+							              ""DateTimeEnd"": ""2017-05-10T13:09:12"",
 							              ""ExerciseHistoryId"": 25
 							            }
 							          }
@@ -748,7 +767,7 @@ namespace Fittify.Client.ViewModelRepository.Test
         }
 
         [Test]
-        public async Task CorrectlyReturnWorkoutHistoryDetailsWithoutPreviousExerciseHistory()
+        public async Task CorrectlyReturnWorkoutHistoryDetailsUnexistingPreviousExerciseHistory()
         {
             using (var apiServer = GetApiTestServerInstance())
             {
@@ -1031,9 +1050,18 @@ namespace Fittify.Client.ViewModelRepository.Test
 							          {
 							            ""HistoricCardioSet"": null,
 							            ""CurrentCardioSet"": {
-							              ""Id"": 2,
-							              ""DateTimeStart"": ""2017-05-03T13:24:12"",
-							              ""DateTimeEnd"": ""2017-05-03T13:34:12"",
+							              ""Id"": 14,
+							              ""DateTimeStart"": ""2017-05-03T14:04:12"",
+							              ""DateTimeEnd"": ""2017-05-03T14:24:12"",
+							              ""ExerciseHistoryId"": 10
+							            }
+							          },
+							          {
+							            ""HistoricCardioSet"": null,
+							            ""CurrentCardioSet"": {
+							              ""Id"": 15,
+							              ""DateTimeStart"": ""2017-05-03T13:04:12"",
+							              ""DateTimeEnd"": ""2017-05-03T13:09:12"",
 							              ""ExerciseHistoryId"": 10
 							            }
 							          }
@@ -1292,7 +1320,7 @@ namespace Fittify.Client.ViewModelRepository.Test
 							            ""ExerciseType"": ""Cardio""
 							          },
 							          ""WorkoutHistoryId"": 9,
-							          ""PreviousExerciseHistoryId"": 29,
+							          ""PreviousExerciseHistoryId"": 30,
 							          ""PreviousExerciseHistory"": null,
 							          ""CurrentAndHistoricWeightLiftingSetPairs"": [],
 							          ""CurrentAndHistoricCardioSetPairs"": [],

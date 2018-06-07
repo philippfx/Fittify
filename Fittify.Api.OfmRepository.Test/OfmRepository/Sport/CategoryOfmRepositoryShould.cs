@@ -32,7 +32,7 @@ namespace Fittify.Api.OfmRepository.Test.OfmRepository.Sport
         public void Init()
         {
             AutoMapper.Mapper.Reset();
-            AutoMapperForFittify.Initialize();
+            AutoMapperForFittifyApi.Initialize();
         }
 
         [Test]

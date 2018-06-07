@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Client.ViewModels;
 using Fittify.Common.CustomExceptions;
@@ -10,6 +11,8 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Fittify.Web.View.Controllers
 {
+
+    [ExcludeFromCodeCoverage]
     [Authorize]
     [Route("address")]
     public class AddressController : Controller

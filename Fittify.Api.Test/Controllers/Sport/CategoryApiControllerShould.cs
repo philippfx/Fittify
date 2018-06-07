@@ -34,7 +34,7 @@ namespace Fittify.Api.Test.Controllers.Sport
         [SetUp]
         public void Init()
         {
-            AutoMapperForFittify.Initialize();
+            AutoMapperForFittifyApi.Initialize();
         }
 
         [Test]

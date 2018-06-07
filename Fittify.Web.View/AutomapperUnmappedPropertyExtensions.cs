@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
 
 namespace Fittify.Web.View
 {
-    public static class AutomapperExtensions
+    [ExcludeFromCodeCoverage] // Code taken from an external source: https://stackoverflow.com/questions/954480/automapper-ignore-the-rest#answer-38073718
+    public static class AutomapperUnmappedPropertyExtensions
     {
 
         public static void NewMethod(this IMemberConfigurationExpression memberConfigurationExpression)

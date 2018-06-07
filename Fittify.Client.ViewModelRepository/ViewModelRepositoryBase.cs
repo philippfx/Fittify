@@ -37,7 +37,6 @@ namespace Fittify.Client.ViewModelRepository
 
         public virtual async Task<ViewModelQueryResult<TViewModel>> GetById(TId id)
         {
-
             var ofmQueryResult = await ApiModelRepository.GetSingle(id);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<TViewModel>();
@@ -110,7 +109,7 @@ namespace Fittify.Client.ViewModelRepository
             }
             else
             {
-                ofmQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
+                workoutViewModelQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
             }
 
             return workoutViewModelQueryResult;
@@ -130,7 +129,7 @@ namespace Fittify.Client.ViewModelRepository
             }
             else
             {
-                ofmQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
+                workoutViewModelQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
             }
 
             return workoutViewModelQueryResult;
@@ -143,14 +142,14 @@ namespace Fittify.Client.ViewModelRepository
             var workoutViewModelQueryResult = new ViewModelQueryResult<TViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
 
-            if ((int)ofmQueryResult.HttpStatusCode == 201)
+            if ((int)ofmQueryResult.HttpStatusCode == 200)
             {
                 workoutViewModelQueryResult.ViewModel =
                     Mapper.Map<TViewModel>(ofmQueryResult.OfmForGet);
             }
             else
             {
-                ofmQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
+                workoutViewModelQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
             }
 
             return workoutViewModelQueryResult;

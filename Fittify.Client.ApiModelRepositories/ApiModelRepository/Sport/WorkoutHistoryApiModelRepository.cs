@@ -43,7 +43,6 @@ namespace Fittify.Client.ApiModelRepository.OfmRepository.Sport
             }
 
             var httpResponse = await HttpRequestExecuter.Post(uri, ofmForPost, AppConfiguration, HttpContextAccessor);
-            var content = httpResponse.Content.ReadAsStringAsync();
             ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 

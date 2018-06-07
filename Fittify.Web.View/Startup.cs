@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,7 @@ using Fittify.Client.ViewModels.Sport;
 using Fittify.Web.View.Helpers;
 using Fittify.Web.View.Helpers.Extensions;
 using Fittify.Web.View.Middleware.Extensions.ConfigureServices;
+using Fittify.Web.View.Services.ConfigureServices;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -28,6 +30,8 @@ using Newtonsoft.Json.Linq;
 
 namespace Fittify.Web.View
 {
+
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public IConfiguration Configuration { get; set; }
@@ -171,21 +175,7 @@ namespace Fittify.Web.View
         {
             if (!env.IsClientTestServer()) // need to exclude automapper initialization for full integration test of client app, because mapper is also initialized in Api Startup 
             {
-                AutoMapper.Mapper.Initialize(cfg =>
-                {
-                    // OfmGet to ViewModel
-                    cfg.CreateMap<WorkoutOfmForGet, WorkoutViewModel>()
-                        .ForMember(dest => dest.AssociatedExercises, opt => opt.MapFrom(src => src.Exercises));
-                    cfg.CreateMap<CategoryOfmForGet, CategoryViewModel>();
-                    ////.ForMember(dest => dest.RangeOfWorkoutIds, opt => opt.MapFrom(src => src.Workouts.Select(w => w.Id).ToList().ToStringOfIds()));
-                    cfg.CreateMap<CardioSetOfmForGet, CardioSetViewModel>();
-                    cfg.CreateMap<WeightLiftingSetOfmForGet, WeightLiftingSetViewModel>();
-                    cfg.CreateMap<ExerciseOfmForGet, ExerciseViewModel>();
-                    cfg.CreateMap<ExerciseHistoryOfmForGet, ExerciseHistoryViewModel>();
-                    cfg.CreateMap<WorkoutHistoryOfmForGet, WorkoutHistoryViewModel>()
-                        .ForMember(dest => dest.ExerciseHistories, opt => opt.MapFrom(src => src.ExerciseHistories));
-                    cfg.IgnoreUnmapped();
-                });
+                AutoMapperForFittifyWeb.Initialize();
             }
             
             loggerFactory.AddConsole();

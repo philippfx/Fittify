@@ -14,13 +14,13 @@ namespace Fittify.Client.ViewModelRepository.Sport
             //IConfiguration appConfiguration,
             //IHttpContextAccessor httpContextAccessor,
             //IHttpRequestExecuter httpRequestExecuter,
-            IApiModelRepository<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters> cardioSetApiModelRepository)
+            IApiModelRepository<int, CategoryOfmForGet, CategoryOfmForPost, CategoryOfmCollectionResourceParameters> categoryApiModelRepository)
             : base(
                 ////appConfiguration,
                 ////httpContextAccessor,
                 ////"Category",
                 ////httpRequestExecuter,
-                cardioSetApiModelRepository)
+                categoryApiModelRepository)
         {
         }
     }

@@ -519,32 +519,26 @@ namespace Fittify.Api.Test
 						    {
 						      ""id"": 25,
 						      ""previousExerciseHistory"": {
-						        ""id"": 14,
+						        ""id"": 15,
 						        ""previousExerciseHistory"": null,
 						        ""exercise"": null,
-						        ""rangeOfWeightLiftingSetIds"": ""80-81"",
-						        ""weightLiftingSets"": [
+						        ""rangeOfWeightLiftingSetIds"": """",
+						        ""weightLiftingSets"": [],
+						        ""rangeOfCardioSetIds"": ""12-13"",
+						        ""cardioSets"": [
 						          {
-						            ""id"": 80,
-						            ""weightFull"": 30,
-						            ""repetitionsFull"": 12,
-						            ""weightReduced"": 20,
-						            ""repetitionsReduced"": 8,
-						            ""weightBurn"": 10,
-						            ""exerciseHistoryId"": 14
+						            ""id"": 12,
+						            ""dateTimeStart"": ""2017-05-05T14:04:12"",
+						            ""dateTimeEnd"": ""2017-05-05T14:24:12"",
+						            ""exerciseHistoryId"": 15
 						          },
 						          {
-						            ""id"": 81,
-						            ""weightFull"": 30,
-						            ""repetitionsFull"": 12,
-						            ""weightReduced"": 20,
-						            ""repetitionsReduced"": 8,
-						            ""weightBurn"": 10,
-						            ""exerciseHistoryId"": 14
+						            ""id"": 13,
+						            ""dateTimeStart"": ""2017-05-05T13:04:12"",
+						            ""dateTimeEnd"": ""2017-05-05T13:09:12"",
+						            ""exerciseHistoryId"": 15
 						          }
 						        ],
-						        ""rangeOfCardioSetIds"": """",
-						        ""cardioSets"": [],
 						        ""workoutHistoryId"": 3,
 						        ""executedOnDateTime"": ""2017-05-05T13:04:12"",
 						        ""previousExerciseHistoryId"": null
@@ -556,18 +550,24 @@ namespace Fittify.Api.Test
 						      },
 						      ""rangeOfWeightLiftingSetIds"": """",
 						      ""weightLiftingSets"": [],
-						      ""rangeOfCardioSetIds"": ""5"",
+						      ""rangeOfCardioSetIds"": ""8-9"",
 						      ""cardioSets"": [
 						        {
-						          ""id"": 5,
-						          ""dateTimeStart"": ""2017-05-10T13:24:12"",
-						          ""dateTimeEnd"": ""2017-05-10T13:34:12"",
+						          ""id"": 8,
+						          ""dateTimeStart"": ""2017-05-10T14:04:12"",
+						          ""dateTimeEnd"": ""2017-05-10T14:24:12"",
+						          ""exerciseHistoryId"": 25
+						        },
+						        {
+						          ""id"": 9,
+						          ""dateTimeStart"": ""2017-05-10T13:04:12"",
+						          ""dateTimeEnd"": ""2017-05-10T13:09:12"",
 						          ""exerciseHistoryId"": 25
 						        }
 						      ],
 						      ""workoutHistoryId"": 5,
 						      ""executedOnDateTime"": ""2017-05-10T13:04:12"",
-						      ""previousExerciseHistoryId"": 14
+						      ""previousExerciseHistoryId"": 15
 						    }
 						  ],
 						  ""dateTimeStart"": ""2017-05-10T12:01:05"",

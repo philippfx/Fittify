@@ -263,7 +263,7 @@ namespace Fittify.Api
                    .AllowAnyHeader()
             );
             
-            AutoMapperForFittify.Initialize();
+            AutoMapperForFittifyApi.Initialize();
 
             Debug.Write(string.Format("Creating a foo: {0}", JsonConvert.SerializeObject(new WeightLiftingSet())));
 

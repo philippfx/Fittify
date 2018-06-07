@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Fittify.Client.ApiModelRepository
 {
+    [ExcludeFromCodeCoverage] // Todo: Unit Test this !! 
     public class HttpRequestExecuter : IHttpRequestExecuter
     {
         private readonly IHttpRequestBuilder _httpRequestBuilder;

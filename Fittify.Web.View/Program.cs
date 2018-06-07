@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
 namespace Fittify.Web.View
 {
+    [ExcludeFromCodeCoverage]
     public class Program
     {
         // ASP.NET Core 1.x
