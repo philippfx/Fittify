@@ -15,7 +15,8 @@ using Microsoft.Extensions.Configuration;
 namespace Fittify.Client.ViewModelRepository.Sport
 {
     public class WorkoutHistoryViewModelRepository : 
-        ViewModelRepositoryBase<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmResourceParameters, WorkoutHistoryOfmCollectionResourceParameters>
+        ViewModelRepositoryBase<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmResourceParameters, WorkoutHistoryOfmCollectionResourceParameters>,
+        IWorkoutHistoryViewModelRepository
     {
         private readonly IWorkoutHistoryApiModelRepository _workoutHistoryApiModelRepository;
 
@@ -38,9 +39,9 @@ namespace Fittify.Client.ViewModelRepository.Sport
             _exerciseHistoryViewModelRepository = exerciseHistoryViewModelRepository;
         }
 
-        public override async Task<ViewModelQueryResult<WorkoutHistoryViewModel>> Create(WorkoutHistoryOfmForPost workoutOfmForPost)
+        public async Task<ViewModelQueryResult<WorkoutHistoryViewModel>> Create(WorkoutHistoryOfmForPost workoutHistoryOfmForPost, bool includeExerciseHistories)
         {
-            var ofmQueryResult = await _workoutHistoryApiModelRepository.Post(workoutOfmForPost);
+            var ofmQueryResult = await _workoutHistoryApiModelRepository.Post(workoutHistoryOfmForPost, includeExerciseHistories);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutHistoryViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
@@ -77,11 +78,11 @@ namespace Fittify.Client.ViewModelRepository.Sport
                     {
                         if(relatedViewModelExerciseHistory.Exercise.ExerciseType == ExerciseTypeEnum.WeightLifting.ToString())
                         {
-                            var historicWeightLiftingSets = eH.PreviousExerciseHistory.WeightLiftingSets.OrderBy(o => o.Id).ToArray();
+                            var historicWeightLiftingSets = eH.PreviousExerciseHistory?.WeightLiftingSets?.OrderBy(o => o.Id).ToArray();
                             var currentWeightLiftingSets = eH.WeightLiftingSets.OrderBy(o => o.Id).ToArray();
-                            var historicWeightLiftingSetsCount = eH.PreviousExerciseHistory.WeightLiftingSets.Count();
+                            var historicWeightLiftingSetsCount = eH.PreviousExerciseHistory?.WeightLiftingSets?.Count();
                             var currentWeightLiftingSetsCount = eH.WeightLiftingSets.Count();
-                            var maxWeightLiftingSetsCount = Math.Max(historicWeightLiftingSetsCount, currentWeightLiftingSetsCount);
+                            var maxWeightLiftingSetsCount = Math.Max(historicWeightLiftingSetsCount.GetValueOrDefault(), currentWeightLiftingSetsCount);
 
                             for (int i = 0; i < maxWeightLiftingSetsCount; i++)
                             {
@@ -103,11 +104,11 @@ namespace Fittify.Client.ViewModelRepository.Sport
 
                         if (relatedViewModelExerciseHistory.Exercise.ExerciseType == ExerciseTypeEnum.Cardio.ToString())
                         {
-                            var historicCardioSets = eH.CardioSets.OrderBy(o => o.Id).ToArray();
+                            var historicCardioSets = eH.PreviousExerciseHistory?.CardioSets?.OrderBy(o => o.Id).ToArray();
                             var currentCardioSets = eH.CardioSets.OrderBy(o => o.Id).ToArray();
-                            var historicCardioSetsCount = eH.PreviousExerciseHistory.CardioSets.Count();
+                            var historicCardioSetsCount = eH.PreviousExerciseHistory?.CardioSets?.Count();
                             var currentCardioSetsCount = eH.CardioSets.Count();
-                            var maxCardioSetsCount = Math.Max(historicCardioSetsCount, currentCardioSetsCount);
+                            var maxCardioSetsCount = Math.Max(historicCardioSetsCount.GetValueOrDefault(), currentCardioSetsCount);
 
                             for (int i = 0; i < maxCardioSetsCount; i++)
                             {
@@ -115,7 +116,7 @@ namespace Fittify.Client.ViewModelRepository.Sport
                                 if (historicCardioSetsCount > i)
                                 {
                                     currentAndHistoricCardioSetPair.HistoricCardioSet
-                                        = Mapper.Map<CardioSetViewModel>(historicCardioSets[i]);
+                                        = Mapper.Map<CardioSetViewModel>(historicCardioSets?[i]);
                                 }
 
                                 if (currentCardioSetsCount > i)

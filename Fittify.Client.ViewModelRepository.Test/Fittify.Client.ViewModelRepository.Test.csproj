@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\Fittify.Web.View\appsettings.json" Link="appsettings.json" />
+    <Content Include="..\Fittify.Web.View\appsettings.json" Link="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +23,7 @@
     <ProjectReference Include="..\Fittify.Api\Fittify.Api.csproj" />
     <ProjectReference Include="..\Fittify.Client.ApiModelRepositories\Fittify.Client.ApiModelRepository.csproj" />
     <ProjectReference Include="..\Fittify.Client.ViewModelRepository\Fittify.Client.ViewModelRepository.csproj" />
+    <ProjectReference Include="..\Fittify.Web.View\Fittify.Web.View.csproj" />
   </ItemGroup>
 
 </Project>

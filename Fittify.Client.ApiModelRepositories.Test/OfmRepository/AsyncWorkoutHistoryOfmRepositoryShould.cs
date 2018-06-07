@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
@@ -11,7 +13,9 @@ using Fittify.Client.ApiModelRepositories.Test.TestHelpers;
 using Fittify.Client.ApiModelRepository;
 using Fittify.Client.ApiModelRepository.OfmRepository.Sport;
 using Fittify.Common.Extensions;
+using Fittify.Web.View;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -21,15 +25,15 @@ namespace Fittify.Client.ApiModelRepositories.Test.OfmRepository
     [TestFixture]
     class AsyncWorkoutHistoryOfmRepositoryShould
     {
-        private string _defaultAppConfigurationString =
-            @"
-                {
-                  ""FittifyApiBaseUrl"": ""https://somelocalhost:0000/"",
-                  ""MappedFittifyApiActions"": {
-                    ""WorkoutHistory"": ""api/workouthistories""
-                  }
-                }
-            ";
+        ////private string _defaultAppConfigurationString =
+        ////    @"
+        ////        {
+        ////          ""FittifyApiBaseUrl"": ""https://somelocalhost:0000/"",
+        ////          ""MappedFittifyApiActions"": {
+        ////            ""WorkoutHistory"": ""api/workouthistories""
+        ////          }
+        ////        }
+        ////    ";
 
         [Test]
         public async Task ReturnSuccessfulOfmQueryResult_UsingPost()
@@ -37,7 +41,7 @@ namespace Fittify.Client.ApiModelRepositories.Test.OfmRepository
             await Task.Run(async () =>
             {
                 // Arrange
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -59,12 +63,14 @@ namespace Fittify.Client.ApiModelRepositories.Test.OfmRepository
                             Name = "MockWorkout"
                         }
                     };
-
-                    var uri = new Uri("https://somelocalhost:0000/api/workouthistories");
+                    
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/workouthistories");
                     var httpResponse = new HttpResponseMessage();
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(returnedWorkoutHistoryOfmForGet));
                     httpResponse.StatusCode = HttpStatusCode.OK;
-                    httpRequestExecuter.Setup(s => s.Post(uri, workoutHistoryOfmForPost, testAppConfiguration.Instance, httpContextAccessorMock.Object)).ReturnsAsync(httpResponse);
+                    httpRequestExecuter
+                        .Setup(s => s.Post(uri, workoutHistoryOfmForPost, testAppConfiguration.Instance, httpContextAccessorMock.Object))
+                        .ReturnsAsync(httpResponse);
 
                     // ACT
                     var ofmQueryResult = await workoutHistoryOfmRepository.Post(workoutHistoryOfmForPost);
@@ -102,7 +108,7 @@ namespace Fittify.Client.ApiModelRepositories.Test.OfmRepository
             await Task.Run(async () =>
             {
                 // Arrange
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -127,7 +133,7 @@ namespace Fittify.Client.ApiModelRepositories.Test.OfmRepository
                         }
                     };
 
-                    var uri = new Uri("https://somelocalhost:0000/api/workouthistories");
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/workouthistories");
                     var httpResponse = new HttpResponseMessage();
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(queryResult));
                     httpResponse.StatusCode = HttpStatusCode.BadRequest;

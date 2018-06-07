@@ -575,7 +575,7 @@ namespace Fittify.Api.Test
 						}
                     ".MinifyJson().PrettifyJson();
 
-                Assert.AreEqual(actualObjectResult, expectedObjectResult);
+                Assert.AreEqual(expectedObjectResult, actualObjectResult);
             }
         }
 

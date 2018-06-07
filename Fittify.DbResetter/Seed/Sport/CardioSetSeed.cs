@@ -16,8 +16,16 @@ namespace Fittify.DbResetter.Seed.Sport
                 {
                     fittifyContext.CardioSets.Add(new CardioSet()
                     {
-                        DateTimeStart = eH.ExecutedOnDateTime + TimeSpan.FromMinutes(20),
-                        DateTimeEnd = eH.ExecutedOnDateTime + TimeSpan.FromMinutes(30),
+                        DateTimeStart = eH.ExecutedOnDateTime + TimeSpan.FromMinutes(0),
+                        DateTimeEnd = eH.ExecutedOnDateTime + TimeSpan.FromMinutes(5),
+                        ExerciseHistoryId = eH.Id,
+                        OwnerGuid = StaticFields.TestOwnerGuid
+                    });
+
+                    fittifyContext.CardioSets.Add(new CardioSet()
+                    {
+                        DateTimeStart = eH.ExecutedOnDateTime + TimeSpan.FromMinutes(60),
+                        DateTimeEnd = eH.ExecutedOnDateTime + TimeSpan.FromMinutes(80),
                         ExerciseHistoryId = eH.Id,
                         OwnerGuid = StaticFields.TestOwnerGuid
                     });

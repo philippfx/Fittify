@@ -15,7 +15,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
 
         }
 
-        public async Task<PagedList<Animal>> GetPagedCollection(AnimalResourceParameters ofmResourceParameters)
+        public override async Task<PagedList<Animal>> GetPagedCollection(AnimalResourceParameters ofmResourceParameters)
         {
             return await Task.Run(() =>
             {

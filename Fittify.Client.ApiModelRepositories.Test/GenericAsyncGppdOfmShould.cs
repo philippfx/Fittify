@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -11,38 +12,30 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using System.Net;
+using System.Reflection;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Client.ApiModelRepository;
 using Fittify.Client.ApiModelRepository.Helpers;
 using Fittify.Client.ApiModelRepository.OfmRepository.Sport;
 using Fittify.Common.Extensions;
+using Fittify.Web.View;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
+using Microsoft.Extensions.Configuration;
 
 namespace Fittify.Client.ApiModelRepositories.Test
 {
     [TestFixture]
     class GenericAsyncGppdOfmShould
     {
-        private string _defaultAppConfigurationString =
-            @"
-                {
-                  ""FittifyApiBaseUrl"": ""https://somelocalhost:0000/"",
-                  ""MappedFittifyApiActions"": {
-                    ""Category"": ""api/categories"",
-                    ""Workout"": ""api/workouts""
-                  }
-                }
-            ";
-
         [Test]
         public async Task ReturnSuccessfulOfmQueryResult_UsingGetSingle()
         {
             await Task.Run(async () =>
             {
                 // Arrange
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -56,7 +49,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                         Name = "MockCategoryName"
                     };
 
-                    var uri = new Uri("https://somelocalhost:0000/api/categories/1");
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/categories/1");
                     var httpResponse = new HttpResponseMessage();
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(returnedCategoryOfmForGet));
                     httpResponse.StatusCode = HttpStatusCode.OK;
@@ -92,7 +85,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
             await Task.Run(async () =>
             {
                 // Arrange
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -114,7 +107,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                         }
                     };
 
-                    var uri = new Uri("https://somelocalhost:0000/api/categories/1");
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/categories/1");
                     var httpResponse = new HttpResponseMessage();
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(returnedCategoryOfmForGet));
                     httpResponse.StatusCode = HttpStatusCode.BadRequest;
@@ -155,7 +148,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
         {
             await Task.Run(async () =>
             {
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -169,7 +162,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                         Name = "MockWorkoutName"
                     };
 
-                    var uri = new Uri("https://somelocalhost:0000/api/workouts/1?IncludeExercises=1");
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/workouts/1?IncludeExercises=1");
                     var httpResponse = new HttpResponseMessage();
                     var resourceParameters = new WorkoutOfmResourceParameters()
                     {
@@ -211,7 +204,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
             await Task.Run(async () =>
             {
                 // Arrange
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -231,7 +224,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                         }
                     };
 
-                    var uri = new Uri("https://somelocalhost:0000/api/workouts/1?IncludeExercises=1");
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/workouts/1?IncludeExercises=1");
                     var httpResponse = new HttpResponseMessage();
                     var resourceParameters = new WorkoutOfmResourceParameters()
                     {
@@ -273,7 +266,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
             await Task.Run(async () =>
             {
                 // Arrange
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -296,7 +289,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     };
 
                     var resourceParameters = new CategoryOfmCollectionResourceParameters();
-                    var uri = new Uri("https://somelocalhost:0000/api/categories" + resourceParameters.ToQueryParameterString());
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/categories" + resourceParameters.ToQueryParameterString());
                     var httpResponse = new HttpResponseMessage();
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(returnedCategoryOfmForGetCollection));
                     httpResponse.StatusCode = HttpStatusCode.OK;
@@ -338,7 +331,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
             await Task.Run(async () =>
             {
                 // Arrange
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -361,7 +354,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     };
 
                     var resourceParameters = new CategoryOfmCollectionResourceParameters();
-                    var uri = new Uri("https://somelocalhost:0000/api/categories" + resourceParameters.ToQueryParameterString());
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/categories" + resourceParameters.ToQueryParameterString());
                     var httpResponse = new HttpResponseMessage();
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(returnedCategoryOfmForGetCollection));
                     httpResponse.StatusCode = HttpStatusCode.OK;
@@ -403,7 +396,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
             await Task.Run(async () =>
             {
                 // Arrange
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -424,7 +417,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                     };
 
                     var resourceParameters = new CategoryOfmCollectionResourceParameters();
-                    var uri = new Uri("https://somelocalhost:0000/api/categories" + resourceParameters.ToQueryParameterString());
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/categories" + resourceParameters.ToQueryParameterString());
                     var httpResponse = new HttpResponseMessage();
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(returnedOfmCollectionQueryResult));
                     httpResponse.StatusCode = HttpStatusCode.BadRequest;
@@ -462,7 +455,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
             await Task.Run(async () =>
             {
                 // Arrange
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -481,7 +474,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                         Name = "MockCategoryName"
                     };
 
-                    var uri = new Uri("https://somelocalhost:0000/api/categories");
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/categories");
                     var httpResponse = new HttpResponseMessage();
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(returnedCategoryOfmForGet));
                     httpResponse.StatusCode = HttpStatusCode.OK;
@@ -517,7 +510,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
             await Task.Run(async () =>
             {
                 // Arrange
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -542,7 +535,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                         }
                     };
 
-                    var uri = new Uri("https://somelocalhost:0000/api/categories");
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/categories");
                     var httpResponse = new HttpResponseMessage();
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(queryResult));
                     httpResponse.StatusCode = HttpStatusCode.BadRequest;
@@ -579,7 +572,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
             await Task.Run(async () =>
             {
                 // Arrange
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -588,7 +581,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                         testAppConfiguration.Instance, httpContextAccessorMock.Object, httpRequestHandlerMock.Object);
 
 
-                    var uri = new Uri("https://somelocalhost:0000/api/categories/1");
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/categories/1");
                     var httpResponse = new HttpResponseMessage();
                     //httpResponse.Content = new StringContent(JsonConvert.SerializeObject());
                     httpResponse.StatusCode = HttpStatusCode.NoContent;
@@ -621,7 +614,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
             await Task.Run(async () =>
             {
                 // Arrange
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -640,7 +633,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                         }
                     };
 
-                    var uri = new Uri("https://somelocalhost:0000/api/categories/1");
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/categories/1");
                     var httpResponse = new HttpResponseMessage();
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(queryResult));
                     httpResponse.StatusCode = HttpStatusCode.NotFound;
@@ -677,7 +670,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
             await Task.Run(async () =>
             {
                 // Arrange
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -699,7 +692,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                         }
                     };
 
-                    var uri = new Uri("https://somelocalhost:0000/api/categories/1");
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/categories/1");
                     var httpResponse = new HttpResponseMessage();
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(returnedCategoryOfmForGet));
                     httpResponse.StatusCode = HttpStatusCode.OK;
@@ -736,7 +729,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
             await Task.Run(async () =>
             {
                 // Arrange
-                using (var testAppConfiguration = new AppConfigurationMock(_defaultAppConfigurationString))
+                using (var testAppConfiguration = new AppConfigurationMock(File.ReadAllText(Path.GetDirectoryName(typeof(Startup).GetTypeInfo().Assembly.Location) + "\\appsettings.json")))
                 {
                     // ARRANGE
                     var httpContextAccessorMock = new Mock<IHttpContextAccessor>();
@@ -763,7 +756,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                         }
                     };
 
-                    var uri = new Uri("https://somelocalhost:0000/api/categories/1");
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/categories/1");
                     var httpResponse = new HttpResponseMessage();
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(returnedCategoryOfmForGet));
                     httpResponse.StatusCode = HttpStatusCode.BadRequest;

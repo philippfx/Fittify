@@ -96,9 +96,9 @@ namespace Fittify.Client.ViewModelRepository
             return workoutViewModelCollectionQueryResult;
         }
 
-        public virtual async Task<ViewModelQueryResult<TViewModel>> Create(TOfmForPost workoutOfmForPost)
+        public virtual async Task<ViewModelQueryResult<TViewModel>> Create(TOfmForPost workoutHistoryOfmForPost)
         {
-            var ofmQueryResult = await ApiModelRepository.Post(workoutOfmForPost);
+            var ofmQueryResult = await ApiModelRepository.Post(workoutHistoryOfmForPost);
 
             var workoutViewModelQueryResult = new ViewModelQueryResult<TViewModel>();
             workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;

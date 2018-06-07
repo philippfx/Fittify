@@ -34,42 +34,42 @@ namespace Fittify.Client.ViewModelRepository.Sport
             _exerciseViewModelRepository = exerciseViewModelRepository;
         }
 
-        public override async Task<ViewModelQueryResult<WorkoutViewModel>> GetById(int id)
-        {
-            var ofmQueryResult = await ApiModelRepository.GetSingle(id);
+        ////public override async Task<ViewModelQueryResult<WorkoutViewModel>> GetById(int id)
+        ////{
+        ////    var ofmQueryResult = await ApiModelRepository.GetSingle(id);
 
-            var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutViewModel>();
-            workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
+        ////    var workoutViewModelQueryResult = new ViewModelQueryResult<WorkoutViewModel>();
+        ////    workoutViewModelQueryResult.HttpStatusCode = ofmQueryResult.HttpStatusCode;
 
-            if ((int) ofmQueryResult.HttpStatusCode == 200)
-            {
-                workoutViewModelQueryResult.ViewModel =
-                    Mapper.Map<WorkoutViewModel>(ofmQueryResult.OfmForGet);
-            }
-            else
-            {
-                workoutViewModelQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
-            }
+        ////    if ((int) ofmQueryResult.HttpStatusCode == 200)
+        ////    {
+        ////        workoutViewModelQueryResult.ViewModel =
+        ////            Mapper.Map<WorkoutViewModel>(ofmQueryResult.OfmForGet);
+        ////    }
+        ////    else
+        ////    {
+        ////        workoutViewModelQueryResult.ErrorMessagesPresented = ofmQueryResult.ErrorMessagesPresented;
+        ////    }
 
-            var exerciseViewModelRepository = _exerciseViewModelRepository;
-            if (!String.IsNullOrWhiteSpace(ofmQueryResult.OfmForGet.RangeOfExerciseIds))
-            {
-                var exerciseViewModelCollectionQuery = await exerciseViewModelRepository.GetCollection(
-                    new ExerciseOfmCollectionResourceParameters()
-                    {
-                        Ids = ofmQueryResult.OfmForGet.RangeOfExerciseIds
-                    });
-                workoutViewModelQueryResult.ViewModel.AssociatedExercises =
-                    exerciseViewModelCollectionQuery.ViewModelForGetCollection.ToList();
-            }
+        ////    var exerciseViewModelRepository = _exerciseViewModelRepository;
+        ////    if (!String.IsNullOrWhiteSpace(ofmQueryResult.OfmForGet.RangeOfExerciseIds))
+        ////    {
+        ////        var exerciseViewModelCollectionQuery = await exerciseViewModelRepository.GetCollection(
+        ////            new ExerciseOfmCollectionResourceParameters()
+        ////            {
+        ////                Ids = ofmQueryResult.OfmForGet.RangeOfExerciseIds
+        ////            });
+        ////        workoutViewModelQueryResult.ViewModel.AssociatedExercises =
+        ////            exerciseViewModelCollectionQuery.ViewModelForGetCollection.ToList();
+        ////    }
 
-            var allExerciseViewModelCollectionQuery =
-                await exerciseViewModelRepository.GetCollection(new ExerciseOfmCollectionResourceParameters());
-            workoutViewModelQueryResult.ViewModel.AllExercises =
-                allExerciseViewModelCollectionQuery.ViewModelForGetCollection.ToList();
+        ////    var allExerciseViewModelCollectionQuery =
+        ////        await exerciseViewModelRepository.GetCollection(new ExerciseOfmCollectionResourceParameters());
+        ////    workoutViewModelQueryResult.ViewModel.AllExercises =
+        ////        allExerciseViewModelCollectionQuery.ViewModelForGetCollection.ToList();
 
-            return workoutViewModelQueryResult;
-        }
+        ////    return workoutViewModelQueryResult;
+        ////}
 
         public override async Task<ViewModelQueryResult<WorkoutViewModel>> GetById(int id,
             WorkoutOfmResourceParameters workoutOfmResourceParameters)

@@ -19,7 +19,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
 
         public async Task<WorkoutHistory> CreateIncludingExerciseHistories(WorkoutHistory newWorkoutHistory, Guid ownerGuid)
         {
-            var workoutBluePrint = FittifyContext.Workouts.FirstOrDefault(w => w.Id == newWorkoutHistory.WorkoutId || w.Id == newWorkoutHistory.Workout.Id);
+            var workoutBluePrint = FittifyContext.Workouts.FirstOrDefault(w => w.Id == newWorkoutHistory.WorkoutId);
             newWorkoutHistory.Workout = workoutBluePrint;
             newWorkoutHistory.OwnerGuid = ownerGuid;
             await FittifyContext.AddAsync(newWorkoutHistory);

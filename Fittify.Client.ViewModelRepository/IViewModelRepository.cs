@@ -13,7 +13,7 @@ namespace Fittify.Client.ViewModelRepository
         Task<ViewModelQueryResult<TViewModel>> GetById(TId id);
         Task<ViewModelQueryResult<TViewModel>> GetById(TId id, TResourceParameters resourceParameters);
         Task<ViewModelCollectionQueryResult<TViewModel>> GetCollection(TGetCollectionResourceParameters resourceParameters);
-        Task<ViewModelQueryResult<TViewModel>> Create(TOfmForPost workoutOfmForPost);
+        Task<ViewModelQueryResult<TViewModel>> Create(TOfmForPost workoutHistoryOfmForPost);
         Task<ViewModelQueryResult<TViewModel>> Delete(TId id);
         Task<ViewModelQueryResult<TViewModel>> PartiallyUpdate(TId id, JsonPatchDocument jsonPatchDocument);
     }
