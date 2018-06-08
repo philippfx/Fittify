@@ -80,17 +80,20 @@ namespace Fittify.Api.Test.Controllers.Sport
             var expectedJsonResult =
                 @"
                     {
-                      ""Value"": {
-                        ""Id"": 1,
-                        ""DateTimeStart"": null,
-                        ""DateTimeEnd"": null,
-                        ""ExerciseHistoryId"": 1
-                      },
-                      ""Formatters"": [],
-                      ""ContentTypes"": [],
-                      ""DeclaredType"": null,
-                      ""StatusCode"": 200
-                    }
+          ""Value"": {
+            ""Id"": 1,
+            ""WeightFull"": null,
+            ""RepetitionsFull"": null,
+            ""WeightReduced"": null,
+            ""RepetitionsReduced"": null,
+            ""WeightBurn"": null,
+            ""ExerciseHistoryId"": 1
+          },
+          ""Formatters"": [],
+          ""ContentTypes"": [],
+          ""DeclaredType"": null,
+          ""StatusCode"": 200
+        }
                 ".MinifyJson().PrettifyJson();
 
 
@@ -103,7 +106,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             // Mock GppdRepo
             var asyncGppdMock = new Mock<IAsyncOfmRepository<WeightLiftingSetOfmForGet, int>>();
-            asyncGppdMock.Setup(s => s.GetById(1, "Id, ExerciseHistoryId")).Returns(Task.FromResult(
+            asyncGppdMock.Setup(s => s.GetById(1, "Id, WeightFull, RepetitionsFull")).Returns(Task.FromResult(
                     new OfmForGetQueryResult<WeightLiftingSetOfmForGet>()
                     {
                         ReturnedTOfmForGet = new WeightLiftingSetOfmForGet()
@@ -142,7 +145,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                     {
                       ""Value"": {
                         ""Id"": 1,
-                        ""ExerciseHistoryId"": 1
+                        ""WeightFull"": null,
+                        ""RepetitionsFull"": null
                       },
                       ""Formatters"": [],
                       ""ContentTypes"": [],
@@ -204,39 +208,42 @@ namespace Fittify.Api.Test.Controllers.Sport
             var expectedJsonResult =
                 @"
                    {
-					  ""Value"": {
-					    ""Id"": 1,
-					    ""DateTimeStart"": null,
-					    ""DateTimeEnd"": null,
-					    ""ExerciseHistoryId"": 1,
-					    ""links"": [
-					      {
-					        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-					        ""Rel"": ""self"",
-					        ""Method"": ""GET""
-					      },
-					      {
-					        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-					        ""Rel"": ""create_weightLiftingSet"",
-					        ""Method"": ""POST""
-					      },
-					      {
-					        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-					        ""Rel"": ""partially_update_weightLiftingSet"",
-					        ""Method"": ""PATCH""
-					      },
-					      {
-					        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-					        ""Rel"": ""delete_weightLiftingSet"",
-					        ""Method"": ""DELETE""
-					      }
-					    ]
-					  },
-					  ""Formatters"": [],
-					  ""ContentTypes"": [],
-					  ""DeclaredType"": null,
-					  ""StatusCode"": 200
-					}
+                      ""Value"": {
+                        ""Id"": 1,
+                        ""WeightFull"": null,
+                        ""RepetitionsFull"": null,
+                        ""WeightReduced"": null,
+                        ""RepetitionsReduced"": null,
+                        ""WeightBurn"": null,
+                        ""ExerciseHistoryId"": 1,
+                        ""links"": [
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""self"",
+                            ""Method"": ""GET""
+                          },
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""create_weightLiftingSet"",
+                            ""Method"": ""POST""
+                          },
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""partially_update_weightLiftingSet"",
+                            ""Method"": ""PATCH""
+                          },
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""delete_weightLiftingSet"",
+                            ""Method"": ""DELETE""
+                          }
+                        ]
+                      },
+                      ""Formatters"": [],
+                      ""ContentTypes"": [],
+                      ""DeclaredType"": null,
+                      ""StatusCode"": 200
+                    }
                 ".MinifyJson().PrettifyJson();
 
             Assert.AreEqual(expectedJsonResult, actualObjectResult);
@@ -629,15 +636,18 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""Value"": [
                         {
                           ""Id"": 1,
-                          ""ExerciseHistoryId"": 1
+                          ""WeightFull"": null,
+                          ""RepetitionsFull"": null
                         },
                         {
                           ""Id"": 2,
-                          ""ExerciseHistoryId"": 1
+                          ""WeightFull"": null,
+                          ""RepetitionsFull"": null
                         },
                         {
                           ""Id"": 3,
-                          ""ExerciseHistoryId"": 1
+                          ""WeightFull"": null,
+                          ""RepetitionsFull"": null
                         }
                       ],
                       ""Formatters"": [],
@@ -737,8 +747,11 @@ namespace Fittify.Api.Test.Controllers.Sport
                         ""value"": [
                           {
                             ""Id"": 1,
-                            ""DateTimeStart"": null,
-                            ""DateTimeEnd"": null,
+                            ""WeightFull"": null,
+                            ""RepetitionsFull"": null,
+                            ""WeightReduced"": null,
+                            ""RepetitionsReduced"": null,
+                            ""WeightBurn"": null,
                             ""ExerciseHistoryId"": 1,
                             ""links"": [
                               {
@@ -765,8 +778,11 @@ namespace Fittify.Api.Test.Controllers.Sport
                           },
                           {
                             ""Id"": 2,
-                            ""DateTimeStart"": null,
-                            ""DateTimeEnd"": null,
+                            ""WeightFull"": null,
+                            ""RepetitionsFull"": null,
+                            ""WeightReduced"": null,
+                            ""RepetitionsReduced"": null,
+                            ""WeightBurn"": null,
                             ""ExerciseHistoryId"": 1,
                             ""links"": [
                               {
@@ -793,8 +809,11 @@ namespace Fittify.Api.Test.Controllers.Sport
                           },
                           {
                             ""Id"": 3,
-                            ""DateTimeStart"": null,
-                            ""DateTimeEnd"": null,
+                            ""WeightFull"": null,
+                            ""RepetitionsFull"": null,
+                            ""WeightReduced"": null,
+                            ""RepetitionsReduced"": null,
+                            ""WeightBurn"": null,
                             ""ExerciseHistoryId"": 1,
                             ""links"": [
                               {
@@ -926,11 +945,12 @@ namespace Fittify.Api.Test.Controllers.Sport
             var expectedJsonResult =
                 @"
                     {
-                       ""Value"": {
+                      ""Value"": {
                         ""value"": [
                           {
                             ""Id"": 1,
-                            ""ExerciseHistoryId"": 1,
+                            ""WeightFull"": null,
+                            ""RepetitionsFull"": null,
                             ""links"": [
                               {
                                 ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
@@ -956,7 +976,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                           },
                           {
                             ""Id"": 2,
-                            ""ExerciseHistoryId"": 1,
+                            ""WeightFull"": null,
+                            ""RepetitionsFull"": null,
                             ""links"": [
                               {
                                 ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
@@ -982,7 +1003,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                           },
                           {
                             ""Id"": 3,
-                            ""ExerciseHistoryId"": 1,
+                            ""WeightFull"": null,
+                            ""RepetitionsFull"": null,
                             ""links"": [
                               {
                                 ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
@@ -1191,13 +1213,13 @@ namespace Fittify.Api.Test.Controllers.Sport
                     .PrettifyJson();
                 var expectedHeaderResult =
                     @"
-                    {
-                       ""totalCount"": 30,
-                       ""pageSize"": 1,
-                       ""currentPage"": 2,
-                       ""totalPages"": 30
-                    }
-                ".MinifyJson().PrettifyJson();
+                        {
+                           ""totalCount"": 30,
+                           ""pageSize"": 1,
+                           ""currentPage"": 2,
+                           ""totalPages"": 30
+                        }
+                    ".MinifyJson().PrettifyJson();
 
                 Assert.AreEqual(actualHeaderResult, expectedHeaderResult);
 
@@ -1892,8 +1914,11 @@ namespace Fittify.Api.Test.Controllers.Sport
                     {
                       ""Value"": {
                         ""Id"": 1,
-                        ""DateTimeStart"": ""2018-01-01T00:00:00"",
-                        ""DateTimeEnd"": null,
+                        ""WeightFull"": null,
+                        ""RepetitionsFull"": null,
+                        ""WeightReduced"": null,
+                        ""RepetitionsReduced"": null,
+                        ""WeightBurn"": null,
                         ""ExerciseHistoryId"": 5
                       },
                       ""Formatters"": [],
