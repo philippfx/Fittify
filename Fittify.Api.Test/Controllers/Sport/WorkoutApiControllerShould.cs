@@ -8,6 +8,7 @@ using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
+using Fittify.Api.OfmRepository.OfmRepository.GenericGppd.Sport;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels;
@@ -29,7 +30,7 @@ using NUnit.Framework;
 namespace Fittify.Api.Test.Controllers.Sport
 {
     [TestFixture]
-    class ExerciseHistoryApiControllerShould
+    class WorkoutApiControllerShould
     {
         [SetUp]
         public void Init()
@@ -42,14 +43,15 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
-            asyncGppdMock.Setup(s => s.GetById(1, null)).Returns(Task.FromResult(
-                    new OfmForGetQueryResult<ExerciseHistoryOfmForGet>()
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
+            var workoutOfmResourceParameters = new WorkoutOfmResourceParameters();
+            asyncGppdMock.Setup(s => s.GetById(1, workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000"))).Returns(Task.FromResult(
+                    new OfmForGetQueryResult<WorkoutOfmForGet>()
                     {
-                        ReturnedTOfmForGet = new ExerciseHistoryOfmForGet()
+                        ReturnedTOfmForGet = new WorkoutOfmForGet()
                         {
                             Id = 1,
-                            WorkoutHistoryId = 1
+                            Name = "Mock Workout"
                         }
                     }));
 
@@ -67,13 +69,23 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
 
+            // Mock User
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("sub", "00000000-0000-0000-0000-000000000000")
+            }));
+            workoutController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
             // Act
-            var objectResult = await exerciseHistoryController.GetById(1, new ExerciseHistoryOfmResourceParameters());
+            var objectResult = await workoutController.GetById(1, workoutOfmResourceParameters);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -82,15 +94,10 @@ namespace Fittify.Api.Test.Controllers.Sport
                     {
                       ""Value"": {
                         ""Id"": 1,
-                        ""PreviousExerciseHistory"": null,
-                        ""Exercise"": null,
-                        ""RangeOfWeightLiftingSetIds"": null,
-                        ""WeightLiftingSets"": null,
-                        ""RangeOfCardioSetIds"": null,
-                        ""CardioSets"": null,
-                        ""WorkoutHistoryId"": 1,
-                        ""ExecutedOnDateTime"": ""0001-01-01T00:00:00"",
-                        ""PreviousExerciseHistoryId"": null,
+                        ""RangeOfExerciseIds"": null,
+                        ""Exercises"": null,
+                        ""RangeOfWorkoutHistoryIds"": null,
+                        ""Name"": ""Mock Workout"",
                       },
                       ""Formatters"": [],
                       ""ContentTypes"": [],
@@ -100,7 +107,108 @@ namespace Fittify.Api.Test.Controllers.Sport
                 ".MinifyJson().PrettifyJson();
 
 
-            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+        }
+
+        [Test]
+        public async Task ReturnOkObjectResult_IncludingRelatedExercises_WhenUsingGetById()
+        {
+            // Arrange
+            // Mock GppdRepo
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
+            var workoutOfmResourceParameters = new WorkoutOfmResourceParameters() { IncludeExercises = "1" };
+            asyncGppdMock.Setup(s => s.GetById(1, workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000"))).Returns(Task.FromResult(
+                    new OfmForGetQueryResult<WorkoutOfmForGet>()
+                    {
+                        ReturnedTOfmForGet = new WorkoutOfmForGet()
+                        {
+                            Id = 1,
+                            Name = "Mock Workout",
+                            RangeOfExerciseIds = "1-3",
+                            Exercises = new List<ExerciseOfmForGet>()
+                            {
+                                new ExerciseOfmForGet(){ Id = 1, Name = "Exercise1"},
+                                new ExerciseOfmForGet(){ Id = 2, Name = "Exercise2"},
+                                new ExerciseOfmForGet(){ Id = 3, Name = "Exercise3"}
+                            }
+                        }
+                    }));
+
+            // Mock IUrlHelper
+            var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
+
+            // Mock IHttpContextAccessor
+            var httpContextAccessorMock = new Mock<IHttpContextAccessor>(); // Is mocked to avoid exception. All resulting values will be overidden by mock.
+            httpContextAccessorMock.Setup(s => s.HttpContext.Items).Returns(new Dictionary<object, object>()
+            {
+                {
+                    nameof(IncomingRawHeaders),
+                    IncomingRawHeadersMock.GetDefaultIncomingRawHeaders()
+                }
+            });
+
+            // Initialize controller
+            var workoutController = new WorkoutApiController(
+                asyncGppdMock.Object,
+                mockUrlHelper.Object,
+                httpContextAccessorMock.Object);
+
+            // Mock User
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("sub", "00000000-0000-0000-0000-000000000000")
+            }));
+            workoutController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
+            // Act
+            var objectResult = await workoutController.GetById(1, workoutOfmResourceParameters);
+
+            // Assert
+            var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
+            var expectedJsonResult =
+                @"
+                    {
+                      ""Value"": {
+                        ""Id"": 1,
+                        ""RangeOfExerciseIds"": ""1-3"",
+                        ""Exercises"": [
+                          {
+                            ""Id"": 1,
+                            ""RangeOfWorkoutIds"": null,
+                            ""RangeOfExerciseHistoryIds"": null,
+                            ""Name"": ""Exercise1"",
+                            ""ExerciseType"": ""WeightLifting""
+                          },
+                          {
+                            ""Id"": 2,
+                            ""RangeOfWorkoutIds"": null,
+                            ""RangeOfExerciseHistoryIds"": null,
+                            ""Name"": ""Exercise2"",
+                            ""ExerciseType"": ""WeightLifting""
+                          },
+                          {
+                            ""Id"": 3,
+                            ""RangeOfWorkoutIds"": null,
+                            ""RangeOfExerciseHistoryIds"": null,
+                            ""Name"": ""Exercise3"",
+                            ""ExerciseType"": ""WeightLifting""
+                          }
+                        ],
+                        ""RangeOfWorkoutHistoryIds"": null,
+                        ""Name"": ""Mock Workout""
+                      },
+                      ""Formatters"": [],
+                      ""ContentTypes"": [],
+                      ""DeclaredType"": null,
+                      ""StatusCode"": 200
+                    }
+                ".MinifyJson().PrettifyJson();
+
+
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
         }
 
         [Test]
@@ -108,14 +216,15 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
-            asyncGppdMock.Setup(s => s.GetById(1, "Id, WorkoutHistoryId")).Returns(Task.FromResult(
-                    new OfmForGetQueryResult<ExerciseHistoryOfmForGet>()
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
+            var workoutOfmResourceParameters = new WorkoutOfmResourceParameters() {Fields = "Name"};
+            asyncGppdMock.Setup(s => s.GetById(1, workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000"))).Returns(Task.FromResult(
+                    new OfmForGetQueryResult<WorkoutOfmForGet>()
                     {
-                        ReturnedTOfmForGet = new ExerciseHistoryOfmForGet()
+                        ReturnedTOfmForGet = new WorkoutOfmForGet()
                         {
                             Id = 1,
-                            WorkoutHistoryId = 1
+                            Name = "Mock Workout"
                         }
                     }));
 
@@ -133,13 +242,24 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
 
+            // Mock User
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("sub", "00000000-0000-0000-0000-000000000000")
+            }));
+            workoutController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
+
             // Act
-            var objectResult = await exerciseHistoryController.GetById(1, new ExerciseHistoryOfmResourceParameters() { Fields = "Id, WorkoutHistoryId" });
+            var objectResult = await workoutController.GetById(1, workoutOfmResourceParameters);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -147,8 +267,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""Id"": 1,
-                        ""WorkoutHistoryId"": 1
+                        ""Name"": ""Mock Workout""
                       },
                       ""Formatters"": [],
                       ""ContentTypes"": [],
@@ -157,7 +276,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
         }
 
         [Test]
@@ -165,14 +284,15 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
-            asyncGppdMock.Setup(s => s.GetById(1, null)).Returns(Task.FromResult(
-                    new OfmForGetQueryResult<ExerciseHistoryOfmForGet>()
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
+            var workoutOfmResourceParameters = new WorkoutOfmResourceParameters();
+            asyncGppdMock.Setup(s => s.GetById(1, workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000"))).Returns(Task.FromResult(
+                    new OfmForGetQueryResult<WorkoutOfmForGet>()
                     {
-                        ReturnedTOfmForGet = new ExerciseHistoryOfmForGet()
+                        ReturnedTOfmForGet = new WorkoutOfmForGet()
                         {
                             Id = 1,
-                            WorkoutHistoryId = 1
+                            Name = "Mock Workout"
                         }
                     }));
 
@@ -197,30 +317,35 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
 
+            // Mock User
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("sub", "00000000-0000-0000-0000-000000000000")
+            }));
+            workoutController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
             // Act
-            var objectResult = await exerciseHistoryController.GetById(1, new ExerciseHistoryOfmResourceParameters());
+            var objectResult = await workoutController.GetById(1, workoutOfmResourceParameters);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
             var expectedJsonResult =
                 @"
-                   {
+                    {
                       ""Value"": {
                         ""Id"": 1,
-                        ""PreviousExerciseHistory"": null,
-                        ""Exercise"": null,
-                        ""RangeOfWeightLiftingSetIds"": null,
-                        ""WeightLiftingSets"": null,
-                        ""RangeOfCardioSetIds"": null,
-                        ""CardioSets"": null,
-                        ""WorkoutHistoryId"": 1,
-                        ""ExecutedOnDateTime"": ""0001-01-01T00:00:00"",
-                        ""PreviousExerciseHistoryId"": null,
+                        ""RangeOfExerciseIds"": null,
+                        ""Exercises"": null,
+                        ""RangeOfWorkoutHistoryIds"": null,
+                        ""Name"": ""Mock Workout"",
                         ""links"": [
                           {
                             ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
@@ -229,17 +354,17 @@ namespace Fittify.Api.Test.Controllers.Sport
                           },
                           {
                             ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                            ""Rel"": ""create_exerciseHistory"",
+                            ""Rel"": ""create_workout"",
                             ""Method"": ""POST""
                           },
                           {
                             ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                            ""Rel"": ""partially_update_exerciseHistory"",
+                            ""Rel"": ""partially_update_workout"",
                             ""Method"": ""PATCH""
                           },
                           {
                             ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                            ""Rel"": ""delete_exerciseHistory"",
+                            ""Rel"": ""delete_workout"",
                             ""Method"": ""DELETE""
                           }
                         ]
@@ -251,7 +376,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
         }
 
         [Test]
@@ -259,14 +384,15 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
-            asyncGppdMock.Setup(s => s.GetById(1, "Id, WorkoutHistoryId")).Returns(Task.FromResult(
-                    new OfmForGetQueryResult<ExerciseHistoryOfmForGet>()
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
+            var workoutOfmResourceParameters = new WorkoutOfmResourceParameters() {Fields = "Name"};
+            asyncGppdMock.Setup(s => s.GetById(1, workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000"))).Returns(Task.FromResult(
+                    new OfmForGetQueryResult<WorkoutOfmForGet>()
                     {
-                        ReturnedTOfmForGet = new ExerciseHistoryOfmForGet()
+                        ReturnedTOfmForGet = new WorkoutOfmForGet()
                         {
                             Id = 1,
-                            WorkoutHistoryId = 1
+                            Name = "Mock Workout"
                         }
                     }));
 
@@ -291,13 +417,24 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
 
+            // Mock User
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("sub", "00000000-0000-0000-0000-000000000000")
+            }));
+            workoutController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
+
             // Act
-            var objectResult = await exerciseHistoryController.GetById(1, new ExerciseHistoryOfmResourceParameters() { Fields = "Id, WorkoutHistoryId" });
+            var objectResult = await workoutController.GetById(1, workoutOfmResourceParameters);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -305,8 +442,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""Id"": 1,
-                        ""WorkoutHistoryId"": 1,
+                        ""Name"": ""Mock Workout"",
                         ""links"": [
                           {
                             ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
@@ -315,17 +451,17 @@ namespace Fittify.Api.Test.Controllers.Sport
                           },
                           {
                             ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                            ""Rel"": ""create_exerciseHistory"",
+                            ""Rel"": ""create_workout"",
                             ""Method"": ""POST""
                           },
                           {
                             ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                            ""Rel"": ""partially_update_exerciseHistory"",
+                            ""Rel"": ""partially_update_workout"",
                             ""Method"": ""PATCH""
                           },
                           {
                             ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                            ""Rel"": ""delete_exerciseHistory"",
+                            ""Rel"": ""delete_workout"",
                             ""Method"": ""DELETE""
                           }
                         ]
@@ -337,7 +473,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
         }
 
         [Test]
@@ -345,9 +481,10 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
-            asyncGppdMock.Setup(s => s.GetById(1, null)).Returns(Task.FromResult(
-                    new OfmForGetQueryResult<ExerciseHistoryOfmForGet>()
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
+            var workoutOfmResourceParameters = new WorkoutOfmResourceParameters();
+            asyncGppdMock.Setup(s => s.GetById(1, workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000"))).Returns(Task.FromResult(
+                    new OfmForGetQueryResult<WorkoutOfmForGet>()
                     {
                         ReturnedTOfmForGet = null,
                         ErrorMessages = new List<string>()
@@ -370,13 +507,23 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
 
+            // Mock User
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("sub", "00000000-0000-0000-0000-000000000000")
+            }));
+            workoutController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
             // Act
-            var objectResult = await exerciseHistoryController.GetById(1, new ExerciseHistoryOfmResourceParameters());
+            var objectResult = await workoutController.GetById(1, workoutOfmResourceParameters);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -384,7 +531,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""exerciseHistory"": [
+                        ""workout"": [
                           ""Some ErrorMessage returned from Ofm Repository, for example queried field not found entity.""
                         ]
                       },
@@ -395,7 +542,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
         }
 
         [Test]
@@ -403,9 +550,10 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
-            asyncGppdMock.Setup(s => s.GetById(1, null)).Returns(Task.FromResult(
-                    new OfmForGetQueryResult<ExerciseHistoryOfmForGet>()
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
+            var workoutOfmResourceParameters = new WorkoutOfmResourceParameters();
+            asyncGppdMock.Setup(s => s.GetById(1, workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000"))).Returns(Task.FromResult(
+                    new OfmForGetQueryResult<WorkoutOfmForGet>()
                     {
                         ReturnedTOfmForGet = null,
                         ErrorMessages = new List<string>() // Simply no entity found, so there is no error message
@@ -425,13 +573,24 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
 
+            // Mock User
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("sub", "00000000-0000-0000-0000-000000000000")
+            }));
+            workoutController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
+
             // Act
-            var objectResult = await exerciseHistoryController.GetById(1, new ExerciseHistoryOfmResourceParameters());
+            var objectResult = await workoutController.GetById(1, workoutOfmResourceParameters);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -439,8 +598,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""exerciseHistory"": [
-                          ""No exerciseHistory found for id=1""
+                        ""workout"": [
+                          ""No workout found for id=1""
                         ]
                       },
                       ""Formatters"": [],
@@ -449,39 +608,39 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""StatusCode"": 404
                     }
                 ".MinifyJson().PrettifyJson();
-            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
         }
 
         [Test]
         public async Task ReturnOkObjectResult_ForMinimumQuery_WhenUsingGetGollection()
         {
             // Arrange
-            var exerciseHistoryOfmResourceParameters = new ExerciseHistoryOfmCollectionResourceParameters();
+            var workoutOfmResourceParameters = new WorkoutOfmCollectionResourceParameters();
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
-                .Setup(s => s.GetCollection(exerciseHistoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
+                .Setup(s => s.GetCollection(workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
-                    new OfmForGetCollectionQueryResult<ExerciseHistoryOfmForGet>()
+                    new OfmForGetCollectionQueryResult<WorkoutOfmForGet>()
                     {
-                        ReturnedTOfmForGetCollection = new OfmForGetCollection<ExerciseHistoryOfmForGet>()
+                        ReturnedTOfmForGetCollection = new OfmForGetCollection<WorkoutOfmForGet>()
                         {
-                            OfmForGets = new List<ExerciseHistoryOfmForGet>()
+                            OfmForGets = new List<WorkoutOfmForGet>()
                             {
-                                new ExerciseHistoryOfmForGet()
+                                new WorkoutOfmForGet()
                                 {
                                     Id = 1,
-                                    WorkoutHistoryId = 1
+                                    Name = "MockWorkout1"
                                 },
-                                new ExerciseHistoryOfmForGet()
+                                new WorkoutOfmForGet()
                                 {
                                     Id = 2,
-                                    WorkoutHistoryId = 1
+                                    Name = "MockWorkout2"
                                 },
-                                new ExerciseHistoryOfmForGet()
+                                new WorkoutOfmForGet()
                                 {
                                     Id = 3,
-                                    WorkoutHistoryId = 1
+                                    Name = "MockWorkout3"
                                 }
                             }
                         },
@@ -506,7 +665,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -516,55 +675,40 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 new Claim("sub", "00000000-0000-0000-0000-000000000000")
             }));
-            exerciseHistoryController.ControllerContext = new ControllerContext()
+            workoutController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
             // Act
-            var objectResult = await exerciseHistoryController.GetCollection(exerciseHistoryOfmResourceParameters);
+            var objectResult = await workoutController.GetCollection(workoutOfmResourceParameters);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
             var expectedJsonResult =
                 @"
-                   {
+                    {
                       ""Value"": [
                         {
-                          ""Id"": 1,
-                          ""PreviousExerciseHistory"": null,
-                          ""Exercise"": null,
-                          ""RangeOfWeightLiftingSetIds"": null,
-                          ""WeightLiftingSets"": null,
-                          ""RangeOfCardioSetIds"": null,
-                          ""CardioSets"": null,
-                          ""WorkoutHistoryId"": 1,
-                          ""ExecutedOnDateTime"": ""0001-01-01T00:00:00"",
-                          ""PreviousExerciseHistoryId"": null
+                            ""Id"": 1,
+                            ""RangeOfExerciseIds"": null,
+                            ""Exercises"": null,
+                            ""RangeOfWorkoutHistoryIds"": null,
+                            ""Name"": ""MockWorkout1"",
                         },
                         {
-                          ""Id"": 2,
-                          ""PreviousExerciseHistory"": null,
-                          ""Exercise"": null,
-                          ""RangeOfWeightLiftingSetIds"": null,
-                          ""WeightLiftingSets"": null,
-                          ""RangeOfCardioSetIds"": null,
-                          ""CardioSets"": null,
-                          ""WorkoutHistoryId"": 1,
-                          ""ExecutedOnDateTime"": ""0001-01-01T00:00:00"",
-                          ""PreviousExerciseHistoryId"": null
+                            ""Id"": 2,
+                            ""RangeOfExerciseIds"": null,
+                            ""Exercises"": null,
+                            ""RangeOfWorkoutHistoryIds"": null,
+                            ""Name"": ""MockWorkout2"",
                         },
                         {
-                          ""Id"": 3,
-                          ""PreviousExerciseHistory"": null,
-                          ""Exercise"": null,
-                          ""RangeOfWeightLiftingSetIds"": null,
-                          ""WeightLiftingSets"": null,
-                          ""RangeOfCardioSetIds"": null,
-                          ""CardioSets"": null,
-                          ""WorkoutHistoryId"": 1,
-                          ""ExecutedOnDateTime"": ""0001-01-01T00:00:00"",
-                          ""PreviousExerciseHistoryId"": null
+                            ""Id"": 3,
+                            ""RangeOfExerciseIds"": null,
+                            ""Exercises"": null,
+                            ""RangeOfWorkoutHistoryIds"": null,
+                            ""Name"": ""MockWorkout3"",
                         }
                       ],
                       ""Formatters"": [],
@@ -574,42 +718,42 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
         }
 
         [Test]
         public async Task ReturnOkObjectResult_ForQueryFieldName_WhenUsingGetGollection()
         {
             // Arrange
-            var exerciseHistoryOfmResourceParameters = new ExerciseHistoryOfmCollectionResourceParameters()
+            var workoutOfmResourceParameters = new WorkoutOfmCollectionResourceParameters()
             {
-                Fields = "Id, WorkoutHistoryId"
+                Fields = "Name"
             };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
-                .Setup(s => s.GetCollection(exerciseHistoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
+                .Setup(s => s.GetCollection(workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
-                    new OfmForGetCollectionQueryResult<ExerciseHistoryOfmForGet>()
+                    new OfmForGetCollectionQueryResult<WorkoutOfmForGet>()
                     {
-                        ReturnedTOfmForGetCollection = new OfmForGetCollection<ExerciseHistoryOfmForGet>()
+                        ReturnedTOfmForGetCollection = new OfmForGetCollection<WorkoutOfmForGet>()
                         {
-                            OfmForGets = new List<ExerciseHistoryOfmForGet>()
+                            OfmForGets = new List<WorkoutOfmForGet>()
                             {
-                                new ExerciseHistoryOfmForGet()
+                                new WorkoutOfmForGet()
                                 {
                                     Id = 1,
-                                    WorkoutHistoryId = 1
+                                    Name = "MockWorkout1"
                                 },
-                                new ExerciseHistoryOfmForGet()
+                                new WorkoutOfmForGet()
                                 {
                                     Id = 2,
-                                    WorkoutHistoryId = 1
+                                    Name = "MockWorkout2"
                                 },
-                                new ExerciseHistoryOfmForGet()
+                                new WorkoutOfmForGet()
                                 {
                                     Id = 3,
-                                    WorkoutHistoryId = 1
+                                    Name = "MockWorkout3"
                                 }
                             }
                         },
@@ -633,7 +777,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -643,13 +787,13 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 new Claim("sub", "00000000-0000-0000-0000-000000000000")
             }));
-            exerciseHistoryController.ControllerContext = new ControllerContext()
+            workoutController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
             // Act
-            var objectResult = await exerciseHistoryController.GetCollection(exerciseHistoryOfmResourceParameters);
+            var objectResult = await workoutController.GetCollection(workoutOfmResourceParameters);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -658,16 +802,13 @@ namespace Fittify.Api.Test.Controllers.Sport
                     {
                       ""Value"": [
                         {
-                          ""Id"": 1,
-                          ""WorkoutHistoryId"": 1
+                          ""Name"": ""MockWorkout1""
                         },
                         {
-                          ""Id"": 2,
-                          ""WorkoutHistoryId"": 1
+                          ""Name"": ""MockWorkout2""
                         },
                         {
-                          ""Id"": 3,
-                          ""WorkoutHistoryId"": 1
+                          ""Name"": ""MockWorkout3""
                         }
                       ],
                       ""Formatters"": [],
@@ -677,39 +818,39 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
         }
 
         [Test]
         public async Task ReturnOkObjectResult_ForMinimumQueryIncludingHateoas_WhenUsingGetGollection()
         {
             // Arrange
-            var exerciseHistoryOfmResourceParameters = new ExerciseHistoryOfmCollectionResourceParameters();
+            var workoutOfmResourceParameters = new WorkoutOfmCollectionResourceParameters();
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
-                .Setup(s => s.GetCollection(exerciseHistoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
+                .Setup(s => s.GetCollection(workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
-                    new OfmForGetCollectionQueryResult<ExerciseHistoryOfmForGet>()
+                    new OfmForGetCollectionQueryResult<WorkoutOfmForGet>()
                     {
-                        ReturnedTOfmForGetCollection = new OfmForGetCollection<ExerciseHistoryOfmForGet>()
+                        ReturnedTOfmForGetCollection = new OfmForGetCollection<WorkoutOfmForGet>()
                         {
-                            OfmForGets = new List<ExerciseHistoryOfmForGet>()
+                            OfmForGets = new List<WorkoutOfmForGet>()
                             {
-                                new ExerciseHistoryOfmForGet()
+                                new WorkoutOfmForGet()
                                 {
                                     Id = 1,
-                                    WorkoutHistoryId = 1
+                                    Name = "MockWorkout1"
                                 },
-                                new ExerciseHistoryOfmForGet()
+                                new WorkoutOfmForGet()
                                 {
                                     Id = 2,
-                                    WorkoutHistoryId = 1
+                                    Name = "MockWorkout2"
                                 },
-                                new ExerciseHistoryOfmForGet()
+                                new WorkoutOfmForGet()
                                 {
                                     Id = 3,
-                                    WorkoutHistoryId = 1
+                                    Name = "MockWorkout3"
                                 }
                             }
                         },
@@ -740,7 +881,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -750,177 +891,162 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 new Claim("sub", "00000000-0000-0000-0000-000000000000")
             }));
-            exerciseHistoryController.ControllerContext = new ControllerContext()
+            workoutController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
             // Act
-            var objectResult = await exerciseHistoryController.GetCollection(exerciseHistoryOfmResourceParameters);
+            var objectResult = await workoutController.GetCollection(workoutOfmResourceParameters);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
             var expectedJsonResult =
                 @"
-                    {
-                      ""Value"": {
-                        ""value"": [
-                          {
-                            ""Id"": 1,
-                            ""PreviousExerciseHistory"": null,
-                            ""Exercise"": null,
-                            ""RangeOfWeightLiftingSetIds"": null,
-                            ""WeightLiftingSets"": null,
-                            ""RangeOfCardioSetIds"": null,
-                            ""CardioSets"": null,
-                            ""WorkoutHistoryId"": 1,
-                            ""ExecutedOnDateTime"": ""0001-01-01T00:00:00"",
-                            ""PreviousExerciseHistoryId"": null,
-                            ""links"": [
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""self"",
-                                ""Method"": ""GET""
+                            {
+                              ""Value"": {
+                                ""value"": [
+                                  {
+                                    ""Id"": 1,
+                                    ""RangeOfExerciseIds"": null,
+                                    ""Exercises"": null,
+                                    ""RangeOfWorkoutHistoryIds"": null,
+                                    ""Name"": ""MockWorkout1"",
+                                    ""links"": [
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""self"",
+                                        ""Method"": ""GET""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""create_workout"",
+                                        ""Method"": ""POST""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""partially_update_workout"",
+                                        ""Method"": ""PATCH""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""delete_workout"",
+                                        ""Method"": ""DELETE""
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    ""Id"": 2,
+                                    ""RangeOfExerciseIds"": null,
+                                    ""Exercises"": null,
+                                    ""RangeOfWorkoutHistoryIds"": null,
+                                    ""Name"": ""MockWorkout2"",
+                                    ""links"": [
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""self"",
+                                        ""Method"": ""GET""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""create_workout"",
+                                        ""Method"": ""POST""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""partially_update_workout"",
+                                        ""Method"": ""PATCH""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""delete_workout"",
+                                        ""Method"": ""DELETE""
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    ""Id"": 3,
+                                    ""RangeOfExerciseIds"": null,
+                                    ""Exercises"": null,
+                                    ""RangeOfWorkoutHistoryIds"": null,
+                                    ""Name"": ""MockWorkout3"",
+                                    ""links"": [
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""self"",
+                                        ""Method"": ""GET""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""create_workout"",
+                                        ""Method"": ""POST""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""partially_update_workout"",
+                                        ""Method"": ""PATCH""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""delete_workout"",
+                                        ""Method"": ""DELETE""
+                                      }
+                                    ]
+                                  }
+                                ],
+                                ""links"": [
+                                  {
+                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                    ""Rel"": ""self"",
+                                    ""Method"": ""GET""
+                                  },
+                                  {
+                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                    ""Rel"": ""nextPage"",
+                                    ""Method"": ""GET""
+                                  }
+                                ]
                               },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""create_exerciseHistory"",
-                                ""Method"": ""POST""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""partially_update_exerciseHistory"",
-                                ""Method"": ""PATCH""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""delete_exerciseHistory"",
-                                ""Method"": ""DELETE""
-                              }
-                            ]
-                          },
-                          {
-                            ""Id"": 2,
-                            ""PreviousExerciseHistory"": null,
-                            ""Exercise"": null,
-                            ""RangeOfWeightLiftingSetIds"": null,
-                            ""WeightLiftingSets"": null,
-                            ""RangeOfCardioSetIds"": null,
-                            ""CardioSets"": null,
-                            ""WorkoutHistoryId"": 1,
-                            ""ExecutedOnDateTime"": ""0001-01-01T00:00:00"",
-                            ""PreviousExerciseHistoryId"": null,
-                            ""links"": [
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""self"",
-                                ""Method"": ""GET""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""create_exerciseHistory"",
-                                ""Method"": ""POST""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""partially_update_exerciseHistory"",
-                                ""Method"": ""PATCH""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""delete_exerciseHistory"",
-                                ""Method"": ""DELETE""
-                              }
-                            ]
-                          },
-                          {
-                            ""Id"": 3,
-                            ""PreviousExerciseHistory"": null,
-                            ""Exercise"": null,
-                            ""RangeOfWeightLiftingSetIds"": null,
-                            ""WeightLiftingSets"": null,
-                            ""RangeOfCardioSetIds"": null,
-                            ""CardioSets"": null,
-                            ""WorkoutHistoryId"": 1,
-                            ""ExecutedOnDateTime"": ""0001-01-01T00:00:00"",
-                            ""PreviousExerciseHistoryId"": null,
-                            ""links"": [
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""self"",
-                                ""Method"": ""GET""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""create_exerciseHistory"",
-                                ""Method"": ""POST""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""partially_update_exerciseHistory"",
-                                ""Method"": ""PATCH""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""delete_exerciseHistory"",
-                                ""Method"": ""DELETE""
-                              }
-                            ]
-                          }
-                        ],
-                        ""links"": [
-                          {
-                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                            ""Rel"": ""self"",
-                            ""Method"": ""GET""
-                          },
-                          {
-                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                            ""Rel"": ""nextPage"",
-                            ""Method"": ""GET""
-                          }
-                        ]
-                      },
-                      ""Formatters"": [],
-                      ""ContentTypes"": [],
-                      ""DeclaredType"": null,
-                      ""StatusCode"": 200
-                    }
+                              ""Formatters"": [],
+                              ""ContentTypes"": [],
+                              ""DeclaredType"": null,
+                              ""StatusCode"": 200
+                            }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
         }
 
         [Test]
         public async Task ReturnOkObjectResult_ForQueriedNameFieldIncludingHateoas_WhenUsingGetGollection()
         {
             // Arrange
-            var exerciseHistoryOfmResourceParameters = new ExerciseHistoryOfmCollectionResourceParameters() { Fields = "Id, WorkoutHistoryId" };
+            var workoutOfmResourceParameters = new WorkoutOfmCollectionResourceParameters() { Fields = "Name" };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
-                .Setup(s => s.GetCollection(exerciseHistoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
+                .Setup(s => s.GetCollection(workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
-                    new OfmForGetCollectionQueryResult<ExerciseHistoryOfmForGet>()
+                    new OfmForGetCollectionQueryResult<WorkoutOfmForGet>()
                     {
-                        ReturnedTOfmForGetCollection = new OfmForGetCollection<ExerciseHistoryOfmForGet>()
+                        ReturnedTOfmForGetCollection = new OfmForGetCollection<WorkoutOfmForGet>()
                         {
-                            OfmForGets = new List<ExerciseHistoryOfmForGet>()
+                            OfmForGets = new List<WorkoutOfmForGet>()
                             {
-                                new ExerciseHistoryOfmForGet()
+                                new WorkoutOfmForGet()
                                 {
                                     Id = 1,
-                                    WorkoutHistoryId = 1
+                                    Name = "MockWorkout1"
                                 },
-                                new ExerciseHistoryOfmForGet()
+                                new WorkoutOfmForGet()
                                 {
                                     Id = 2,
-                                    WorkoutHistoryId = 1
+                                    Name = "MockWorkout2"
                                 },
-                                new ExerciseHistoryOfmForGet()
+                                new WorkoutOfmForGet()
                                 {
                                     Id = 3,
-                                    WorkoutHistoryId = 1
+                                    Name = "MockWorkout3"
                                 }
                             }
                         },
@@ -951,7 +1077,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -961,143 +1087,140 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 new Claim("sub", "00000000-0000-0000-0000-000000000000")
             }));
-            exerciseHistoryController.ControllerContext = new ControllerContext()
+            workoutController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
             // Act
-            var objectResult = await exerciseHistoryController.GetCollection(exerciseHistoryOfmResourceParameters);
+            var objectResult = await workoutController.GetCollection(workoutOfmResourceParameters);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
             var expectedJsonResult =
                 @"
-                    {
-                      ""Value"": {
-                        ""value"": [
-                          {
-                            ""Id"": 1,
-                            ""WorkoutHistoryId"": 1,
-                            ""links"": [
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""self"",
-                                ""Method"": ""GET""
+                            {
+                              ""Value"": {
+                                ""value"": [
+                                  {
+                                    ""Name"": ""MockWorkout1"",
+                                    ""links"": [
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""self"",
+                                        ""Method"": ""GET""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""create_workout"",
+                                        ""Method"": ""POST""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""partially_update_workout"",
+                                        ""Method"": ""PATCH""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""delete_workout"",
+                                        ""Method"": ""DELETE""
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    ""Name"": ""MockWorkout2"",
+                                    ""links"": [
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""self"",
+                                        ""Method"": ""GET""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""create_workout"",
+                                        ""Method"": ""POST""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""partially_update_workout"",
+                                        ""Method"": ""PATCH""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""delete_workout"",
+                                        ""Method"": ""DELETE""
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    ""Name"": ""MockWorkout3"",
+                                    ""links"": [
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""self"",
+                                        ""Method"": ""GET""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""create_workout"",
+                                        ""Method"": ""POST""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""partially_update_workout"",
+                                        ""Method"": ""PATCH""
+                                      },
+                                      {
+                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                        ""Rel"": ""delete_workout"",
+                                        ""Method"": ""DELETE""
+                                      }
+                                    ]
+                                  }
+                                ],
+                                ""links"": [
+                                  {
+                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                    ""Rel"": ""self"",
+                                    ""Method"": ""GET""
+                                  },
+                                  {
+                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                    ""Rel"": ""nextPage"",
+                                    ""Method"": ""GET""
+                                  }
+                                ]
                               },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""create_exerciseHistory"",
-                                ""Method"": ""POST""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""partially_update_exerciseHistory"",
-                                ""Method"": ""PATCH""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""delete_exerciseHistory"",
-                                ""Method"": ""DELETE""
-                              }
-                            ]
-                          },
-                          {
-                            ""Id"": 2,
-                            ""WorkoutHistoryId"": 1,
-                            ""links"": [
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""self"",
-                                ""Method"": ""GET""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""create_exerciseHistory"",
-                                ""Method"": ""POST""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""partially_update_exerciseHistory"",
-                                ""Method"": ""PATCH""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""delete_exerciseHistory"",
-                                ""Method"": ""DELETE""
-                              }
-                            ]
-                          },
-                          {
-                            ""Id"": 3,
-                            ""WorkoutHistoryId"": 1,
-                            ""links"": [
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""self"",
-                                ""Method"": ""GET""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""create_exerciseHistory"",
-                                ""Method"": ""POST""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""partially_update_exerciseHistory"",
-                                ""Method"": ""PATCH""
-                              },
-                              {
-                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                ""Rel"": ""delete_exerciseHistory"",
-                                ""Method"": ""DELETE""
-                              }
-                            ]
-                          }
-                        ],
-                        ""links"": [
-                          {
-                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                            ""Rel"": ""self"",
-                            ""Method"": ""GET""
-                          },
-                          {
-                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                            ""Rel"": ""nextPage"",
-                            ""Method"": ""GET""
-                          }
-                        ]
-                      },
-                      ""Formatters"": [],
-                      ""ContentTypes"": [],
-                      ""DeclaredType"": null,
-                      ""StatusCode"": 200
-                    }
+                              ""Formatters"": [],
+                              ""ContentTypes"": [],
+                              ""DeclaredType"": null,
+                              ""StatusCode"": 200
+                            }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
         }
 
         [Test]
         public async Task ReturnXPaginationHeader_NotUsingHateoas_ForMinimumQuery_WhenUsingGetGollection()
         {
             // Arrange
-            var exerciseHistoryOfmResourceParameters = new ExerciseHistoryOfmCollectionResourceParameters();
+            var workoutOfmResourceParameters = new WorkoutOfmCollectionResourceParameters();
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
-                .Setup(s => s.GetCollection(exerciseHistoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
+                .Setup(s => s.GetCollection(workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
-                    new OfmForGetCollectionQueryResult<ExerciseHistoryOfmForGet>()
+                    new OfmForGetCollectionQueryResult<WorkoutOfmForGet>()
                     {
-                        ReturnedTOfmForGetCollection = new OfmForGetCollection<ExerciseHistoryOfmForGet>()
+                        ReturnedTOfmForGetCollection = new OfmForGetCollection<WorkoutOfmForGet>()
                         {
-                            OfmForGets = new List<ExerciseHistoryOfmForGet>()
+                            OfmForGets = new List<WorkoutOfmForGet>()
                             {
-                                new ExerciseHistoryOfmForGet()
+                                new WorkoutOfmForGet()
                                 {
                                     Id = 2,
-                                    WorkoutHistoryId = 1
+                                    Name = "MockWorkout2"
                                 }
                             }
                         },
@@ -1110,8 +1233,8 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Mock IUrlHelper
             var mockUrlHelper = new Mock<IUrlHelper>();
             mockUrlHelper
-                .Setup(s => s.Link("GetExerciseHistoryCollection", It.IsAny<ExpandoObject>()))
-                .Returns("https://mockedHost:0000/exercisehistories?paremeters=Omitted");
+                .Setup(s => s.Link("GetWorkoutCollection", It.IsAny<ExpandoObject>()))
+                .Returns("https://mockedHost:0000/workouts?paremeters=Omitted");
 
             // Mock IHttpContextAccessor
             var httpContextAccessorMock = new Mock<IHttpContextAccessor>(); // Is mocked to avoid exception. All resulting values will be overidden by mock.
@@ -1124,7 +1247,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -1135,16 +1258,16 @@ namespace Fittify.Api.Test.Controllers.Sport
                 new Claim("sub", "00000000-0000-0000-0000-000000000000")
             }));
 
-            exerciseHistoryController.ControllerContext = new ControllerContext()
+            workoutController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
             // Act
-            var objectResult = await exerciseHistoryController.GetCollection(exerciseHistoryOfmResourceParameters);
+            var objectResult = await workoutController.GetCollection(workoutOfmResourceParameters);
 
             // Assert
-            var actualHeaderResult = exerciseHistoryController.Response.Headers["X-Pagination"].ToString().MinifyJson().PrettifyJson();
+            var actualHeaderResult = workoutController.Response.Headers["X-Pagination"].ToString().MinifyJson().PrettifyJson();
             var expectedHeaderResult =
                 @"
                     {
@@ -1152,8 +1275,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                        ""pageSize"": 1,
                        ""currentPage"": 2,
                        ""totalPages"": 30,
-                       ""previousPage"": ""https://mockedHost:0000/exercisehistories?paremeters=Omitted"",
-                       ""nextPage"": ""https://mockedHost:0000/exercisehistories?paremeters=Omitted""
+                       ""previousPage"": ""https://mockedHost:0000/workouts?paremeters=Omitted"",
+                       ""nextPage"": ""https://mockedHost:0000/workouts?paremeters=Omitted""
                     }
                 ".MinifyJson().PrettifyJson();
 
@@ -1166,24 +1289,24 @@ namespace Fittify.Api.Test.Controllers.Sport
             await Task.Run(() =>
             {
                 // Arrange
-                var exerciseHistoryOfmResourceParameters = new ExerciseHistoryOfmCollectionResourceParameters();
+                var workoutOfmResourceParameters = new WorkoutOfmCollectionResourceParameters();
                 // Mock GppdRepo
                 var asyncGppdMock =
-                    new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+                    new Mock<IAsyncOfmRepositoryForWorkout>();
                 asyncGppdMock
-                    .Setup(s => s.GetCollection(exerciseHistoryOfmResourceParameters,
+                    .Setup(s => s.GetCollection(workoutOfmResourceParameters,
                         new Guid("00000000-0000-0000-0000-000000000000")))
                     .Returns(Task.FromResult(
-                        new OfmForGetCollectionQueryResult<ExerciseHistoryOfmForGet>()
+                        new OfmForGetCollectionQueryResult<WorkoutOfmForGet>()
                         {
-                            ReturnedTOfmForGetCollection = new OfmForGetCollection<ExerciseHistoryOfmForGet>()
+                            ReturnedTOfmForGetCollection = new OfmForGetCollection<WorkoutOfmForGet>()
                             {
-                                OfmForGets = new List<ExerciseHistoryOfmForGet>()
+                                OfmForGets = new List<WorkoutOfmForGet>()
                                 {
-                                    new ExerciseHistoryOfmForGet()
+                                    new WorkoutOfmForGet()
                                     {
                                         Id = 2,
-                                        WorkoutHistoryId = 1
+                                        Name = "MockWorkout2"
                                     }
                                 }
                             },
@@ -1196,8 +1319,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                 // Mock IUrlHelper
                 var mockUrlHelper = new Mock<IUrlHelper>();
                 mockUrlHelper
-                    .Setup(s => s.Link("GetExerciseHistoryCollection", It.IsAny<ExpandoObject>()))
-                    .Returns("https://mockedHost:0000/exercisehistories?paremeters=Omitted");
+                    .Setup(s => s.Link("GetWorkoutCollection", It.IsAny<ExpandoObject>()))
+                    .Returns("https://mockedHost:0000/workouts?paremeters=Omitted");
 
                 // Mock IHttpContextAccessor
                 var incomingheaders = IncomingRawHeadersMock.GetDefaultIncomingRawHeaders();
@@ -1214,7 +1337,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 });
 
                 // Initialize controller
-                var exerciseHistoryController = new ExerciseHistoryApiController(
+                var workoutController = new WorkoutApiController(
                     asyncGppdMock.Object,
                     mockUrlHelper.Object,
                     httpContextAccessorMock.Object);
@@ -1225,17 +1348,17 @@ namespace Fittify.Api.Test.Controllers.Sport
                     new Claim("sub", "00000000-0000-0000-0000-000000000000")
                 }));
 
-                exerciseHistoryController.ControllerContext = new ControllerContext()
+                workoutController.ControllerContext = new ControllerContext()
                 {
                     HttpContext = new DefaultHttpContext() { User = user }
                 };
 
                 // Act
-                var objectResult = exerciseHistoryController.GetCollection(exerciseHistoryOfmResourceParameters).GetAwaiter()
+                var objectResult = workoutController.GetCollection(workoutOfmResourceParameters).GetAwaiter()
                     .GetResult();
 
                 // Assert
-                var actualHeaderResult = exerciseHistoryController.Response.Headers["X-Pagination"].ToString().MinifyJson()
+                var actualHeaderResult = workoutController.Response.Headers["X-Pagination"].ToString().MinifyJson()
                     .PrettifyJson();
                 var expectedHeaderResult =
                     @"
@@ -1256,13 +1379,13 @@ namespace Fittify.Api.Test.Controllers.Sport
         public async Task ReturnUnprocessableEntityObjectResult_ForAnyErrorMessageReturnedFromOfmRepository_WhenUsingGetGollection()
         {
             // Arrange
-            var exerciseHistoryOfmResourceParameters = new ExerciseHistoryOfmCollectionResourceParameters();
+            var workoutOfmResourceParameters = new WorkoutOfmCollectionResourceParameters();
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
-                .Setup(s => s.GetCollection(exerciseHistoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
+                .Setup(s => s.GetCollection(workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
-                    new OfmForGetCollectionQueryResult<ExerciseHistoryOfmForGet>()
+                    new OfmForGetCollectionQueryResult<WorkoutOfmForGet>()
                     {
                         ReturnedTOfmForGetCollection = null,
                         ErrorMessages = new List<string>()
@@ -1285,7 +1408,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -1295,13 +1418,13 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 new Claim("sub", "00000000-0000-0000-0000-000000000000")
             }));
-            exerciseHistoryController.ControllerContext = new ControllerContext()
+            workoutController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
             // Act
-            var objectResult = await exerciseHistoryController.GetCollection(exerciseHistoryOfmResourceParameters);
+            var objectResult = await workoutController.GetCollection(workoutOfmResourceParameters);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -1309,7 +1432,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""exerciseHistory"": [
+                        ""workout"": [
                           ""Some ErrorMessage returned from Ofm Repository, for example queried field not found entity.""
                         ]
                       },
@@ -1320,24 +1443,24 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
         }
 
         [Test]
         public async Task ReturnEntityNotFoundObjectResult_ForUnexistingEntities_WhenUsingGetGollection()
         {
             // Arrange
-            var exerciseHistoryOfmResourceParameters = new ExerciseHistoryOfmCollectionResourceParameters();
+            var workoutOfmResourceParameters = new WorkoutOfmCollectionResourceParameters();
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
-                .Setup(s => s.GetCollection(exerciseHistoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
+                .Setup(s => s.GetCollection(workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
-                    new OfmForGetCollectionQueryResult<ExerciseHistoryOfmForGet>()
+                    new OfmForGetCollectionQueryResult<WorkoutOfmForGet>()
                     {
-                        ReturnedTOfmForGetCollection = new OfmForGetCollection<ExerciseHistoryOfmForGet>()
+                        ReturnedTOfmForGetCollection = new OfmForGetCollection<WorkoutOfmForGet>()
                         {
-                            OfmForGets = new List<ExerciseHistoryOfmForGet>() // Ofm  Repo Returns empty List
+                            OfmForGets = new List<WorkoutOfmForGet>() // Ofm  Repo Returns empty List
                         },
                         ErrorMessages = new List<string>() // Simply no entity found, so there is no error message
                     }));
@@ -1359,7 +1482,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -1369,13 +1492,13 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 new Claim("sub", "00000000-0000-0000-0000-000000000000")
             }));
-            exerciseHistoryController.ControllerContext = new ControllerContext()
+            workoutController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
             // Act
-            var objectResult = await exerciseHistoryController.GetCollection(exerciseHistoryOfmResourceParameters);
+            var objectResult = await workoutController.GetCollection(workoutOfmResourceParameters);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -1383,8 +1506,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""exerciseHistory"": [
-                          ""No exerciseHistories found""
+                        ""workout"": [
+                          ""No workouts found""
                         ]
                       },
                       ""Formatters"": [],
@@ -1394,20 +1517,20 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
         }
 
         [Test]
         public async Task ReturnUnauthorizedResult_WhenUserClaimSubIsNullOrMissingOrWhiteSpace_WhenUsingGetGollection()
         {
             // Arrange
-            var exerciseHistoryOfmResourceParameters = new ExerciseHistoryOfmCollectionResourceParameters();
+            var workoutOfmResourceParameters = new WorkoutOfmCollectionResourceParameters();
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
-                .Setup(s => s.GetCollection(exerciseHistoryOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
+                .Setup(s => s.GetCollection(workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
-                    new OfmForGetCollectionQueryResult<ExerciseHistoryOfmForGet>()
+                    new OfmForGetCollectionQueryResult<WorkoutOfmForGet>()
                     {
                         // No need to put data, because controller action exits early
                     }));
@@ -1426,7 +1549,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -1436,13 +1559,13 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 //new Claim("sub", "00000000-0000-0000-0000-000000000000")
             }));
-            exerciseHistoryController.ControllerContext = new ControllerContext()
+            workoutController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
             // Act
-            var objectResult = await exerciseHistoryController.GetCollection(exerciseHistoryOfmResourceParameters);
+            var objectResult = await workoutController.GetCollection(workoutOfmResourceParameters);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -1453,23 +1576,23 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+            Assert.AreEqual(actualObjectResult, expectedJsonResult);
         }
 
         [Test]
         public async Task ReturnCorrectCreatedAtRouteResult_ForMinimumPost_WhenUsingPost()
         {
             // Arrange
-            var modelForPost = new ExerciseHistoryOfmForPost() { WorkoutHistoryId = 1 };
+            var modelForPost = new WorkoutOfmForPost() { Name = "Mock Workout" };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
                 .Setup(s => s.Post(modelForPost, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
-                    new ExerciseHistoryOfmForGet()
+                    new WorkoutOfmForGet()
                     {
                         Id = 1,
-                        WorkoutHistoryId = 1
+                        Name = "Mock Workout"
                     }));
 
             // Mock IUrlHelper
@@ -1486,7 +1609,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -1496,24 +1619,24 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 new Claim("sub", "00000000-0000-0000-0000-000000000000")
             }));
-            exerciseHistoryController.ControllerContext = new ControllerContext()
+            workoutController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
             // Act
-            var objectResult = await exerciseHistoryController.Post(modelForPost);
+            var objectResult = await workoutController.Post(modelForPost);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
             var expectedObjectResult = JsonConvert.SerializeObject(
                 new CreatedAtRouteResult(
-                    routeName: ("Get" + typeof(ExerciseHistoryOfmForGet).Name.ToShortPascalCasedOfmForGetName() + "ById"),
+                    routeName: ("Get" + typeof(WorkoutOfmForGet).Name.ToShortPascalCasedOfmForGetName() + "ById"),
                     routeValues: new { id = 1 },
-                    value: new ExerciseHistoryOfmForGet()
+                    value: new WorkoutOfmForGet()
                     {
                         Id = 1,
-                        WorkoutHistoryId = 1
+                        Name = "Mock Workout"
                     })
                 , new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
 
@@ -1524,16 +1647,16 @@ namespace Fittify.Api.Test.Controllers.Sport
         public async Task ReturnBadRequestObjectResult_ForNullOfmForPost_WhenUsingPost()
         {
             // Arrange
-            ExerciseHistoryOfmForPost modelForPost = null;
+            WorkoutOfmForPost modelForPost = null;
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
                 .Setup(s => s.Post(modelForPost, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
-                    new ExerciseHistoryOfmForGet()
+                    new WorkoutOfmForGet()
                     {
                         Id = 1,
-                        WorkoutHistoryId = 1
+                        Name = "Mock Workout"
                     }));
 
             // Mock IUrlHelper
@@ -1550,7 +1673,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -1560,13 +1683,13 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 new Claim("sub", "00000000-0000-0000-0000-000000000000")
             }));
-            exerciseHistoryController.ControllerContext = new ControllerContext()
+            workoutController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
             // Act
-            var objectResult = await exerciseHistoryController.Post(modelForPost);
+            var objectResult = await workoutController.Post(modelForPost);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -1574,8 +1697,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""exerciseHistory"": [
-                          ""The supplied body for the exerciseHistory is null.""
+                        ""workout"": [
+                          ""The supplied body for the workout is null.""
                         ]
                       },
                       ""Formatters"": [],
@@ -1592,16 +1715,16 @@ namespace Fittify.Api.Test.Controllers.Sport
         public async Task ReturnUnprocessableEntityObjectResult_ForInvalidPostModel_WhenUsingPost()
         {
             // Arrange
-            var modelForPost = new ExerciseHistoryOfmForPost() { WorkoutHistoryId = 1 };
+            var modelForPost = new WorkoutOfmForPost() { Name = null };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
                 .Setup(s => s.Post(modelForPost, new Guid("00000000-0000-0000-0000-000000000000")))
                 .Returns(Task.FromResult(
-                    new ExerciseHistoryOfmForGet()
+                    new WorkoutOfmForGet()
                     {
                         Id = 1,
-                        WorkoutHistoryId = 1
+                        Name = "Mock Workout"
                     }));
 
             // Mock IUrlHelper
@@ -1618,7 +1741,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -1628,14 +1751,14 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 new Claim("sub", "00000000-0000-0000-0000-000000000000")
             }));
-            exerciseHistoryController.ControllerContext = new ControllerContext()
+            workoutController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
-            exerciseHistoryController.ModelState.AddModelError("ExerciseHistoryId", "The ExerciseHistoryId Field is required");
+            workoutController.ModelState.AddModelError("Name", "The Name Field is required");
 
             // Act
-            var objectResult = await exerciseHistoryController.Post(modelForPost);
+            var objectResult = await workoutController.Post(modelForPost);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -1643,8 +1766,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""ExerciseHistoryId"": [
-                          ""The ExerciseHistoryId Field is required""
+                        ""Name"": [
+                          ""The Name Field is required""
                         ]
                       },
                       ""Formatters"": [],
@@ -1661,13 +1784,13 @@ namespace Fittify.Api.Test.Controllers.Sport
         public async Task ReturnUnauthorizedResult_WhenUserClaimSubIsNullOrMissingOrWhitespace_WhenUsingPost()
         {
             // Arrange
-            ExerciseHistoryOfmForPost modelForPost = new ExerciseHistoryOfmForPost() { WorkoutHistoryId = 1 };
+            WorkoutOfmForPost modelForPost = new WorkoutOfmForPost() { Name = "Mock Workout" };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
                 .Setup(s => s.Post(modelForPost, It.IsAny<Guid>()))
                 .Returns(Task.FromResult(
-                    new ExerciseHistoryOfmForGet()
+                    new WorkoutOfmForGet()
                     {
                         // No need to setup, because it exits earlier
                     }));
@@ -1686,7 +1809,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -1696,13 +1819,13 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 new Claim("sub", "")
             }));
-            exerciseHistoryController.ControllerContext = new ControllerContext()
+            workoutController.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
 
             // Act
-            var objectResult = await exerciseHistoryController.Post(modelForPost);
+            var objectResult = await workoutController.Post(modelForPost);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -1721,7 +1844,7 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
                 .Setup(s => s.Delete(1))
                 .Returns(Task.FromResult(new OfmDeletionQueryResult<int>()
@@ -1745,13 +1868,13 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
 
             // Act
-            var objectResult = await exerciseHistoryController.Delete(1);
+            var objectResult = await workoutController.Delete(1);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -1770,7 +1893,7 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
                 .Setup(s => s.Delete(1))
                 .Returns(Task.FromResult(new OfmDeletionQueryResult<int>()
@@ -1797,13 +1920,13 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
 
             // Act
-            var objectResult = await exerciseHistoryController.Delete(1);
+            var objectResult = await workoutController.Delete(1);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -1811,7 +1934,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""exerciseHistory"": [
+                        ""workout"": [
                           ""There was an internal server error. Please contact support.""
                         ]
                       },
@@ -1830,7 +1953,7 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
                 .Setup(s => s.Delete(1))
                 .Returns(Task.FromResult(new OfmDeletionQueryResult<int>()
@@ -1854,13 +1977,13 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
 
             // Act
-            var objectResult = await exerciseHistoryController.Delete(1);
+            var objectResult = await workoutController.Delete(1);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -1868,8 +1991,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""exerciseHistory"": [
-                          ""No exerciseHistory found for id=1""
+                        ""workout"": [
+                          ""No workout found for id=1""
                         ]
                       },
                       ""Formatters"": [],
@@ -1886,15 +2009,15 @@ namespace Fittify.Api.Test.Controllers.Sport
         public async Task ReturnOkObjectResult_ForSuccessfulPatch_WhenUsingPatch()
         {
             // Arrange
-            var ofmForPatchFromRepo = new ExerciseHistoryOfmForPatch() { Id = 2, PreviousExerciseHistoryId = null};
+            var ofmForPatchFromRepo = new WorkoutOfmForPatch() { Id = 1, Name = "MockWorkout" };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
-                .Setup(s => s.GetByIdOfmForPatch<ExerciseHistoryOfmForPatch>(1))
+                .Setup(s => s.GetByIdOfmForPatch<WorkoutOfmForPatch>(1))
                 .Returns(Task.FromResult(ofmForPatchFromRepo));
             asyncGppdMock
                 .Setup(s => s.UpdatePartially(ofmForPatchFromRepo))
-                .Returns(Task.FromResult(new ExerciseHistoryOfmForGet() { Id = 2, PreviousExerciseHistoryId = 1 }));
+                .Returns(Task.FromResult(new WorkoutOfmForGet() { Id = 1, Name = "UpdatedMockWorkoutName" }));
 
             // Mock IUrlHelper
             var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
@@ -1910,7 +2033,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -1921,14 +2044,14 @@ namespace Fittify.Api.Test.Controllers.Sport
                 It.IsAny<ValidationStateDictionary>(),
                 It.IsAny<string>(),
                 It.IsAny<Object>()));
-            exerciseHistoryController.ObjectValidator = objectValidator.Object;
+            workoutController.ObjectValidator = objectValidator.Object;
 
             // Act
-            var objectResult = await exerciseHistoryController.UpdatePartially(1, new JsonPatchDocument<ExerciseHistoryOfmForPatch>()
+            var objectResult = await workoutController.UpdatePartially(1, new JsonPatchDocument<WorkoutOfmForPatch>()
             {
                 Operations =
                 {
-                    new Operation<ExerciseHistoryOfmForPatch>("replace", "/PreviousExerciseHistoryId", null, 1)
+                    new Operation<WorkoutOfmForPatch>("replace", "/Name", null, "UpdatedMockWorkoutName")
                 }
             });
 
@@ -1938,16 +2061,11 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""Id"": 2,
-                        ""PreviousExerciseHistory"": null,
-                        ""Exercise"": null,
-                        ""RangeOfWeightLiftingSetIds"": null,
-                        ""WeightLiftingSets"": null,
-                        ""RangeOfCardioSetIds"": null,
-                        ""CardioSets"": null,
-                        ""WorkoutHistoryId"": 0,
-                        ""ExecutedOnDateTime"": ""0001-01-01T00:00:00"",
-                        ""PreviousExerciseHistoryId"": 1
+                        ""Id"": 1,
+                        ""RangeOfExerciseIds"": null,
+                        ""Exercises"": null,
+                        ""RangeOfWorkoutHistoryIds"": null,
+                        ""Name"": ""UpdatedMockWorkoutName"",
                       },
                       ""Formatters"": [],
                       ""ContentTypes"": [],
@@ -1963,15 +2081,15 @@ namespace Fittify.Api.Test.Controllers.Sport
         public async Task ReturnBadRequestObjectResult_ForNullIncomingPatchDocument_WhenUsingPatch()
         {
             // Arrange
-            var ofmForPatchFromRepo = new ExerciseHistoryOfmForPatch() { Id = 2, PreviousExerciseHistoryId = null};
+            var ofmForPatchFromRepo = new WorkoutOfmForPatch() { Id = 1, Name = "MockWorkout" };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
-                .Setup(s => s.GetByIdOfmForPatch<ExerciseHistoryOfmForPatch>(1))
+                .Setup(s => s.GetByIdOfmForPatch<WorkoutOfmForPatch>(1))
                 .Returns(Task.FromResult(ofmForPatchFromRepo));
             asyncGppdMock
                 .Setup(s => s.UpdatePartially(ofmForPatchFromRepo))
-                .Returns(Task.FromResult(new ExerciseHistoryOfmForGet() { Id = 2, PreviousExerciseHistoryId = 1 }));
+                .Returns(Task.FromResult(new WorkoutOfmForGet() { Id = 1, Name = "UpdatedMockWorkoutName" }));
 
             // Mock IUrlHelper
             var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
@@ -1987,7 +2105,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -1998,10 +2116,10 @@ namespace Fittify.Api.Test.Controllers.Sport
                 It.IsAny<ValidationStateDictionary>(),
                 It.IsAny<string>(),
                 It.IsAny<Object>()));
-            exerciseHistoryController.ObjectValidator = objectValidator.Object;
+            workoutController.ObjectValidator = objectValidator.Object;
 
             // Act
-            var objectResult = await exerciseHistoryController.UpdatePartially(1, null);
+            var objectResult = await workoutController.UpdatePartially(1, null);
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -2009,8 +2127,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""exerciseHistory"": [
-                          ""You sent an empty body (null) for exerciseHistory with id=1""
+                        ""workout"": [
+                          ""You sent an empty body (null) for workout with id=1""
                         ]
                       },
                       ""Formatters"": [],
@@ -2028,10 +2146,10 @@ namespace Fittify.Api.Test.Controllers.Sport
         {
             // Arrange
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
-                .Setup(s => s.GetByIdOfmForPatch<ExerciseHistoryOfmForPatch>(0))
-                .Returns(Task.FromResult((ExerciseHistoryOfmForPatch)null));
+                .Setup(s => s.GetByIdOfmForPatch<WorkoutOfmForPatch>(0))
+                .Returns(Task.FromResult((WorkoutOfmForPatch)null));
 
             // Mock IUrlHelper
             var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
@@ -2047,7 +2165,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
@@ -2058,14 +2176,14 @@ namespace Fittify.Api.Test.Controllers.Sport
                 It.IsAny<ValidationStateDictionary>(),
                 It.IsAny<string>(),
                 It.IsAny<Object>()));
-            exerciseHistoryController.ObjectValidator = objectValidator.Object;
+            workoutController.ObjectValidator = objectValidator.Object;
 
             // Act
-            var objectResult = await exerciseHistoryController.UpdatePartially(0, new JsonPatchDocument<ExerciseHistoryOfmForPatch>()
+            var objectResult = await workoutController.UpdatePartially(0, new JsonPatchDocument<WorkoutOfmForPatch>()
             {
                 Operations =
                 {
-                    new Operation<ExerciseHistoryOfmForPatch>("replace", "/ExerciseHistoryId", null, "5")
+                    new Operation<WorkoutOfmForPatch>("replace", "/Name", null, "UpdatedMockWorkoutName")
                 }
             });
 
@@ -2075,8 +2193,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""exerciseHistory"": [
-                          ""No exerciseHistory found for id=0""
+                        ""workout"": [
+                          ""No workout found for id=0""
                         ]
                       },
                       ""Formatters"": [],
@@ -2093,15 +2211,15 @@ namespace Fittify.Api.Test.Controllers.Sport
         public async Task ReturnUnprocessableEntityObjectResult_ForModelValidationErrors_WhenUsingPatch()
         {
             // Arrange
-            var ofmForPatchFromRepo = new ExerciseHistoryOfmForPatch() { Id = 2, PreviousExerciseHistoryId = null};
+            var ofmForPatchFromRepo = new WorkoutOfmForPatch() { Id = 1, Name = "MockWorkout" };
             // Mock GppdRepo
-            var asyncGppdMock = new Mock<IAsyncOfmRepository<ExerciseHistoryOfmForGet, int>>();
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
             asyncGppdMock
-                .Setup(s => s.GetByIdOfmForPatch<ExerciseHistoryOfmForPatch>(1))
+                .Setup(s => s.GetByIdOfmForPatch<WorkoutOfmForPatch>(1))
                 .Returns(Task.FromResult(ofmForPatchFromRepo));
             asyncGppdMock
                 .Setup(s => s.UpdatePartially(ofmForPatchFromRepo))
-                .Returns(Task.FromResult(new ExerciseHistoryOfmForGet() { Id = 2, PreviousExerciseHistoryId = 1 }));
+                .Returns(Task.FromResult(new WorkoutOfmForGet() { Id = 1, Name = null }));
 
             // Mock IUrlHelper
             var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
@@ -2117,13 +2235,13 @@ namespace Fittify.Api.Test.Controllers.Sport
             });
 
             // Initialize controller
-            var exerciseHistoryController = new ExerciseHistoryApiController(
+            var workoutController = new WorkoutApiController(
                 asyncGppdMock.Object,
                 mockUrlHelper.Object,
                 httpContextAccessorMock.Object);
 
             // Mock ModelState Validation Erros
-            exerciseHistoryController.ModelState.AddModelError("ExerciseHistoryId", "The ExerciseHistoryId Field is required");
+            workoutController.ModelState.AddModelError("Name", "The Name Field is required");
 
             // Mock Controller.TryValidate() method to avoid null reference exception
             var objectValidator = new Mock<IObjectModelValidator>();
@@ -2131,14 +2249,14 @@ namespace Fittify.Api.Test.Controllers.Sport
                 It.IsAny<ValidationStateDictionary>(),
                 It.IsAny<string>(),
                 It.IsAny<Object>()));
-            exerciseHistoryController.ObjectValidator = objectValidator.Object;
+            workoutController.ObjectValidator = objectValidator.Object;
 
             // Act
-            var objectResult = await exerciseHistoryController.UpdatePartially(1, new JsonPatchDocument<ExerciseHistoryOfmForPatch>()
+            var objectResult = await workoutController.UpdatePartially(1, new JsonPatchDocument<WorkoutOfmForPatch>()
             {
                 Operations =
                 {
-                    new Operation<ExerciseHistoryOfmForPatch>("replace", "/ExerciseHistoryId", null, null)
+                    new Operation<WorkoutOfmForPatch>("replace", "/Name", null, null)
                 }
             });
 
@@ -2148,8 +2266,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""ExerciseHistoryId"": [
-                          ""The ExerciseHistoryId Field is required""
+                        ""Name"": [
+                          ""The Name Field is required""
                         ]
                       },
                       ""Formatters"": [],

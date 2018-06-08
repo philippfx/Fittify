@@ -17,7 +17,8 @@ namespace Fittify.Common.Helpers
             { "tooth", "teeth" },
             { "goose", "geese" },
             // And now the more standard rules.
-            { ".*fe$", "$1ves" },         // ie, wolf, wife
+            { "(.*)fe$", "$1ves" },         // ie wife
+            { "(.*)f$", "$1ves" },         // ie, wolf, calf, thief
             { "(.*)man$", "$1men" },
             { "(.+[aeiou]y)$", "$1s" },
             { "(.+[^aeiou])y$", "$1ies" },

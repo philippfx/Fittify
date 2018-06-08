@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Fittify.Api.Authorization;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.CustomAttributes;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Helpers.ObjectResults;
 using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
+using Fittify.Api.OfmRepository.OfmRepository.Sport;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Get;
@@ -47,6 +49,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet("{id}", Name = "GetWeightLiftingSetById")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
+        [AuthorizeOwnerIntId(typeof(WeightLiftingSetOfmRepository))]
         public async Task<IActionResult> GetById(int id, WeightLiftingSetOfmResourceParameters weightLiftingSetOfmResourceParameters)
         {
             var ofmForGetQueryResult = await _asyncOfmRepository.GetById(id, weightLiftingSetOfmResourceParameters.Fields);

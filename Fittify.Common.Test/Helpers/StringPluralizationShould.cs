@@ -26,6 +26,8 @@ namespace Fittify.Common.Test.Helpers
             dictionary.Add("man", "men");           // Words that end in 'man' - Replace with 'men'
             dictionary.Add("wolf", "wolves");       // Words that end in 'f' - Replace with 'ves'
             dictionary.Add("wife", "wives");        // Words that end in 'fe' - Replace with 'ves'
+            dictionary.Add("calf", "calves");        // Words that end in 'fe' - Replace with 'ves'
+            dictionary.Add("thief", "thieves");        // Words that end in 'fe' - Replace with 'ves'
             dictionary.Add("day", "days");          // Words that end in '[vowel]y' - Replace with 'ys'
             dictionary.Add("sky", "skies");         // Words that end in '[consonant]y' - Replace with 'ies'
 

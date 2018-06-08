@@ -292,7 +292,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 httpContextAccessorMock.Object);
 
             // Act
-            var objectResult = await weightLiftingSetController.GetById(1, new WeightLiftingSetOfmResourceParameters() { Fields = "Id, WeightFull, RepetitionsFull" });
+            var objectResult = await weightLiftingSetController.GetById(1, new WeightLiftingSetOfmResourceParameters() { Fields = "Id, ExerciseHistoryId" });
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -527,20 +527,29 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""Value"": [
                         {
                           ""Id"": 1,
-                          ""DateTimeStart"": null,
-                          ""DateTimeEnd"": null,
+                          ""WeightFull"": null,
+                          ""RepetitionsFull"": null,
+                          ""WeightReduced"": null,
+                          ""RepetitionsReduced"": null,
+                          ""WeightBurn"": null,
                           ""ExerciseHistoryId"": 1
                         },
                         {
                           ""Id"": 2,
-                          ""DateTimeStart"": null,
-                          ""DateTimeEnd"": null,
+                          ""WeightFull"": null,
+                          ""RepetitionsFull"": null,
+                          ""WeightReduced"": null,
+                          ""RepetitionsReduced"": null,
+                          ""WeightBurn"": null,
                           ""ExerciseHistoryId"": 1
                         },
                         {
                           ""Id"": 3,
-                          ""DateTimeStart"": null,
-                          ""DateTimeEnd"": null,
+                          ""WeightFull"": null,
+                          ""RepetitionsFull"": null,
+                          ""WeightReduced"": null,
+                          ""RepetitionsReduced"": null,
+                          ""WeightBurn"": null,
                           ""ExerciseHistoryId"": 1
                         }
                       ],

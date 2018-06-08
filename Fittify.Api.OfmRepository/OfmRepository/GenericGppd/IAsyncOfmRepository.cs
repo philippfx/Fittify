@@ -23,7 +23,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.GenericGppd
 
         Task<TOfmForGet> UpdatePartially<TOfmForPatch>(TOfmForPatch ofmForPatch)
             where TOfmForPatch : class; //// Todo: Maybe returning OfmForGetQueryResult??
-                                        /// 
+                                        
         Task<OfmDeletionQueryResult<TId>> Delete(TId id);
     }
 }

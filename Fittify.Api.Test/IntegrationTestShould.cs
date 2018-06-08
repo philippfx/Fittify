@@ -165,7 +165,7 @@ namespace Fittify.Api.Test
                 var result = await client.GetAsync("/api/workouts/1");
                 var responseStatusCode = result.StatusCode;
 
-                Assert.AreEqual((int) responseStatusCode, 401);
+                Assert.AreEqual(401, (int)responseStatusCode);
             }
         }
 
@@ -580,7 +580,7 @@ namespace Fittify.Api.Test
         }
 
         [Test]
-        public async Task ReturnFullWorkoutRepository_ForFullQuery()
+        public async Task ReturnFullWorkout_IncludingExerciseHistories()
         {
             using (var server = GetTestServerInstance())
             {
@@ -602,7 +602,6 @@ namespace Fittify.Api.Test
                               ""id"": 4,
                               ""rangeOfWorkoutIds"": ""2"",
                               ""rangeOfExerciseHistoryIds"": null,
-                              ""rangeOfPreviousExerciseHistoryIds"": null,
                               ""name"": ""DeadLiftSeed"",
                               ""exerciseType"": ""WeightLifting""
                             },
@@ -610,7 +609,6 @@ namespace Fittify.Api.Test
                               ""id"": 5,
                               ""rangeOfWorkoutIds"": ""2"",
                               ""rangeOfExerciseHistoryIds"": null,
-                              ""rangeOfPreviousExerciseHistoryIds"": null,
                               ""name"": ""SeatedPullDownSeed"",
                               ""exerciseType"": ""WeightLifting""
                             },
@@ -618,7 +616,6 @@ namespace Fittify.Api.Test
                               ""id"": 6,
                               ""rangeOfWorkoutIds"": ""2"",
                               ""rangeOfExerciseHistoryIds"": null,
-                              ""rangeOfPreviousExerciseHistoryIds"": null,
                               ""name"": ""RowSeed"",
                               ""exerciseType"": ""WeightLifting""
                             },
@@ -626,7 +623,6 @@ namespace Fittify.Api.Test
                               ""id"": 10,
                               ""rangeOfWorkoutIds"": ""2"",
                               ""rangeOfExerciseHistoryIds"": null,
-                              ""rangeOfPreviousExerciseHistoryIds"": null,
                               ""name"": ""SitupsSeed"",
                               ""exerciseType"": ""WeightLifting""
                             },
@@ -634,7 +630,6 @@ namespace Fittify.Api.Test
                               ""id"": 11,
                               ""rangeOfWorkoutIds"": ""2"",
                               ""rangeOfExerciseHistoryIds"": null,
-                              ""rangeOfPreviousExerciseHistoryIds"": null,
                               ""name"": ""SpinningBikeSeed"",
                               ""exerciseType"": ""Cardio""
                             }

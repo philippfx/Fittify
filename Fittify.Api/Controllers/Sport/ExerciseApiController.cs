@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Fittify.Api.Authorization;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.CustomAttributes;
 using Fittify.Api.Helpers.Extensions;
 using Fittify.Api.Helpers.ObjectResults;
 using Fittify.Api.OfmRepository.Helpers;
 using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
+using Fittify.Api.OfmRepository.OfmRepository.Sport;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Get;
@@ -47,6 +49,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet("{id}", Name = "GetExerciseById")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
+        [AuthorizeOwnerIntId(typeof(ExerciseOfmRepository))]
         public async Task<IActionResult> GetById(int id, ExerciseOfmResourceParameters exerciseOfmResourceParameters)
         {
             var ofmForGetQueryResult = await _asyncOfmRepository.GetById(id, exerciseOfmResourceParameters.Fields);
@@ -112,6 +115,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpDelete("{id}", Name = "DeleteExercise")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
+        [AuthorizeOwnerIntId(typeof(ExerciseOfmRepository))]
         public async Task<IActionResult> Delete(int id)
         {
             var ofmDeletionQueryResult = await _asyncOfmRepository.Delete(id);
@@ -123,6 +127,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpPatch("{id}", Name = "PartiallyUpdateExercise")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
+        [AuthorizeOwnerIntId(typeof(ExerciseOfmRepository))]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<ExerciseOfmForPatch> jsonPatchDocument)
         {
             //// Todo: Prohibit trying to patch id!
