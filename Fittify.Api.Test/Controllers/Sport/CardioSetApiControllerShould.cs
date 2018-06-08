@@ -82,7 +82,9 @@ namespace Fittify.Api.Test.Controllers.Sport
                     {
                       ""Value"": {
                         ""Id"": 1,
-                        ""Name"": ""Mock CardioSet""
+                        ""DateTimeStart"": null,
+                        ""DateTimeEnd"": null,
+                        ""ExerciseHistoryId"": 1
                       },
                       ""Formatters"": [],
                       ""ContentTypes"": [],
@@ -92,7 +94,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 ".MinifyJson().PrettifyJson();
 
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -101,7 +103,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             // Mock GppdRepo
             var asyncGppdMock = new Mock<IAsyncOfmRepository<CardioSetOfmForGet, int>>();
-            asyncGppdMock.Setup(s => s.GetById(1, "Name")).Returns(Task.FromResult(
+            asyncGppdMock.Setup(s => s.GetById(1, "Id, ExerciseHistoryId")).Returns(Task.FromResult(
                     new OfmForGetQueryResult<CardioSetOfmForGet>()
                     {
                         ReturnedTOfmForGet = new CardioSetOfmForGet()
@@ -131,7 +133,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 httpContextAccessorMock.Object);
 
             // Act
-            var objectResult = await cardioSetController.GetById(1, new CardioSetOfmResourceParameters() { Fields = "Name" });
+            var objectResult = await cardioSetController.GetById(1, new CardioSetOfmResourceParameters() { Fields = "Id, ExerciseHistoryId" });
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -139,7 +141,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""Name"": ""Mock CardioSet""
+                        ""Id"": 1,
+                        ""ExerciseHistoryId"": 1
                       },
                       ""Formatters"": [],
                       ""ContentTypes"": [],
@@ -148,7 +151,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -200,41 +203,43 @@ namespace Fittify.Api.Test.Controllers.Sport
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
             var expectedJsonResult =
                 @"
-                    {
-                      ""Value"": {
-                        ""Id"": 1,
-                        ""Name"": ""Mock CardioSet"",
-                        ""links"": [
-                          {
-                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                            ""Rel"": ""self"",
-                            ""Method"": ""GET""
-                          },
-                          {
-                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                            ""Rel"": ""create_cardioSet"",
-                            ""Method"": ""POST""
-                          },
-                          {
-                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                            ""Rel"": ""partially_update_cardioSet"",
-                            ""Method"": ""PATCH""
-                          },
-                          {
-                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                            ""Rel"": ""delete_cardioSet"",
-                            ""Method"": ""DELETE""
-                          }
-                        ]
-                      },
-                      ""Formatters"": [],
-                      ""ContentTypes"": [],
-                      ""DeclaredType"": null,
-                      ""StatusCode"": 200
-                    }
+                   {
+					  ""Value"": {
+					    ""Id"": 1,
+					    ""DateTimeStart"": null,
+					    ""DateTimeEnd"": null,
+					    ""ExerciseHistoryId"": 1,
+					    ""links"": [
+					      {
+					        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+					        ""Rel"": ""self"",
+					        ""Method"": ""GET""
+					      },
+					      {
+					        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+					        ""Rel"": ""create_cardioSet"",
+					        ""Method"": ""POST""
+					      },
+					      {
+					        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+					        ""Rel"": ""partially_update_cardioSet"",
+					        ""Method"": ""PATCH""
+					      },
+					      {
+					        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+					        ""Rel"": ""delete_cardioSet"",
+					        ""Method"": ""DELETE""
+					      }
+					    ]
+					  },
+					  ""Formatters"": [],
+					  ""ContentTypes"": [],
+					  ""DeclaredType"": null,
+					  ""StatusCode"": 200
+					}
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -243,7 +248,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             // Mock GppdRepo
             var asyncGppdMock = new Mock<IAsyncOfmRepository<CardioSetOfmForGet, int>>();
-            asyncGppdMock.Setup(s => s.GetById(1, "Name")).Returns(Task.FromResult(
+            asyncGppdMock.Setup(s => s.GetById(1, "Id, ExerciseHistoryId")).Returns(Task.FromResult(
                     new OfmForGetQueryResult<CardioSetOfmForGet>()
                     {
                         ReturnedTOfmForGet = new CardioSetOfmForGet()
@@ -280,7 +285,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 httpContextAccessorMock.Object);
 
             // Act
-            var objectResult = await cardioSetController.GetById(1, new CardioSetOfmResourceParameters() { Fields = "Name" });
+            var objectResult = await cardioSetController.GetById(1, new CardioSetOfmResourceParameters() { Fields = "Id, ExerciseHistoryId" });
 
             // Assert
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -288,7 +293,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""Name"": ""Mock CardioSet"",
+                        ""Id"": 1,
+                        ""ExerciseHistoryId"": 1,
                         ""links"": [
                           {
                             ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
@@ -319,7 +325,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -377,7 +383,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -431,7 +437,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""StatusCode"": 404
                     }
                 ".MinifyJson().PrettifyJson();
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -514,15 +520,21 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""Value"": [
                         {
                           ""Id"": 1,
-                          ""Name"": ""MockCardioSet1""
+                          ""DateTimeStart"": null,
+                          ""DateTimeEnd"": null,
+                          ""ExerciseHistoryId"": 1
                         },
                         {
                           ""Id"": 2,
-                          ""Name"": ""MockCardioSet2""
+                          ""DateTimeStart"": null,
+                          ""DateTimeEnd"": null,
+                          ""ExerciseHistoryId"": 1
                         },
                         {
                           ""Id"": 3,
-                          ""Name"": ""MockCardioSet3""
+                          ""DateTimeStart"": null,
+                          ""DateTimeEnd"": null,
+                          ""ExerciseHistoryId"": 1
                         }
                       ],
                       ""Formatters"": [],
@@ -532,7 +544,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -541,7 +553,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             var cardioSetOfmResourceParameters = new CardioSetOfmCollectionResourceParameters()
             {
-                Fields = "Name"
+                Fields = "Id, ExerciseHistoryId"
             };
             // Mock GppdRepo
             var asyncGppdMock = new Mock<IAsyncOfmRepository<CardioSetOfmForGet, int>>();
@@ -616,13 +628,16 @@ namespace Fittify.Api.Test.Controllers.Sport
                     {
                       ""Value"": [
                         {
-                          ""Name"": ""MockCardioSet1""
+                          ""Id"": 1,
+                          ""ExerciseHistoryId"": 1
                         },
                         {
-                          ""Name"": ""MockCardioSet2""
+                          ""Id"": 2,
+                          ""ExerciseHistoryId"": 1
                         },
                         {
-                          ""Name"": ""MockCardioSet3""
+                          ""Id"": 3,
+                          ""ExerciseHistoryId"": 1
                         }
                       ],
                       ""Formatters"": [],
@@ -632,7 +647,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -717,116 +732,122 @@ namespace Fittify.Api.Test.Controllers.Sport
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
             var expectedJsonResult =
                 @"
-                            {
-                              ""Value"": {
-                                ""value"": [
-                                  {
-                                    ""Id"": 1,
-                                    ""Name"": ""MockCardioSet1"",
-                                    ""links"": [
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""self"",
-                                        ""Method"": ""GET""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""create_cardioSet"",
-                                        ""Method"": ""POST""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""partially_update_cardioSet"",
-                                        ""Method"": ""PATCH""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""delete_cardioSet"",
-                                        ""Method"": ""DELETE""
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    ""Id"": 2,
-                                    ""Name"": ""MockCardioSet2"",
-                                    ""links"": [
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""self"",
-                                        ""Method"": ""GET""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""create_cardioSet"",
-                                        ""Method"": ""POST""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""partially_update_cardioSet"",
-                                        ""Method"": ""PATCH""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""delete_cardioSet"",
-                                        ""Method"": ""DELETE""
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    ""Id"": 3,
-                                    ""Name"": ""MockCardioSet3"",
-                                    ""links"": [
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""self"",
-                                        ""Method"": ""GET""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""create_cardioSet"",
-                                        ""Method"": ""POST""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""partially_update_cardioSet"",
-                                        ""Method"": ""PATCH""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""delete_cardioSet"",
-                                        ""Method"": ""DELETE""
-                                      }
-                                    ]
-                                  }
-                                ],
-                                ""links"": [
-                                  {
-                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                    ""Rel"": ""self"",
-                                    ""Method"": ""GET""
-                                  },
-                                  {
-                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                    ""Rel"": ""nextPage"",
-                                    ""Method"": ""GET""
-                                  }
-                                ]
+                    {
+                      ""Value"": {
+                        ""value"": [
+                          {
+                            ""Id"": 1,
+                            ""DateTimeStart"": null,
+                            ""DateTimeEnd"": null,
+                            ""ExerciseHistoryId"": 1,
+                            ""links"": [
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""self"",
+                                ""Method"": ""GET""
                               },
-                              ""Formatters"": [],
-                              ""ContentTypes"": [],
-                              ""DeclaredType"": null,
-                              ""StatusCode"": 200
-                            }
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""create_cardioSet"",
+                                ""Method"": ""POST""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""partially_update_cardioSet"",
+                                ""Method"": ""PATCH""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""delete_cardioSet"",
+                                ""Method"": ""DELETE""
+                              }
+                            ]
+                          },
+                          {
+                            ""Id"": 2,
+                            ""DateTimeStart"": null,
+                            ""DateTimeEnd"": null,
+                            ""ExerciseHistoryId"": 1,
+                            ""links"": [
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""self"",
+                                ""Method"": ""GET""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""create_cardioSet"",
+                                ""Method"": ""POST""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""partially_update_cardioSet"",
+                                ""Method"": ""PATCH""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""delete_cardioSet"",
+                                ""Method"": ""DELETE""
+                              }
+                            ]
+                          },
+                          {
+                            ""Id"": 3,
+                            ""DateTimeStart"": null,
+                            ""DateTimeEnd"": null,
+                            ""ExerciseHistoryId"": 1,
+                            ""links"": [
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""self"",
+                                ""Method"": ""GET""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""create_cardioSet"",
+                                ""Method"": ""POST""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""partially_update_cardioSet"",
+                                ""Method"": ""PATCH""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""delete_cardioSet"",
+                                ""Method"": ""DELETE""
+                              }
+                            ]
+                          }
+                        ],
+                        ""links"": [
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""self"",
+                            ""Method"": ""GET""
+                          },
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""nextPage"",
+                            ""Method"": ""GET""
+                          }
+                        ]
+                      },
+                      ""Formatters"": [],
+                      ""ContentTypes"": [],
+                      ""DeclaredType"": null,
+                      ""StatusCode"": 200
+                    }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
         public async Task ReturnOkObjectResult_ForQueriedNameFieldIncludingHateoas_WhenUsingGetGollection()
         {
             // Arrange
-            var cardioSetOfmResourceParameters = new CardioSetOfmCollectionResourceParameters() { Fields = "Name" };
+            var cardioSetOfmResourceParameters = new CardioSetOfmCollectionResourceParameters() { Fields = "Id, ExerciseHistoryId" };
             // Mock GppdRepo
             var asyncGppdMock = new Mock<IAsyncOfmRepository<CardioSetOfmForGet, int>>();
             asyncGppdMock
@@ -904,106 +925,109 @@ namespace Fittify.Api.Test.Controllers.Sport
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
             var expectedJsonResult =
                 @"
-                            {
-                              ""Value"": {
-                                ""value"": [
-                                  {
-                                    ""Name"": ""MockCardioSet1"",
-                                    ""links"": [
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""self"",
-                                        ""Method"": ""GET""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""create_cardioSet"",
-                                        ""Method"": ""POST""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""partially_update_cardioSet"",
-                                        ""Method"": ""PATCH""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""delete_cardioSet"",
-                                        ""Method"": ""DELETE""
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    ""Name"": ""MockCardioSet2"",
-                                    ""links"": [
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""self"",
-                                        ""Method"": ""GET""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""create_cardioSet"",
-                                        ""Method"": ""POST""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""partially_update_cardioSet"",
-                                        ""Method"": ""PATCH""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""delete_cardioSet"",
-                                        ""Method"": ""DELETE""
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    ""Name"": ""MockCardioSet3"",
-                                    ""links"": [
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""self"",
-                                        ""Method"": ""GET""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""create_cardioSet"",
-                                        ""Method"": ""POST""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""partially_update_cardioSet"",
-                                        ""Method"": ""PATCH""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""delete_cardioSet"",
-                                        ""Method"": ""DELETE""
-                                      }
-                                    ]
-                                  }
-                                ],
-                                ""links"": [
-                                  {
-                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                    ""Rel"": ""self"",
-                                    ""Method"": ""GET""
-                                  },
-                                  {
-                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                    ""Rel"": ""nextPage"",
-                                    ""Method"": ""GET""
-                                  }
-                                ]
+                    {
+                       ""Value"": {
+                        ""value"": [
+                          {
+                            ""Id"": 1,
+                            ""ExerciseHistoryId"": 1,
+                            ""links"": [
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""self"",
+                                ""Method"": ""GET""
                               },
-                              ""Formatters"": [],
-                              ""ContentTypes"": [],
-                              ""DeclaredType"": null,
-                              ""StatusCode"": 200
-                            }
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""create_cardioSet"",
+                                ""Method"": ""POST""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""partially_update_cardioSet"",
+                                ""Method"": ""PATCH""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""delete_cardioSet"",
+                                ""Method"": ""DELETE""
+                              }
+                            ]
+                          },
+                          {
+                            ""Id"": 2,
+                            ""ExerciseHistoryId"": 1,
+                            ""links"": [
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""self"",
+                                ""Method"": ""GET""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""create_cardioSet"",
+                                ""Method"": ""POST""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""partially_update_cardioSet"",
+                                ""Method"": ""PATCH""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""delete_cardioSet"",
+                                ""Method"": ""DELETE""
+                              }
+                            ]
+                          },
+                          {
+                            ""Id"": 3,
+                            ""ExerciseHistoryId"": 1,
+                            ""links"": [
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""self"",
+                                ""Method"": ""GET""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""create_cardioSet"",
+                                ""Method"": ""POST""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""partially_update_cardioSet"",
+                                ""Method"": ""PATCH""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""delete_cardioSet"",
+                                ""Method"": ""DELETE""
+                              }
+                            ]
+                          }
+                        ],
+                        ""links"": [
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""self"",
+                            ""Method"": ""GET""
+                          },
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""nextPage"",
+                            ""Method"": ""GET""
+                          }
+                        ]
+                      },
+                      ""Formatters"": [],
+                      ""ContentTypes"": [],
+                      ""DeclaredType"": null,
+                      ""StatusCode"": 200
+                    }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1248,7 +1272,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1312,7 +1336,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     {
                       ""Value"": {
                         ""cardioSet"": [
-                          ""No cardiosets found""
+                          ""No cardioSets found""
                         ]
                       },
                       ""Formatters"": [],
@@ -1322,7 +1346,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1381,7 +1405,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1560,7 +1584,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 HttpContext = new DefaultHttpContext() { User = user }
             };
-            cardioSetController.ModelState.AddModelError("Name", "The Name Field is required");
+            cardioSetController.ModelState.AddModelError("ExerciseHistoryId", "The ExerciseHistoryId Field is required");
 
             // Act
             var objectResult = await cardioSetController.Post(modelForPost);
@@ -1571,8 +1595,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""Name"": [
-                          ""The Name Field is required""
+                        ""ExerciseHistoryId"": [
+                          ""The ExerciseHistoryId Field is required""
                         ]
                       },
                       ""Formatters"": [],
@@ -1814,7 +1838,7 @@ namespace Fittify.Api.Test.Controllers.Sport
         public async Task ReturnOkObjectResult_ForSuccessfulPatch_WhenUsingPatch()
         {
             // Arrange
-            var ofmForPatchFromRepo = new CardioSetOfmForPatch() { Id = 1 , DateTimeStart = new DateTime(2018, 1, 1)};
+            var ofmForPatchFromRepo = new CardioSetOfmForPatch() { Id = 1, ExerciseHistoryId = 1, DateTimeStart = new DateTime(2018, 1, 1) };
             // Mock GppdRepo
             var asyncGppdMock = new Mock<IAsyncOfmRepository<CardioSetOfmForGet, int>>();
             asyncGppdMock
@@ -1822,7 +1846,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 .Returns(Task.FromResult(ofmForPatchFromRepo));
             asyncGppdMock
                 .Setup(s => s.UpdatePartially(ofmForPatchFromRepo))
-                .Returns(Task.FromResult(new CardioSetOfmForGet() { Id = 1, DateTimeStart = new DateTime(2018, 1, 1) } ));
+                .Returns(Task.FromResult(new CardioSetOfmForGet() { Id = 1, ExerciseHistoryId = 5, DateTimeStart = new DateTime(2018, 1, 1) }));
 
             // Mock IUrlHelper
             var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
@@ -1856,7 +1880,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 Operations =
                 {
-                    new Operation<CardioSetOfmForPatch>("replace", "/Name", null, "UpdatedMockCardioSetName")
+                    new Operation<CardioSetOfmForPatch>("replace", "/ExerciseHistoryId", null, "5")
                 }
             });
 
@@ -1867,7 +1891,9 @@ namespace Fittify.Api.Test.Controllers.Sport
                     {
                       ""Value"": {
                         ""Id"": 1,
-                        ""Name"": ""UpdatedMockCardioSetName""
+                        ""DateTimeStart"": ""2018-01-01T00:00:00"",
+                        ""DateTimeEnd"": null,
+                        ""ExerciseHistoryId"": 5
                       },
                       ""Formatters"": [],
                       ""ContentTypes"": [],
@@ -1883,7 +1909,7 @@ namespace Fittify.Api.Test.Controllers.Sport
         public async Task ReturnBadRequestObjectResult_ForNullIncomingPatchDocument_WhenUsingPatch()
         {
             // Arrange
-            var ofmForPatchFromRepo = new CardioSetOfmForPatch() { Id = 1, DateTimeStart = new DateTime(2018, 1, 1) } ;
+            var ofmForPatchFromRepo = new CardioSetOfmForPatch() { Id = 1, DateTimeStart = new DateTime(2018, 1, 1) };
             // Mock GppdRepo
             var asyncGppdMock = new Mock<IAsyncOfmRepository<CardioSetOfmForGet, int>>();
             asyncGppdMock
@@ -1985,7 +2011,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 Operations =
                 {
-                    new Operation<CardioSetOfmForPatch>("replace", "/Name", null, "UpdatedMockCardioSetName")
+                    new Operation<CardioSetOfmForPatch>("replace", "/ExerciseHistoryId", null, "5")
                 }
             });
 
@@ -2043,7 +2069,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 httpContextAccessorMock.Object);
 
             // Mock ModelState Validation Erros
-            cardioSetController.ModelState.AddModelError("Name", "The Name Field is required");
+            cardioSetController.ModelState.AddModelError("ExerciseHistoryId", "The ExerciseHistoryId Field is required");
 
             // Mock Controller.TryValidate() method to avoid null reference exception
             var objectValidator = new Mock<IObjectModelValidator>();
@@ -2058,7 +2084,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             {
                 Operations =
                 {
-                    new Operation<CardioSetOfmForPatch>("replace", "/Name", null, null)
+                    new Operation<CardioSetOfmForPatch>("replace", "/ExerciseHistoryId", null, null)
                 }
             });
 
@@ -2068,8 +2094,8 @@ namespace Fittify.Api.Test.Controllers.Sport
                 @"
                     {
                       ""Value"": {
-                        ""Name"": [
-                          ""The Name Field is required""
+                        ""ExerciseHistoryId"": [
+                          ""The ExerciseHistoryId Field is required""
                         ]
                       },
                       ""Formatters"": [],

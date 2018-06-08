@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Fittify.Api.Authorization;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.CustomAttributes;
 using Fittify.Api.Helpers.Extensions;
@@ -15,16 +14,14 @@ using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Helpers;
-using Fittify.DataModelRepository.Repository.Sport;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using BadRequestObjectResult = Fittify.Api.Helpers.ObjectResults.BadRequestObjectResult;
 
 namespace Fittify.Api.Controllers.Sport
 {
     [Route("api/cardiosets")]
-    [Authorize]
     public class CardioSetApiController :
         Controller
     {
@@ -36,21 +33,20 @@ namespace Fittify.Api.Controllers.Sport
         private readonly IncomingHeaders _incomingHeaders;
 
         public CardioSetApiController(
+            IAsyncOfmRepository<CardioSetOfmForGet, int> asyncOfmRepository,
             IUrlHelper urlHelper,
-            IHttpContextAccessor httpContextAccesor,
-            IAsyncOfmRepository<CardioSetOfmForGet, int> asyncOfmRepository)
+            IHttpContextAccessor httpContextAccesor)
         {
             _asyncOfmRepository = asyncOfmRepository;
             _shortCamelCasedControllerName = nameof(CardioSetApiController).ToShortCamelCasedControllerName();
             _urlHelper = urlHelper;
             _controllerGuardClause = new ControllerGuardClauses<CardioSetOfmForGet, CardioSetOfmForPost, CardioSetOfmForPatch, int>(this);
-            _hateoasLinkFactory = new HateoasLinkFactory<int>(urlHelper, nameof(CardioSetApiController));
+            _hateoasLinkFactory = new HateoasLinkFactory<int>(_urlHelper, nameof(CardioSetApiController));
             _incomingHeaders = Mapper.Map<IncomingHeaders>(httpContextAccesor.HttpContext.Items[nameof(IncomingRawHeaders)] as IncomingRawHeaders);
         }
 
         [HttpGet("{id}", Name = "GetCardioSetById")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
-        [AuthorizeOwnerIntId(typeof(CardioSetRepository))]
         public async Task<IActionResult> GetById(int id, CardioSetOfmResourceParameters cardioSetOfmResourceParameters)
         {
             var ofmForGetQueryResult = await _asyncOfmRepository.GetById(id, cardioSetOfmResourceParameters.Fields);
@@ -59,27 +55,29 @@ namespace Fittify.Api.Controllers.Sport
                 return objectResult;
             }
             var expandable = ofmForGetQueryResult.ReturnedTOfmForGet.ToExpandableOfm();
-            var shapedExpandable = expandable.Shape(cardioSetOfmResourceParameters.Fields); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
-            if (_incomingHeaders.IncludeHateoas) shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, cardioSetOfmResourceParameters.Fields).ToList());
+            var shapedExpandable = expandable.Shape(cardioSetOfmResourceParameters.Fields);
+            if (_incomingHeaders.IncludeHateoas)
+                shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, cardioSetOfmResourceParameters.Fields).ToList());
             return Ok(shapedExpandable);
         }
 
         [HttpGet(Name = "GetCardioSetCollection")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
-        public async Task<IActionResult> GetCollection(CardioSetOfmCollectionResourceParameters ofmCollectionResourceParameters)
+        public async Task<IActionResult> GetCollection(CardioSetOfmCollectionResourceParameters collectionResourceParameters)
         {
-            var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();
-            var ownerGuid = new Guid(stringOwnerGuid);
+            var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();
+            var ownerGuid = new Guid(stringGuid);
 
-            var ofmForGetCollectionQueryResult = await _asyncOfmRepository.GetCollection(ofmCollectionResourceParameters, ownerGuid);
+            var ofmForGetCollectionQueryResult = await _asyncOfmRepository.GetCollection(collectionResourceParameters, ownerGuid);
+
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
-            if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasForExpandableOfmForGets<CardioSetOfmForGet, int>(_urlHelper, nameof(CardioSetApiController), ofmCollectionResourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
-            expandableOfmForGetCollection = expandableOfmForGetCollection.Shape(ofmCollectionResourceParameters.Fields, _incomingHeaders.IncludeHateoas).ToList();
+            if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasForExpandableOfmForGets<CardioSetOfmForGet, int>(_urlHelper, nameof(CardioSetApiController), collectionResourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
+            expandableOfmForGetCollection = expandableOfmForGetCollection.Shape(collectionResourceParameters.Fields, _incomingHeaders.IncludeHateoas).ToList();
 
             this.AddPaginationMetadata<int, CardioSetOfmForGet>(ofmForGetCollectionQueryResult,
-                _incomingHeaders, ofmCollectionResourceParameters.AsDictionary().RemoveNullValues(), _urlHelper, nameof(CardioSetApiController));
+                _incomingHeaders, collectionResourceParameters.AsDictionary().RemoveNullValues(), _urlHelper, nameof(CardioSetApiController));
 
             if (!_incomingHeaders.IncludeHateoas)
             {
@@ -89,7 +87,7 @@ namespace Fittify.Api.Controllers.Sport
             dynamic result = new
             {
                 value = expandableOfmForGetCollection,
-                links = _hateoasLinkFactory.CreateLinksForOfmGetGeneric(ofmCollectionResourceParameters.AsDictionary().RemoveNullValues(),
+                links = _hateoasLinkFactory.CreateLinksForOfmGetGeneric(collectionResourceParameters.AsDictionary().RemoveNullValues(),
                     ofmForGetCollectionQueryResult.HasPrevious, ofmForGetCollectionQueryResult.HasNext).ToList()
             };
             return Ok(result);
@@ -103,12 +101,8 @@ namespace Fittify.Api.Controllers.Sport
             if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();
             var ownerGuid = new Guid(stringGuid);
 
-            if (ofmForPost == null) return BadRequest();
-
-            if (!ModelState.IsValid)
-            {
-                return new UnprocessableEntityObjectResult(ModelState);
-            }
+            if (!_controllerGuardClause.ValidatePost(ofmForPost, out ObjectResult objectResult))
+                return objectResult;
 
             var ofmForGet = await _asyncOfmRepository.Post(ofmForPost, ownerGuid);
 
@@ -118,74 +112,49 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpDelete("{id}", Name = "DeleteCardioSet")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
-        [AuthorizeOwnerIntId(typeof(CardioSetRepository))]
         public async Task<IActionResult> Delete(int id)
         {
             var ofmDeletionQueryResult = await _asyncOfmRepository.Delete(id);
-            if (ofmDeletionQueryResult.IsDeleted == false)
-            {
-                if (ofmDeletionQueryResult.ErrorMessages.Count != 0)
-                {
-                    foreach (var blockingOfmForGet in ofmDeletionQueryResult.ErrorMessages)
-                    {
-                        ModelState.AddModelError(_shortCamelCasedControllerName, blockingOfmForGet);
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError(_shortCamelCasedControllerName, "There was an unknown error deleting this entity. Please contact support.");
-                }
-            }
 
-            if (!ModelState.IsValid)
-            {
-                return new UnprocessableEntityObjectResult(ModelState);
-            }
+            if (!_controllerGuardClause.ValidateDelete(ofmDeletionQueryResult, id, out ObjectResult objectResult)) return objectResult;
 
             return NoContent();
         }
 
         [HttpPatch("{id}", Name = "PartiallyUpdateCardioSet")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
-        [AuthorizeOwnerIntId(typeof(CardioSetRepository))]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<CardioSetOfmForPatch> jsonPatchDocument)
         {
+            //// Todo: Prohibit trying to patch id!
             if (jsonPatchDocument == null)
             {
                 ModelState.AddModelError(_shortCamelCasedControllerName, "You sent an empty body (null) for " + _shortCamelCasedControllerName + " with id=" + id);
+                return new BadRequestObjectResult(ModelState);
+            }
+
+            // Get entity with original values from context
+            var ofmForPatch = await _asyncOfmRepository.GetByIdOfmForPatch<CardioSetOfmForPatch>(id);
+            if (ofmForPatch == null)
+            {
+                ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
                 return new EntityNotFoundObjectResult(ModelState);
             }
 
-            try
+            // Apply new values from jsonPatchDocument to ofm (the ofm that was just created based on fresh entity from context)
+            jsonPatchDocument.ApplyTo(ofmForPatch, ModelState);
+
+            // Validating ofm
+            TryValidateModel(ofmForPatch); // This is important to catch invalid model states caused by applying the jsonPatch, for example if a required field that previously had a value is now set to null
+            if (!ModelState.IsValid)
             {
-                // Get entity with original values from context
-                var ofmForPatch = await _asyncOfmRepository.GetByIdOfmForPatch<CardioSetOfmForPatch>(id);
-                if (ofmForPatch == null)
-                {
-                    ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
-                    return new EntityNotFoundObjectResult(ModelState);
-                }
-
-                // Apply new values from jsonPatchDocument to ofm (the ofm that was just created based on fresh entity from context)
-                jsonPatchDocument.ApplyTo(ofmForPatch, ModelState);
-
-                // Validating ofm
-                TryValidateModel(ofmForPatch); // This is important to catch invalid model states caused by applying the jsonPatch, for example if a required field that previously had a value is now set to null
-                if (!ModelState.IsValid)
-                {
-                    return new UnprocessableEntityObjectResult(ModelState);
-                }
-
-                // returning the patched ofm as response
-                var ofmForGet = _asyncOfmRepository.UpdatePartially(ofmForPatch).Result;
-                return new JsonResult(ofmForGet);
-
+                return new UnprocessableEntityObjectResult(ModelState);
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+
+            // returning the patched ofm as response
+            var ofmForGet = await _asyncOfmRepository.UpdatePartially(ofmForPatch);
+            return Ok(ofmForGet);
         }
     }
 }
+
+
