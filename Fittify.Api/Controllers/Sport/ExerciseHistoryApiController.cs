@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using Fittify.Api.Authorization;
 using Fittify.Api.Helpers;
 using Fittify.Api.Helpers.CustomAttributes;
 using Fittify.Api.Helpers.Extensions;
@@ -15,17 +14,14 @@ using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Patch;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Common.Helpers;
-using Fittify.DataModelRepository.Repository.Sport;
-using Fittify.DataModelRepository.ResourceParameters.Sport;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using BadRequestObjectResult = Fittify.Api.Helpers.ObjectResults.BadRequestObjectResult;
 
 namespace Fittify.Api.Controllers.Sport
 {
     [Route("api/exercisehistories")]
-    [Authorize]
     public class ExerciseHistoryApiController :
         Controller
     {
@@ -45,23 +41,23 @@ namespace Fittify.Api.Controllers.Sport
             _shortCamelCasedControllerName = nameof(ExerciseHistoryApiController).ToShortCamelCasedControllerName();
             _urlHelper = urlHelper;
             _controllerGuardClause = new ControllerGuardClauses<ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmForPatch, int>(this);
-            _hateoasLinkFactory = new HateoasLinkFactory<int>(urlHelper, nameof(ExerciseHistoryApiController));
+            _hateoasLinkFactory = new HateoasLinkFactory<int>(_urlHelper, nameof(ExerciseHistoryApiController));
             _incomingHeaders = Mapper.Map<IncomingHeaders>(httpContextAccesor.HttpContext.Items[nameof(IncomingRawHeaders)] as IncomingRawHeaders);
         }
 
         [HttpGet("{id}", Name = "GetExerciseHistoryById")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
-        [AuthorizeOwnerIntId(typeof(ExerciseHistoryRepository))]
-        public async Task<IActionResult> GetById(int id, ExerciseHistoryResourceParameters exerciseHistoryResourceParameters)
+        public async Task<IActionResult> GetById(int id, ExerciseHistoryOfmResourceParameters exerciseHistoryOfmResourceParameters)
         {
-            var ofmForGetQueryResult = await _asyncOfmRepository.GetById(id, exerciseHistoryResourceParameters.Fields);
+            var ofmForGetQueryResult = await _asyncOfmRepository.GetById(id, exerciseHistoryOfmResourceParameters.Fields);
             if (!_controllerGuardClause.ValidateGetById(ofmForGetQueryResult, id, out ObjectResult objectResult))
             {
                 return objectResult;
             }
             var expandable = ofmForGetQueryResult.ReturnedTOfmForGet.ToExpandableOfm();
-            var shapedExpandable = expandable.Shape(exerciseHistoryResourceParameters.Fields); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
-            if (_incomingHeaders.IncludeHateoas) shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, exerciseHistoryResourceParameters.Fields).ToList());
+            var shapedExpandable = expandable.Shape(exerciseHistoryOfmResourceParameters.Fields);
+            if (_incomingHeaders.IncludeHateoas)
+                shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, exerciseHistoryOfmResourceParameters.Fields).ToList());
             return Ok(shapedExpandable);
         }
 
@@ -69,15 +65,20 @@ namespace Fittify.Api.Controllers.Sport
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> GetCollection(ExerciseHistoryOfmCollectionResourceParameters collectionResourceParameters)
         {
-            var stringOwnerGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
-            if (String.IsNullOrWhiteSpace(stringOwnerGuid)) return Unauthorized();
-            var ownerGuid = new Guid(stringOwnerGuid);
+            var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+            if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();
+            var ownerGuid = new Guid(stringGuid);
 
             var ofmForGetCollectionQueryResult = await _asyncOfmRepository.GetCollection(collectionResourceParameters, ownerGuid);
+
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
             if (_incomingHeaders.IncludeHateoas) expandableOfmForGetCollection = expandableOfmForGetCollection.CreateHateoasForExpandableOfmForGets<ExerciseHistoryOfmForGet, int>(_urlHelper, nameof(ExerciseHistoryApiController), collectionResourceParameters.Fields).ToList(); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
             expandableOfmForGetCollection = expandableOfmForGetCollection.Shape(collectionResourceParameters.Fields, _incomingHeaders.IncludeHateoas).ToList();
+
+            this.AddPaginationMetadata<int, ExerciseHistoryOfmForGet>(ofmForGetCollectionQueryResult,
+                _incomingHeaders, collectionResourceParameters.AsDictionary().RemoveNullValues(), _urlHelper, nameof(ExerciseHistoryApiController));
+
             if (!_incomingHeaders.IncludeHateoas)
             {
                 return Ok(expandableOfmForGetCollection);
@@ -91,7 +92,7 @@ namespace Fittify.Api.Controllers.Sport
             };
             return Ok(result);
         }
-        
+
         [HttpPost(Name = "CreateExerciseHistory")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
         public async Task<IActionResult> Post([FromBody] ExerciseHistoryOfmForPost ofmForPost)
@@ -100,12 +101,8 @@ namespace Fittify.Api.Controllers.Sport
             if (String.IsNullOrWhiteSpace(stringGuid)) return Unauthorized();
             var ownerGuid = new Guid(stringGuid);
 
-            if (ofmForPost == null) return BadRequest();
-
-            if (!ModelState.IsValid)
-            {
-                return new UnprocessableEntityObjectResult(ModelState);
-            }
+            if (!_controllerGuardClause.ValidatePost(ofmForPost, out ObjectResult objectResult))
+                return objectResult;
 
             var ofmForGet = await _asyncOfmRepository.Post(ofmForPost, ownerGuid);
 
@@ -115,74 +112,49 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpDelete("{id}", Name = "DeleteExerciseHistory")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
-        [AuthorizeOwnerIntId(typeof(ExerciseHistoryRepository))]
         public async Task<IActionResult> Delete(int id)
         {
             var ofmDeletionQueryResult = await _asyncOfmRepository.Delete(id);
-            if (ofmDeletionQueryResult.IsDeleted == false)
-            {
-                if (ofmDeletionQueryResult.ErrorMessages.Count != 0)
-                {
-                    foreach (var blockingOfmForGet in ofmDeletionQueryResult.ErrorMessages)
-                    {
-                        ModelState.AddModelError(_shortCamelCasedControllerName, blockingOfmForGet);
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError(_shortCamelCasedControllerName, "There was an unknown error deleting this entity. Please contact support.");
-                }
-            }
 
-            if (!ModelState.IsValid)
-            {
-                return new UnprocessableEntityObjectResult(ModelState);
-            }
+            if (!_controllerGuardClause.ValidateDelete(ofmDeletionQueryResult, id, out ObjectResult objectResult)) return objectResult;
 
             return NoContent();
         }
 
         [HttpPatch("{id}", Name = "PartiallyUpdateExerciseHistory")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
-        [AuthorizeOwnerIntId(typeof(ExerciseHistoryRepository))]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<ExerciseHistoryOfmForPatch> jsonPatchDocument)
         {
+            //// Todo: Prohibit trying to patch id!
             if (jsonPatchDocument == null)
             {
                 ModelState.AddModelError(_shortCamelCasedControllerName, "You sent an empty body (null) for " + _shortCamelCasedControllerName + " with id=" + id);
+                return new BadRequestObjectResult(ModelState);
+            }
+
+            // Get entity with original values from context
+            var ofmForPatch = await _asyncOfmRepository.GetByIdOfmForPatch<ExerciseHistoryOfmForPatch>(id);
+            if (ofmForPatch == null)
+            {
+                ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
                 return new EntityNotFoundObjectResult(ModelState);
             }
 
-            try
+            // Apply new values from jsonPatchDocument to ofm (the ofm that was just created based on fresh entity from context)
+            jsonPatchDocument.ApplyTo(ofmForPatch, ModelState);
+
+            // Validating ofm
+            TryValidateModel(ofmForPatch); // This is important to catch invalid model states caused by applying the jsonPatch, for example if a required field that previously had a value is now set to null
+            if (!ModelState.IsValid)
             {
-                // Get entity with original values from context
-                var ofmForPatch = await _asyncOfmRepository.GetByIdOfmForPatch<ExerciseHistoryOfmForPatch>(id);
-                if (ofmForPatch == null)
-                {
-                    ModelState.AddModelError(_shortCamelCasedControllerName, "No " + _shortCamelCasedControllerName + " found for id=" + id);
-                    return new EntityNotFoundObjectResult(ModelState);
-                }
-
-                // Apply new values from jsonPatchDocument to ofm (the ofm that was just created based on fresh entity from context)
-                jsonPatchDocument.ApplyTo(ofmForPatch, ModelState);
-
-                // Validating ofm
-                TryValidateModel(ofmForPatch); // This is important to catch invalid model states caused by applying the jsonPatch, for example if a required field that previously had a value is now set to null
-                if (!ModelState.IsValid)
-                {
-                    return new UnprocessableEntityObjectResult(ModelState);
-                }
-
-                // returning the patched ofm as response
-                var ofmForGet = _asyncOfmRepository.UpdatePartially(ofmForPatch).Result;
-                return new JsonResult(ofmForGet);
-
+                return new UnprocessableEntityObjectResult(ModelState);
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+
+            // returning the patched ofm as response
+            var ofmForGet = await _asyncOfmRepository.UpdatePartially(ofmForPatch);
+            return Ok(ofmForGet);
         }
     }
 }
+
+
