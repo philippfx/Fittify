@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace Fittify.Client.ApiModelRepository
 {
+    [ExcludeFromCodeCoverage] // As of 8th of June 2018, covered by end-to-end test. May be unit tested
     public class HttpRequestBuilder : IHttpRequestBuilder
     {
         private readonly HttpClient _httpClient;

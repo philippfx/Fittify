@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Fittify.Common.CustomExceptions;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
@@ -11,6 +12,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 namespace Fittify.Web.View.Controllers
 {
+    [ExcludeFromCodeCoverage] // Todo: Unit test. Not urgent, because code taken from https://app.pluralsight.com/player?course=asp-dotnet-core-oauth2-openid-connect-securing&author=kevin-dockx&name=asp-dotnet-core-oauth2-openid-connect-securing-m3&clip=7&mode=live
     [Route("account")]
     public class AccountController : Controller
     {
@@ -22,6 +24,7 @@ namespace Fittify.Web.View.Controllers
             _appConfiguration = appConfiguration;
             _httpContextAccessor = httpContextAccessor;
         }
+
         [Route("logout")]
         public async Task Logout()
         {

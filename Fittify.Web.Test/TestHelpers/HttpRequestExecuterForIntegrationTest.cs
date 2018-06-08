@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Fittify.Client.ApiModelRepository;
@@ -52,6 +53,7 @@ namespace Fittify.Web.Test.TestHelpers
             return await _httpRequestBuilder.SendAsync();
         }
 
+        [ExcludeFromCodeCoverage] // As of 8th of June 2018, not used for Fittify at all
         public async Task<HttpResponseMessage> Put(
             Uri requestUri, object value)
         {
@@ -63,8 +65,10 @@ namespace Fittify.Web.Test.TestHelpers
             return await _httpRequestBuilder.SendAsync();
         }
 
+
+        [ExcludeFromCodeCoverage] // As of 8th of June 2018, not used for Fittify tests
         public async Task<HttpResponseMessage> Patch(
-            Uri requestUri, JsonPatchDocument jsonPatchDocument /*object jsonPatchDocument*/, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+            Uri requestUri, JsonPatchDocument jsonPatchDocument, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             _httpRequestBuilder
                 .AddMethod(new HttpMethod("PATCH"))
@@ -74,6 +78,8 @@ namespace Fittify.Web.Test.TestHelpers
             return await _httpRequestBuilder.SendAsync();
         }
 
+
+        [ExcludeFromCodeCoverage] // As of 8th of June 2018, not used for Fittify tests
         public async Task<HttpResponseMessage> Delete(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             _httpRequestBuilder

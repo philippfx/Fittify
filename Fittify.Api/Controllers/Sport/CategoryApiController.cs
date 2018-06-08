@@ -43,9 +43,6 @@ namespace Fittify.Api.Controllers.Sport
             _controllerGuardClause = new ControllerGuardClauses<CategoryOfmForGet, CategoryOfmForPost, CategoryOfmForPatch, int>(this);
             _hateoasLinkFactory = new HateoasLinkFactory<int>(_urlHelper, nameof(CategoryApiController));
             _incomingHeaders = Mapper.Map<IncomingHeaders>(httpContextAccesor.HttpContext.Items[nameof(IncomingRawHeaders)] as IncomingRawHeaders);
-            ////var workoutOfmRepo = httpContextAccesor.HttpContext.RequestServices.GetService(typeof(IAsyncOfmRepository<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int, WorkoutOfmCollectionResourceParameters>)) as IAsyncOfmRepository<WorkoutOfmForGet, WorkoutOfmForPost, WorkoutOfmForPatch, int,
-            ////    WorkoutOfmCollectionResourceParameters>;
-
         }
 
         [HttpGet("{id}", Name = "GetCategoryById")]
@@ -58,7 +55,7 @@ namespace Fittify.Api.Controllers.Sport
                 return objectResult;
             }
             var expandable = ofmForGetQueryResult.ReturnedTOfmForGet.ToExpandableOfm();
-            var shapedExpandable = expandable.Shape(categoryOfmResourceParameters.Fields); // Todo Improve! The data is only superficially shaped AFTER a full query was run against the database
+            var shapedExpandable = expandable.Shape(categoryOfmResourceParameters.Fields);
             if (_incomingHeaders.IncludeHateoas)
                 shapedExpandable.Add("links", _hateoasLinkFactory.CreateLinksForOfmForGet(id, categoryOfmResourceParameters.Fields).ToList());
             return Ok(shapedExpandable);
@@ -73,8 +70,6 @@ namespace Fittify.Api.Controllers.Sport
             var ownerGuid = new Guid(stringGuid);
 
             var ofmForGetCollectionQueryResult = await _asyncOfmRepository.GetCollection(collectionResourceParameters, ownerGuid);
-
-            //var ofmForGetCollectionQueryResult = await _asyncOfmRepository.GetCollection(collectionResourceParameters, Guid.NewGuid());
 
             if (!_controllerGuardClause.ValidateGetCollection(ofmForGetCollectionQueryResult, out ObjectResult objectResult)) return objectResult;
             var expandableOfmForGetCollection = ofmForGetCollectionQueryResult.ReturnedTOfmForGetCollection.OfmForGets.ToExpandableOfmForGets();
@@ -108,12 +103,6 @@ namespace Fittify.Api.Controllers.Sport
 
             if (!_controllerGuardClause.ValidatePost(ofmForPost, out ObjectResult objectResult))
                 return objectResult;
-            //if (ofmForPost == null) return BadRequest("The request body is null");
-
-            //if (!ModelState.IsValid)
-            //{
-            //    return new UnprocessableEntityObjectResult(ModelState);
-            //}
 
             var ofmForGet = await _asyncOfmRepository.Post(ofmForPost, ownerGuid);
 
