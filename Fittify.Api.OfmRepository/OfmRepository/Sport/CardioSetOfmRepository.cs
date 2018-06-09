@@ -12,7 +12,7 @@ using ITypeHelperService = Fittify.Api.OfmRepository.Services.TypeHelper.ITypeHe
 
 namespace Fittify.Api.OfmRepository.OfmRepository.Sport
 {
-    public class CardioSetOfmRepository : AsyncOfmRepositoryBase<CardioSet, CardioSetOfmForGet, int, CardioSetResourceParameters>, IAsyncEntityOwnerIntId
+    public class CardioSetOfmRepository : AsyncOfmRepositoryBase<CardioSet, CardioSetOfmForGet, int, CardioSetResourceParameters>, IAsyncOfmOwnerIntId
     {
         public CardioSetOfmRepository(IAsyncCrud<CardioSet, int, CardioSetResourceParameters> repo,
             IPropertyMappingService propertyMappingService,

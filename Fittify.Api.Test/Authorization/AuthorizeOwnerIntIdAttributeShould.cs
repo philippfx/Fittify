@@ -28,7 +28,7 @@ namespace Fittify.Api.Test.Authorization
             await Task.Run(() =>
             {
                 // Arrange
-                var requestHeaderMatchesApiVersionAttribute = new AuthorizeOwnerIntIdAttribute(typeof(CategoryOfmRepository));
+                var authorizeOwnerIntIdAttribute = new AuthorizeOwnerIntIdAttribute(typeof(CategoryOfmRepository));
 
                 // Mock ActionConstraintContext
                 var actionContext = new ActionContext(
@@ -47,7 +47,7 @@ namespace Fittify.Api.Test.Authorization
                 authorizationFilterContext.HttpContext.RequestServices = serviceProvider.Object;
 
                 // Act
-                requestHeaderMatchesApiVersionAttribute.OnAuthorization(authorizationFilterContext);
+                authorizeOwnerIntIdAttribute.OnAuthorization(authorizationFilterContext);
 
                 // Assert
                 var actualObjectResult = JsonConvert.SerializeObject(authorizationFilterContext.Result, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -61,14 +61,14 @@ namespace Fittify.Api.Test.Authorization
                 Assert.AreEqual(actualObjectResult, expectedObjectResult);
             });
         }
-
+        
         [Test]
         public async Task ReturnBadRequestResult_WhenIdInRouteIsNotParsable()
         {
             await Task.Run(() =>
             {
                 // Arrange
-                var requestHeaderMatchesApiVersionAttribute = new AuthorizeOwnerIntIdAttribute(typeof(CategoryOfmRepository));
+                var authorizeOwnerIntIdAttribute = new AuthorizeOwnerIntIdAttribute(typeof(CategoryOfmRepository));
 
                 // Mock ActionConstraintContext
                 var actionContext = new ActionContext(
@@ -96,7 +96,7 @@ namespace Fittify.Api.Test.Authorization
                 authorizationFilterContext.RouteData.Values.Add("id", "abc"); // unparsable int id
 
                 // Act
-                requestHeaderMatchesApiVersionAttribute.OnAuthorization(authorizationFilterContext);
+                authorizeOwnerIntIdAttribute.OnAuthorization(authorizationFilterContext);
 
                 // Assert
                 var actualObjectResult = JsonConvert.SerializeObject(authorizationFilterContext.Result, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -117,7 +117,7 @@ namespace Fittify.Api.Test.Authorization
             await Task.Run(() =>
             {
                 // Arrange
-                var requestHeaderMatchesApiVersionAttribute = new AuthorizeOwnerIntIdAttribute(typeof(CategoryOfmRepository));
+                var authorizeOwnerIntIdAttribute = new AuthorizeOwnerIntIdAttribute(typeof(CategoryOfmRepository));
 
                 // Mock ActionConstraintContext
                 var actionContext = new ActionContext(
@@ -148,7 +148,7 @@ namespace Fittify.Api.Test.Authorization
                 authorizationFilterContext.RouteData.Values.Add("id", "1");
 
                 // Act
-                requestHeaderMatchesApiVersionAttribute.OnAuthorization(authorizationFilterContext);
+                authorizeOwnerIntIdAttribute.OnAuthorization(authorizationFilterContext);
 
                 // Assert
                 var actualObjectResult = JsonConvert.SerializeObject(authorizationFilterContext.Result, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -169,7 +169,7 @@ namespace Fittify.Api.Test.Authorization
             await Task.Run(() =>
             {
                 // Arrange
-                var requestHeaderMatchesApiVersionAttribute = new AuthorizeOwnerIntIdAttribute(typeof(CategoryOfmRepository));
+                var authorizeOwnerIntIdAttribute = new AuthorizeOwnerIntIdAttribute(typeof(CategoryOfmRepository));
 
                 // Mock ActionConstraintContext
                 var actionContext = new ActionContext(
@@ -200,7 +200,7 @@ namespace Fittify.Api.Test.Authorization
                 authorizationFilterContext.RouteData.Values.Add("id", "1");
 
                 // Act
-                requestHeaderMatchesApiVersionAttribute.OnAuthorization(authorizationFilterContext);
+                authorizeOwnerIntIdAttribute.OnAuthorization(authorizationFilterContext);
 
                 // Assert
                 var actualObjectResult = JsonConvert.SerializeObject(authorizationFilterContext.Result, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
@@ -215,53 +215,64 @@ namespace Fittify.Api.Test.Authorization
             });
         }
 
-        ////[Test]
-        ////public async Task ReturnUnauthorizedtResult_WhenUserIsNotOwnerOfEntity()
-        ////{
-        ////    // Arrange
-        ////    var requestHeaderMatchesApiVersionAttribute = new AuthorizeOwnerIntIdAttribute(typeof(CategoryOfmRepository));
+        [Test]
+        public async Task ReturnInternalServerErrorObjectResult_WhenOfmRepositoryCouldNotBeRetrievedFromDependencyContainer()
+        {
+            await Task.Run(() =>
+            {
+                // Arrange
+                var authorizeOwnerIntIdAttribute = new AuthorizeOwnerIntIdAttribute(typeof(CategoryOfmRepository));
 
-        ////    // Mock ActionConstraintContext
-        ////    var actionContext = new ActionContext(
-        ////        new DefaultHttpContext(),
-        ////        new RouteData(),
-        ////        new ActionDescriptor(),
-        ////        new ModelStateDictionary());
+                // Mock ActionConstraintContext
+                var actionContext = new ActionContext(
+                    new DefaultHttpContext(),
+                    new RouteData(),
+                    new ActionDescriptor(),
+                    new ModelStateDictionary());
 
-        ////    var authorizationFilterContext = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata>());
+                var authorizationFilterContext = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata>());
 
-        ////    // Mock ServiceProvider to avoid exception when getting EF Context from Dependency Container
-        ////    var serviceProvider = new Mock<IServiceProvider>();
-        ////    serviceProvider
-        ////        .Setup(x => x.GetService(typeof(FittifyContext)))
-        ////        .Returns(new FittifyContext(new DbContextOptions<FittifyContext>()));
-        ////    authorizationFilterContext.HttpContext.RequestServices = serviceProvider.Object;
+                // Mock ServiceProvider to avoid exception when getting EF Context from Dependency Container
+                var serviceProvider = new Mock<IServiceProvider>();
+                serviceProvider
+                    .Setup(x => x.GetService(typeof(FittifyContext)))
+                    .Returns(new FittifyContext(new DbContextOptions<FittifyContext>()));
+                authorizationFilterContext.HttpContext.RequestServices = serviceProvider.Object;
 
-        ////    // Mock User or the sut exits earlier than reaching the code to be tested
-        ////    var userMock = new Mock<ClaimsPrincipal>();
-        ////    userMock
-        ////        .SetupGet(x => x.Identity.IsAuthenticated)
-        ////        .Returns(true);
-        ////    //userMock
-        ////    //    .Setup(s => s.Claims)
-        ////    //    .Returns(new Claim[] { new Claim("sub", "this-is-not-a-guid") });
-        ////    authorizationFilterContext.HttpContext.User = userMock.Object;
+                // Mock User or the sut exits earlier than reaching the code to be tested
+                var userMock = new Mock<ClaimsPrincipal>();
+                userMock
+                    .SetupGet(x => x.Identity.IsAuthenticated)
+                    .Returns(true);
+                userMock
+                    .Setup(s => s.Claims)
+                    .Returns(new Claim[] { new Claim("sub", "00000000-0000-0000-0000-000000000000") });
+                authorizationFilterContext.HttpContext.User = userMock.Object;
 
-        ////    authorizationFilterContext.RouteData.Values.Add("id", "1");
+                authorizationFilterContext.RouteData.Values.Add("id", "1");
 
-        ////    // Act
-        ////    requestHeaderMatchesApiVersionAttribute.OnAuthorization(authorizationFilterContext);
+                // Act
+                authorizeOwnerIntIdAttribute.OnAuthorization(authorizationFilterContext);
 
-        ////    // Assert
-        ////    var actualObjectResult = JsonConvert.SerializeObject(authorizationFilterContext.Result, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
-        ////    var expectedObjectResult =
-        ////        @"
-        ////            {
-        ////              ""StatusCode"": 401
-        ////            }
-        ////        ".MinifyJson().PrettifyJson();
+                // Assert
+                var actualObjectResult = JsonConvert.SerializeObject(authorizationFilterContext.Result, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
+                var expectedObjectResult =
+                    @"
+                        {
+                          ""Value"": {
+                            ""_ofmRepository"": [
+                              ""_ofmRepository could not be retrieved from dependency container and must not be null""
+                            ]
+                          },
+                          ""Formatters"": [],
+                          ""ContentTypes"": [],
+                          ""DeclaredType"": null,
+                          ""StatusCode"": 500
+                        }
+                    ".MinifyJson().PrettifyJson();
 
-        ////    Assert.AreEqual(actualObjectResult, expectedObjectResult);
-            ////}
+                Assert.AreEqual(actualObjectResult, expectedObjectResult);
+            });
         }
     }
+}

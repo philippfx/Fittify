@@ -51,7 +51,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet("{id}", Name = "GetWorkoutHistoryById")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
-        [AuthorizeOwnerIntId(typeof(WorkoutHistoryOfmRepository))]
+        //[AuthorizeOwnerIntId(typeof(WorkoutHistoryOfmRepository))]
         public async Task<IActionResult> GetById(int id, WorkoutHistoryOfmResourceParameters workoutHistoryOfmResourceParameters)
         {
             var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
@@ -119,6 +119,7 @@ namespace Fittify.Api.Controllers.Sport
             if (!int.TryParse(includeExerciseHistories, out int parsedResult))
             {
                 ModelState.AddModelError(_shortCamelCasedControllerName, "The query parameter 'includeExerciseHistories' can only take a value of 0 (=false) or 1 (=true).");
+                return new BadRequestObjectResult(ModelState);
             }
 
             if (!ModelState.IsValid)

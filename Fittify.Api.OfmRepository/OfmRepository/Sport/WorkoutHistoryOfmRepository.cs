@@ -24,7 +24,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.Sport
     public class WorkoutHistoryOfmRepository : 
         AsyncOfmRepositoryBase<WorkoutHistory, WorkoutHistoryOfmForGet, int, WorkoutHistoryResourceParameters>,
         IAsyncOfmRepositoryForWorkoutHistory, 
-        IAsyncEntityOwnerIntId
+        IAsyncOfmOwnerIntId
 
     {
         private readonly IWorkoutHistoryRepository _workoutHistoryRepository;

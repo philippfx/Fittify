@@ -162,13 +162,13 @@ namespace Fittify.Api.Test
                 var client = server.CreateClient();
                 client.DefaultRequestHeaders.Add("X-Integration-Testing-Authentication", "InjectClaimsViaHeaders");
                 client.DefaultRequestHeaders.Add("sub", "55555555-5555-5555-5555-55555aaa5555");
-                var result = await client.GetAsync("/api/workouts/1");
+                var result = await client.GetAsync("/api/exercises/1");
                 var responseStatusCode = result.StatusCode;
 
                 Assert.AreEqual(401, (int)responseStatusCode);
             }
         }
-
+        
         [Test]
         public async Task ReturnFail_ForWrongApiVersion()
         {
@@ -191,7 +191,7 @@ namespace Fittify.Api.Test
                     }
                 ".MinifyJson().PrettifyJson();
 
-                Assert.AreEqual(actualObjectResult, expectedObjectResult);
+                Assert.AreEqual(expectedObjectResult, actualObjectResult);
             }
         }
 
