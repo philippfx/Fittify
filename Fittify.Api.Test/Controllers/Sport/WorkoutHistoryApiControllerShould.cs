@@ -532,6 +532,58 @@ namespace Fittify.Api.Test.Controllers.Sport
         }
 
         [Test]
+        public async Task ReturnUnauthorizedResult_WhenUserClaimSubIsNullOrMissingOrWhiteSpace_WhenUsingGetById()
+        {
+            // Arrange
+            var workoutHistoryOfmResourceParameters = new WorkoutHistoryOfmResourceParameters();
+            // Mock GppdRepo
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkoutHistory>();
+
+            // Mock IUrlHelper
+            var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
+
+            // Mock IHttpContextAccessor
+            var httpContextAccessorMock = new Mock<IHttpContextAccessor>(); // Is mocked to avoid exception. All resulting values will be overidden by mock.
+            httpContextAccessorMock.Setup(s => s.HttpContext.Items).Returns(new Dictionary<object, object>()
+            {
+                {
+                    nameof(IncomingRawHeaders),
+                    IncomingRawHeadersMock.GetDefaultIncomingRawHeaders()
+                }
+            });
+
+            // Initialize controller
+            var workoutHistoryController = new WorkoutHistoryApiController(
+                asyncGppdMock.Object,
+                mockUrlHelper.Object,
+                httpContextAccessorMock.Object);
+
+            // Mock User
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                //new Claim("sub", "00000000-0000-0000-0000-000000000000")
+            }));
+            workoutHistoryController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
+            // Act
+            var objectResult = await workoutHistoryController.GetById(1, workoutHistoryOfmResourceParameters);
+
+            // Assert
+            var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
+            var expectedJsonResult =
+                @"
+                    {
+                      ""StatusCode"": 401
+                    }
+                ".MinifyJson().PrettifyJson();
+
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+        }
+
+        [Test]
         public async Task ReturnOkObjectResult_ForMinimumQuery_WhenUsingGetGollection()
         {
             // Arrange
@@ -1722,6 +1774,65 @@ namespace Fittify.Api.Test.Controllers.Sport
                 ".MinifyJson().PrettifyJson();
 
             Assert.AreEqual(expectedObjectResult, actualObjectResult);
+        }
+
+        [Test]
+        public async Task ReturnBadRequestResult_ForInvalidExerciseHistoriesQueryParameter_WhenUsingGetById()
+        {
+            // Arrange
+            // Mock GppdRepo
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkoutHistory>();
+
+            // Mock IUrlHelper
+            var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
+
+            // Mock IHttpContextAccessor
+            var httpContextAccessorMock = new Mock<IHttpContextAccessor>(); // Is mocked to avoid exception. All resulting values will be overidden by mock.
+            httpContextAccessorMock.Setup(s => s.HttpContext.Items).Returns(new Dictionary<object, object>()
+            {
+                {
+                    nameof(IncomingRawHeaders),
+                    IncomingRawHeadersMock.GetDefaultIncomingRawHeaders()
+                }
+            });
+
+            // Initialize controller
+            var workoutController = new WorkoutHistoryApiController(
+                asyncGppdMock.Object,
+                mockUrlHelper.Object,
+                httpContextAccessorMock.Object);
+
+            // Mock User
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                new Claim("sub", "00000000-0000-0000-0000-000000000000")
+            }));
+            workoutController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
+            // Act
+            var objectResult = await workoutController.Post(new WorkoutHistoryOfmForPost(), "abc");
+
+            // Assert
+            var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
+            var expectedJsonResult =
+                @"
+                   {
+                      ""Value"": {
+                        ""workoutHistory"": [
+                          ""The query parameter 'includeExerciseHistories' can only take a value of 0 (=false) or 1 (=true).""
+                        ]
+                      },
+                      ""Formatters"": [],
+                      ""ContentTypes"": [],
+                      ""DeclaredType"": null,
+                      ""StatusCode"": 400
+                   }
+                ".MinifyJson().PrettifyJson();
+
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]

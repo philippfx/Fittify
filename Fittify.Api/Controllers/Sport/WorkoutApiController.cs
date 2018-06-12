@@ -51,7 +51,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpGet("{id}", Name = "GetWorkoutById")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
-        [AuthorizeOwnerIntId(typeof(WorkoutOfmRepository))]
+        //[AuthorizeOwnerIntId(typeof(WorkoutOfmRepository))]
         public async Task<IActionResult> GetById(int id, WorkoutOfmResourceParameters workoutOfmResourceParameters)
         {
             var stringGuid = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;

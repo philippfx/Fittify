@@ -1,7 +1,11 @@
 {
   "iisSettings": {
-    "windowsAuthentication": false,
+    "windowsAuthentication": true,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/Fittify.Web.View",
+      "sslPort": 0
+    },
     "iisExpress": {
       "applicationUrl": "https://localhost:44328/",
       "sslPort": 44328
@@ -21,7 +25,15 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:36599"
+      "applicationUrl": "http://localhost:44328"
+    },
+    "Selenium": {
+      "commandName": "IISExpress",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "use64Bit": true,
+      "applicationUrl": "http://localhost:44328"
     }
   }
 }

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq;
+using Fittify.Api.Helpers.ObjectResults;
 using Fittify.Api.OfmRepository.OfmRepository;
+using Fittify.Common.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Fittify.Api.Authorization
 {
@@ -46,8 +49,16 @@ namespace Fittify.Api.Authorization
                 context.Result = new UnauthorizedResult();
                 return;
             }
+
+            if (_ofmRepository == null)
+            {
+                var modelStateDictionary = new ModelStateDictionary();
+                modelStateDictionary.AddModelError("_ofmRepository", "_ofmRepository could not be retrieved from dependency container and must not be null");
+                context.Result = new InternalServerErrorObjectResult(modelStateDictionary);
+                return;
+            }
             
-            if (_ofmRepository != null && await _ofmRepository?.IsEntityOwner(entityId, ownerGuid) == false)
+            if (await _ofmRepository?.IsEntityOwner(entityId, ownerGuid) == false)
             {
                 context.Result = new UnauthorizedResult();
             }

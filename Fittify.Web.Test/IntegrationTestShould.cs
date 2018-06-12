@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Fittify.Common.Extensions;
 using Fittify.Web.Test.TestHelpers;
 using Fittify.Web.View;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -77,6 +79,14 @@ namespace Fittify.Web.Test
 
                 Assert.AreEqual("text/html; charset=utf-8",
                     response.Content.Headers.ContentType.ToString());
+
+                var htmlDocument = new HtmlDocument();
+                htmlDocument.LoadHtml(responseString);
+
+                var tableNodes = htmlDocument.GetElementbyId("workout-table").ChildNodes;
+                var tableRows = tableNodes.Where(w => w.Name == "tr");
+
+                Assert.AreEqual(4, tableRows.Count());
             }
         }
 

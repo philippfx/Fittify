@@ -31,14 +31,14 @@ namespace Fittify.DataModelRepository.Repository.Sport.Factory
         //    throw new InvalidOperationException();
         //}
 
-        public IAsyncEntityOwnerIntId CreateAsyncOwnerIntIdInstance(Type dataRepositoryType)
-        {
-            if (dataRepositoryType == typeof(WorkoutRepository))
-            {
-                return new WorkoutRepository(_fittifyContext);
-            }
+        ////public IAsyncEntityOwnerIntId CreateAsyncOwnerIntIdInstance(Type dataRepositoryType)
+        ////{
+        ////    if (dataRepositoryType == typeof(WorkoutRepository))
+        ////    {
+        ////        return new WorkoutRepository(_fittifyContext);
+        ////    }
 
-            return null;
-        }
+        ////    return null;
+        ////}
     }
 }

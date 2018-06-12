@@ -38,5 +38,10 @@
       <HintPath>..\..\..\Users\seifert-1\.nuget\packages\microsoft.aspnetcore.authentication.openidconnect\2.0.0\lib\netstandard2.0\Microsoft.AspNetCore.Authentication.OpenIdConnect.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
 </Project>

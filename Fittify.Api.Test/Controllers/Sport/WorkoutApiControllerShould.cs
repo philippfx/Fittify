@@ -612,6 +612,65 @@ namespace Fittify.Api.Test.Controllers.Sport
         }
 
         [Test]
+        public async Task ReturnUnauthorizedResult_WhenUserClaimSubIsNullOrMissingOrWhiteSpace_WhenUsingGetById()
+        {
+            // Arrange
+            var workoutOfmResourceParameters = new WorkoutOfmResourceParameters();
+            // Mock GppdRepo
+            var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
+            ////asyncGppdMock
+            ////    .Setup(s => s.GetCollection(workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000")))
+            ////    .Returns(Task.FromResult(
+            ////        new OfmForGetCollectionQueryResult<WorkoutOfmForGet>()
+            ////        {
+            ////            // No need to put data, because controller action exits early
+            ////        }));
+
+            // Mock IUrlHelper
+            var mockUrlHelper = new Mock<IUrlHelper>(MockBehavior.Strict);
+
+            // Mock IHttpContextAccessor
+            var httpContextAccessorMock = new Mock<IHttpContextAccessor>(); // Is mocked to avoid exception. All resulting values will be overidden by mock.
+            httpContextAccessorMock.Setup(s => s.HttpContext.Items).Returns(new Dictionary<object, object>()
+            {
+                {
+                    nameof(IncomingRawHeaders),
+                    IncomingRawHeadersMock.GetDefaultIncomingRawHeaders()
+                }
+            });
+
+            // Initialize controller
+            var workoutController = new WorkoutApiController(
+                asyncGppdMock.Object,
+                mockUrlHelper.Object,
+                httpContextAccessorMock.Object);
+
+            // Mock User
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            {
+                //new Claim("sub", "00000000-0000-0000-0000-000000000000")
+            }));
+            workoutController.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+
+            // Act
+            var objectResult = await workoutController.GetById(1, workoutOfmResourceParameters);
+
+            // Assert
+            var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
+            var expectedJsonResult =
+                @"
+                    {
+                      ""StatusCode"": 401
+                    }
+                ".MinifyJson().PrettifyJson();
+
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
+        }
+
+        [Test]
         public async Task ReturnOkObjectResult_ForMinimumQuery_WhenUsingGetGollection()
         {
             // Arrange
