@@ -41,5 +41,21 @@ namespace Fittify.DataModelRepository.Repository.Sport
                 ofmResourceParameters.PageNumber, 
                 ofmResourceParameters.PageSize);
         }
+
+        public override Task<EntityDeletionResult<int>> Delete(int id)
+        {
+            var mapExerciseWorkouts = FittifyContext.MapExerciseWorkout.Where(w => w.ExerciseId == id).ToList();
+            FittifyContext.RemoveRange(mapExerciseWorkouts);
+
+            var exerciseHistories = FittifyContext.ExerciseHistories.Where(w => w.ExerciseId == id).ToList();
+            foreach (var exerciseHistory in exerciseHistories)
+            {
+                exerciseHistory.ExerciseId = null;
+                exerciseHistory.Exercise = null;
+            }
+
+            return base.Delete(id);
+
+        }
     }
 }

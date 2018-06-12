@@ -36,10 +36,10 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)postResult.HttpStatusCode != 201)
-            {
-                // Todo: Do something when posting failed
-            }
+            //if ((int)postResult.HttpStatusCode != 201)
+            //{
+            //    // Todo: Do something when posting failed
+            //}
 
             return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }
@@ -59,10 +59,10 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)patchResult.HttpStatusCode != 200)
-            {
-                // Todo: Do something when posting failed
-            }
+            //if ((int)patchResult.HttpStatusCode != 200)
+            //{
+            //    // Todo: Do something when posting failed
+            //}
 
             return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }
@@ -82,10 +82,10 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)patchResult.HttpStatusCode != 200)
-            {
-                // Todo: Do something when posting failed
-            }
+            //if ((int)patchResult.HttpStatusCode != 200)
+            //{
+            //    // Todo: Do something when posting failed
+            //}
 
             return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }
@@ -102,10 +102,10 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)deleteResult.HttpStatusCode != 204)
-            {
-                // Todo: Do something when posting failed
-            }
+            //if ((int)deleteResult.HttpStatusCode != 204)
+            //{
+            //    // Todo: Do something when posting failed
+            //}
 
             return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }

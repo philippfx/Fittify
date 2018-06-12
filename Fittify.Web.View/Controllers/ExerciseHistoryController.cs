@@ -24,7 +24,7 @@ namespace Fittify.Web.View.Controllers
         }
 
         [HttpPost]
-        public async Task<RedirectToActionResult> CreateExerciseHistory([FromForm] ExerciseHistoryOfmForPost exerciseHistoryOfmForPost)
+        public async Task<RedirectToActionResult> CreateNewExerciseHistory([FromForm] ExerciseHistoryOfmForPost exerciseHistoryOfmForPost)
         {
             var postResult = await _exerciseHistoryViewModelRepository.Create(exerciseHistoryOfmForPost);
 

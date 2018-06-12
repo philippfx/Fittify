@@ -113,6 +113,10 @@ namespace Fittify.Api
                     FittifyContextSeeder.Seed(fittifyContext);
                 }
             }
+            else if (HostingEnvironment.IsNoDatabase())
+            {
+                services.AddDbContext<FittifyContext>(options => options.UseSqlServer(""));
+            }
             else if (HostingEnvironment.IsProduction())
             {
                 dbConnectionString = Configuration.GetValue<string>("ConnectionStrings:SmarterAspConnection");

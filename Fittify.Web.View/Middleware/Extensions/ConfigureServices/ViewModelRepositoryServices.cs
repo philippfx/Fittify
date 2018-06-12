@@ -1,7 +1,11 @@
-﻿using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
+﻿using System.Linq;
+using Fittify.Api.OfmRepository.OfmRepository.GenericGppd;
 using Fittify.Api.OfmRepository.OfmRepository.Sport;
+using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
+using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Client.ViewModelRepository;
 using Fittify.Client.ViewModelRepository.Sport;
+using Fittify.Client.ViewModels.Sport;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Fittify.Web.View.Middleware.Extensions.ConfigureServices
@@ -20,7 +24,10 @@ namespace Fittify.Web.View.Middleware.Extensions.ConfigureServices
                     //.WithScopedLifetime())
                     ;
 
+            //var serviceDescriptor = services.FirstOrDefault(descriptor => descriptor.ServiceType == typeof(IViewModelRepository<int,WeightLiftingSetViewModel,WeightLiftingSetOfmForPost, WeightLiftingSetOfmResourceParameters, WeightLiftingSetOfmCollectionResourceParameters>));
+            //services.Remove(serviceDescriptor);
 
+            //services.AddTransient<IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmResourceParameters, WeightLiftingSetOfmCollectionResourceParameters>, WeightLiftingSetViewModelRepository>();
             return services;
         }
     }

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fittify.DataModelRepository.Repository
 {
-
-    public abstract class AsyncCrudBase<TEntity, TId, TResourceParameters> : IAsyncCrud<TEntity, TId, TResourceParameters>
+    public abstract class
+        AsyncCrudBase<TEntity, TId, TResourceParameters> : IAsyncCrud<TEntity, TId, TResourceParameters>
         where TEntity : class, IEntityUniqueIdentifier<TId>, IEntityOwner, new()
         where TId : struct
         where TResourceParameters : EntityResourceParametersBase, IEntityOwner, new()
@@ -22,7 +22,7 @@ namespace Fittify.DataModelRepository.Repository
         {
             FittifyContext = fittifyContext;
         }
-        
+
         public async Task<bool> IsEntityOwner(TId id, Guid ownerGuid)
         {
             var entity = await FittifyContext.Set<TEntity>().FindAsync(id);
@@ -36,13 +36,13 @@ namespace Fittify.DataModelRepository.Repository
             if (entity != null) return true;
             return false;
         }
-        
+
         public virtual async Task<TEntity> Create(TEntity entity, Guid? ownerGuid)
         {
             entity.OwnerGuid = ownerGuid;
             await FittifyContext.Set<TEntity>().AddAsync(entity);
             await SaveContext();
-            
+
             return entity;
         }
 
@@ -64,9 +64,11 @@ namespace Fittify.DataModelRepository.Repository
             {
                 ofmResourceParameters = new TResourceParameters();
             }
+
             var linqToEntityQuery = await GetCollectionQueryable(ofmResourceParameters);
 
-            return await PagedList<TEntity>.CreateAsync(linqToEntityQuery, ofmResourceParameters.PageNumber, ofmResourceParameters.PageSize);
+            return await PagedList<TEntity>.CreateAsync(linqToEntityQuery, ofmResourceParameters.PageNumber,
+                ofmResourceParameters.PageSize);
         }
 
         /// <summary>
@@ -84,7 +86,6 @@ namespace Fittify.DataModelRepository.Repository
 
             await Task.Run(() =>
             {
-
                 if (ofmResourceParameters == null)
                 {
                     ofmResourceParameters = new TResourceParameters();
@@ -127,7 +128,7 @@ namespace Fittify.DataModelRepository.Repository
         {
             return FittifyContext.Set<TEntity>().AsNoTracking();
         }
-        
+
         /// <summary>
         /// save context and returns success or fail
         /// </summary>
@@ -142,20 +143,20 @@ namespace Fittify.DataModelRepository.Repository
         public virtual async Task<EntityDeletionResult<TId>> Delete(TId id)
         {
             var entity = await GetById(id);
-            
+
             return await Delete(entity);
         }
 
         public virtual async Task<EntityDeletionResult<TId>> Delete(TEntity entity)
         {
             var entityDeletionResult = new EntityDeletionResult<TId>();
-            
+
             if (entity == null)
             {
                 entityDeletionResult.DidEntityExist = false;
                 return entityDeletionResult;
             }
-            
+
             entityDeletionResult.DidEntityExist = true;
 
             FittifyContext.Set<TEntity>().Remove(entity);

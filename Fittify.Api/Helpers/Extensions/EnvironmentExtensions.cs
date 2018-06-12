@@ -10,5 +10,10 @@ namespace Fittify.Api.Helpers.Extensions
         {
             return env.IsEnvironment(StandardEnvironment.TestInMemoryDb);
         }
+
+        public static bool IsNoDatabase(this IHostingEnvironment env)
+        {
+            return env.IsEnvironment(StandardEnvironment.NoDatabase);
+        }
     }
 }

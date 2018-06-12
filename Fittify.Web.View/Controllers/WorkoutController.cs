@@ -46,7 +46,7 @@ namespace Fittify.Web.View.Controllers
 
         public async Task<IActionResult> Overview()
         {
-            await WriteOutIdentityAndAccessInformation();
+            //await WriteOutIdentityAndAccessInformation();
             //await WriteOutAccessInformation();
 
             var queryResult = await _workoutViewModelRepository.GetCollection(new WorkoutOfmCollectionResourceParameters());
@@ -109,12 +109,12 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)postResult.HttpStatusCode != 201)
-            {
-                // Todo: Do something when creation failed
-            }
+            //if ((int)postResult.HttpStatusCode != 201)
+            //{
+            //    // Todo: Do something when creation failed
+            //}
 
-            return RedirectToAction("AssociatedExercises", "Workout", new { workoutId = workoutId });
+            return RedirectToAction("AssociatedExercises", new { workoutId = workoutId });
         }
 
         [Route("{workoutId}/history")]
@@ -158,7 +158,7 @@ namespace Fittify.Web.View.Controllers
                 workoutViewModel = postResult.ViewModel;
             }
 
-            return RedirectToAction("AssociatedExercises", "Workout", new { workoutId = workoutViewModel?.Id });
+            return RedirectToAction("AssociatedExercises", new { workoutId = workoutViewModel?.Id });
         }
 
         [HttpPost]
@@ -173,17 +173,17 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)queryResult.HttpStatusCode == 204)
-            {
-                // Todo: Do something when deletion failed
-            }
+            //if ((int)queryResult.HttpStatusCode != 204)
+            //{
+            //    // Todo: Do something when deletion failed
+            //}
             
-            return RedirectToAction("Overview", "WorkoutOfmCollectionResourceParameters", null);
+            return RedirectToAction("Overview");
         }
 
         [HttpPost]
         [Route("{id}/patch")]
-        public async Task<RedirectToActionResult> PatchName(int id, [FromForm] WorkoutOfmForPatch workoutOfmForPatch)
+        public async Task<RedirectToActionResult> PatchWorkoutName(int id, [FromForm] WorkoutOfmForPatch workoutOfmForPatch)
         {
             JsonPatchDocument jsonPatchDocument = new JsonPatchDocument();
 
@@ -202,12 +202,12 @@ namespace Fittify.Web.View.Controllers
                 // Todo: Do something when patching failed
             }
 
-            return RedirectToAction("Overview", "WorkoutOfmCollectionResourceParameters", null);
+            return RedirectToAction("Overview");
         }
 
         [HttpPost]
         [Route("HistoryDetails/{workoutHistoryId}/SavingChanges")]
-        public async Task<RedirectToActionResult> SaveChangesForSets(int workoutHistoryId, IFormCollection formCollection)
+        public async Task<RedirectToActionResult> SaveChangesForWeightLiftingSets(int workoutHistoryId, IFormCollection formCollection)
         {
             // The formCollection is a flat array (there is no nested item).
             // Each form item needs to be parsed and assigned to its unique weightliftingSet
@@ -255,7 +255,7 @@ namespace Fittify.Web.View.Controllers
 
             foreach (var wls in listWls)
             {
-                JsonPatchDocument jsonPatchDocument = new JsonPatchDocument();
+                var jsonPatchDocument = new JsonPatchDocument();
                 foreach (var prop in wls.GetType().GetProperties())
                 {
                     if (prop.GetValue(wls) != null && !prop.Name.ToLower().Contains("id"))
@@ -273,31 +273,31 @@ namespace Fittify.Web.View.Controllers
                     return RedirectToAction("AccessDenied", "Authorization");
                 }
 
-                if ((int)patchResult.HttpStatusCode == 200)
-                {
-                    // Todo: Do something when patching failed
-                }
+                //if ((int)patchResult.HttpStatusCode != 200)
+                //{
+                //    // Todo: Do something when patching failed
+                //}
             }
             return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }
 
-        private async Task WriteOutIdentityAndAccessInformation()
-        {
-            // get the saved identity token
-            string identityToken = await HttpContext
-                .GetTokenAsync("id_token");
-            Debug.WriteLine($"Identity token: {identityToken}");
+        //private async Task WriteOutIdentityAndAccessInformation()
+        //{
+        //    // get the saved identity token
+        //    string identityToken = await HttpContext
+        //        .GetTokenAsync("id_token");
+        //    Debug.WriteLine($"Identity token: {identityToken}");
 
-            //var identityToken = await HttpContext.Authentication
-            //    .GetTokenAsync(OpenIdConnectParameterNames.IdToken);
-            var accesstoken = await HttpContext.GetTokenAsync("access_token");
-            Debug.WriteLine($"Access token: {accesstoken}");
+        //    //var identityToken = await HttpContext.Authentication
+        //    //    .GetTokenAsync(OpenIdConnectParameterNames.IdToken);
+        //    var accesstoken = await HttpContext.GetTokenAsync("access_token");
+        //    Debug.WriteLine($"Access token: {accesstoken}");
             
-            // write out the user claims
-            foreach (var claim in User.Claims)
-            {
-                Debug.WriteLine($"Claim type: {claim.Type} - Claim value: {claim.Value}");
-            }
-        }
+        //    // write out the user claims
+        //    foreach (var claim in User.Claims)
+        //    {
+        //        Debug.WriteLine($"Claim type: {claim.Type} - Claim value: {claim.Value}");
+        //    }
+        //}
     }
 }

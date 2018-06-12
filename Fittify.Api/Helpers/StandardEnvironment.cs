@@ -6,5 +6,6 @@ namespace Fittify.Api.Helpers
     public static class StandardEnvironment
     {
         public static readonly string TestInMemoryDb = "TestInMemoryDb";
+        public static readonly string NoDatabase = "NoDatabase";
     }
 }

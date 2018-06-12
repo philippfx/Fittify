@@ -44,67 +44,67 @@ namespace Fittify.Web.View.Controllers
             return View("Overview", categoryViewModelCollectionResult.ViewModelForGetCollection.ToList());
         }
 
-        [HttpPost]
-        public async Task<RedirectToActionResult> CreateCategory([FromForm] CategoryOfmForPost categoryOfmForPost, [FromQuery] int workoutId)
-        {
-            var postResult = await _categoryViewModelRepository.Create(categoryOfmForPost);
+        //[HttpPost]
+        //public async Task<RedirectToActionResult> CreateCategory([FromForm] CategoryOfmForPost categoryOfmForPost, [FromQuery] int workoutId)
+        //{
+        //    var postResult = await _categoryViewModelRepository.Create(categoryOfmForPost);
 
-            if (postResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
-                postResult.HttpStatusCode == HttpStatusCode.Forbidden)
-            {
-                return RedirectToAction("AccessDenied", "Authorization");
-            }
+        //    if (postResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+        //        postResult.HttpStatusCode == HttpStatusCode.Forbidden)
+        //    {
+        //        return RedirectToAction("AccessDenied", "Authorization");
+        //    }
 
-            if ((int)postResult.HttpStatusCode != 201)
-            {
-                // Todo: Do something when posting failed
-            }
+        //    if ((int)postResult.HttpStatusCode != 201)
+        //    {
+        //        // Todo: Do something when posting failed
+        //    }
 
-            return RedirectToAction("Overview", "Category", new { workoutId = workoutId });
-        }
+        //    return RedirectToAction("Overview", "Category", new { workoutId = workoutId });
+        //}
 
-        [HttpPost]
-        [Route("{id}/deletion")]
-        public async Task<RedirectToActionResult> Delete(int id)
-        {
-            var deleteResult = await _categoryViewModelRepository.Delete(id);
+        //[HttpPost]
+        //[Route("{id}/deletion")]
+        //public async Task<RedirectToActionResult> Delete(int id)
+        //{
+        //    var deleteResult = await _categoryViewModelRepository.Delete(id);
 
-            if (deleteResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
-                deleteResult.HttpStatusCode == HttpStatusCode.Forbidden)
-            {
-                return RedirectToAction("AccessDenied", "Authorization");
-            }
+        //    if (deleteResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+        //        deleteResult.HttpStatusCode == HttpStatusCode.Forbidden)
+        //    {
+        //        return RedirectToAction("AccessDenied", "Authorization");
+        //    }
 
-            if ((int)deleteResult.HttpStatusCode != 204)
-            {
-                // Todo: Do something when deleting failed
-            }
+        //    if ((int)deleteResult.HttpStatusCode != 204)
+        //    {
+        //        // Todo: Do something when deleting failed
+        //    }
 
-            return RedirectToAction("Overview", "CategoryResourceParameters", null);
-        }
+        //    return RedirectToAction("Overview", "CategoryResourceParameters", null);
+        //}
 
-        [HttpPost]
-        [Route("{id}/patch")]
-        public async Task<RedirectToActionResult> PatchName(int id, [FromForm] CategoryOfmForPatch categoryOfmForPatch)
-        {
-            JsonPatchDocument jsonPatchDocument = new JsonPatchDocument();
+        //[HttpPost]
+        //[Route("{id}/patch")]
+        //public async Task<RedirectToActionResult> PatchName(int id, [FromForm] CategoryOfmForPatch categoryOfmForPatch)
+        //{
+        //    JsonPatchDocument jsonPatchDocument = new JsonPatchDocument();
 
-            jsonPatchDocument.Replace("/" + nameof(categoryOfmForPatch.Name), categoryOfmForPatch.Name);
+        //    jsonPatchDocument.Replace("/" + nameof(categoryOfmForPatch.Name), categoryOfmForPatch.Name);
 
-            var patchResult = await _categoryViewModelRepository.PartiallyUpdate(id, jsonPatchDocument);
+        //    var patchResult = await _categoryViewModelRepository.PartiallyUpdate(id, jsonPatchDocument);
 
-            if (patchResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
-                patchResult.HttpStatusCode == HttpStatusCode.Forbidden)
-            {
-                return RedirectToAction("AccessDenied", "Authorization");
-            }
+        //    if (patchResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+        //        patchResult.HttpStatusCode == HttpStatusCode.Forbidden)
+        //    {
+        //        return RedirectToAction("AccessDenied", "Authorization");
+        //    }
 
-            if ((int)patchResult.HttpStatusCode != 200)
-            {
-                // Todo: Do something when posting failed
-            }
+        //    if ((int)patchResult.HttpStatusCode != 200)
+        //    {
+        //        // Todo: Do something when posting failed
+        //    }
 
-            return RedirectToAction("Overview", "CategoryResourceParameters", null);
-        }
+        //    return RedirectToAction("Overview", "CategoryResourceParameters", null);
+        //}
     }
 }

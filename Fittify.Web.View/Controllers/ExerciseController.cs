@@ -37,16 +37,16 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)exerciseViewModelCollectionResult.HttpStatusCode != 200)
-            {
-                // Todo: Do something when posting failed
-            }
+            //if ((int)exerciseViewModelCollectionResult.HttpStatusCode != 200)
+            //{
+            //    // Todo: Do something when posting failed
+            //}
             
             return View("Overview", exerciseViewModelCollectionResult.ViewModelForGetCollection.ToList());
         }
 
         [HttpPost]
-        public async Task<RedirectToActionResult> CreateExercise([FromForm] ExerciseOfmForPost exerciseOfmForPost, [FromQuery] int workoutId)
+        public async Task<RedirectToActionResult> CreateNewExercise([FromForm] ExerciseOfmForPost exerciseOfmForPost)
         {
             var postResult = await _exerciseViewModelRepository.Create(exerciseOfmForPost);
 
@@ -56,12 +56,12 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)postResult.HttpStatusCode != 201)
-            {
-                // Todo: Do something when posting failed
-            }
+            //if ((int)postResult.HttpStatusCode != 201)
+            //{
+            //    // Todo: Do something when posting failed
+            //}
 
-            return RedirectToAction("Overview", "Exercise", new { workoutId = workoutId });
+            return RedirectToAction("Overview");
         }
 
         [HttpPost]
@@ -76,17 +76,17 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)deleteResult.HttpStatusCode != 204)
-            {
-                // Todo: Do something when deleting failed
-            }
+            //if ((int)deleteResult.HttpStatusCode != 204)
+            //{
+            //    // Todo: Do something when deleting failed
+            //}
 
-            return RedirectToAction("Overview", "ExerciseOfmCollectionResourceParameters", null);
+            return RedirectToAction("Overview");
         }
 
         [HttpPost]
         [Route("{id}/patch")]
-        public async Task<RedirectToActionResult> PatchName(int id, [FromForm] ExerciseOfmForPatch exerciseOfmForPatch)
+        public async Task<RedirectToActionResult> PatchExerciseName(int id, [FromForm] ExerciseOfmForPatch exerciseOfmForPatch)
         {
             JsonPatchDocument jsonPatchDocument = new JsonPatchDocument();
 
@@ -100,12 +100,12 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)patchResult.HttpStatusCode != 200)
-            {
-                // Todo: Do something when posting failed
-            }
+            //if ((int)patchResult.HttpStatusCode != 200)
+            //{
+            //    // Todo: Do something when posting failed
+            //}
 
-            return RedirectToAction("Overview", "ExerciseOfmCollectionResourceParameters", null);
+            return RedirectToAction("Overview");
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Fittify.Web.Test.TestHelpers
         public override void ConfigureServices(IServiceCollection services)
         {
             base.ConfigureServices(services);
-            services.AddScoped<IHttpRequestExecuter, HttpRequestExecuterForIntegrationTest>();
+            services.AddTransient<IHttpRequestExecuter, HttpRequestExecuterForIntegrationTest>();
         }
 
         public override void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

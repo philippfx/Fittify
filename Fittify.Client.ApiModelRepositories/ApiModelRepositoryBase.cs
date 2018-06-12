@@ -145,6 +145,7 @@ namespace Fittify.Client.ApiModelRepository
                 + "/" + id
             );
             var httpResponse = await HttpRequestExecuter.Delete(uri, AppConfiguration, HttpContextAccessor);
+            //var contentString = httpResponse.Content.ReadAsStringAsync();
             ofmQueryResult.HttpStatusCode = httpResponse.StatusCode;
             ofmQueryResult.HttpResponseHeaders = httpResponse.Headers.ToList();
 

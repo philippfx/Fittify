@@ -115,6 +115,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpDelete("{id}", Name = "DeleteWeightLiftingSet")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
+        [AuthorizeOwnerIntId(typeof(WeightLiftingSetOfmRepository))]
         public async Task<IActionResult> Delete(int id)
         {
             var ofmDeletionQueryResult = await _asyncOfmRepository.Delete(id);
@@ -126,6 +127,7 @@ namespace Fittify.Api.Controllers.Sport
 
         [HttpPatch("{id}", Name = "PartiallyUpdateWeightLiftingSet")]
         [RequestHeaderMatchesApiVersion(new[] { "1" })]
+        [AuthorizeOwnerIntId(typeof(WeightLiftingSetOfmRepository))]
         public async Task<IActionResult> UpdatePartially(int id, [FromBody]JsonPatchDocument<WeightLiftingSetOfmForPatch> jsonPatchDocument)
         {
             //// Todo: Prohibit trying to patch id!
