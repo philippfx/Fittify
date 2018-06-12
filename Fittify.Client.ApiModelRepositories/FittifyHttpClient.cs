@@ -1,9 +1,9 @@
-﻿using System.Net.Http;
+﻿////using System.Net.Http;
 
-namespace Fittify.Client.ApiModelRepository
-{
-    public class FittifyHttpClient : HttpClient, IHttpClient
-    {
+////namespace Fittify.Client.ApiModelRepository
+////{
+////    public class FittifyHttpClient : HttpClient, IHttpClient
+////    {
 
-    }
-}
+////    }
+////}

@@ -266,6 +266,7 @@ namespace Fittify.Web.View.Controllers
                 }
 
                 var patchResult = await _weightLiftingSetViewModelRepository.PartiallyUpdate(wls.Id, jsonPatchDocument);
+                    ////.ConfigureAwait(false).GetAwaiter().GetResult(); // Must be called synchronously, or System.InvalidOperationException is thrown: This instance has already started one or more requests. Properties can only be modified before sending the first request.
 
                 if (patchResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
                     patchResult.HttpStatusCode == HttpStatusCode.Forbidden)

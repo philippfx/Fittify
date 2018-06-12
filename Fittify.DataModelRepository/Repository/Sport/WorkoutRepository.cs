@@ -67,7 +67,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
                 eH.PreviousExerciseHistoryId = null;
             }
             
-            var result = SaveContext().Result;
+            ////var result = SaveContext().Result;
 
             // Todo maybe fixing exerciseHistories that now have no previousExerciseHistory
             return await base.Delete(entity);

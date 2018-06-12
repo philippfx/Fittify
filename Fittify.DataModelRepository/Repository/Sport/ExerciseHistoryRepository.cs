@@ -61,7 +61,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
             if (!(await base.DoesEntityExist(id))) return new EntityDeletionResult<int>() { DidEntityExist = false, IsDeleted = false };
             
             FixRelationOfNextExerciseHistory(id);
-            var result = SaveContext().Result;
+            ////var result = SaveContext().Result;
             return await base.Delete(id);
         }
 

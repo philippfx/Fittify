@@ -18,7 +18,7 @@ namespace Fittify.Web.View.Middleware.Extensions.ConfigureServices
                     .FromAssemblyOf<WorkoutViewModelRepository>()
                     .AddClasses(classes => classes.AssignableTo(typeof(IViewModelRepository<,,,,>)))
                     .AsImplementedInterfaces()
-                    .WithScopedLifetime())
+                    .WithTransientLifetime())
                     //.AddClasses(classes => classes.AssignableTo<IScopedService>())
                     //.As<IScopedService>()
                     //.WithScopedLifetime())

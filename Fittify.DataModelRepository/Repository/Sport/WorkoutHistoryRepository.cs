@@ -117,7 +117,7 @@ namespace Fittify.DataModelRepository.Repository.Sport
             {
                 exerciseHistoryRepository.FixRelationOfNextExerciseHistory(exerciseHistory.Id);
             }
-            var result = SaveContext().Result;
+            ////var result = SaveContext().Result;
             return await base.Delete(entity);
         }
     }

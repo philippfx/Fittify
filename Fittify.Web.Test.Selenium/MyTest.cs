@@ -6,10 +6,10 @@ using OpenQA.Selenium;
 
 namespace Fittify.Web.Test.Selenium
 {
-    [TestFixture]
+    //[TestFixture]
     class MyTest
     {
-        [Test]
+        //[Test]
         public void TestHomePage()
         {
             string text;
