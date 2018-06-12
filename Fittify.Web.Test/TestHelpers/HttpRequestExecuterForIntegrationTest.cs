@@ -15,9 +15,11 @@ namespace Fittify.Web.Test.TestHelpers
     public class HttpRequestExecuterForIntegrationTest : IHttpRequestExecuter
     {
         private readonly IHttpRequestBuilder _httpRequestBuilder;
-        public HttpRequestExecuterForIntegrationTest(IHttpRequestBuilder httpRequestBuilder)
+        private readonly HttpClient _httpClient;
+        public HttpRequestExecuterForIntegrationTest(IHttpRequestBuilder httpRequestBuilder, IServiceProvider serviceProvider)
         {
             _httpRequestBuilder = httpRequestBuilder;
+            _httpClient = serviceProvider.GetService(typeof(HttpClient)) as HttpClient ?? new HttpClient();
         }
         public async Task<HttpResponseMessage> GetSingle(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
@@ -25,7 +27,7 @@ namespace Fittify.Web.Test.TestHelpers
                 .AddMethod(HttpMethod.Get)
                 .AddRequestUri(requestUri);
 
-            return await _httpRequestBuilder.SendAsync();
+            return await _httpRequestBuilder.SendAsync(_httpClient);
         }
 
         public async Task<HttpResponseMessage> GetCollection(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
@@ -39,7 +41,7 @@ namespace Fittify.Web.Test.TestHelpers
                 .AddMethod(HttpMethod.Get)
                 .AddRequestUri(requestUri);
 
-            return await _httpRequestBuilder.SendAsync();
+            return await _httpRequestBuilder.SendAsync(_httpClient);
         }
 
         public async Task<HttpResponseMessage> Post(
@@ -50,7 +52,7 @@ namespace Fittify.Web.Test.TestHelpers
                 .AddRequestUri(requestUri)
                 .AddContent(new JsonContent(value));
 
-            return await _httpRequestBuilder.SendAsync();
+            return await _httpRequestBuilder.SendAsync(_httpClient);
         }
 
         [ExcludeFromCodeCoverage] // As of 8th of June 2018, not used for Fittify at all
@@ -62,7 +64,7 @@ namespace Fittify.Web.Test.TestHelpers
                 .AddRequestUri(requestUri)
                 .AddContent(new JsonContent(value));
 
-            return await _httpRequestBuilder.SendAsync();
+            return await _httpRequestBuilder.SendAsync(_httpClient);
         }
 
 
@@ -75,7 +77,7 @@ namespace Fittify.Web.Test.TestHelpers
                 .AddRequestUri(requestUri)
                 .AddContent(new PatchContent(jsonPatchDocument));
 
-            return await _httpRequestBuilder.SendAsync();
+            return await _httpRequestBuilder.SendAsync(_httpClient);
         }
 
 
@@ -86,7 +88,7 @@ namespace Fittify.Web.Test.TestHelpers
                 .AddMethod(HttpMethod.Delete)
                 .AddRequestUri(requestUri);
 
-            return await _httpRequestBuilder.SendAsync();
+            return await _httpRequestBuilder.SendAsync(_httpClient);
         }
     }
 }

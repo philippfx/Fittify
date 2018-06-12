@@ -3,6 +3,6 @@
     public class WorkoutOfmResourceParameters
     {
         public string Fields { get; set; }
-        public string IncludeExercises { get; set; }
+        public string IncludeMapsExerciseWorkout { get; set; }
     }
 }

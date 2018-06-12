@@ -36,10 +36,10 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)categoryViewModelCollectionResult.HttpStatusCode != 200)
-            {
-                // Todo: Do something when posting failed
-            }
+            //if ((int)categoryViewModelCollectionResult.HttpStatusCode != 200)
+            //{
+            //    // Todo: Do something when posting failed
+            //}
 
             return View("Overview", categoryViewModelCollectionResult.ViewModelForGetCollection.ToList());
         }

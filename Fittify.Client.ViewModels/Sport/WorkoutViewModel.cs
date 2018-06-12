@@ -12,7 +12,7 @@ namespace Fittify.Client.ViewModels.Sport
         //[ForeignKey("CategoryId")]
         //public int? CategoryId { get; set; }
 
-        public List<ExerciseViewModel> AssociatedExercises { get; set; }
+        public List<MapExerciseWorkoutViewModel> MapsExerciseWorkout { get; set; }
         public List<ExerciseViewModel> AllExercises { get; set; }
         
     }

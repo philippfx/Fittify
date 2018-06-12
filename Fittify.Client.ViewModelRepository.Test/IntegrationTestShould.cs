@@ -56,10 +56,10 @@ namespace Fittify.Client.ViewModelRepository.Test
                         .Setup(s => s.GetService(typeof(HttpClient)))
                         .Returns(apitHttpClient);
 
-                    var httpRequestBuilder = new HttpRequestBuilder(serviceProviderMock.Object);
+                    var httpRequestBuilder = new HttpRequestBuilder();
                     httpRequestBuilder.AddRequestUri(new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/categories"));
 
-                    var httpRequestExecuter = new HttpRequestExecuterForIntegrationTest(httpRequestBuilder);
+                    var httpRequestExecuter = new HttpRequestExecuterForIntegrationTest(httpRequestBuilder, serviceProviderMock.Object);
                     var apiModelRepositoryMock =
                         new CategoryApiModelRepository(testAppConfiguration.Instance, null, httpRequestExecuter);
 
@@ -115,10 +115,10 @@ namespace Fittify.Client.ViewModelRepository.Test
                         .Setup(s => s.GetService(typeof(HttpClient)))
                         .Returns(apitHttpClientForExercise);
 
-                    var exerciseApiModelHttpRequestBuilder = new HttpRequestBuilder(serviceProviderForExerciseApiModelMock.Object);
+                    var exerciseApiModelHttpRequestBuilder = new HttpRequestBuilder();
                     exerciseApiModelHttpRequestBuilder.AddRequestUri(new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/exercises"));
 
-                    var exericseApiModelhttpRequestExecuter = new HttpRequestExecuterForIntegrationTest(exerciseApiModelHttpRequestBuilder);
+                    var exericseApiModelhttpRequestExecuter = new HttpRequestExecuterForIntegrationTest(exerciseApiModelHttpRequestBuilder, serviceProviderForExerciseApiModelMock.Object);
                     var exericseApiModelRepositoryMock =
                         new ExerciseApiModelRepository(testAppConfiguration.Instance, null, exericseApiModelhttpRequestExecuter);
 
@@ -135,115 +135,140 @@ namespace Fittify.Client.ViewModelRepository.Test
                         .Setup(s => s.GetService(typeof(HttpClient)))
                         .Returns(apitHttpClientForWorkout);
 
-                    var workoutApiModelHttpRequestBuilder = new HttpRequestBuilder(serviceProviderForWorkoutApiModelMock.Object);
+                    var workoutApiModelHttpRequestBuilder = new HttpRequestBuilder();
                     workoutApiModelHttpRequestBuilder.AddRequestUri(new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/workouts"));
 
-                    var workoutApiModelhttpRequestExecuter = new HttpRequestExecuterForIntegrationTest(workoutApiModelHttpRequestBuilder);
+                    var workoutApiModelhttpRequestExecuter = new HttpRequestExecuterForIntegrationTest(workoutApiModelHttpRequestBuilder, serviceProviderForWorkoutApiModelMock.Object);
                     var workoutApiModelRepositoryMock =
                         new WorkoutApiModelRepository(testAppConfiguration.Instance, null, workoutApiModelhttpRequestExecuter);
 
                     var workoutViewModelRepository = new WorkoutViewModelRepository(workoutApiModelRepositoryMock, exerciseViewModelRepository);
 
                     // Act
-                    var viewModelQueryResult = await workoutViewModelRepository.GetById(1, new WorkoutOfmResourceParameters() { IncludeExercises = "1" });
+                    var viewModelQueryResult = await workoutViewModelRepository.GetById(1, new WorkoutOfmResourceParameters() { IncludeMapsExerciseWorkout = "1" });
 
                     // Assert
                     var actualOfmQueryResult = JsonConvert.SerializeObject(viewModelQueryResult, new JsonSerializerSettings() { Formatting = Newtonsoft.Json.Formatting.Indented }).MinifyJson().PrettifyJson();
                     var expectedOfmQueryResult =
                         @"
                             {
-                                ""ViewModel"": {
-								    ""Id"": 1,
-								    ""AssociatedExercises"": [
-								      {
-								        ""Id"": 1,
-								        ""Name"": ""InclinedBenchPressSeed"",
-								        ""ExerciseType"": ""WeightLifting""
-								      },
-								      {
-								        ""Id"": 2,
-								        ""Name"": ""DumbBellFlySeed"",
-								        ""ExerciseType"": ""WeightLifting""
-								      },
-								      {
-								        ""Id"": 3,
-								        ""Name"": ""NegativeBenchPressSeed"",
-								        ""ExerciseType"": ""WeightLifting""
-								      },
-								      {
-								        ""Id"": 10,
-								        ""Name"": ""SitupsSeed"",
-								        ""ExerciseType"": ""WeightLifting""
-								      },
-								      {
-								        ""Id"": 11,
-								        ""Name"": ""SpinningBikeSeed"",
-								        ""ExerciseType"": ""Cardio""
-								      }
-								    ],
-								    ""AllExercises"": [
-								      {
-								        ""Id"": 1,
-								        ""Name"": ""InclinedBenchPressSeed"",
-								        ""ExerciseType"": ""WeightLifting""
-								      },
-								      {
-								        ""Id"": 2,
-								        ""Name"": ""DumbBellFlySeed"",
-								        ""ExerciseType"": ""WeightLifting""
-								      },
-								      {
-								        ""Id"": 3,
-								        ""Name"": ""NegativeBenchPressSeed"",
-								        ""ExerciseType"": ""WeightLifting""
-								      },
-								      {
-								        ""Id"": 4,
-								        ""Name"": ""DeadLiftSeed"",
-								        ""ExerciseType"": ""WeightLifting""
-								      },
-								      {
-								        ""Id"": 5,
-								        ""Name"": ""SeatedPullDownSeed"",
-								        ""ExerciseType"": ""WeightLifting""
-								      },
-								      {
-								        ""Id"": 6,
-								        ""Name"": ""RowSeed"",
-								        ""ExerciseType"": ""WeightLifting""
-								      },
-								      {
-								        ""Id"": 7,
-								        ""Name"": ""SquatSeed"",
-								        ""ExerciseType"": ""WeightLifting""
-								      },
-								      {
-								        ""Id"": 8,
-								        ""Name"": ""LegCurlSeed"",
-								        ""ExerciseType"": ""WeightLifting""
-								      },
-								      {
-								        ""Id"": 9,
-								        ""Name"": ""CalfRaiseSeed"",
-								        ""ExerciseType"": ""WeightLifting""
-								      },
-								      {
-								        ""Id"": 10,
-								        ""Name"": ""SitupsSeed"",
-								        ""ExerciseType"": ""WeightLifting""
-								      },
-								      {
-								        ""Id"": 11,
-								        ""Name"": ""SpinningBikeSeed"",
-								        ""ExerciseType"": ""Cardio""
-								      }
-								    ],
-								    ""Name"": ""MondayChestSeed""
-								  },
-								  ""HttpStatusCode"": 200,
-								  ""HttpResponseHeaders"": null,
-								  ""ErrorMessagesPresented"": null
-								}
+                              ""ViewModel"": {
+                                ""Id"": 1,
+                                ""MapsExerciseWorkout"": [
+                                  {
+                                    ""Id"": 1,
+                                    ""Exercise"": {
+                                      ""Id"": 1,
+                                      ""Name"": ""InclinedBenchPressSeed"",
+                                      ""ExerciseType"": ""WeightLifting""
+                                    },
+                                    ""ExerciseId"": 1,
+                                    ""WorkoutId"": 1
+                                  },
+                                  {
+                                    ""Id"": 2,
+                                    ""Exercise"": {
+                                      ""Id"": 2,
+                                      ""Name"": ""DumbBellFlySeed"",
+                                      ""ExerciseType"": ""WeightLifting""
+                                    },
+                                    ""ExerciseId"": 2,
+                                    ""WorkoutId"": 1
+                                  },
+                                  {
+                                    ""Id"": 3,
+                                    ""Exercise"": {
+                                      ""Id"": 3,
+                                      ""Name"": ""NegativeBenchPressSeed"",
+                                      ""ExerciseType"": ""WeightLifting""
+                                    },
+                                    ""ExerciseId"": 3,
+                                    ""WorkoutId"": 1
+                                  },
+                                  {
+                                    ""Id"": 4,
+                                    ""Exercise"": {
+                                      ""Id"": 10,
+                                      ""Name"": ""SitupsSeed"",
+                                      ""ExerciseType"": ""WeightLifting""
+                                    },
+                                    ""ExerciseId"": 10,
+                                    ""WorkoutId"": 1
+                                  },
+                                  {
+                                    ""Id"": 5,
+                                    ""Exercise"": {
+                                      ""Id"": 11,
+                                      ""Name"": ""SpinningBikeSeed"",
+                                      ""ExerciseType"": ""Cardio""
+                                    },
+                                    ""ExerciseId"": 11,
+                                    ""WorkoutId"": 1
+                                  }
+                                ],
+                                ""AllExercises"": [
+                                  {
+                                    ""Id"": 1,
+                                    ""Name"": ""InclinedBenchPressSeed"",
+                                    ""ExerciseType"": ""WeightLifting""
+                                  },
+                                  {
+                                    ""Id"": 2,
+                                    ""Name"": ""DumbBellFlySeed"",
+                                    ""ExerciseType"": ""WeightLifting""
+                                  },
+                                  {
+                                    ""Id"": 3,
+                                    ""Name"": ""NegativeBenchPressSeed"",
+                                    ""ExerciseType"": ""WeightLifting""
+                                  },
+                                  {
+                                    ""Id"": 4,
+                                    ""Name"": ""DeadLiftSeed"",
+                                    ""ExerciseType"": ""WeightLifting""
+                                  },
+                                  {
+                                    ""Id"": 5,
+                                    ""Name"": ""SeatedPullDownSeed"",
+                                    ""ExerciseType"": ""WeightLifting""
+                                  },
+                                  {
+                                    ""Id"": 6,
+                                    ""Name"": ""RowSeed"",
+                                    ""ExerciseType"": ""WeightLifting""
+                                  },
+                                  {
+                                    ""Id"": 7,
+                                    ""Name"": ""SquatSeed"",
+                                    ""ExerciseType"": ""WeightLifting""
+                                  },
+                                  {
+                                    ""Id"": 8,
+                                    ""Name"": ""LegCurlSeed"",
+                                    ""ExerciseType"": ""WeightLifting""
+                                  },
+                                  {
+                                    ""Id"": 9,
+                                    ""Name"": ""CalfRaiseSeed"",
+                                    ""ExerciseType"": ""WeightLifting""
+                                  },
+                                  {
+                                    ""Id"": 10,
+                                    ""Name"": ""SitupsSeed"",
+                                    ""ExerciseType"": ""WeightLifting""
+                                  },
+                                  {
+                                    ""Id"": 11,
+                                    ""Name"": ""SpinningBikeSeed"",
+                                    ""ExerciseType"": ""Cardio""
+                                  }
+                                ],
+                                ""Name"": ""MondayChestSeed""
+                              },
+                              ""HttpStatusCode"": 200,
+                              ""HttpResponseHeaders"": null,
+                              ""ErrorMessagesPresented"": null
+                            }
                         ".MinifyJson().PrettifyJson();
 
                     Assert.AreEqual(actualOfmQueryResult, expectedOfmQueryResult);
@@ -270,10 +295,10 @@ namespace Fittify.Client.ViewModelRepository.Test
                         .Setup(s => s.GetService(typeof(HttpClient)))
                         .Returns(apitHttpClientForExercise);
 
-                    var exerciseApiModelHttpRequestBuilder = new HttpRequestBuilder(serviceProviderForExerciseApiModelMock.Object);
+                    var exerciseApiModelHttpRequestBuilder = new HttpRequestBuilder();
                     exerciseApiModelHttpRequestBuilder.AddRequestUri(new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/exercises"));
 
-                    var exericseApiModelhttpRequestExecuter = new HttpRequestExecuterForIntegrationTest(exerciseApiModelHttpRequestBuilder);
+                    var exericseApiModelhttpRequestExecuter = new HttpRequestExecuterForIntegrationTest(exerciseApiModelHttpRequestBuilder, serviceProviderForExerciseApiModelMock.Object);
                     var exericseApiModelRepositoryMock =
                         new ExerciseApiModelRepository(testAppConfiguration.Instance, null, exericseApiModelhttpRequestExecuter);
 
@@ -290,10 +315,10 @@ namespace Fittify.Client.ViewModelRepository.Test
                         .Setup(s => s.GetService(typeof(HttpClient)))
                         .Returns(apitHttpClientForWorkoutHistory);
 
-                    var workoutHistoryApiModelHttpRequestBuilder = new HttpRequestBuilder(serviceProviderForWorkoutHistoryApiModelMock.Object);
+                    var workoutHistoryApiModelHttpRequestBuilder = new HttpRequestBuilder();
                     workoutHistoryApiModelHttpRequestBuilder.AddRequestUri(new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/workouts"));
 
-                    var workoutHisoryApiModelhttpRequestExecuter = new HttpRequestExecuterForIntegrationTest(workoutHistoryApiModelHttpRequestBuilder);
+                    var workoutHisoryApiModelhttpRequestExecuter = new HttpRequestExecuterForIntegrationTest(workoutHistoryApiModelHttpRequestBuilder, serviceProviderForWorkoutHistoryApiModelMock.Object);
                     var workoutHistoryApiModelRepositoryMock =
                         new WorkoutHistoryApiModelRepository(testAppConfiguration.Instance, null, workoutHisoryApiModelhttpRequestExecuter);
 
@@ -319,7 +344,7 @@ namespace Fittify.Client.ViewModelRepository.Test
 							    ""Id"": 5,
 							    ""Workout"": {
 							      ""Id"": 2,
-							      ""AssociatedExercises"": null,
+							      ""MapsExerciseWorkout"": null,
 							      ""AllExercises"": null,
 							      ""Name"": ""WednesdayBackSeed""
 							    },
@@ -785,10 +810,10 @@ namespace Fittify.Client.ViewModelRepository.Test
                         .Setup(s => s.GetService(typeof(HttpClient)))
                         .Returns(apitHttpClientForExercise);
 
-                    var exerciseApiModelHttpRequestBuilder = new HttpRequestBuilder(serviceProviderForExerciseApiModelMock.Object);
+                    var exerciseApiModelHttpRequestBuilder = new HttpRequestBuilder();
                     exerciseApiModelHttpRequestBuilder.AddRequestUri(new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/exercises"));
 
-                    var exericseApiModelhttpRequestExecuter = new HttpRequestExecuterForIntegrationTest(exerciseApiModelHttpRequestBuilder);
+                    var exericseApiModelhttpRequestExecuter = new HttpRequestExecuterForIntegrationTest(exerciseApiModelHttpRequestBuilder, serviceProviderForExerciseApiModelMock.Object);
                     var exericseApiModelRepositoryMock =
                         new ExerciseApiModelRepository(testAppConfiguration.Instance, null, exericseApiModelhttpRequestExecuter);
 
@@ -805,10 +830,10 @@ namespace Fittify.Client.ViewModelRepository.Test
                         .Setup(s => s.GetService(typeof(HttpClient)))
                         .Returns(apitHttpClientForWorkoutHistory);
 
-                    var workoutHistoryApiModelHttpRequestBuilder = new HttpRequestBuilder(serviceProviderForWorkoutHistoryApiModelMock.Object);
+                    var workoutHistoryApiModelHttpRequestBuilder = new HttpRequestBuilder();
                     workoutHistoryApiModelHttpRequestBuilder.AddRequestUri(new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/workouts"));
 
-                    var workoutHisoryApiModelhttpRequestExecuter = new HttpRequestExecuterForIntegrationTest(workoutHistoryApiModelHttpRequestBuilder);
+                    var workoutHisoryApiModelhttpRequestExecuter = new HttpRequestExecuterForIntegrationTest(workoutHistoryApiModelHttpRequestBuilder, serviceProviderForWorkoutHistoryApiModelMock.Object);
                     var workoutHistoryApiModelRepositoryMock =
                         new WorkoutHistoryApiModelRepository(testAppConfiguration.Instance, null, workoutHisoryApiModelhttpRequestExecuter);
 
@@ -834,7 +859,7 @@ namespace Fittify.Client.ViewModelRepository.Test
 							    ""Id"": 2,
 							    ""Workout"": {
 							      ""Id"": 2,
-							      ""AssociatedExercises"": null,
+							      ""MapsExerciseWorkout"": null,
 							      ""AllExercises"": null,
 							      ""Name"": ""WednesdayBackSeed""
 							    },
@@ -1161,10 +1186,10 @@ namespace Fittify.Client.ViewModelRepository.Test
                         .Setup(s => s.GetService(typeof(HttpClient)))
                         .Returns(apitHttpClientForWorkoutHistory);
 
-                    var workoutHistoryApiModelHttpRequestBuilder = new HttpRequestBuilder(serviceProviderForWorkoutHistoryApiModelMock.Object);
+                    var workoutHistoryApiModelHttpRequestBuilder = new HttpRequestBuilder();
                     workoutHistoryApiModelHttpRequestBuilder.AddRequestUri(new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/workouts?includeExerciseHistories=1"));
 
-                    var workoutHisoryApiModelhttpRequestExecuter = new HttpRequestExecuterForIntegrationTest(workoutHistoryApiModelHttpRequestBuilder);
+                    var workoutHisoryApiModelhttpRequestExecuter = new HttpRequestExecuterForIntegrationTest(workoutHistoryApiModelHttpRequestBuilder, serviceProviderForWorkoutHistoryApiModelMock.Object);
                     var workoutHistoryApiModelRepositoryMock =
                         new WorkoutHistoryApiModelRepository(testAppConfiguration.Instance, null, workoutHisoryApiModelhttpRequestExecuter);
 
@@ -1182,7 +1207,7 @@ namespace Fittify.Client.ViewModelRepository.Test
 							    ""Id"": 10,
 							    ""Workout"": {
 							      ""Id"": 2,
-							      ""AssociatedExercises"": null,
+							      ""MapsExerciseWorkout"": null,
 							      ""AllExercises"": null,
 							      ""Name"": ""WednesdayBackSeed""
 							    },

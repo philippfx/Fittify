@@ -12,7 +12,7 @@ namespace Fittify.Web.View.Services.ConfigureServices
             {
                 // OfmGet to ViewModel
                 cfg.CreateMap<WorkoutOfmForGet, WorkoutViewModel>()
-                    .ForMember(dest => dest.AssociatedExercises, opt => opt.MapFrom(src => src.Exercises));
+                    .ForMember(dest => dest.MapsExerciseWorkout, opt => opt.MapFrom(src => src.MapsExerciseWorkout));
                 cfg.CreateMap<CategoryOfmForGet, CategoryViewModel>();
                 ////.ForMember(dest => dest.RangeOfWorkoutIds, opt => opt.MapFrom(src => src.Workouts.Select(w => w.Id).ToList().ToStringOfIds()));
                 cfg.CreateMap<CardioSetOfmForGet, CardioSetViewModel>();

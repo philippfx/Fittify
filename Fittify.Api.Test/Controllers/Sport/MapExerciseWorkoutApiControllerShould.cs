@@ -84,7 +84,9 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""Value"": {
                         ""Id"": 1,
                         ""WorkoutId"": 1,
+                        ""Workout"": null,
                         ""ExerciseId"": 1,
+                        ""Exercise"": null,
                       },
                       ""Formatters"": [],
                       ""ContentTypes"": [],
@@ -209,7 +211,9 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""Value"": {
                         ""Id"": 1,
                         ""WorkoutId"": 1,
+                        ""Workout"": null,
                         ""ExerciseId"": 1,
+                        ""Exercise"": null,
                         ""links"": [
                           {
                             ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",

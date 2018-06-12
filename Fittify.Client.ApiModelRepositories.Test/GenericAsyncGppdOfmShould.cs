@@ -162,11 +162,11 @@ namespace Fittify.Client.ApiModelRepositories.Test
                         Name = "MockWorkoutName"
                     };
 
-                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/workouts/1?IncludeExercises=1");
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/workouts/1?IncludeMapsExerciseWorkout=1");
                     var httpResponse = new HttpResponseMessage();
                     var resourceParameters = new WorkoutOfmResourceParameters()
                     {
-                        IncludeExercises = "1"
+                        IncludeMapsExerciseWorkout = "1"
                     };
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(returnedWorkoutOfmForGet));
                     httpResponse.StatusCode = HttpStatusCode.OK;
@@ -183,7 +183,7 @@ namespace Fittify.Client.ApiModelRepositories.Test
                               ""OfmForGet"": {
                                 ""Id"": 1,
                                 ""RangeOfExerciseIds"": null,
-                                ""Exercises"": null,
+                                ""MapsExerciseWorkout"": null,
                                 ""RangeOfWorkoutHistoryIds"": null,
                                 ""Name"": ""MockWorkoutName""
                               },
@@ -224,11 +224,11 @@ namespace Fittify.Client.ApiModelRepositories.Test
                         }
                     };
 
-                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/workouts/1?IncludeExercises=1");
+                    var uri = new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/workouts/1?IncludeMapsExerciseWorkout=1");
                     var httpResponse = new HttpResponseMessage();
                     var resourceParameters = new WorkoutOfmResourceParameters()
                     {
-                        IncludeExercises = "1"
+                        IncludeMapsExerciseWorkout = "1"
                     };
                     httpResponse.Content = new StringContent(JsonConvert.SerializeObject(returnedWorkoutOfmForGet));
                     httpResponse.StatusCode = HttpStatusCode.BadRequest;

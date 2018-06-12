@@ -47,8 +47,8 @@ namespace Fittify.Client.ViewModelRepository.Sport
                 workoutViewModelQueryResult.ViewModel =
                     Mapper.Map<WorkoutViewModel>(ofmQueryResult.OfmForGet);
 
-                workoutViewModelQueryResult.ViewModel.AssociatedExercises =
-                    Mapper.Map<List<ExerciseViewModel>>(ofmQueryResult.OfmForGet.Exercises);
+                workoutViewModelQueryResult.ViewModel.MapsExerciseWorkout =
+                    Mapper.Map<List<MapExerciseWorkoutViewModel>>(ofmQueryResult.OfmForGet.MapsExerciseWorkout);
 
                 // Exercises
                 var exerciseViewModelRepository = _exerciseViewModelRepository;

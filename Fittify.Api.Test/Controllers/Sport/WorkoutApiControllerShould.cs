@@ -95,7 +95,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""Value"": {
                         ""Id"": 1,
                         ""RangeOfExerciseIds"": null,
-                        ""Exercises"": null,
+                        ""MapsExerciseWorkout"": null,
                         ""RangeOfWorkoutHistoryIds"": null,
                         ""Name"": ""Mock Workout"",
                       },
@@ -116,7 +116,7 @@ namespace Fittify.Api.Test.Controllers.Sport
             // Arrange
             // Mock GppdRepo
             var asyncGppdMock = new Mock<IAsyncOfmRepositoryForWorkout>();
-            var workoutOfmResourceParameters = new WorkoutOfmResourceParameters() { IncludeExercises = "1" };
+            var workoutOfmResourceParameters = new WorkoutOfmResourceParameters() { IncludeMapsExerciseWorkout = "1" };
             asyncGppdMock.Setup(s => s.GetById(1, workoutOfmResourceParameters, new Guid("00000000-0000-0000-0000-000000000000"))).Returns(Task.FromResult(
                     new OfmForGetQueryResult<WorkoutOfmForGet>()
                     {
@@ -125,11 +125,20 @@ namespace Fittify.Api.Test.Controllers.Sport
                             Id = 1,
                             Name = "Mock Workout",
                             RangeOfExerciseIds = "1-3",
-                            Exercises = new List<ExerciseOfmForGet>()
+                            MapsExerciseWorkout = new List<MapExerciseWorkoutOfmForGet>()
                             {
-                                new ExerciseOfmForGet(){ Id = 1, Name = "Exercise1"},
-                                new ExerciseOfmForGet(){ Id = 2, Name = "Exercise2"},
-                                new ExerciseOfmForGet(){ Id = 3, Name = "Exercise3"}
+                                new MapExerciseWorkoutOfmForGet()
+                                {
+                                    Exercise = new ExerciseOfmForGet(){ Id = 1, Name = "Exercise1"}
+                                },
+                                new MapExerciseWorkoutOfmForGet()
+                                {
+                                    Exercise = new ExerciseOfmForGet(){ Id = 2, Name = "Exercise2"}
+                                },
+                                new MapExerciseWorkoutOfmForGet()
+                                {
+                                    Exercise = new ExerciseOfmForGet(){ Id = 3, Name = "Exercise3"}
+                                }
                             }
                         }
                     }));
@@ -174,27 +183,45 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""Value"": {
                         ""Id"": 1,
                         ""RangeOfExerciseIds"": ""1-3"",
-                        ""Exercises"": [
+                        ""MapsExerciseWorkout"": [
                           {
-                            ""Id"": 1,
-                            ""RangeOfWorkoutIds"": null,
-                            ""RangeOfExerciseHistoryIds"": null,
-                            ""Name"": ""Exercise1"",
-                            ""ExerciseType"": ""WeightLifting""
+                            ""Id"": 0,
+                            ""WorkoutId"": 0,
+                            ""Workout"": null,
+                            ""ExerciseId"": 0,
+                            ""Exercise"": {
+                              ""Id"": 1,
+                              ""RangeOfWorkoutIds"": null,
+                              ""RangeOfExerciseHistoryIds"": null,
+                              ""Name"": ""Exercise1"",
+                              ""ExerciseType"": ""WeightLifting""
+                            }
                           },
                           {
-                            ""Id"": 2,
-                            ""RangeOfWorkoutIds"": null,
-                            ""RangeOfExerciseHistoryIds"": null,
-                            ""Name"": ""Exercise2"",
-                            ""ExerciseType"": ""WeightLifting""
+                            ""Id"": 0,
+                            ""WorkoutId"": 0,
+                            ""Workout"": null,
+                            ""ExerciseId"": 0,
+                            ""Exercise"": {
+                              ""Id"": 2,
+                              ""RangeOfWorkoutIds"": null,
+                              ""RangeOfExerciseHistoryIds"": null,
+                              ""Name"": ""Exercise2"",
+                              ""ExerciseType"": ""WeightLifting""
+                            }
                           },
                           {
-                            ""Id"": 3,
-                            ""RangeOfWorkoutIds"": null,
-                            ""RangeOfExerciseHistoryIds"": null,
-                            ""Name"": ""Exercise3"",
-                            ""ExerciseType"": ""WeightLifting""
+                            ""Id"": 0,
+                            ""WorkoutId"": 0,
+                            ""Workout"": null,
+                            ""ExerciseId"": 0,
+                            ""Exercise"": {
+                              ""Id"": 3,
+                              ""RangeOfWorkoutIds"": null,
+                              ""RangeOfExerciseHistoryIds"": null,
+                              ""Name"": ""Exercise3"",
+                              ""ExerciseType"": ""WeightLifting""
+                            }
                           }
                         ],
                         ""RangeOfWorkoutHistoryIds"": null,
@@ -343,7 +370,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""Value"": {
                         ""Id"": 1,
                         ""RangeOfExerciseIds"": null,
-                        ""Exercises"": null,
+                        ""MapsExerciseWorkout"": null,
                         ""RangeOfWorkoutHistoryIds"": null,
                         ""Name"": ""Mock Workout"",
                         ""links"": [
@@ -777,7 +804,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -968,7 +995,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                                   {
                                     ""Id"": 1,
                                     ""RangeOfExerciseIds"": null,
-                                    ""Exercises"": null,
+                                    ""MapsExerciseWorkout"": null,
                                     ""RangeOfWorkoutHistoryIds"": null,
                                     ""Name"": ""MockWorkout1"",
                                     ""links"": [
@@ -997,7 +1024,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                                   {
                                     ""Id"": 2,
                                     ""RangeOfExerciseIds"": null,
-                                    ""Exercises"": null,
+                                    ""MapsExerciseWorkout"": null,
                                     ""RangeOfWorkoutHistoryIds"": null,
                                     ""Name"": ""MockWorkout2"",
                                     ""links"": [
@@ -1026,7 +1053,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                                   {
                                     ""Id"": 3,
                                     ""RangeOfExerciseIds"": null,
-                                    ""Exercises"": null,
+                                    ""MapsExerciseWorkout"": null,
                                     ""RangeOfWorkoutHistoryIds"": null,
                                     ""Name"": ""MockWorkout3"",
                                     ""links"": [
@@ -2133,7 +2160,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedObjectResult);
+            Assert.AreEqual(expectedObjectResult, actualObjectResult);
         }
 
         [Test]

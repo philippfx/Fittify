@@ -7,6 +7,8 @@ namespace Fittify.Api.OuterFacingModels.Sport.Get
     {
         public int Id { get; set; }
         public int WorkoutId { get; set; }
+        public WorkoutOfmForGet Workout { get; set; }
         public int ExerciseId { get; set; }
+        public ExerciseOfmForGet Exercise { get; set; }
     }
 }

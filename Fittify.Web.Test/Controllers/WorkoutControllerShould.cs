@@ -39,19 +39,19 @@ namespace Fittify.Web.Test.Controllers
                               ""Model"": [
                                 {
                                   ""Id"": 1,
-                                  ""AssociatedExercises"": null,
+                                  ""MapsExerciseWorkout"": [],
                                   ""AllExercises"": null,
                                   ""Name"": ""MondayChestSeed""
                                 },
                                 {
                                   ""Id"": 2,
-                                  ""AssociatedExercises"": null,
+                                  ""MapsExerciseWorkout"": [],
                                   ""AllExercises"": null,
                                   ""Name"": ""WednesdayBackSeed""
                                 },
                                 {
                                   ""Id"": 3,
-                                  ""AssociatedExercises"": null,
+                                  ""MapsExerciseWorkout"": [],
                                   ""AllExercises"": null,
                                   ""Name"": ""FridayLegSeed""
                                 }
@@ -120,7 +120,7 @@ namespace Fittify.Web.Test.Controllers
                               ""Id"": 2,
                               ""Workout"": {
                                 ""Id"": 2,
-                                ""AssociatedExercises"": null,
+                                ""MapsExerciseWorkout"": null,
                                 ""AllExercises"": null,
                                 ""Name"": ""WednesdayBackSeed""
                               },
@@ -133,7 +133,7 @@ namespace Fittify.Web.Test.Controllers
                               ""Id"": 5,
                               ""Workout"": {
                                 ""Id"": 2,
-                                ""AssociatedExercises"": null,
+                                ""MapsExerciseWorkout"": null,
                                 ""AllExercises"": null,
                                 ""Name"": ""WednesdayBackSeed""
                               },
@@ -146,7 +146,7 @@ namespace Fittify.Web.Test.Controllers
                               ""Id"": 8,
                               ""Workout"": {
                                 ""Id"": 2,
-                                ""AssociatedExercises"": null,
+                                ""MapsExerciseWorkout"": null,
                                 ""AllExercises"": null,
                                 ""Name"": ""WednesdayBackSeed""
                               },
@@ -217,31 +217,56 @@ namespace Fittify.Web.Test.Controllers
                               ""ViewName"": null,
                               ""Model"": {
                                 ""Id"": 2,
-                                ""AssociatedExercises"": [
-                                  {
-                                    ""Id"": 4,
-                                    ""Name"": ""DeadLiftSeed"",
-                                    ""ExerciseType"": ""WeightLifting""
-                                  },
-                                  {
-                                    ""Id"": 5,
-                                    ""Name"": ""SeatedPullDownSeed"",
-                                    ""ExerciseType"": ""WeightLifting""
-                                  },
+                                ""MapsExerciseWorkout"": [
                                   {
                                     ""Id"": 6,
-                                    ""Name"": ""RowSeed"",
-                                    ""ExerciseType"": ""WeightLifting""
+                                    ""Exercise"": {
+                                      ""Id"": 4,
+                                      ""Name"": ""DeadLiftSeed"",
+                                      ""ExerciseType"": ""WeightLifting""
+                                    },
+                                    ""ExerciseId"": 4,
+                                    ""WorkoutId"": 2
+                                  },
+                                  {
+                                    ""Id"": 7,
+                                    ""Exercise"": {
+                                      ""Id"": 5,
+                                      ""Name"": ""SeatedPullDownSeed"",
+                                      ""ExerciseType"": ""WeightLifting""
+                                    },
+                                    ""ExerciseId"": 5,
+                                    ""WorkoutId"": 2
+                                  },
+                                  {
+                                    ""Id"": 8,
+                                    ""Exercise"": {
+                                      ""Id"": 6,
+                                      ""Name"": ""RowSeed"",
+                                      ""ExerciseType"": ""WeightLifting""
+                                    },
+                                    ""ExerciseId"": 6,
+                                    ""WorkoutId"": 2
+                                  },
+                                  {
+                                    ""Id"": 9,
+                                    ""Exercise"": {
+                                      ""Id"": 10,
+                                      ""Name"": ""SitupsSeed"",
+                                      ""ExerciseType"": ""WeightLifting""
+                                    },
+                                    ""ExerciseId"": 10,
+                                    ""WorkoutId"": 2
                                   },
                                   {
                                     ""Id"": 10,
-                                    ""Name"": ""SitupsSeed"",
-                                    ""ExerciseType"": ""WeightLifting""
-                                  },
-                                  {
-                                    ""Id"": 11,
-                                    ""Name"": ""SpinningBikeSeed"",
-                                    ""ExerciseType"": ""Cardio""
+                                    ""Exercise"": {
+                                      ""Id"": 11,
+                                      ""Name"": ""SpinningBikeSeed"",
+                                      ""ExerciseType"": ""Cardio""
+                                    },
+                                    ""ExerciseId"": 11,
+                                    ""WorkoutId"": 2
                                   }
                                 ],
                                 ""AllExercises"": [
@@ -307,36 +332,6 @@ namespace Fittify.Web.Test.Controllers
                               ""TempData"": null,
                               ""ViewEngine"": null,
                               ""ContentType"": null
-                            }
-                        ".MinifyJson().PrettifyJson();
-
-                    Assert.AreEqual(expectedIActionResult, actualIActionResult);
-                }
-            });
-        }
-
-
-        [Test]
-        public async Task ReturnRedirectToAccessDenied_WhenUnauthorized_UsingAssociatedExercises()
-        {
-            await Task.Run(async () =>
-            {
-                using (var controller = new MockedWorkoutController())
-                {
-                    // Act
-                    var iActionResult = await controller.UnAuthenticatedInstance.AssociatedExercises(1);
-
-                    var actualIActionResult = JsonConvert.SerializeObject(iActionResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
-                    var expectedIActionResult =
-                        @"
-                            {
-                              ""UrlHelper"": null,
-                              ""ActionName"": ""AccessDenied"",
-                              ""ControllerName"": ""Authorization"",
-                              ""RouteValues"": null,
-                              ""Permanent"": false,
-                              ""PreserveMethod"": false,
-                              ""Fragment"": null
                             }
                         ".MinifyJson().PrettifyJson();
 

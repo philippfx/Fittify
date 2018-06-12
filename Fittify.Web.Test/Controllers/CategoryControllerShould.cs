@@ -55,10 +55,10 @@ namespace Fittify.Web.Test.Controllers
                         .Setup(s => s.GetService(typeof(HttpClient)))
                         .Returns(apitHttpClient);
 
-                    var httpRequestBuilder = new HttpRequestBuilder(serviceProviderMock.Object);
+                    var httpRequestBuilder = new HttpRequestBuilder(/*serviceProviderMock.Object*/);
                     httpRequestBuilder.AddRequestUri(new Uri(testAppConfiguration.Instance.GetValue<string>("FittifyApiBaseUrl") + "api/categories"));
 
-                    var httpRequestExecuter = new HttpRequestExecuterForIntegrationTest(httpRequestBuilder);
+                    var httpRequestExecuter = new HttpRequestExecuterForIntegrationTest(httpRequestBuilder, serviceProviderMock.Object);
                     var apiModelRepositoryMock =
                         new CategoryApiModelRepository(testAppConfiguration.Instance, null, httpRequestExecuter);
 

@@ -203,7 +203,7 @@ namespace Fittify.Web.Test.Controllers
                 using (var controller = new MockedExerciseController())
                 {
                     // Act
-                    var iActionResult = await controller.AuthenticatedInstance.Delete(2);
+                    var iActionResult = await controller.AuthenticatedInstance.Delete(1);
 
                     // Assert
                     var actualIActionResult = JsonConvert.SerializeObject(iActionResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();

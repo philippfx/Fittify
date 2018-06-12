@@ -6,5 +6,6 @@ namespace Fittify.Client.ViewModels.Sport
     public class MapExerciseWorkoutViewModel : MapExerciseWorkoutOfmBase, IEntityUniqueIdentifier<int>
     {
         public int Id { get; set; }
+        public ExerciseViewModel Exercise { get; set; }
     }
 }

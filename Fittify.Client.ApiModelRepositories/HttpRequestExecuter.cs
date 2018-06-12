@@ -17,10 +17,26 @@ namespace Fittify.Client.ApiModelRepository
     public class HttpRequestExecuter : IHttpRequestExecuter
     {
         private readonly IHttpRequestBuilder _httpRequestBuilder;
-        public HttpRequestExecuter(IHttpRequestBuilder httpRequestBuilder)
+        private readonly HttpClient _httpClient;
+        private readonly IServiceProvider _serviceProvider;
+
+        public HttpRequestExecuter(IHttpRequestBuilder httpRequestBuilder, IServiceProvider serviceProvider)
         {
             _httpRequestBuilder = httpRequestBuilder;
+            _httpClient = serviceProvider.GetService(typeof(HttpClient)) as HttpClient ?? new HttpClient();
+            _serviceProvider = serviceProvider;
         }
+
+        ////public HttpClient GetHttpClient()
+        ////{
+        ////    if (_httpClient == null)
+        ////    {
+        ////        return _serviceProvider.GetService(typeof(HttpClient)) as HttpClient ?? new HttpClient();
+        ////    }
+
+        ////    if (_httpClient != null && _httpClient.)
+        ////} 
+
         public async Task<HttpResponseMessage> GetSingle(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
@@ -30,7 +46,7 @@ namespace Fittify.Client.ApiModelRepository
                 .AddRequestUri(requestUri)
                 .AddBearerToken(accessToken);
 
-            return await _httpRequestBuilder.SendAsync();
+            return await _httpRequestBuilder.SendAsync(_httpClient);
         }
 
         public async Task<HttpResponseMessage> GetCollection(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
@@ -46,7 +62,7 @@ namespace Fittify.Client.ApiModelRepository
                 .AddRequestUri(requestUri)
                 .AddBearerToken(accessToken);
 
-            return await _httpRequestBuilder.SendAsync();
+            return await _httpRequestBuilder.SendAsync(_httpClient);
         }
 
         public async Task<HttpResponseMessage> Post(
@@ -60,7 +76,7 @@ namespace Fittify.Client.ApiModelRepository
                 .AddContent(new JsonContent(value))
                 .AddBearerToken(accessToken);
             
-            return await _httpRequestBuilder.SendAsync();
+            return await _httpRequestBuilder.SendAsync(_httpClient);
         }
 
         public async Task<HttpResponseMessage> Put(
@@ -71,11 +87,11 @@ namespace Fittify.Client.ApiModelRepository
                 .AddRequestUri(requestUri)
                 .AddContent(new JsonContent(value));
 
-            return await _httpRequestBuilder.SendAsync();
+            return await _httpRequestBuilder.SendAsync(_httpClient);
         }
 
         public async Task<HttpResponseMessage> Patch(
-            Uri requestUri, JsonPatchDocument jsonPatchDocument /*object jsonPatchDocument*/, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
+            Uri requestUri, JsonPatchDocument jsonPatchDocument, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
         {
             string accessToken = await GetAccessToken(appConfiguration, httpContextAccessor);
 
@@ -85,7 +101,7 @@ namespace Fittify.Client.ApiModelRepository
                 .AddContent(new PatchContent(jsonPatchDocument))
                 .AddBearerToken(accessToken);
 
-            return await _httpRequestBuilder.SendAsync();
+            return await _httpRequestBuilder.SendAsync(_httpClient);
         }
 
         public async Task<HttpResponseMessage> Delete(Uri requestUri, IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)
@@ -97,7 +113,7 @@ namespace Fittify.Client.ApiModelRepository
                 .AddRequestUri(requestUri)
                 .AddBearerToken(accessToken);
 
-            return await _httpRequestBuilder.SendAsync();
+            return await _httpRequestBuilder.SendAsync(_httpClient);
         }
 
         private async Task<string> GetAccessToken(IConfiguration appConfiguration, IHttpContextAccessor httpContextAccessor)

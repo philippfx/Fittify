@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Fittify.Common;
 using Fittify.DataModelRepository;
 using Fittify.DataModels.Models.Sport;
@@ -11,7 +12,7 @@ namespace Fittify.DbResetter.Seed.Sport
         {
             // Chest
             if (fittifyContext.Exercises.FirstOrDefault(f => f.Name == "InclinedBenchPressSeed") == null)
-                fittifyContext.Add(new Exercise() { Name = "InclinedBenchPressSeed", ExerciseType = ExerciseTypeEnum.WeightLifting});
+                fittifyContext.Add(new Exercise() { Name = "InclinedBenchPressSeed", ExerciseType = ExerciseTypeEnum.WeightLifting, OwnerGuid = Guid.Parse("d860efca-22d9-47fd-8249-791ba61b07c7") });
 
             if (fittifyContext.Exercises.FirstOrDefault(f => f.Name == "DumbBellFlySeed") == null)
                 fittifyContext.Add(new Exercise() { Name = "DumbBellFlySeed", ExerciseType = ExerciseTypeEnum.WeightLifting });

@@ -51,7 +51,7 @@ namespace Fittify.Api.OfmRepository.OfmRepository.Sport
                 .Include(i => i.MapExerciseWorkout)
                 .Include(i => i.WorkoutHistories);
 
-            if (resourceParameters.IncludeExercises.ToBool())
+            if (resourceParameters.IncludeMapsExerciseWorkout.ToBool())
             {
                 workoutLinqToEntity =
                     workoutLinqToEntity
@@ -68,9 +68,9 @@ namespace Fittify.Api.OfmRepository.OfmRepository.Sport
 
             ofmForGetResult.ReturnedTOfmForGet = Mapper.Map<Workout, WorkoutOfmForGet>(workout);
 
-            if (resourceParameters.IncludeExercises.ToBool() && workout.MapExerciseWorkout.Count() > 0)
+            if (resourceParameters.IncludeMapsExerciseWorkout.ToBool() && workout.MapExerciseWorkout.Count() > 0)
             {
-                ofmForGetResult.ReturnedTOfmForGet.Exercises = Mapper.Map<List<ExerciseOfmForGet>>(workout.MapExerciseWorkout.Select(s => s.Exercise).ToList());
+                ofmForGetResult.ReturnedTOfmForGet.MapsExerciseWorkout= Mapper.Map<List<MapExerciseWorkoutOfmForGet>>(workout.MapExerciseWorkout.ToList());
             }
 
             return ofmForGetResult;

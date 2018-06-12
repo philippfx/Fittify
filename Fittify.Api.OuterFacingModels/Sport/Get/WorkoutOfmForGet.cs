@@ -8,7 +8,7 @@ namespace Fittify.Api.OuterFacingModels.Sport.Get
     {
         public int Id { get; set; }
         public string RangeOfExerciseIds { get; set; }
-        public IEnumerable<ExerciseOfmForGet> Exercises { get; set; }
+        public IEnumerable<MapExerciseWorkoutOfmForGet> MapsExerciseWorkout { get; set; }
         public string RangeOfWorkoutHistoryIds { get; set; }
     }
 }

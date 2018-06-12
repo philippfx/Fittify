@@ -72,7 +72,7 @@ namespace Fittify.Web.View.Controllers
         {
             var workoutResourceParameters = new WorkoutOfmResourceParameters()
             {
-                IncludeExercises = "1"
+                IncludeMapsExerciseWorkout = "1"
             };
             var queryResult = await _workoutViewModelRepository.GetById(workoutId, workoutResourceParameters);
 

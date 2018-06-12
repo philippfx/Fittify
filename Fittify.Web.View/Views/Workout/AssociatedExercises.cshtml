@@ -17,14 +17,14 @@
                 <!--Delete Header-->
             </th>
         </tr>
-        @if (Model.AssociatedExercises != null || Model.AssociatedExercises?.Count > 0)
+        @if (Model.MapsExerciseWorkout != null || Model.MapsExerciseWorkout?.Count > 0)
         {
-            foreach (var exercise in Model.AssociatedExercises)
+            foreach (var mapExerciseWorkout in Model.MapsExerciseWorkout)
             {
                  <tr>
-                     <td>@exercise.Name</td>
+                     <td>@mapExerciseWorkout.Exercise.Name</td>
                      <td>
-                         <form action="~/mapexerciseworkout/deletion?workoutId=@Model.Id&exerciseId=@exercise.Id" method="post">
+                         <form action="~/mapexerciseworkout/deletion?mapExericseWorkoutId=@mapExerciseWorkout.Id&workoutId=@mapExerciseWorkout.WorkoutId" method="post">
                              <input type="submit" value="X" class="btn btn-danger btn-xs" onclick="return confirm('Are you sure you want to delete?')"/>
                          </form>
                      </td>

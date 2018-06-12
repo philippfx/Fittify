@@ -66,7 +66,7 @@ namespace Fittify.Api.Test
                     {
 	                    ""id"": 1,
 	                    ""rangeOfExerciseIds"": ""1-3,10-11"",
-                        ""exercises"": null,
+                        ""mapsExerciseWorkout"": null,
 	                    ""rangeOfWorkoutHistoryIds"": ""1,4,7"",
 	                    ""name"": ""MondayChestSeed""
                     }
@@ -588,7 +588,7 @@ namespace Fittify.Api.Test
                 client.DefaultRequestHeaders.Add("X-Integration-Testing-Authentication", "InjectClaimsViaHeaders");
                 client.DefaultRequestHeaders.Add("sub", "d860efca-22d9-47fd-8249-791ba61b07c7");
                 client.DefaultRequestHeaders.Add("ApiVersion", "1");
-                var result = await client.GetAsync("/api/workouts/2?IncludeExercises=1");
+                var result = await client.GetAsync("/api/workouts/2?IncludeMapsExerciseWorkout=1");
                 var responseString = await result.Content.ReadAsStringAsync();
 
                 var actualObjectResult = responseString.MinifyJson().PrettifyJson();
@@ -597,41 +597,101 @@ namespace Fittify.Api.Test
                         {
                           ""id"": 2,
                           ""rangeOfExerciseIds"": ""4-6,10-11"",
-                          ""exercises"": [
-                            {
-                              ""id"": 4,
-                              ""rangeOfWorkoutIds"": ""2"",
-                              ""rangeOfExerciseHistoryIds"": null,
-                              ""name"": ""DeadLiftSeed"",
-                              ""exerciseType"": ""WeightLifting""
-                            },
-                            {
-                              ""id"": 5,
-                              ""rangeOfWorkoutIds"": ""2"",
-                              ""rangeOfExerciseHistoryIds"": null,
-                              ""name"": ""SeatedPullDownSeed"",
-                              ""exerciseType"": ""WeightLifting""
-                            },
+                          ""mapsExerciseWorkout"": [
                             {
                               ""id"": 6,
-                              ""rangeOfWorkoutIds"": ""2"",
-                              ""rangeOfExerciseHistoryIds"": null,
-                              ""name"": ""RowSeed"",
-                              ""exerciseType"": ""WeightLifting""
+                              ""workoutId"": 2,
+                              ""workout"": {
+                                ""id"": 2,
+                                ""rangeOfExerciseIds"": ""4-6,10-11"",
+                                ""mapsExerciseWorkout"": null,
+                                ""rangeOfWorkoutHistoryIds"": ""2,5,8"",
+                                ""name"": ""WednesdayBackSeed""
+                              },
+                              ""exerciseId"": 4,
+                              ""exercise"": {
+                                ""id"": 4,
+                                ""rangeOfWorkoutIds"": ""2"",
+                                ""rangeOfExerciseHistoryIds"": null,
+                                ""name"": ""DeadLiftSeed"",
+                                ""exerciseType"": ""WeightLifting""
+                              }
+                            },
+                            {
+                              ""id"": 7,
+                              ""workoutId"": 2,
+                              ""workout"": {
+                                ""id"": 2,
+                                ""rangeOfExerciseIds"": ""4-6,10-11"",
+                                ""mapsExerciseWorkout"": null,
+                                ""rangeOfWorkoutHistoryIds"": ""2,5,8"",
+                                ""name"": ""WednesdayBackSeed""
+                              },
+                              ""exerciseId"": 5,
+                              ""exercise"": {
+                                ""id"": 5,
+                                ""rangeOfWorkoutIds"": ""2"",
+                                ""rangeOfExerciseHistoryIds"": null,
+                                ""name"": ""SeatedPullDownSeed"",
+                                ""exerciseType"": ""WeightLifting""
+                              }
+                            },
+                            {
+                              ""id"": 8,
+                              ""workoutId"": 2,
+                              ""workout"": {
+                                ""id"": 2,
+                                ""rangeOfExerciseIds"": ""4-6,10-11"",
+                                ""mapsExerciseWorkout"": null,
+                                ""rangeOfWorkoutHistoryIds"": ""2,5,8"",
+                                ""name"": ""WednesdayBackSeed""
+                              },
+                              ""exerciseId"": 6,
+                              ""exercise"": {
+                                ""id"": 6,
+                                ""rangeOfWorkoutIds"": ""2"",
+                                ""rangeOfExerciseHistoryIds"": null,
+                                ""name"": ""RowSeed"",
+                                ""exerciseType"": ""WeightLifting""
+                              }
+                            },
+                            {
+                              ""id"": 9,
+                              ""workoutId"": 2,
+                              ""workout"": {
+                                ""id"": 2,
+                                ""rangeOfExerciseIds"": ""4-6,10-11"",
+                                ""mapsExerciseWorkout"": null,
+                                ""rangeOfWorkoutHistoryIds"": ""2,5,8"",
+                                ""name"": ""WednesdayBackSeed""
+                              },
+                              ""exerciseId"": 10,
+                              ""exercise"": {
+                                ""id"": 10,
+                                ""rangeOfWorkoutIds"": ""2"",
+                                ""rangeOfExerciseHistoryIds"": null,
+                                ""name"": ""SitupsSeed"",
+                                ""exerciseType"": ""WeightLifting""
+                              }
                             },
                             {
                               ""id"": 10,
-                              ""rangeOfWorkoutIds"": ""2"",
-                              ""rangeOfExerciseHistoryIds"": null,
-                              ""name"": ""SitupsSeed"",
-                              ""exerciseType"": ""WeightLifting""
-                            },
-                            {
-                              ""id"": 11,
-                              ""rangeOfWorkoutIds"": ""2"",
-                              ""rangeOfExerciseHistoryIds"": null,
-                              ""name"": ""SpinningBikeSeed"",
-                              ""exerciseType"": ""Cardio""
+                              ""workoutId"": 2,
+                              ""workout"": {
+                                ""id"": 2,
+                                ""rangeOfExerciseIds"": ""4-6,10-11"",
+                                ""mapsExerciseWorkout"": null,
+                                ""rangeOfWorkoutHistoryIds"": ""2,5,8"",
+                                ""name"": ""WednesdayBackSeed""
+                              },
+                              ""exerciseId"": 11,
+                              ""exercise"": {
+                                ""id"": 11,
+                                ""rangeOfWorkoutIds"": ""2"",
+                                ""rangeOfExerciseHistoryIds"": null,
+                                ""name"": ""SpinningBikeSeed"",
+                                ""exerciseType"": ""Cardio""
+                              }
                             }
                           ],
                           ""rangeOfWorkoutHistoryIds"": ""2,5,8"",

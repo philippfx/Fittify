@@ -10,10 +10,8 @@ namespace Fittify.Client.ApiModelRepository
     [ExcludeFromCodeCoverage] // As of 8th of June 2018, covered by end-to-end test. May be unit tested
     public class HttpRequestBuilder : IHttpRequestBuilder
     {
-        private readonly HttpClient _httpClient;
-        public HttpRequestBuilder(IServiceProvider serviceProvider)
+        public HttpRequestBuilder()
         {
-            _httpClient = serviceProvider.GetService(typeof(HttpClient)) as HttpClient ?? new HttpClient();
         }
         private HttpMethod _method = null;
         private Uri _requestUri = null;
@@ -65,7 +63,7 @@ namespace Fittify.Client.ApiModelRepository
             return this;
         }
 
-        public async Task<HttpResponseMessage> SendAsync()
+        public async Task<HttpResponseMessage> SendAsync(HttpClient httpClient)
         {
             // Check required arguments
             //EnsureArguments();
@@ -102,9 +100,9 @@ namespace Fittify.Client.ApiModelRepository
 
             // Setup client
             ////var client = new HttpClient();
-            _httpClient.Timeout = this._timeout;
+            httpClient.Timeout = this._timeout;
 
-            var result = await _httpClient.SendAsync(request);
+            var result = await httpClient.SendAsync(request);
             var content = await result.Content.ReadAsStringAsync();
 
             return result;

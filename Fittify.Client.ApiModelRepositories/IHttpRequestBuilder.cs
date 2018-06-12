@@ -14,6 +14,6 @@ namespace Fittify.Client.ApiModelRepository
         HttpRequestBuilder AddAcceptHeader(string acceptHeader);
         HttpRequestBuilder AddTimeout(TimeSpan timeout);
         HttpRequestBuilder AddCustomRequestHeaders(Dictionary<string, string> customRequestHeaders);
-        Task<HttpResponseMessage> SendAsync();
+        Task<HttpResponseMessage> SendAsync(HttpClient httpClient);
     }
 }
