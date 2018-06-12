@@ -31,7 +31,7 @@ namespace Fittify.Web.View
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseContentRoot(@"C:\VS_2017_Projects\Fittify\Fittify.Web.View")
+                ////.UseContentRoot(@"C:\VS_2017_Projects\Fittify\Fittify.Web.View")
                 .Build();
     }
     

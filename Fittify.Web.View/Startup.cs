@@ -39,7 +39,7 @@ namespace Fittify.Web.View
 
         public Startup(IHostingEnvironment env)
         {
-            ////var currentDirectory = Directory.GetCurrentDirectory();
+            var currentDirectory = Directory.GetCurrentDirectory();
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 ////.SetBasePath(@"C:\VS_2017_Projects\Fittify\Fittify.Web.View")
