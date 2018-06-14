@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Quantus.IDP.Entities;
+using Quantus.IDP.DataModelRepository;
 
 namespace Quantus.IDP.Migrations
 {

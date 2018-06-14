@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Quantus.IDP.Entities.Default;
+using Quantus.IDP.DataModels.Models.Default;
 
-namespace Quantus.IDP.Services
+namespace Quantus.IDP.DataModelRepository
 {
     public interface IQuantusUserRepository
     {

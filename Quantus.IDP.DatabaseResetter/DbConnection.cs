@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
-using Quantus.IDP.Entities;
+using Quantus.IDP.DataModelRepository;
 
 namespace Quantus.DbResetter
 {
@@ -21,48 +21,48 @@ namespace Quantus.DbResetter
             return path;
         }
 
-        public static void DeleteDb()
+        public static bool DeleteDb()
         {
             using (var quantusContext = new QuantusUserContext(GetQuantusUserConnectionStringFromAppsettingsJson()))
             {
-                try
-                {
-                    quantusContext.Database.EnsureDeleted();
-                }
-                catch (Exception ex)
-                {
-                    var msg = ex.Message;
-                }
+                //try
+                //{
+                    return quantusContext.Database.EnsureDeleted();
+                //}
+                //catch (Exception ex)
+                //{
+                //    var msg = ex.Message;
+                //}
             }
         }
 
-        public static void EnsureCreatedDbContext()
+        public static bool EnsureCreatedDbContext()
         {
             using (var quantusUserContext = new QuantusUserContext(GetQuantusUserConnectionStringFromAppsettingsJson()))
             {
-                try
-                {
-                    quantusUserContext.Database.EnsureCreated();
-                }
-                catch (Exception ex)
-                {
-                    var msg = ex.Message;
-                }
+                //try
+                //{
+                    return quantusUserContext.Database.EnsureCreated();
+                //}
+                //catch (Exception ex)
+                //{
+                //    var msg = ex.Message;
+                //}
             }
         }
 
-        public static void Seed()
+        public static bool Seed()
         {
             using (var quantusUserContext = new QuantusUserContext(GetQuantusUserConnectionStringFromAppsettingsJson()))
             {
-                try
-                {
-                    quantusUserContext.EnsureSeedDataForContext();
-                }
-                catch (Exception ex)
-                {
-                    var msg = ex.Message;
-                }
+                //try
+                //{
+                    return quantusUserContext.EnsureSeedDataForContext();
+                //}
+                //catch (Exception ex)
+                //{
+                //    var msg = ex.Message;
+                //}
             }
         }
     }

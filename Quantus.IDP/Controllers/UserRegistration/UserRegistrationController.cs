@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Quantus.IDP.Entities.Default;
-using Quantus.IDP.Services;
+using Quantus.IDP.DataModelRepository;
+using Quantus.IDP.DataModels.Models.Default;
 
 namespace Quantus.IDP.Controllers.UserRegistration
 {
@@ -58,7 +58,7 @@ namespace Quantus.IDP.Controllers.UserRegistration
                 // user id at the provider to this user's logins
                 if (model.IsProvisioningFromExternal)
                 {
-                    userToCreate.Logins.Add(new Entities.Default.QuantusUserLogin()
+                    userToCreate.Logins.Add(new QuantusUserLogin()
                     {
                         LoginProvider = model.Provider,
                         ProviderKey = model.ProviderUserId,
@@ -117,7 +117,7 @@ namespace Quantus.IDP.Controllers.UserRegistration
                 // user id at the provider to this user's logins
                 if (model.IsProvisioningFromExternal)
                 {
-                    userToCreate.Logins.Add(new Entities.Default.QuantusUserLogin()
+                    userToCreate.Logins.Add(new QuantusUserLogin()
                     {
                         LoginProvider = model.Provider,
                         ProviderKey = model.ProviderUserId,

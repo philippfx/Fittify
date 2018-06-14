@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Fittify.Api.Services
+namespace Quantus.IDP.Services
 {
     public interface IDbResetter
     {

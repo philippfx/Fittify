@@ -4,14 +4,12 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Client.ApiModelRepositories.Test.TestHelpers;
 using Fittify.Client.ApiModelRepository;
-using Fittify.Client.ApiModelRepository.OfmRepository.Sport;
+using Fittify.Client.ApiModelRepository.ApiModelRepository.Sport;
 using Fittify.Common.Extensions;
 using Fittify.Web.View;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +18,7 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace Fittify.Client.ApiModelRepositories.Test.OfmRepository
+namespace Fittify.Client.ApiModelRepositories.Test.ApiModelRepository.Sport
 {
     [TestFixture]
     class WorkoutHistoryApiModelRepositoryShould

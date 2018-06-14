@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Quantus.IDP.Services;
+using Quantus.IDP.DataModelRepository;
 
 namespace Quantus.IDP
 {

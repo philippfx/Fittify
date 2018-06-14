@@ -1,36 +1,23 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Fittify.Api.OfmRepository.OfmResourceParameters.Sport;
-using Fittify.Api.OuterFacingModels.Sport.Get;
-using Fittify.Api.OuterFacingModels.Sport.Post;
-using Microsoft.AspNetCore.Http;
-using Moq;
-using Newtonsoft.Json;
-using NUnit.Framework;
 using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
 using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
-using Fittify.Api.OuterFacingModels.Sport.Patch;
+using Fittify.Api.OuterFacingModels.Sport.Get;
+using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Client.ApiModelRepository;
-using Fittify.Client.ApiModelRepository.Helpers;
-using Fittify.Client.ApiModelRepository.OfmRepository.Sport;
-using Fittify.Client.ViewModelRepository;
 using Fittify.Client.ViewModelRepository.Sport;
 using Fittify.Client.ViewModelRepository.Test.TestHelpers;
-using Fittify.Client.ViewModels.Sport;
-using Fittify.Common;
 using Fittify.Common.Extensions;
 using Fittify.Web.View;
 using Fittify.Web.View.Services.ConfigureServices;
 using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.JsonPatch.Operations;
-using Microsoft.Extensions.Configuration;
-using ExerciseOfmForGet = Fittify.Api.OuterFacingModels.Sport.Get.ExerciseOfmForGet;
+using Moq;
+using Newtonsoft.Json;
+using NUnit.Framework;
 
-namespace Fittify.Client.ApiModelRepositories.Test
+namespace Fittify.Client.ViewModelRepository.Test
 {
     [TestFixture]
     class ViewModelRespositoryBaseShould

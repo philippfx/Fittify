@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
+﻿using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace Fittify.Client.ApiModelRepository.OfmRepository.Sport
+namespace Fittify.Client.ApiModelRepository.ApiModelRepository.Sport
 {
     public class WeightLiftingSetApiModelRepository : ApiModelRepositoryBase<int, WeightLiftingSetOfmForGet, WeightLiftingSetOfmForPost, WeightLiftingSetOfmCollectionResourceParameters>
     {

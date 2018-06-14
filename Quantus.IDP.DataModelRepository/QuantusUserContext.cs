@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Quantus.IDP.Entities.Default;
+using Quantus.IDP.DataModels.Models.Default;
 
-namespace Quantus.IDP.Entities
+namespace Quantus.IDP.DataModelRepository
 {
     public class QuantusUserContext : IdentityDbContext<QuantusUser, QuantusRole, Guid, QuantusUserClaim, QuantusUserRole, QuantusUserLogin, QuantusRoleClaim, QuantusUserToken>
     {

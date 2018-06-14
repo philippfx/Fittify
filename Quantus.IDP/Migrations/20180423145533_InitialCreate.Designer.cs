@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using Quantus.IDP.Entities;
 using System;
+using Quantus.IDP.DataModelRepository;
 
 namespace Quantus.IDP.Migrations
 {

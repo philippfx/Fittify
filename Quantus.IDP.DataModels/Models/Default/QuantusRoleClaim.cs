@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity;
 
-namespace Quantus.IDP.Entities.Default
+namespace Quantus.IDP.DataModels.Models.Default
 {
     public class QuantusRoleClaim : IdentityRoleClaim<Guid>
     {

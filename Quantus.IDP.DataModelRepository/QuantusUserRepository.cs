@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Quantus.IDP.Entities;
-using Quantus.IDP.Entities.Default;
+using Quantus.IDP.DataModels.Models.Default;
 
-namespace Quantus.IDP.Services
+namespace Quantus.IDP.DataModelRepository
 {
     public class QuantusUserRepository : IQuantusUserRepository
     {

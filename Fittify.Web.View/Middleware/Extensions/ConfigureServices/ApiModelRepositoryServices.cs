@@ -1,5 +1,5 @@
 ﻿using Fittify.Client.ApiModelRepository;
-using Fittify.Client.ApiModelRepository.OfmRepository.Sport;
+using Fittify.Client.ApiModelRepository.ApiModelRepository.Sport;
 using Fittify.DataModelRepository.Repository;
 using Microsoft.Extensions.DependencyInjection;
 

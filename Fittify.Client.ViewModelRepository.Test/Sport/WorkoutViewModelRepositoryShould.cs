@@ -9,7 +9,6 @@ using Fittify.Api.OfmRepository.OfmResourceParameters.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Get;
 using Fittify.Api.OuterFacingModels.Sport.Post;
 using Fittify.Client.ApiModelRepository;
-using Fittify.Client.ApiModelRepository.OfmRepository.Sport;
 using Fittify.Client.ViewModelRepository.Sport;
 using Fittify.Client.ViewModelRepository.Test.TestHelpers;
 using Fittify.Common.Extensions;

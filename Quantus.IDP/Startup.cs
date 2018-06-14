@@ -7,8 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using Quantus.IDP.Entities;
-using Quantus.IDP.Entities.Default;
+using Quantus.IDP.DataModelRepository;
+using Quantus.IDP.DataModels.Models.Default;
 using Quantus.IDP.Services;
 
 namespace Quantus.IDP
@@ -64,6 +64,11 @@ namespace Quantus.IDP
 
             var connectionString = AppConfiguration.GetValue<string>("ConnectionStrings:DefaultConnection");
             services.AddDbContext<QuantusUserContext>(o => o.UseSqlServer(connectionString));
+
+            if (HostingEnvironment.IsProduction() == false)
+            {
+                services.AddScoped<IDbResetter, Services.DbResetter>();
+            }
 
             services.AddScoped<IQuantusUserRepository, QuantusUserRepository>();
 

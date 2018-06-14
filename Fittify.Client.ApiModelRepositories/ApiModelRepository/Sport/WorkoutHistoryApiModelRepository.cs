@@ -10,7 +10,7 @@ using Fittify.Common.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace Fittify.Client.ApiModelRepository.OfmRepository.Sport
+namespace Fittify.Client.ApiModelRepository.ApiModelRepository.Sport
 {
     public class WorkoutHistoryApiModelRepository 
         : ApiModelRepositoryBase<int, WorkoutHistoryOfmForGet, WorkoutHistoryOfmForPost, WorkoutHistoryOfmCollectionResourceParameters>, IWorkoutHistoryApiModelRepository

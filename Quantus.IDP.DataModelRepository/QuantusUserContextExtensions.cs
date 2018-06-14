@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Quantus.IDP.Entities.Default;
+using Quantus.IDP.DataModels.Models.Default;
 
-namespace Quantus.IDP.Entities
+namespace Quantus.IDP.DataModelRepository
 {
     public static class QuantusUserContextExtensions
     {
-        public static void EnsureSeedDataForContext(this QuantusUserContext context)
+        public static bool EnsureSeedDataForContext(this QuantusUserContext context)
         {
             // Add 2 demo users if there aren't any users yet
             if (context.Users.Any())
             {
-                return;
+                return false;
             }
 
             // init users
@@ -52,7 +52,12 @@ namespace Quantus.IDP.Entities
             };
 
             context.Users.AddRange(users);
-            context.SaveChanges();
+            if (context.SaveChanges() > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

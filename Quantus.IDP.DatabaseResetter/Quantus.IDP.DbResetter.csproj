@@ -13,10 +13,12 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Quantus.IDP\Quantus.IDP.csproj" />
+    <ProjectReference Include="..\Quantus.IDP.DataModelRepository\Quantus.IDP.DataModelRepository.csproj" />
+    <ProjectReference Include="..\Quantus.IDP.DataModels\Quantus.IDP.DataModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>

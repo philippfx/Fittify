@@ -6,7 +6,7 @@ using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 
-namespace Quantus.IDP.Services
+namespace Quantus.IDP.DataModelRepository
 {
     public class QuantusUserProfileService : IProfileService
     {
