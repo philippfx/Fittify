@@ -7,7 +7,7 @@ namespace Fittify.DbResetter.Seed.Sport
 {
     public class CardioSetSeed
     {
-        public static void Seed(FittifyContext fittifyContext)
+        public static bool Seed(FittifyContext fittifyContext)
         {
             var exerciseHistories = fittifyContext.ExerciseHistories.Where(eH => eH.Exercise.Name == "SpinningBikeSeed").ToList();
             if (fittifyContext.CardioSets.Count() == 0)
@@ -32,7 +32,13 @@ namespace Fittify.DbResetter.Seed.Sport
                 }
             }
 
-            fittifyContext.SaveChanges();
+
+            if (fittifyContext.SaveChanges() >= 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

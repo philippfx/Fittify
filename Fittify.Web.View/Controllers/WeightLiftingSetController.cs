@@ -13,11 +13,11 @@ using Microsoft.Extensions.Configuration;
 namespace Fittify.Web.View.Controllers
 {
     [Route("weightliftingsets")]
-    public class WeightLiftingSetWebController : Controller
+    public class WeightLiftingSetController : Controller
     {
         private readonly IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmResourceParameters, WeightLiftingSetOfmCollectionResourceParameters> _weightLiftingSetViewModelRepository;
 
-        public WeightLiftingSetWebController(
+        public WeightLiftingSetController(
             IViewModelRepository<int, WeightLiftingSetViewModel, WeightLiftingSetOfmForPost, WeightLiftingSetOfmResourceParameters, WeightLiftingSetOfmCollectionResourceParameters> weightLiftingSetViewModelRepository)
         {
             _weightLiftingSetViewModelRepository = weightLiftingSetViewModelRepository;
@@ -34,10 +34,10 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)postResult.HttpStatusCode != 201)
-            {
-                // Todo: Do something when posting failed
-            }
+            //if ((int)postResult.HttpStatusCode != 201)
+            //{
+            //    // Todo: Do something when posting failed
+            //}
 
             return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }
@@ -54,10 +54,10 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)deleteResult.HttpStatusCode != 204)
-            {
-                // Todo: Do something when posting failed
-            }
+            //if ((int)deleteResult.HttpStatusCode != 204)
+            //{
+            //    // Todo: Do something when posting failed
+            //}
 
             return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }

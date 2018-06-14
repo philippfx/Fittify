@@ -34,10 +34,11 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)postResult.HttpStatusCode != 201)
-            {
-                // Todo: Do something when posting failed
-            }
+            //if ((int)postResult.HttpStatusCode != 201)
+            //{
+            //    // Todo: Do something when posting failed
+            //}
+
             return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = exerciseHistoryOfmForPost.WorkoutHistoryId });
         }
 
@@ -53,10 +54,10 @@ namespace Fittify.Web.View.Controllers
                 return RedirectToAction("AccessDenied", "Authorization");
             }
 
-            if ((int)deleteResult.HttpStatusCode != 204)
-            {
-                // Todo: Do something when deleting failed
-            }
+            //if ((int)deleteResult.HttpStatusCode != 204)
+            //{
+            //    // Todo: Do something when deleting failed
+            //}
 
             return RedirectToAction("HistoryDetails", "WorkoutHistory", new { workoutHistoryId = workoutHistoryId });
         }

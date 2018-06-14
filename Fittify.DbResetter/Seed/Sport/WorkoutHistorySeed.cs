@@ -7,7 +7,7 @@ namespace Fittify.DbResetter.Seed.Sport
 {
     public class WorkoutHistorySeed
     {
-        public static void Seed(FittifyContext fittifyContext)
+        public static bool Seed(FittifyContext fittifyContext)
         {
             DateTime SessionStart;
             DateTime SessionEnd;
@@ -153,7 +153,13 @@ namespace Fittify.DbResetter.Seed.Sport
                 });
             }
 
-            fittifyContext.SaveChanges();
+
+            if (fittifyContext.SaveChanges() >= 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

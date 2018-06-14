@@ -51,11 +51,11 @@ namespace Fittify.DbResetter.Seed
         ////    }
         ////}
 
-        public void EnsureFreshSeedDataForProductionContext(string dbConnectionString)
+        public bool EnsureFreshSeedDataForProductionContext(string dbConnectionString)
         {
             using (_fittifyContext = new FittifyContext(dbConnectionString))
             {
-                Seed(_fittifyContext);
+                return Seed(_fittifyContext);
             }
         }
 
@@ -64,16 +64,42 @@ namespace Fittify.DbResetter.Seed
             Seed(fittifyContext);
         }
         
-        public static void Seed(FittifyContext fittifyContext)
+        public static bool Seed(FittifyContext fittifyContext)
         {
-            CategorySeed.Seed(fittifyContext);
-            WorkoutSeed.Seed(fittifyContext);
-            WorkoutHistorySeed.Seed(fittifyContext);
-            ExerciseSeed.Seed(fittifyContext);
-            ExerciseHistorySeed.Seed(fittifyContext);
-            WeightLiftingSetSeed.Seed(fittifyContext);
-            CardioSetSeed.Seed(fittifyContext);
-            MapExerciseWorkoutSeeder.Seed(fittifyContext);
+            if (!CategorySeed.Seed(fittifyContext))
+            {
+                return false;
+            }
+            if(!WorkoutSeed.Seed(fittifyContext))
+            {
+                return false;
+            }
+            if(!WorkoutHistorySeed.Seed(fittifyContext))
+            {
+                return false;
+            }
+            if (!ExerciseSeed.Seed(fittifyContext))
+            {
+                return false;
+            }
+            if (!ExerciseHistorySeed.Seed(fittifyContext))
+            {
+                return false;
+            }
+            if (!WeightLiftingSetSeed.Seed(fittifyContext))
+            {
+                return false;
+            }
+            if (!CardioSetSeed.Seed(fittifyContext))
+            {
+                return false;
+            }
+            if (!MapExerciseWorkoutSeeder.Seed(fittifyContext))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

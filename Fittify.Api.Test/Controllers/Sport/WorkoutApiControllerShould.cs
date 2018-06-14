@@ -107,7 +107,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 ".MinifyJson().PrettifyJson();
 
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -235,7 +235,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 ".MinifyJson().PrettifyJson();
 
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -303,7 +303,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -403,7 +403,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -500,7 +500,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -569,7 +569,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -635,7 +635,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""StatusCode"": 404
                     }
                 ".MinifyJson().PrettifyJson();
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -776,25 +776,25 @@ namespace Fittify.Api.Test.Controllers.Sport
                     {
                       ""Value"": [
                         {
-                            ""Id"": 1,
-                            ""RangeOfExerciseIds"": null,
-                            ""Exercises"": null,
-                            ""RangeOfWorkoutHistoryIds"": null,
-                            ""Name"": ""MockWorkout1"",
+                          ""Id"": 1,
+                          ""RangeOfExerciseIds"": null,
+                          ""MapsExerciseWorkout"": null,
+                          ""RangeOfWorkoutHistoryIds"": null,
+                          ""Name"": ""MockWorkout1""
                         },
                         {
-                            ""Id"": 2,
-                            ""RangeOfExerciseIds"": null,
-                            ""Exercises"": null,
-                            ""RangeOfWorkoutHistoryIds"": null,
-                            ""Name"": ""MockWorkout2"",
+                          ""Id"": 2,
+                          ""RangeOfExerciseIds"": null,
+                          ""MapsExerciseWorkout"": null,
+                          ""RangeOfWorkoutHistoryIds"": null,
+                          ""Name"": ""MockWorkout2""
                         },
                         {
-                            ""Id"": 3,
-                            ""RangeOfExerciseIds"": null,
-                            ""Exercises"": null,
-                            ""RangeOfWorkoutHistoryIds"": null,
-                            ""Name"": ""MockWorkout3"",
+                          ""Id"": 3,
+                          ""RangeOfExerciseIds"": null,
+                          ""MapsExerciseWorkout"": null,
+                          ""RangeOfWorkoutHistoryIds"": null,
+                          ""Name"": ""MockWorkout3""
                         }
                       ],
                       ""Formatters"": [],
@@ -904,7 +904,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1100,7 +1100,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                             }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1284,7 +1284,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                             }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1529,7 +1529,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1603,7 +1603,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1662,7 +1662,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -2149,7 +2149,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""Value"": {
                         ""Id"": 1,
                         ""RangeOfExerciseIds"": null,
-                        ""Exercises"": null,
+                        ""MapsExerciseWorkout"": null,
                         ""RangeOfWorkoutHistoryIds"": null,
                         ""Name"": ""UpdatedMockWorkoutName"",
                       },

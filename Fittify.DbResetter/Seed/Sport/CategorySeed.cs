@@ -7,7 +7,7 @@ namespace Fittify.DbResetter.Seed.Sport
 {
     public static class CategorySeed
     {
-        public static void Seed(FittifyContext fittifyContext)
+        public static bool Seed(FittifyContext fittifyContext)
         {
             var listCategories = new List<Category>()
             {
@@ -23,7 +23,13 @@ namespace Fittify.DbResetter.Seed.Sport
                     fittifyContext.Add(category);
                 }
             }
-            fittifyContext.SaveChanges();
+
+            if (fittifyContext.SaveChanges() >= 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -341,6 +341,35 @@ namespace Fittify.Web.Test.Controllers
         }
 
         [Test]
+        public async Task ReturnRedirectToAccessDenied_WhenUnauthorized_UsingAssociatedExercises()
+        {
+            await Task.Run(async () =>
+            {
+                using (var controller = new MockedWorkoutController())
+                {
+                    // Act
+                    var iActionResult = await controller.UnAuthenticatedInstance.AssociatedExercises(1);
+
+                    var actualIActionResult = JsonConvert.SerializeObject(iActionResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
+                    var expectedIActionResult =
+                        @"
+                            {
+                              ""UrlHelper"": null,
+                              ""ActionName"": ""AccessDenied"",
+                              ""ControllerName"": ""Authorization"",
+                              ""RouteValues"": null,
+                              ""Permanent"": false,
+                              ""PreserveMethod"": false,
+                              ""Fragment"": null
+                            }
+                        ".MinifyJson().PrettifyJson();
+
+                    Assert.AreEqual(expectedIActionResult, actualIActionResult);
+                }
+            });
+        }
+
+        [Test]
         public async Task ReturnCorrectRedirectToActionResult_UsingAssociateExercise()
         {
             await Task.Run(async () =>

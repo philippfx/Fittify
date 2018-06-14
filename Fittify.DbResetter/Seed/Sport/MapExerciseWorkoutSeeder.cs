@@ -7,7 +7,7 @@ namespace Fittify.DbResetter.Seed.Sport
 {
     public static class MapExerciseWorkoutSeeder
     {
-        public static void Seed(FittifyContext fittifyContext)
+        public static bool Seed(FittifyContext fittifyContext)
         {
             var listMapExerciseWorkouts = fittifyContext.MapExerciseWorkout.ToList();
             if (listMapExerciseWorkouts.Count() == 0)
@@ -117,16 +117,14 @@ namespace Fittify.DbResetter.Seed.Sport
                         });
                     }
                 }
-
-                try
-                {
-                    fittifyContext.SaveChanges();
-                }
-                catch (Exception e)
-                {
-                    var msg = e.Message;
-                }
             }
+
+            if (fittifyContext.SaveChanges() >= 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -22,40 +22,40 @@ namespace Fittify.DbResetter
             return path;
         }
         
-        public static void DeleteDb()
+        public static bool DeleteDb()
         {
             using (var fittifyContext = new FittifyContext(GetFittifyConnectionStringFromAppsettingsJson()))
             {
-                try
-                {
-                    fittifyContext.Database.EnsureDeleted();
-                }
-                catch(Exception ex)
-                {
-                    var msg = ex.Message;
-                }
+                ////try
+                ////{
+                    return fittifyContext.Database.EnsureDeleted();
+                ////}
+                ////catch(Exception ex)
+                ////{
+                ////    var msg = ex.Message;
+                ////}
             }
         }
 
-        public static void EnsureCreatedDbContext()
+        public static bool EnsureCreatedDbContext()
         {
             using (var fittifyContext = new FittifyContext(GetFittifyConnectionStringFromAppsettingsJson()))
             {
-                try
-                {
-                    fittifyContext.Database.EnsureCreated();
-                }
-                catch (Exception ex)
-                {
-                    var msg = ex.Message;
-                }
+                ////try
+                ////{
+                    return fittifyContext.Database.EnsureCreated();
+                ////}
+                ////catch (Exception ex)
+                ////{
+                ////    var msg = ex.Message;
+                ////}
             }
         }
 
-        public static void Seed()
+        public static bool Seed()
         {
             var fittifyContextSeeder = new FittifyContextSeeder();
-            fittifyContextSeeder.EnsureFreshSeedDataForProductionContext(GetFittifyConnectionStringFromAppsettingsJson());
+            return fittifyContextSeeder.EnsureFreshSeedDataForProductionContext(GetFittifyConnectionStringFromAppsettingsJson());
         }
     }
 }

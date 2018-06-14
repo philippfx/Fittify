@@ -6,7 +6,7 @@ namespace Fittify.DbResetter.Seed.Sport
 {
     public class WeightLiftingSetSeed
     {
-        public static void Seed(FittifyContext fittifyContext)
+        public static bool Seed(FittifyContext fittifyContext)
         {
             var exerciseHistories = fittifyContext.ExerciseHistories.ToArray();
             var count = exerciseHistories.Count();
@@ -82,7 +82,13 @@ namespace Fittify.DbResetter.Seed.Sport
                 }
             }
 
-            fittifyContext.SaveChanges();
+
+            if (fittifyContext.SaveChanges() >= 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

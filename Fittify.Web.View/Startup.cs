@@ -30,7 +30,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Fittify.Web.View
 {
-
     [ExcludeFromCodeCoverage]
     public class Startup
     {
@@ -39,12 +38,23 @@ namespace Fittify.Web.View
 
         public Startup(IHostingEnvironment env)
         {
-            var currentDirectory = Directory.GetCurrentDirectory();
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                ////.SetBasePath(@"C:\VS_2017_Projects\Fittify\Fittify.Web.View")
-                .AddJsonFile("appsettings.json"); // includes appsettings.json configuartion file
-            Configuration = builder.Build();
+            if (env.IsProduction())
+            {
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    ////.SetBasePath(@"C:\VS_2017_Projects\Fittify\Fittify.Web.View")
+                    .AddJsonFile("appsettings.Production.json"); // includes appsettings.json configuartion file
+                Configuration = builder.Build();
+            }
+            else
+            {
+                var currentDirectory = Directory.GetCurrentDirectory();
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    ////.SetBasePath(@"C:\VS_2017_Projects\Fittify\Fittify.Web.View")
+                    .AddJsonFile("appsettings.json"); // includes appsettings.json configuartion file
+                Configuration = builder.Build();
+            }
 
             HostingEnvironment = env;
         }
@@ -54,14 +64,12 @@ namespace Fittify.Web.View
         public virtual void ConfigureServices(IServiceCollection services)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            services.AddAuthentication(options => {
+            services.AddAuthentication(options =>
+                {
                     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
                 })
-                .AddCookie(options =>
-                {
-                    options.AccessDeniedPath = "/authorization/accessdenied";
-                })
+                .AddCookie(options => { options.AccessDeniedPath = "/authorization/accessdenied"; })
                 .AddOpenIdConnect(options =>
                 {
                     options.GetClaimsFromUserInfoEndpoint = true;
@@ -99,7 +107,6 @@ namespace Fittify.Web.View
                     {
                         OnTokenValidated = tokenValidatedContext =>
                         {
-
                             //var identity = tokenValidatedContext.Principal.Identity as ClaimsIdentity;
                             //var subjectClaim = identity.Claims.FirstOrDefault(z => z.Type == "sub");
                             //var newClaimsIdentity = new ClaimsIdentity(
@@ -124,7 +131,8 @@ namespace Fittify.Web.View
                             //userInformationReceivedContext.User.Remove("country");
                             //userInformationReceivedContext.User.Remove("subscriptionlevel");
 
-                            ClaimsIdentity claimsIdentity = userInformationReceivedContext.Principal.Identity as ClaimsIdentity;
+                            ClaimsIdentity claimsIdentity =
+                                userInformationReceivedContext.Principal.Identity as ClaimsIdentity;
 
                             var user = userInformationReceivedContext.User;
                             var children = user.Children();
@@ -132,8 +140,10 @@ namespace Fittify.Web.View
                             //claimsIdentity.AddClaims(claims.Select(r => new Claim(JwtClaimTypes., r.Value<String>())));
                             var country = claims.FirstOrDefault(j => j.Path == "country")?.Value<string>();
                             //var countryClaim = new Claim("country", claims.FirstOrDefault(j => j.Path == "country")?.Value<string>());
-                            var subscriptionlevelClaim = new Claim("subscriptionlevel", claims.FirstOrDefault(j => j.Path == "subscriptionlevel")?.Value<string>());
-                            if (!String.IsNullOrWhiteSpace(country)) claimsIdentity.AddClaim(new Claim("country", country));
+                            var subscriptionlevelClaim = new Claim("subscriptionlevel",
+                                claims.FirstOrDefault(j => j.Path == "subscriptionlevel")?.Value<string>());
+                            if (!String.IsNullOrWhiteSpace(country))
+                                claimsIdentity.AddClaim(new Claim("country", country));
                             claimsIdentity.AddClaim(subscriptionlevelClaim);
 
                             return Task.FromResult(0);
@@ -149,7 +159,7 @@ namespace Fittify.Web.View
                     policyBuilder =>
                     {
                         policyBuilder.RequireAuthenticatedUser();
-                        policyBuilder.RequireClaim("country", "nl"/*, "be", "..."*/);
+                        policyBuilder.RequireClaim("country", "nl" /*, "be", "..."*/);
                         policyBuilder.RequireClaim("subscriptionlevel", "PayingUser");
                         //policyBuilder.RequireRole("PayingUser");
                     });
@@ -171,20 +181,22 @@ namespace Fittify.Web.View
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory/*, FittifyContext fittifyContext*/)
+        public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env,
+            ILoggerFactory loggerFactory /*, FittifyContext fittifyContext*/)
         {
-            if (!env.IsClientTestServer()) // need to exclude automapper initialization for full integration test of client app, because mapper is also initialized in Api Startup 
+            if (!env.IsClientTestServer()
+            ) // need to exclude automapper initialization for full integration test of client app, because mapper is also initialized in Api Startup 
             {
                 AutoMapperForFittifyWeb.Initialize();
             }
-            
+
             loggerFactory.AddConsole();
 
             //if (env.IsDevelopment())
             //{
-                app.UseDeveloperExceptionPage();
+            app.UseDeveloperExceptionPage();
             //}
-            
+
             app.UseFileServer();
             // is equivalent to:
             //app.UseDefaultFiles();
@@ -202,7 +214,8 @@ namespace Fittify.Web.View
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello World from startup.cs If you clicked a linked after landing on this page, then the link was dead!");
+                await context.Response.WriteAsync(
+                    "Hello World from startup.cs If you clicked a linked after landing on this page, then the link was dead!");
             });
         }
     }

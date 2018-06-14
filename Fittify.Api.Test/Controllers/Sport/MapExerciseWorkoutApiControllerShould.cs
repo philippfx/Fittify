@@ -96,7 +96,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 ".MinifyJson().PrettifyJson();
 
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -154,7 +154,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -244,7 +244,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -331,7 +331,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -389,7 +389,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -443,7 +443,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""StatusCode"": 404
                     }
                 ".MinifyJson().PrettifyJson();
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -531,17 +531,23 @@ namespace Fittify.Api.Test.Controllers.Sport
                         {
                           ""Id"": 1,
                           ""WorkoutId"": 1,
+                          ""Workout"": null,
                           ""ExerciseId"": 1,
+                          ""Exercise"": null
                         },
                         {
                           ""Id"": 2,
                           ""WorkoutId"": 2,
+                          ""Workout"": null,
                           ""ExerciseId"": 2,
+                          ""Exercise"": null
                         },
                         {
                           ""Id"": 3,
                           ""WorkoutId"": 3,
+                          ""Workout"": null,
                           ""ExerciseId"": 3,
+                          ""Exercise"": null
                         }
                       ],
                       ""Formatters"": [],
@@ -551,7 +557,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -658,7 +664,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -747,112 +753,118 @@ namespace Fittify.Api.Test.Controllers.Sport
             var actualObjectResult = JsonConvert.SerializeObject(objectResult, new JsonSerializerSettings() { Formatting = Formatting.Indented }).MinifyJson().PrettifyJson();
             var expectedJsonResult =
                 @"
-                            {
-                              ""Value"": {
-                                ""value"": [
-                                  {
-                                    ""Id"": 1,
-                                    ""WorkoutId"": 1,
-                                    ""ExerciseId"": 1,
-                                    ""links"": [
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""self"",
-                                        ""Method"": ""GET""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""create_mapExerciseWorkout"",
-                                        ""Method"": ""POST""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""partially_update_mapExerciseWorkout"",
-                                        ""Method"": ""PATCH""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""delete_mapExerciseWorkout"",
-                                        ""Method"": ""DELETE""
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    ""Id"": 2,
-                                    ""WorkoutId"": 2,
-                                    ""ExerciseId"": 2,
-                                    ""links"": [
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""self"",
-                                        ""Method"": ""GET""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""create_mapExerciseWorkout"",
-                                        ""Method"": ""POST""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""partially_update_mapExerciseWorkout"",
-                                        ""Method"": ""PATCH""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""delete_mapExerciseWorkout"",
-                                        ""Method"": ""DELETE""
-                                      }
-                                    ]
-                                  },
-                                  {
-                                    ""Id"": 3,
-                                    ""WorkoutId"": 3,
-                                    ""ExerciseId"": 3,
-                                    ""links"": [
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""self"",
-                                        ""Method"": ""GET""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""create_mapExerciseWorkout"",
-                                        ""Method"": ""POST""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""partially_update_mapExerciseWorkout"",
-                                        ""Method"": ""PATCH""
-                                      },
-                                      {
-                                        ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                        ""Rel"": ""delete_mapExerciseWorkout"",
-                                        ""Method"": ""DELETE""
-                                      }
-                                    ]
-                                  }
-                                ],
-                                ""links"": [
-                                  {
-                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                    ""Rel"": ""self"",
-                                    ""Method"": ""GET""
-                                  },
-                                  {
-                                    ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
-                                    ""Rel"": ""nextPage"",
-                                    ""Method"": ""GET""
-                                  }
-                                ]
+                    {
+                      ""Value"": {
+                        ""value"": [
+                          {
+                            ""Id"": 1,
+                            ""WorkoutId"": 1,
+                            ""Workout"": null,
+                            ""ExerciseId"": 1,
+                            ""Exercise"": null,
+                            ""links"": [
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""self"",
+                                ""Method"": ""GET""
                               },
-                              ""Formatters"": [],
-                              ""ContentTypes"": [],
-                              ""DeclaredType"": null,
-                              ""StatusCode"": 200
-                            }
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""create_mapExerciseWorkout"",
+                                ""Method"": ""POST""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""partially_update_mapExerciseWorkout"",
+                                ""Method"": ""PATCH""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""delete_mapExerciseWorkout"",
+                                ""Method"": ""DELETE""
+                              }
+                            ]
+                          },
+                          {
+                            ""Id"": 2,
+                            ""WorkoutId"": 2,
+                            ""Workout"": null,
+                            ""ExerciseId"": 2,
+                            ""Exercise"": null,
+                            ""links"": [
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""self"",
+                                ""Method"": ""GET""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""create_mapExerciseWorkout"",
+                                ""Method"": ""POST""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""partially_update_mapExerciseWorkout"",
+                                ""Method"": ""PATCH""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""delete_mapExerciseWorkout"",
+                                ""Method"": ""DELETE""
+                              }
+                            ]
+                          },
+                          {
+                            ""Id"": 3,
+                            ""WorkoutId"": 3,
+                            ""Workout"": null,
+                            ""ExerciseId"": 3,
+                            ""Exercise"": null,
+                            ""links"": [
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""self"",
+                                ""Method"": ""GET""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""create_mapExerciseWorkout"",
+                                ""Method"": ""POST""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""partially_update_mapExerciseWorkout"",
+                                ""Method"": ""PATCH""
+                              },
+                              {
+                                ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                                ""Rel"": ""delete_mapExerciseWorkout"",
+                                ""Method"": ""DELETE""
+                              }
+                            ]
+                          }
+                        ],
+                        ""links"": [
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""self"",
+                            ""Method"": ""GET""
+                          },
+                          {
+                            ""Href"": ""{ Omitted Hateoas Link, because it requires too much maintainenance }"",
+                            ""Rel"": ""nextPage"",
+                            ""Method"": ""GET""
+                          }
+                        ]
+                      },
+                      ""Formatters"": [],
+                      ""ContentTypes"": [],
+                      ""DeclaredType"": null,
+                      ""StatusCode"": 200
+                    }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1043,7 +1055,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1291,7 +1303,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1365,7 +1377,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1424,7 +1436,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1923,7 +1935,9 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""Value"": {
                         ""Id"": 1,
                         ""WorkoutId"": 2,
-                        ""ExerciseId"": 2
+                        ""Workout"": null,
+                        ""ExerciseId"": 2,
+                        ""Exercise"": null
                       },
                       ""Formatters"": [],
                       ""ContentTypes"": [],

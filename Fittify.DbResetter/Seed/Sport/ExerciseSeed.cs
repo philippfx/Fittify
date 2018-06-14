@@ -8,7 +8,7 @@ namespace Fittify.DbResetter.Seed.Sport
 {
     public static class ExerciseSeed
     {
-        public static void Seed(FittifyContext fittifyContext)
+        public static bool Seed(FittifyContext fittifyContext)
         {
             // Chest
             if (fittifyContext.Exercises.FirstOrDefault(f => f.Name == "InclinedBenchPressSeed") == null)
@@ -47,7 +47,13 @@ namespace Fittify.DbResetter.Seed.Sport
             if(fittifyContext.Exercises.FirstOrDefault(f => f.Name == "SpinningBikeSeed") == null)
             fittifyContext.Add(new Exercise() { Name = "SpinningBikeSeed", ExerciseType = ExerciseTypeEnum.Cardio });
 
-            fittifyContext.SaveChanges();
+
+            if (fittifyContext.SaveChanges() >= 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

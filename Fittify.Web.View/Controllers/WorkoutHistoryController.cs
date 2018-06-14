@@ -19,10 +19,10 @@ namespace Fittify.Web.View.Controllers
     [Route("workouthistories")]
     public class WorkoutHistoryController : Controller
     {
-        private readonly IViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForPost, WorkoutHistoryOfmResourceParameters, WorkoutHistoryOfmCollectionResourceParameters> _workoutHistoryViewModelRepository;
+        private readonly IWorkoutHistoryViewModelRepository _workoutHistoryViewModelRepository;
         private readonly IApiModelRepository<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmCollectionResourceParameters> _exerciseHistoryApiModelRepository;
         public WorkoutHistoryController(
-            IViewModelRepository<int, WorkoutHistoryViewModel, WorkoutHistoryOfmForPost, WorkoutHistoryOfmResourceParameters, WorkoutHistoryOfmCollectionResourceParameters> workoutHistoryViewModelRepository,
+            IWorkoutHistoryViewModelRepository workoutHistoryViewModelRepository,
             IApiModelRepository<int, ExerciseHistoryOfmForGet, ExerciseHistoryOfmForPost, ExerciseHistoryOfmCollectionResourceParameters> exerciseHistoryApiModelRepository)
         {
             _workoutHistoryViewModelRepository = workoutHistoryViewModelRepository;
@@ -30,14 +30,20 @@ namespace Fittify.Web.View.Controllers
         }
 
         [HttpPost]
-        public async Task<RedirectToActionResult> Create([FromForm] WorkoutHistoryOfmForPost workoutHistoryOfmForPost)
+        public async Task<RedirectToActionResult> CreateNewWorkoutHistory([FromForm] WorkoutHistoryOfmForPost workoutHistoryOfmForPost)
         {
-            var postResult = await _workoutHistoryViewModelRepository.Create(workoutHistoryOfmForPost);
+            var postResult = await _workoutHistoryViewModelRepository.Create(workoutHistoryOfmForPost, includeExerciseHistories: true);
 
-            if ((int)postResult.HttpStatusCode != 201)
+            if (postResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                postResult.HttpStatusCode == HttpStatusCode.Forbidden)
             {
-                // Todo: Do something when posting failed
+                return RedirectToAction("AccessDenied", "Authorization");
             }
+
+            //if ((int)postResult.HttpStatusCode != 201)
+            //{
+            //    // Todo: Do something when posting failed
+            //}
 
             return RedirectToAction("HistoryDetails", new { workoutHistoryId = postResult.ViewModel.Id });
         }
@@ -48,10 +54,16 @@ namespace Fittify.Web.View.Controllers
         {
             var deleteResult = await _workoutHistoryViewModelRepository.Delete(workoutHistoryId);
 
-            if ((int)deleteResult.HttpStatusCode != 204)
+            if (deleteResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                deleteResult.HttpStatusCode == HttpStatusCode.Forbidden)
             {
-                // Todo: Do something when deleting failed
+                return RedirectToAction("AccessDenied", "Authorization");
             }
+
+            //if ((int)deleteResult.HttpStatusCode != 204)
+            //{
+            //    // Todo: Do something when deleting failed
+            //}
 
             return RedirectToAction("HistoryDetails", new { workoutId = workoutId });
         }
@@ -65,10 +77,16 @@ namespace Fittify.Web.View.Controllers
 
             var patchResult = await _workoutHistoryViewModelRepository.PartiallyUpdate(workoutHistoryId, jsonPatch);
 
-            if ((int)patchResult.HttpStatusCode != 200)
+            if (patchResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                patchResult.HttpStatusCode == HttpStatusCode.Forbidden)
             {
-                // Todo: Do something when posting failed
+                return RedirectToAction("AccessDenied", "Authorization");
             }
+
+            //if ((int)patchResult.HttpStatusCode != 200)
+            //{
+            //    // Todo: Do something when posting failed
+            //}
 
             return RedirectToAction("HistoryDetails", new { workoutHistoryId = workoutHistoryId });
         }
@@ -82,10 +100,16 @@ namespace Fittify.Web.View.Controllers
 
             var patchResult = await _workoutHistoryViewModelRepository.PartiallyUpdate(workoutHistoryId, jsonPatch);
 
-            if ((int)patchResult.HttpStatusCode != 200)
+            if (patchResult.HttpStatusCode == HttpStatusCode.Unauthorized ||
+                patchResult.HttpStatusCode == HttpStatusCode.Forbidden)
             {
-                // Todo: Do something when posting failed
+                return RedirectToAction("AccessDenied", "Authorization");
             }
+
+            //if ((int)patchResult.HttpStatusCode != 200)
+            //{
+            //    // Todo: Do something when posting failed
+            //}
 
             return RedirectToAction("HistoryDetails", new { workoutHistoryId = workoutHistoryId });
         }

@@ -95,7 +95,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                 ".MinifyJson().PrettifyJson();
 
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -151,7 +151,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -240,7 +240,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -325,7 +325,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -383,7 +383,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -437,7 +437,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                       ""StatusCode"": 404
                     }
                 ".MinifyJson().PrettifyJson();
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -547,7 +547,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -647,7 +647,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -845,7 +845,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1029,7 +1029,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                             }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1274,7 +1274,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1348,7 +1348,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]
@@ -1407,7 +1407,7 @@ namespace Fittify.Api.Test.Controllers.Sport
                     }
                 ".MinifyJson().PrettifyJson();
 
-            Assert.AreEqual(actualObjectResult, expectedJsonResult);
+            Assert.AreEqual(expectedJsonResult, actualObjectResult);
         }
 
         [Test]

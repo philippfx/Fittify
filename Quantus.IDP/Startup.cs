@@ -31,12 +31,24 @@ namespace Quantus.IDP
 
             //AppConfiguration = appConfiguration;
 
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true); // includes appsettings.json configuartion file
+            if (hostingEnvironment.IsProduction())
+            {
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.Production.json", optional: false, reloadOnChange: true);
                 //.AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: false, reloadOnChange: true); // includes appsettings.json configuartion file
 
-            AppConfiguration = builder.Build();
+                AppConfiguration = builder.Build();
+            }
+            else
+            {
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true); // includes appsettings.json configuartion file
+                //.AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: false, reloadOnChange: true); // includes appsettings.json configuartion file
+
+                AppConfiguration = builder.Build();
+            }
 
             HostingEnvironment = hostingEnvironment;
         }
@@ -112,10 +124,10 @@ namespace Quantus.IDP
             loggerFactory.AddConsole();
             loggerFactory.AddDebug();
 
-            if (env.IsDevelopment())
-            {
+            //if (env.IsDevelopment())
+            //{
                 app.UseDeveloperExceptionPage();
-            }
+            //}
             
             //quantusUserContext.Database.Migrate(); // Ensure database is created and pending migrations are executed
             //quantusUserContext.EnsureSeedDataForContext();

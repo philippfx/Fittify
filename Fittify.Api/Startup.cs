@@ -20,6 +20,7 @@ using Fittify.Api.OfmRepository.OfmRepository.Sport;
 using Fittify.Api.OfmRepository.Services;
 using Fittify.Api.OfmRepository.Services.PropertyMapping;
 using Fittify.Api.OfmRepository.Services.TypeHelper;
+using Fittify.Api.Services;
 using Fittify.Api.Services.ConfigureServices;
 using Fittify.DataModelRepository;
 using IdentityServer4.AccessTokenValidation;
@@ -49,6 +50,13 @@ namespace Fittify.Api
                 var builder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json"); // includes appsettings.json configuartion file
+                Configuration = builder.Build();
+            }
+            else if (hostingEnvironment.IsProduction())
+            {
+                var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.Production.json"); // includes appsettings.json configuartion file
                 Configuration = builder.Build();
             }
             else
@@ -125,6 +133,11 @@ namespace Fittify.Api
             else
             {
                 services.AddDbContext<FittifyContext>(options => options.UseSqlServer(dbConnectionString));
+            }
+
+            if (HostingEnvironment.IsProduction() == false)
+            {
+                services.AddScoped<IDbResetter, Services.DbResetter>();
             }
             
             //try
