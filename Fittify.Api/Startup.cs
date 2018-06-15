@@ -85,8 +85,8 @@ namespace Fittify.Api
                     IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "https://localhost:44364/"; // Auth Server
-                    options.RequireHttpsMetadata = true; // only for development
+                    options.Authority = Configuration.GetValue<string>("QuantusIdpBaseUri"); // Auth Server
+                    options.RequireHttpsMetadata = false; // only for development
                     options.ApiName = "fittifyapi"; // API Resource Id
                     options.ApiSecret = "apisecret";
                 });

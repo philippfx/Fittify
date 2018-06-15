@@ -73,8 +73,8 @@ namespace Fittify.Web.View
                 .AddOpenIdConnect(options =>
                 {
                     options.GetClaimsFromUserInfoEndpoint = true;
-                    options.Authority = "https://localhost:44364/";
-                    options.RequireHttpsMetadata = true;
+                    options.Authority = Configuration.GetValue<string>("QuantusIdpBaseUri");
+                    options.RequireHttpsMetadata = false;
                     options.ClientId = "fittifyclient";
                     options.ClientSecret = "secret";
                     options.Scope.Add("openid");
