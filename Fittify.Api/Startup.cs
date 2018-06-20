@@ -32,6 +32,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
 using Fittify.DbResetter.Seed;
+using NLog.Extensions.Logging;
 
 namespace Fittify.Api
 {
@@ -127,7 +128,7 @@ namespace Fittify.Api
             }
             else if (HostingEnvironment.IsProduction())
             {
-                dbConnectionString = Configuration.GetValue<string>("ConnectionStrings:SmarterAspConnection");
+                dbConnectionString = Configuration.GetValue<string>("ConnectionStrings:DefaultConnection");
                 services.AddDbContext<FittifyContext>(options => options.UseSqlServer(dbConnectionString));
             }
             else
@@ -245,6 +246,7 @@ namespace Fittify.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public virtual void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+
             if (env.IsDevelopment() || env.IsTestInMemoryDb())
             {
                 app.UseDeveloperExceptionPage();
@@ -255,7 +257,10 @@ namespace Fittify.Api
                 {
                     appBuilder.Run(async httpContext =>
                     {
-                        // Required for logging exceptions when it is not caught later in code, see plural sight api course by https://app.pluralsight.com/library/courses/asp-dot-net-core-restful-api-building/
+                        // Required for logging exceptions when it is not caught later in code, see plural sight api course by
+                        // https://app.pluralsight.com/player?course=asp-dot-net-core-restful-api-building&author=kevin-dockx&name=asp-dot-net-core-restful-api-building-m2&clip=12&mode=live
+                        // https://app.pluralsight.com/player?course=asp-dot-net-core-restful-api-building&author=kevin-dockx&name=asp-dot-net-core-restful-api-building-m5&clip=5&mode=live
+                        // log2file https://app.pluralsight.com/player?course=asp-dot-net-core-restful-api-building&author=kevin-dockx&name=asp-dot-net-core-restful-api-building-m5&clip=7&mode=live
                         var exceptionHandlerFeature = httpContext.Features.Get<IExceptionHandlerFeature>();
                         if (exceptionHandlerFeature != null)
                         {

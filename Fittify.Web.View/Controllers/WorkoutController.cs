@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace Fittify.Web.View.Controllers
 {
@@ -61,10 +62,17 @@ namespace Fittify.Web.View.Controllers
             if (queryResult.HttpStatusCode == HttpStatusCode.OK)
             {
                 listWorkoutViewModel = queryResult.ViewModelForGetCollection.ToList();
+                return View("Overview", listWorkoutViewModel);
             }
 
-
-            return View("Overview", listWorkoutViewModel);
+            var test = queryResult.ErrorMessagesPresented.FirstOrDefault(f => f.Key.ToLower().Contains("exception")).Value.ToString();
+            return new ContentResult()
+            {
+                //ContentType = "application/json",
+                ContentType = "text/html;charset=utf-8",
+                //Content = JsonConvert.SerializeObject(queryResult.ErrorMessagesPresented.ToDictionary(item => item.Key.ToString(), item => Regex.Unescape(item.Value.ToString())))
+                Content = queryResult.ErrorMessagesPresented.FirstOrDefault(f => f.Key.ToLower().Contains("exception")).Value.ToString()
+            };
         }
         
         [Route("{workoutId}/associatedexercises", Name = "AssociatedExercises")]

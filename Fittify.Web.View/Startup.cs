@@ -191,6 +191,7 @@ namespace Fittify.Web.View
             }
 
             loggerFactory.AddConsole();
+            loggerFactory.CreateLogger("My Logger");
 
             //if (env.IsDevelopment())
             //{

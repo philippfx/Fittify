@@ -101,8 +101,8 @@ namespace Quantus.IDP
 
                     RedirectUris = new List<string>()
                     {
-                        //"https://localhost:44328/signin-oidc"
-                        "http://philippfx-001-site4.ftempurl.com/signin-oidc"
+                        "https://localhost:44328/signin-oidc"
+                        //"http://philippfx-001-site3.ftempurl.com/signin-oidc"
 
                     },
                     AllowedScopes =
@@ -121,8 +121,8 @@ namespace Quantus.IDP
                     },
                     PostLogoutRedirectUris =
                     {
-                        //"https://localhost:44328/signout-callback-oidc"
-                        "http://philippfx-001-site4.ftempurl.com/signout-callback-oidc"
+                        "https://localhost:44328/signout-callback-oidc"
+                        //"http://philippfx-001-site3.ftempurl.com/signout-callback-oidc"
                     }
                     //AlwaysIncludeUserClaimsInIdToken = true
                 }
